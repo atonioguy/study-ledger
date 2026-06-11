@@ -3,104 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <title>BMSC 3404 — Exam 2 Review (Modules 3 & 4)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
 <style>
-  /* ===== THEME TOKENS ===== */
   :root{
     --font-serif:'Newsreader',Georgia,'Times New Roman',serif;
     --font-sans:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-    --radius:10px;
-    --maxw:780px;
+    --radius:10px; --maxw:780px;
   }
   body.paper{
     --bg:#F3F0E7; --card:#FBFAF4; --ink:#2C2A24; --ink-soft:#6E685C;
     --border:rgba(40,36,28,.14); --border-soft:rgba(40,36,28,.08);
     --accent:#1A4D8F; --tag-bg:#E9E4D6; --tag-ink:#5A5446;
     --fc-bg:#F2EEE2; --fc-accent:#8A6D2F;
+    --mem:#1858A8; --concept:#C0492B;
   }
   body.dark{
     --bg:#101216; --card:#191B20; --ink:#D6D4CC; --ink-soft:#928F86;
     --border:rgba(255,255,255,.13); --border-soft:rgba(255,255,255,.07);
     --accent:#7FB5F0; --tag-bg:#23262D; --tag-ink:#9BA3AE;
     --fc-bg:#1E2127; --fc-accent:#D9B877;
+    --mem:#6FB0F2; --concept:#F0936A;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{
-    margin:0; background:var(--bg); color:var(--ink);
-    font-family:var(--font-sans); line-height:1.7;
-    -webkit-font-smoothing:antialiased;
-  }
-  /* ===== CONTROL BAR ===== */
-  header.bar{
-    position:sticky; top:0; z-index:50;
-    background:var(--bg); border-bottom:1px solid var(--border);
-    padding:10px 16px;
-    display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-  }
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-sans); line-height:1.7; -webkit-font-smoothing:antialiased;}
+  /* key-term colour coding (combines with bold) */
+  .mem{font-weight:500; color:var(--mem);}
+  .concept{font-weight:500; color:var(--concept);}
+  /* control bar */
+  header.bar{position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1px solid var(--border); padding:10px 16px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
   .bar .brand{font-family:var(--font-serif); font-size:16px; font-weight:500; margin-right:auto; letter-spacing:.2px;}
-  .bar select, .bar button{
-    font-family:var(--font-sans); font-size:13px; color:var(--ink);
-    background:var(--card); border:1px solid var(--border);
-    border-radius:8px; padding:6px 10px; cursor:pointer; line-height:1.2;
-  }
+  .bar select, .bar button{font-family:var(--font-sans); font-size:13px; color:var(--ink); background:var(--card); border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; line-height:1.2;}
   .bar button:hover, .bar select:hover{border-color:var(--ink-soft);}
   .bar button[aria-pressed="true"]{border-color:var(--accent); color:var(--accent);}
   .bar .fs{font-size:13px; color:var(--ink-soft); min-width:54px; text-align:center;}
-  /* ===== LAYOUT ===== */
+  /* layout */
   main{max-width:var(--maxw); margin:0 auto; padding:28px 18px 80px;}
   .doc-title{font-family:var(--font-serif); font-size:30px; font-weight:500; line-height:1.2; margin:8px 0 4px;}
-  .doc-sub{color:var(--ink-soft); font-size:14px; margin:0 0 28px;}
+  .doc-sub{color:var(--ink-soft); font-size:14px; margin:0 0 8px;}
+  .legend{font-size:12.5px; color:var(--ink-soft); margin:0 0 26px;}
   section.lesson{scroll-margin-top:72px; margin:0 0 12px;}
   .lesson-title{font-family:var(--font-serif); font-size:23px; font-weight:500; margin:34px 0 2px; padding-top:14px; border-top:1px solid var(--border);}
   .lesson-meta{color:var(--ink-soft); font-size:13px; margin:0 0 18px; font-style:italic;}
-  .subsection{font-family:var(--font-sans); font-size:15px; font-weight:500; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-soft); margin:24px 0 10px;}
-  /* ===== QUESTION BLOCK ===== */
-  article.q{
-    background:var(--card); border:1px solid var(--border);
-    border-radius:var(--radius); padding:18px 20px; margin:0 0 16px;
-    scroll-margin-top:72px;
-  }
+  .subsection{font-size:15px; font-weight:500; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-soft); margin:24px 0 10px;}
+  /* question block */
+  article.q{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px; margin:0 0 16px; scroll-margin-top:72px;}
   .q-head{display:flex; gap:10px; align-items:baseline; margin-bottom:12px;}
-  .q-num{
-    flex:none; font-family:var(--font-sans); font-size:12px; font-weight:500;
-    color:var(--accent); border:1px solid var(--accent); border-radius:6px;
-    padding:2px 7px; line-height:1.3; letter-spacing:.02em;
-  }
+  .q-num{flex:none; font-size:12px; font-weight:500; color:var(--accent); border:1px solid var(--accent); border-radius:6px; padding:2px 7px; line-height:1.3; letter-spacing:.02em;}
   .q-text{font-family:var(--font-serif); font-size:19px; line-height:1.35;}
   .q-text .sub{display:block; font-size:16px; color:var(--ink-soft); margin:4px 0 0 2px; padding-left:14px; border-left:2px solid var(--border);}
-  .lbl{
-    display:inline-block; font-size:11px; font-weight:500; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--tag-ink); background:var(--tag-bg);
-    padding:2px 8px; border-radius:5px; margin-bottom:7px;
-  }
+  .lbl{display:inline-block; font-size:11px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--tag-ink); background:var(--tag-bg); padding:2px 8px; border-radius:5px; margin-bottom:7px;}
   .answer ul{margin:0 0 4px; padding-left:20px;}
   .answer li{margin:0 0 6px;}
   .answer strong{font-weight:500; color:var(--ink);}
   .explain{margin-top:14px;}
-  .explain u{text-decoration:underline; text-decoration-thickness:1.5px; text-underline-offset:2px;}
   .explain strong{font-weight:500;}
   .pending{color:var(--ink-soft); font-style:italic; font-size:14px;}
-  /* ===== FLASHCARD ===== */
-  .fc{
-    background:var(--fc-bg); border:1px solid var(--border-soft);
-    border-left:3px solid var(--fc-accent); border-radius:8px;
-    padding:13px 15px; margin:14px 0 4px;
-  }
+  /* flashcard */
+  .fc{background:var(--fc-bg); border:1px solid var(--border-soft); border-left:3px solid var(--fc-accent); border-radius:8px; padding:13px 15px; margin:14px 0 4px;}
   .fc-tag{font-size:10px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--fc-accent);}
   .fc-q{font-size:15px; margin:4px 0 10px;}
-  .fc-btn{
-    font-family:var(--font-sans); font-size:12px; color:var(--ink);
-    background:transparent; border:1px solid var(--border); border-radius:7px;
-    padding:5px 11px; cursor:pointer;
-  }
+  .fc-btn{font-family:var(--font-sans); font-size:12px; color:var(--ink); background:transparent; border:1px solid var(--border); border-radius:7px; padding:5px 11px; cursor:pointer;}
   .fc-btn:hover{border-color:var(--fc-accent); color:var(--fc-accent);}
   .fc-a{margin-top:10px; font-size:15px; color:var(--ink); border-top:1px dashed var(--border); padding-top:10px;}
-  .fc-a strong{font-weight:500;}
-  /* ===== FIGURE ===== */
+  /* figure */
   figure.fig{margin:14px 0 4px; text-align:center;}
   figure.fig img{max-width:100%; border:1px solid var(--border); border-radius:8px;}
   figure.fig figcaption{font-size:12.5px; color:var(--ink-soft); margin-top:6px; font-style:italic;}
@@ -110,20 +80,17 @@
 </head>
 <body class="paper">
 
-<!-- =========================================================
-     CONTROL BAR  (BeeLine toggle, theme, text size, jump menu)
-     ========================================================= -->
 <header class="bar">
   <span class="brand">Exam 2 Review</span>
   <select id="jump" aria-label="Jump to lesson">
     <option value="">Jump to…</option>
     <option value="m3l1">M3 · L1 — Microbial Genomes</option>
     <option value="m3l2">M3 · L2 — Informational Macromolecules</option>
-    <option value="m3l3">M3 · L3 — Mutation & Gene Transfer</option>
+    <option value="m3l3">M3 · L3 — Mutation &amp; Gene Transfer</option>
     <option value="m3l4">M3 · L4 — Viral Genetics</option>
     <option value="m4">Module 4 — Microbial Diversity</option>
   </select>
-  <button id="blBtn" aria-pressed="true">BeeLine: on</button>
+  <button id="blBtn" aria-pressed="true">Text gradient: on</button>
   <button id="themeBtn">Dark</button>
   <button id="fsDown" aria-label="Smaller text">A−</button>
   <span class="fs" id="fsOut">18px</span>
@@ -132,211 +99,182 @@
 
 <main>
   <h1 class="doc-title">BMSC 3404 — Exam 2 Review</h1>
-  <p class="doc-sub">Modules 3 &amp; 4 · concise answers, explanations, and self-test cards keyed to the lecture review questions.</p>
+  <p class="doc-sub">Modules 3 &amp; 4 · concise answers, explanations, and self-test cards mapped to the lecture review questions.</p>
+  <p class="legend"><span class="mem">Blue</span> = commit to memory&nbsp;&nbsp;·&nbsp;&nbsp;<span class="concept">red-orange</span> = conceptual takeaway</p>
 
-  <!-- ============================== M3 · L1 ============================== -->
   <section class="lesson" id="m3l1">
     <h2 class="lesson-title">Module 3 · Lesson 1 — Introduction to Microbial Genomes</h2>
     <p class="lesson-meta">5 questions on Exam 2 come from this lesson.</p>
 
-    <!-- ---- Q1 ---- -->
     <article class="q" id="m3l1-q1">
       <div class="q-head"><span class="q-num">Q1</span><span class="q-text">What are the informational macromolecules?</span></div>
       <div class="answer">
         <span class="lbl">Answer</span>
         <ul>
-          <li>The informational macromolecules are <strong>nucleic acids</strong> (DNA and RNA) and <strong>proteins</strong>.</li>
-          <li>Anchor vocab: <strong>gene</strong> = functional unit of genetic information · <strong>genome</strong> = all genetic elements in a cell · <strong>DNA</strong> = the blueprint · <strong>RNA</strong> = transcription product.</li>
+          <li>The informational macromolecules are <span class="mem">nucleic acids</span> (DNA and RNA) and <span class="mem">proteins</span>.</li>
+          <li>Anchor vocab: <span class="mem">gene</span> = functional unit of genetic information · <span class="mem">genome</span> = all genetic elements in a cell · <span class="mem">DNA</span> = the blueprint · <span class="mem">RNA</span> = transcription product.</li>
         </ul>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>These are the molecules that <u>store</u> or <u>transmit</u> biological information. Everything else in the module is about how that information is <strong>packaged</strong>, <strong>copied</strong>, and <strong>expressed</strong>, so pin the vocabulary now: a <strong>gene</strong> is the functional unit, the <strong>genome</strong> is the full set of genetic elements in the cell, and the central players are the nucleic acids plus the proteins they encode.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>These are the molecules that <span class="concept">store</span> or <span class="concept">transmit</span> biological information. Everything else in the module is about how that information is <span class="concept">packaged, copied, and expressed</span>, so pin the vocabulary now: a <span class="mem">gene</span> is the functional unit, the <span class="mem">genome</span> is the full set of genetic elements in the cell, and the central players are the nucleic acids plus the proteins they encode.</div>
     </article>
 
-    <!-- ---- Q2 ---- -->
     <article class="q" id="m3l1-q2">
       <div class="q-head"><span class="q-num">Q2</span><span class="q-text">What are the basic properties of DNA?</span></div>
       <div class="answer">
         <span class="lbl">Answer</span>
         <ul>
-          <li><strong>Nucleic acids</strong> are polymers of <strong>nucleotides</strong>; each nucleotide = <strong>nitrogenous base + pentose sugar + phosphate group</strong>.</li>
-          <li>DNA is <strong>double-stranded</strong>, a <strong>double helix</strong>, runs <strong>antiparallel</strong>, with <strong>complementary base pairing</strong> (A–T, C–G).</li>
-          <li>Don't confuse with a <strong>nucleoside</strong> = base + sugar only (<strong>no phosphate</strong>).</li>
-          <li>RNA differs: <strong>ribose</strong> sugar, <strong>single-stranded</strong>, <strong>uracil</strong> replaces thymine; three types — <strong>mRNA</strong>, <strong>tRNA</strong>, <strong>rRNA</strong>.</li>
+          <li><span class="mem">Nucleic acids</span> are polymers of <span class="mem">nucleotides</span>; each nucleotide = <span class="mem">nitrogenous base + pentose sugar + phosphate group</span>.</li>
+          <li>DNA is <span class="mem">double-stranded</span>, a <span class="mem">double helix</span>, runs <span class="mem">antiparallel</span>, with <span class="mem">complementary base pairing</span> (A–T, C–G).</li>
+          <li>Don't confuse with a <span class="mem">nucleoside</span> = base + sugar only (<span class="mem">no phosphate</span>).</li>
+          <li>RNA differs: <span class="mem">ribose</span> sugar, <span class="mem">single-stranded</span>, <span class="mem">uracil</span> replaces thymine; three types — <span class="mem">mRNA</span>, <span class="mem">tRNA</span>, <span class="mem">rRNA</span>.</li>
         </ul>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The properties matter because DNA's structure is what lets it be <u>copied faithfully</u>. <strong>Antiparallel</strong> strands held by <strong>complementary base pairing</strong> mean either strand can serve as a <u>template</u> for the other — the structural basis of replication you'll meet in L2. RNA is built on the same nucleotide logic but the differences (ribose, single-stranded, uracil) are exactly the distractor set the exam likes to test.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The properties matter because DNA's structure is what lets it be <span class="concept">copied faithfully</span>. <span class="mem">Antiparallel</span> strands held by <span class="mem">complementary base pairing</span> mean <span class="concept">either strand can serve as a template for the other</span> — the structural basis of replication you'll meet in L2. RNA is built on the same nucleotide logic, but the differences (ribose, single-stranded, uracil) are exactly the distractor set the exam likes to test.</div>
       <div class="fc">
         <span class="fc-tag">Flashcard</span>
         <div class="fc-q">Nucleotide vs nucleoside — what's the difference?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><strong>Nucleotide</strong> = base + sugar + <strong>phosphate</strong>. <strong>Nucleoside</strong> = base + sugar only (no phosphate).</div>
+        <div class="fc-a" hidden><span class="mem">Nucleotide</span> = base + sugar + <span class="mem">phosphate</span>. <span class="mem">Nucleoside</span> = base + sugar only (no phosphate).</div>
       </div>
       <div class="fc">
         <span class="fc-tag">Flashcard</span>
         <div class="fc-q">Name the three types of RNA and what each does.</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><strong>mRNA</strong> carries the message · <strong>tRNA</strong> brings amino acids · <strong>rRNA</strong> builds the ribosome.</div>
+        <div class="fc-a" hidden><span class="mem">mRNA</span> carries the message · <span class="mem">tRNA</span> brings amino acids · <span class="mem">rRNA</span> builds the ribosome.</div>
       </div>
     </article>
 
-    <!-- ---- Q3 ---- -->
     <article class="q" id="m3l1-q3">
       <div class="q-head"><span class="q-num">Q3</span><span class="q-text">What are the bonds within and between DNA strands?</span></div>
       <div class="answer">
         <span class="lbl">Answer</span>
         <ul>
-          <li><strong>Within</strong> a strand: <strong>phosphodiester bonds</strong> — the <u>covalent</u> sugar–phosphate backbone.</li>
-          <li><strong>Between</strong> the two strands: <strong>hydrogen bonds</strong> between complementary bases.</li>
-          <li><strong>A–T</strong> = <strong>2</strong> H-bonds · <strong>G–C</strong> = <strong>3</strong> H-bonds → <strong>GC-rich DNA is more thermally stable</strong>.</li>
+          <li><span class="mem">Within</span> a strand: <span class="mem">phosphodiester bonds</span> — the <span class="mem">covalent</span> sugar–phosphate backbone.</li>
+          <li><span class="mem">Between</span> the two strands: <span class="mem">hydrogen bonds</span> between complementary bases.</li>
+          <li><span class="mem">A–T = 2</span> H-bonds · <span class="mem">G–C = 3</span> H-bonds → <span class="concept">GC-rich DNA is more thermally stable</span>.</li>
         </ul>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The exam loves to split this two ways, so keep them straight: the <strong>phosphodiester</strong> bonds are <u>covalent</u> and run <u>along</u> a single strand, while the <strong>hydrogen</strong> bonds are weaker and hold the <u>two strands together</u>. That weakness is a feature — it lets helicase pry the strands apart for replication. The G–C count (three H-bonds) is why GC-rich regions resist melting, which circles back when we discuss <strong>supercoiling at high temperature</strong> later in this lesson.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The exam loves to split this two ways, so keep them straight: the <span class="mem">phosphodiester</span> bonds are <span class="mem">covalent</span> and run along a single strand, while the <span class="mem">hydrogen</span> bonds are weaker and hold the two strands together. <span class="concept">That weakness is a feature</span> — it lets helicase pry the strands apart for replication. The G–C count (three H-bonds) is why <span class="concept">GC-rich regions resist melting</span>, which circles back when we discuss supercoiling at high temperature later in this lesson.</div>
       <div class="fc">
         <span class="fc-tag">Flashcard</span>
         <div class="fc-q">Which bonds act within a DNA strand vs between strands — and how many H-bonds per base pair?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden>Within = <strong>phosphodiester</strong> (covalent backbone). Between = <strong>hydrogen bonds</strong>. <strong>A–T = 2</strong>, <strong>G–C = 3</strong>.</div>
+        <div class="fc-a" hidden>Within = <span class="mem">phosphodiester</span> (covalent backbone). Between = <span class="mem">hydrogen bonds</span>. <span class="mem">A–T = 2</span>, <span class="mem">G–C = 3</span>.</div>
       </div>
     </article>
 
-    <!-- ---- Q4 ---- -->
     <article class="q" id="m3l1-q4">
       <div class="q-head"><span class="q-num">Q4</span><span class="q-text">What is the central dogma of molecular biology?</span></div>
       <div class="answer">
         <span class="lbl">Answer</span>
         <ul>
-          <li><strong>DNA → RNA → protein</strong>: DNA is <strong>transcribed</strong> into RNA, and RNA is <strong>translated</strong> into protein.</li>
+          <li><span class="mem">DNA → RNA → protein</span>: DNA is <span class="mem">transcribed</span> into RNA, and RNA is <span class="mem">translated</span> into protein.</li>
         </ul>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>This is the <u>directional flow</u> of genetic information and the skeleton the whole module hangs on. L2 walks each arrow in detail — <strong>transcription</strong> (DNA → RNA) and <strong>translation</strong> (RNA → protein) — and L4 shows how viruses bend the rules of this flow. Know it cold; it's the map you'll navigate everything else with.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>This is the <span class="concept">directional flow</span> of genetic information and the skeleton the whole module hangs on. L2 walks each arrow in detail — <span class="mem">transcription</span> (DNA → RNA) and <span class="mem">translation</span> (RNA → protein) — and L4 shows how viruses bend the rules of this flow. Know it cold; it's the map you'll navigate everything else with.</div>
       <div class="fc">
         <span class="fc-tag">Flashcard</span>
         <div class="fc-q">State the central dogma and name the two processes.</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><strong>DNA → RNA → protein</strong> via <strong>transcription</strong> then <strong>translation</strong>.</div>
+        <div class="fc-a" hidden><span class="mem">DNA → RNA → protein</span> via <span class="mem">transcription</span> then <span class="mem">translation</span>.</div>
       </div>
     </article>
 
-    <!-- ---- Q5 (TEMPLATE — to fill in session) ---- -->
     <article class="q" id="m3l1-q5">
       <div class="q-head"><span class="q-num">Q5</span><span class="q-text">Compare and contrast a typical bacterial genome, a typical archaeal genome, and a typical eukaryotic genome.</span></div>
       <div class="answer"><span class="lbl">Answer</span><p class="pending">— we'll fill this in during our session —</p></div>
       <figure class="fig placeholder">Image slot — paste a slide screenshot (e.g., the genome-comparison slide) and I'll embed it right here with a caption.</figure>
     </article>
 
-    <!-- ---- Q6 ---- -->
     <article class="q" id="m3l1-q6">
       <div class="q-head"><span class="q-num">Q6</span><span class="q-text">If I describe a genome, can you tell what type of organism it is likely in?</span></div>
       <div class="answer"><span class="lbl">Answer</span><p class="pending">— we'll fill this in during our session —</p></div>
     </article>
 
-    <!-- ---- Q7 ---- -->
     <article class="q" id="m3l1-q7">
       <div class="q-head"><span class="q-num">Q7</span><span class="q-text">What is supercoiling?</span></div>
       <div class="answer"><span class="lbl">Answer</span><p class="pending">— we'll fill this in during our session —</p></div>
     </article>
 
-    <!-- ---- Q8 ---- -->
     <article class="q" id="m3l1-q8">
       <div class="q-head"><span class="q-num">Q8</span><span class="q-text">What controls positive and negative supercoiling?</span></div>
       <div class="answer"><span class="lbl">Answer</span><p class="pending">— we'll fill this in during our session —</p></div>
     </article>
 
-    <!-- ---- Q9 ---- -->
     <article class="q" id="m3l1-q9">
       <div class="q-head"><span class="q-num">Q9</span><span class="q-text">What is the benefit of positive supercoiling?</span></div>
       <div class="answer"><span class="lbl">Answer</span><p class="pending">— we'll fill this in during our session —</p></div>
     </article>
 
-    <!-- ---- Q10 ---- -->
     <article class="q" id="m3l1-q10">
       <div class="q-head"><span class="q-num">Q10</span><span class="q-text">What are operons?</span></div>
       <div class="answer"><span class="lbl">Answer</span><p class="pending">— we'll fill this in during our session —</p></div>
     </article>
 
-    <!-- ---- Q11 ---- -->
     <article class="q" id="m3l1-q11">
       <div class="q-head"><span class="q-num">Q11</span><span class="q-text">How are operons regulated?</span></div>
       <div class="answer"><span class="lbl">Answer</span><p class="pending">— we'll fill this in during our session —</p></div>
     </article>
 
-    <!-- ---- Q12 ---- -->
     <article class="q" id="m3l1-q12">
       <div class="q-head"><span class="q-num">Q12</span><span class="q-text">What are plasmids?</span></div>
       <div class="answer"><span class="lbl">Answer</span><p class="pending">— we'll fill this in during our session —</p></div>
     </article>
 
-    <!-- ---- Q13 ---- -->
     <article class="q" id="m3l1-q13">
       <div class="q-head"><span class="q-num">Q13</span><span class="q-text">What is often found on plasmids?</span></div>
       <div class="answer"><span class="lbl">Answer</span><p class="pending">— we'll fill this in during our session —</p></div>
     </article>
 
-    <!-- ---- Q14 ---- -->
     <article class="q" id="m3l1-q14">
       <div class="q-head"><span class="q-num">Q14</span><span class="q-text">How are plasmids different from chromosomes?</span></div>
       <div class="answer"><span class="lbl">Answer</span><p class="pending">— we'll fill this in during our session —</p></div>
     </article>
   </section>
 
-  <!-- ============================== M3 · L2 ============================== -->
   <section class="lesson" id="m3l2">
     <h2 class="lesson-title">Module 3 · Lesson 2 — Making Informational Macromolecules</h2>
     <p class="lesson-meta">7 questions on Exam 2 · organized into DNA Replication / Transcription / Translation. Added when we reach this lesson.</p>
   </section>
 
-  <!-- ============================== M3 · L3 ============================== -->
   <section class="lesson" id="m3l3">
     <h2 class="lesson-title">Module 3 · Lesson 3 — Mutation &amp; Gene Transfer</h2>
     <p class="lesson-meta">8 questions on Exam 2. Added when we reach this lesson.</p>
   </section>
 
-  <!-- ============================== M3 · L4 ============================== -->
   <section class="lesson" id="m3l4">
     <h2 class="lesson-title">Module 3 · Lesson 4 — Viral Genetics</h2>
     <p class="lesson-meta">8 questions on Exam 2. Added when we reach this lesson.</p>
   </section>
 
-  <!-- ============================== MODULE 4 ============================== -->
   <section class="lesson" id="m4">
     <h2 class="lesson-title">Module 4 — Microbial Diversity</h2>
     <p class="lesson-meta">Lessons added as we work through Module 4.</p>
   </section>
 
-  <!-- =========================================================
-       TEMPLATE TO COPY for a new question block:
-
-       <article class="q" id="UNIQUE-ID">
-         <div class="q-head"><span class="q-num">Q#</span><span class="q-text">Question text here.
-           <span class="sub">Optional sub-bullet from the review doc.</span></span></div>
-         <div class="answer">
-           <span class="lbl">Answer</span>
-           <ul><li>Concise point with <strong>key term</strong>.</li></ul>
-         </div>
-         <div class="explain bl"><span class="lbl">Explanation</span><br>Prose with
-           <strong>bold</strong> and <u>underlined</u> key terms. This block gets the BeeLine gradient.</div>
-         <figure class="fig"><img src="data:image/png;base64,..." alt="..."><figcaption>Caption.</figcaption></figure>
-         <div class="fc"><span class="fc-tag">Flashcard</span>
-           <div class="fc-q">Front.</div>
-           <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-           <div class="fc-a" hidden>Back.</div></div>
-       </article>
-       ========================================================= -->
+  <!-- TEMPLATE for a new question block:
+  <article class="q" id="UNIQUE-ID">
+    <div class="q-head"><span class="q-num">Q#</span><span class="q-text">Question text.
+      <span class="sub">Optional sub-bullet from the review doc.</span></span></div>
+    <div class="answer"><span class="lbl">Answer</span>
+      <ul><li>Point with <span class="mem">memory term</span> and <span class="concept">conceptual term</span>.</li></ul></div>
+    <div class="explain bl"><span class="lbl">Explanation</span><br>Prose with colour-coded key terms (gradient overrides colour when on; colour shows when gradient is off).</div>
+    <figure class="fig"><img src="data:image/png;base64,..." alt="..."><figcaption>Caption.</figcaption></figure>
+    <div class="fc"><span class="fc-tag">Flashcard</span>
+      <div class="fc-q">Front.</div>
+      <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+      <div class="fc-a" hidden>Back.</div></div>
+  </article> -->
 </main>
 
 <script>
 (function(){
-  /* ---------- state ---------- */
   var BL_ON = true, THEME = 'paper';
   var SIZES = [15,16,17,18,20,22], si = 3;
   var PAL = { paper:['#1A4D8F','#B23A2E'], dark:['#7FB5F0','#F2A488'] };
   var main = document.querySelector('main');
-
-  /* ---------- helpers ---------- */
   function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
   function mix(c1,c2,t){var a=hx(c1),b=hx(c2),r=function(i){return Math.round(a[i]+(b[i]-a[i])*t);};return 'rgb('+r(0)+','+r(1)+','+r(2)+')';}
-
-  /* wrap words while PRESERVING inline tags (strong, u) */
   function wrapNode(node){
     var kids = Array.prototype.slice.call(node.childNodes);
     kids.forEach(function(k){
@@ -348,16 +286,13 @@
           else { var s=document.createElement('span'); s.className='blw'; s.textContent=tok; frag.appendChild(s); }
         });
         node.replaceChild(frag, k);
-      } else if(k.nodeType === 1 && !k.classList.contains('lbl')){
-        wrapNode(k);
-      }
+      } else if(k.nodeType === 1 && !k.classList.contains('lbl')){ wrapNode(k); }
     });
   }
   function ensureWrapped(el){
     if(el.dataset.w) return;
-    /* skip the leading label + <br>; wrap the rest */
     Array.prototype.slice.call(el.childNodes).forEach(function(n){
-      if(n.nodeType===1 && (n.classList && n.classList.contains('lbl'))) return;
+      if(n.nodeType===1 && n.classList && n.classList.contains('lbl')) return;
       if(n.nodeType===1 && n.tagName==='BR') return;
       if(n.nodeType===3 && n.textContent.trim()==='') return;
       if(n.nodeType===3){ var wrap=document.createElement('span'); el.replaceChild(wrap,n); wrap.appendChild(n); wrapNode(wrap); }
@@ -365,7 +300,6 @@
     });
     el.dataset.w = '1';
   }
-
   function colorBlock(el){
     var words = Array.prototype.slice.call(el.querySelectorAll('.blw'));
     if(!words.length) return;
@@ -380,29 +314,23 @@
     var pal = PAL[THEME];
     lines.forEach(function(line, li){
       var start = pal[li%2], end = pal[(li+1)%2], n = line.length;
-      line.forEach(function(w, wi){
-        w.style.color = mix(start, end, n>1 ? wi/(n-1) : 0);
-      });
+      line.forEach(function(w, wi){ w.style.color = mix(start, end, n>1 ? wi/(n-1) : 0); });
     });
   }
   function recolor(){
-    var blocks = document.querySelectorAll('.explain.bl');
-    blocks.forEach(function(el){
+    document.querySelectorAll('.explain.bl').forEach(function(el){
       ensureWrapped(el);
       if(BL_ON) colorBlock(el);
       else el.querySelectorAll('.blw').forEach(function(w){ w.style.color=''; });
     });
   }
-
-  /* ---------- controls ---------- */
   var blBtn = document.getElementById('blBtn');
   blBtn.onclick = function(){
     BL_ON = !BL_ON;
-    blBtn.textContent = 'BeeLine: ' + (BL_ON ? 'on' : 'off');
+    blBtn.textContent = 'Text gradient: ' + (BL_ON ? 'on' : 'off');
     blBtn.setAttribute('aria-pressed', BL_ON);
     recolor();
   };
-
   var themeBtn = document.getElementById('themeBtn');
   themeBtn.onclick = function(){
     THEME = (THEME==='paper') ? 'dark' : 'paper';
@@ -410,7 +338,6 @@
     themeBtn.textContent = (THEME==='paper') ? 'Dark' : 'Light';
     setTimeout(recolor, 20);
   };
-
   function applySize(){
     main.style.fontSize = SIZES[si] + 'px';
     document.getElementById('fsOut').textContent = SIZES[si] + 'px';
@@ -418,12 +345,9 @@
   }
   document.getElementById('fsUp').onclick = function(){ if(si<SIZES.length-1){ si++; applySize(); } };
   document.getElementById('fsDown').onclick = function(){ if(si>0){ si--; applySize(); } };
-
   document.getElementById('jump').onchange = function(){
     if(this.value){ var t=document.getElementById(this.value); if(t) t.scrollIntoView({block:'start'}); }
   };
-
-  /* flashcards */
   document.querySelectorAll('.fc-btn').forEach(function(btn){
     btn.onclick = function(){
       var a = btn.parentElement.querySelector('.fc-a');
@@ -433,8 +357,6 @@
       btn.setAttribute('aria-expanded', !open);
     };
   });
-
-  /* ---------- init ---------- */
   main.style.fontSize = SIZES[si] + 'px';
   var rt; window.addEventListener('resize', function(){ clearTimeout(rt); rt=setTimeout(recolor, 130); });
   function init(){ recolor(); }
