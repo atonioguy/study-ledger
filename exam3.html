@@ -141,6 +141,14 @@
   #book-clear:hover{ border-color:var(--bad); color:var(--bad); }
   .bm-arrow{ display:none; position:absolute; right:-3px; bottom:-3px; width:19px; height:19px; border-radius:50%; background:var(--card); color:var(--book); border:1.5px solid var(--book); font-size:12px; font-weight:700; line-height:1; align-items:center; justify-content:center; }
   #book-dock.has-bm .bm-arrow{ display:flex; }
+  #kudos-btn{ display:inline-flex; align-items:center; gap:5px; }
+  #kudos-btn.sent{ border-color:var(--ok); color:var(--ok); }
+  #kudos-count{ font-weight:700; }
+  #kudos-toast{ position:fixed; left:50%; top:64px; transform:translateX(-50%) translateY(-12px); background:var(--card); color:var(--ink); border:1px solid var(--border); border-radius:10px; padding:11px 16px; font-size:14px; box-shadow:0 6px 22px rgba(0,0,0,.18); z-index:120; opacity:0; pointer-events:none; transition:opacity .25s,transform .25s; max-width:90vw; text-align:center; }
+  #kudos-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  #confetti-layer{ position:fixed; inset:0; pointer-events:none; z-index:110; overflow:hidden; }
+  .confetti{ position:fixed; top:14px; width:9px; height:14px; opacity:1; animation:confetti-fall var(--dur,2.4s) cubic-bezier(.2,.6,.3,1) forwards; }
+  @keyframes confetti-fall{ to{ transform:translate(var(--dx,0), 108vh) rotateZ(var(--rot,720deg)); opacity:0; } }
 </style>
 </head>
 <body class="paper">
@@ -148,6 +156,7 @@
 <header class="bar">
   <button id="menu-btn" aria-label="Open navigation" aria-expanded="false"><span class="ic"><span></span></span>Menu</button>
   <span class="bar-title">Exam 3 Study Notes</span>
+  <button id="kudos-btn" title="Send some kudos">👏 Kudos <span id="kudos-count">0</span></button>
   <span class="spacer"></span>
   <select id="font-pick" title="Reading font" aria-label="Reading font">
     <option value="newsreader">Font: Newsreader</option>
@@ -175,6 +184,9 @@
   <div class="sb-flagtoggle"><button id="flag-only" aria-pressed="false">&#x2691; Flagged only</button></div>
   <nav class="sb-tree" id="sb-tree"></nav>
 </aside>
+
+<div id="confetti-layer" aria-hidden="true"></div>
+<div id="kudos-toast" role="status" aria-live="polite"></div>
 
 <main>
   <h1 class="doc-title">Applied Microbiology — Exam 3</h1>
@@ -1302,61 +1314,94 @@ window.smoothScrollTo=function(el){
   var at=false; window.addEventListener('scroll',function(){ if(at)return; at=true; requestAnimationFrame(function(){ updateArrow(); at=false; }); }, {passive:true});
 })();
 
-/* ---- highlight (drag-to-select, experimental, per-browser) ---- */
+/* ---- highlight: drag-select (mouse) + tap-a-sentence (touch); per-text-node, list-safe ---- */
 (function(){
-  var KEY='exam3-highlights';
-  var ON=true;
+  var KEY='exam3-highlights', ON=true, coarse=false;
+  try{ coarse=window.matchMedia('(pointer: coarse)').matches; }catch(e){}
   function store(){ try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};} }
   function save(o){ try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){} }
   function artOf(node){ while(node && node!==document){ if(node.nodeType===1 && node.classList && node.classList.contains('q')) return node; node=node.parentNode; } return null; }
-  function serialize(art){
-    var ranges=[], pos=0;
+  function offsetOf(art,node,off){ var r=document.createRange(); r.selectNodeContents(art); try{ r.setEnd(node,off); }catch(e){ return 0; } return r.toString().length; }
+  function fullText(art){ var r=document.createRange(); r.selectNodeContents(art); return r.toString(); }
+  function markOffsets(art){
+    var res=[], pos=0;
     (function walk(node){
       for(var i=0;i<node.childNodes.length;i++){ var c=node.childNodes[i];
         if(c.nodeType===3){ pos+=c.nodeValue.length; }
         else if(c.nodeType===1){
-          if(c.classList && c.classList.contains('hl')){ var s=pos,len=c.textContent.length; ranges.push([s,s+len]); pos+=len; }
+          if(c.classList && c.classList.contains('hl')){ res.push({el:c,start:pos,end:pos+c.textContent.length}); pos+=c.textContent.length; }
           else walk(c);
         } }
     })(art);
-    ranges.sort(function(a,b){return a[0]-b[0];});
-    var out=[]; ranges.forEach(function(r){ if(out.length&&r[0]<=out[out.length-1][1]) out[out.length-1][1]=Math.max(out[out.length-1][1],r[1]); else out.push(r.slice()); });
+    return res;
+  }
+  function serialize(art){
+    var ms=markOffsets(art).map(function(m){return [m.start,m.end];});
+    ms.sort(function(a,b){return a[0]-b[0];});
+    var out=[]; ms.forEach(function(r){ if(out.length&&r[0]<=out[out.length-1][1]) out[out.length-1][1]=Math.max(out[out.length-1][1],r[1]); else out.push(r.slice()); });
     return out;
   }
   function persist(art){ var o=store(); var s=serialize(art); if(s.length)o[art.id]=s; else delete o[art.id]; save(o); }
-  function wrapRange(art,start,end){
-    var tw=document.createTreeWalker(art,NodeFilter.SHOW_TEXT,null), n, pos=0, sN=null,sO=0,eN=null,eO=0;
-    while((n=tw.nextNode())){ var len=n.nodeValue.length;
-      if(sN===null && pos+len>start){ sN=n; sO=start-pos; }
-      if(pos+len>=end){ eN=n; eO=end-pos; break; } pos+=len; }
-    if(!sN||!eN)return;
-    var range=document.createRange(); range.setStart(sN,sO); range.setEnd(eN,eO);
-    var m=document.createElement('mark'); m.className='hl';
-    try{ range.surroundContents(m); }catch(e){ try{ var frag=range.extractContents(); m.appendChild(frag); range.insertNode(m); }catch(e2){} }
+  function highlightRange(art,start,end){
+    if(end<=start) return;
+    var targets=[], pos=0, tw=document.createTreeWalker(art,NodeFilter.SHOW_TEXT,null), n;
+    while((n=tw.nextNode())){
+      var len=n.nodeValue.length, s=pos, e=pos+len; pos=e;
+      if(n.parentNode && n.parentNode.classList && n.parentNode.classList.contains('hl')) continue;
+      var a=Math.max(start,s), b=Math.min(end,e);
+      if(b>a) targets.push({node:n, from:a-s, to:b-s});
+    }
+    targets.forEach(function(t){ try{ var r=document.createRange(); r.setStart(t.node,t.from); r.setEnd(t.node,t.to); var m=document.createElement('mark'); m.className='hl'; r.surroundContents(m); }catch(e){} });
   }
-  function applyStored(){ var o=store(); Object.keys(o).forEach(function(id){ var art=document.getElementById(id); if(!art)return; o[id].slice().sort(function(a,b){return b[0]-a[0];}).forEach(function(r){ wrapRange(art,r[0],r[1]); }); }); }
-
+  function unwrap(m){ var p=m.parentNode; if(!p) return; while(m.firstChild) p.insertBefore(m.firstChild,m); p.removeChild(m); p.normalize(); }
+  function removeRange(art,start,end){ markOffsets(art).forEach(function(m){ if(m.start<end && m.end>start) unwrap(m.el); }); }
+  function applyStored(){ var o=store(); Object.keys(o).forEach(function(id){ var art=document.getElementById(id); if(!art)return; o[id].forEach(function(r){ highlightRange(art,r[0],r[1]); }); }); }
+  function caretPos(x,y){
+    if(document.caretPositionFromPoint){ var pp=document.caretPositionFromPoint(x,y); return pp?{node:pp.offsetNode,offset:pp.offset}:null; }
+    if(document.caretRangeFromPoint){ var rr=document.caretRangeFromPoint(x,y); return rr?{node:rr.startContainer,offset:rr.startOffset}:null; }
+    return null;
+  }
+  function sentenceAt(art,x,y){
+    var pp=caretPos(x,y); if(!pp||!art.contains(pp.node)) return null;
+    var tap=offsetOf(art,pp.node,pp.offset), full=fullText(art), start=tap, end=tap;
+    while(start>0 && !/[.!?]/.test(full.charAt(start-1))) start--;
+    while(end<full.length && !/[.!?]/.test(full.charAt(end))) end++;
+    if(end<full.length) end++;
+    while(start<end && /\s/.test(full.charAt(start))) start++;
+    while(end>start && /\s/.test(full.charAt(end-1))) end--;
+    return {start:start,end:end};
+  }
   var guard=0;
   document.addEventListener('mouseup', function(){
-    if(!ON) return;
+    if(!ON||coarse) return;
     var sel=window.getSelection(); if(!sel||sel.isCollapsed||!sel.rangeCount) return;
     var r=sel.getRangeAt(0); if(r.collapsed||!sel.toString().trim()) return;
-    var a1=artOf(r.startContainer), a2=artOf(r.endContainer);
-    if(!a1||a1!==a2) return;
-    if(artOf(r.startContainer)===null) return;
-    /* avoid wrapping if selection is inside header/sidebar etc (already filtered by artOf) */
-    var m=document.createElement('mark'); m.className='hl';
-    try{ r.surroundContents(m); }catch(e){ try{ var frag=r.extractContents(); m.appendChild(frag); r.insertNode(m); }catch(e2){ return; } }
-    sel.removeAllRanges(); guard=Date.now(); persist(a1); setTimeout(function(){window.recolorAll&&window.recolorAll();},20);
+    var a1=artOf(r.startContainer), a2=artOf(r.endContainer); if(!a1||a1!==a2) return;
+    var s=offsetOf(a1,r.startContainer,r.startOffset), e=offsetOf(a1,r.endContainer,r.endOffset);
+    if(e<s){ var t=s; s=e; e=t; }
+    highlightRange(a1,s,e); sel.removeAllRanges(); guard=Date.now(); persist(a1);
+    setTimeout(function(){window.recolorAll&&window.recolorAll();},20);
   });
   document.addEventListener('click', function(e){
+    if(coarse) return;
+    if(Date.now()-guard<350) return;
     var m=e.target; while(m&&m!==document){ if(m.nodeType===1&&m.classList&&m.classList.contains('hl'))break; m=m.parentNode; }
     if(!m||m===document) return;
-    if(Date.now()-guard<350) return; /* don't instantly remove a fresh highlight */
-    var art=artOf(m); var p=m.parentNode;
-    while(m.firstChild) p.insertBefore(m.firstChild,m); p.removeChild(m); p.normalize();
-    if(art) persist(art); setTimeout(function(){window.recolorAll&&window.recolorAll();},20);
+    var art=artOf(m); unwrap(m); if(art) persist(art);
+    setTimeout(function(){window.recolorAll&&window.recolorAll();},20);
   });
+  if(coarse){
+    document.addEventListener('click', function(e){
+      if(!ON) return;
+      if(e.target.closest && e.target.closest('button, select, a, input, label, #sidebar, header.bar, #book-dock')) return;
+      var art=artOf(e.target); if(!art) return;
+      var sel=window.getSelection(); if(sel && !sel.isCollapsed) return;
+      var sent=sentenceAt(art, e.clientX, e.clientY); if(!sent||sent.end<=sent.start) return;
+      var hit=markOffsets(art).some(function(m){ return m.start<sent.end && m.end>sent.start; });
+      if(hit) removeRange(art,sent.start,sent.end); else highlightRange(art,sent.start,sent.end);
+      persist(art); setTimeout(function(){window.recolorAll&&window.recolorAll();},20);
+    });
+  }
   document.getElementById('hl-toggle').onclick=function(){ ON=!ON; this.textContent='Highlight: '+(ON?'on':'off'); this.setAttribute('aria-pressed',ON); document.body.classList.toggle('hl-off',!ON); };
   window.addEventListener('DOMContentLoaded', applyStored);
   if(document.readyState!=='loading') applyStored();
@@ -1385,6 +1430,39 @@ window.smoothScrollTo=function(el){
     var a=b.parentElement.querySelector('.fc-a'); if(!a) return;
     var open=!a.hidden; a.hidden=open; b.textContent=open?'Reveal answer':'Hide answer'; b.setAttribute('aria-expanded',!open);
   });
+})();
+
+/* ---- kudos button: confetti + thank-you + per-browser counter ---- */
+(function(){
+  var CK='exam3-kudos-sent', CC='exam3-kudos-count';
+  var btn=document.getElementById('kudos-btn'), cnt=document.getElementById('kudos-count');
+  if(!btn) return;
+  var count=0; try{ count=parseInt(localStorage.getItem(CC)||'0',10)||0; }catch(e){}
+  var sent=false; try{ sent=localStorage.getItem(CK)==='1'; }catch(e){}
+  function render(){ cnt.textContent=count; if(sent){ btn.classList.add('sent'); btn.title='Thanks for the kudos!'; } }
+  render();
+  function toast(msg){ var t=document.getElementById('kudos-toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('show'); },3200); }
+  function confetti(){
+    var layer=document.getElementById('confetti-layer'); if(!layer) return;
+    var cols=['#E0922A','#1A4D8F','#C0492B','#2E7D52','#D9B877','#7FB5F0'];
+    var rect=btn.getBoundingClientRect(), cx=rect.left+rect.width/2;
+    for(var i=0;i<60;i++){ (function(){
+      var d=document.createElement('div'); d.className='confetti';
+      d.style.left=cx+'px'; d.style.background=cols[i%cols.length];
+      d.style.setProperty('--dx',(Math.random()*460-230).toFixed(0)+'px');
+      d.style.setProperty('--rot',(Math.random()*900-200).toFixed(0)+'deg');
+      var dur=(1.8+Math.random()*1.4).toFixed(2); d.style.setProperty('--dur',dur+'s');
+      d.style.animationDelay=(Math.random()*0.18).toFixed(2)+'s';
+      if(Math.random()<0.5) d.style.borderRadius='50%';
+      layer.appendChild(d);
+      setTimeout(function(){ if(d.parentNode) d.parentNode.removeChild(d); }, (parseFloat(dur)+0.6)*1000);
+    })(); }
+  }
+  btn.onclick=function(){
+    confetti();
+    if(!sent){ sent=true; count++; try{localStorage.setItem(CK,'1'); localStorage.setItem(CC,String(count));}catch(e){} render(); toast('Thanks for the kudos! Good luck on the exam 🎉'); }
+    else { toast('You already sent kudos — thanks again! 🎉'); }
+  };
 })();
 </script>
 </body>
