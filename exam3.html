@@ -1,4 +1,4 @@
-<!-- build log: v2.8 live · next: fill M6 (Symbiosis) blocks with real content + build M6 reinforcement quizzes -->
+<!-- build log: v2.9 live · next: fill M6 (Symbiosis) blocks with real content + build M6 reinforcement quizzes -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -218,6 +218,8 @@
   #bar-tab:hover{ opacity:1; color:var(--ink); }
   #theme-toggle{ display:inline-flex; align-items:center; justify-content:center; min-width:34px; }
   #theme-toggle svg{ display:block; }
+  #collapse-toggle{ display:inline-flex; align-items:center; justify-content:center; min-width:34px; }
+  #collapse-toggle svg{ display:block; }
   .grad-dd{ position:relative; display:inline-block; }
   .grad-sw{ display:inline-block; width:26px; height:12px; border-radius:3px; flex:0 0 26px; border:1px solid var(--border); }
   .grad-sw-none{ background:repeating-linear-gradient(45deg,var(--border-soft),var(--border-soft) 3px,transparent 3px,transparent 6px); }
@@ -321,8 +323,7 @@
   <span class="bar-right">
   <button id="recall-btn" type="button" aria-pressed="false" title="Recall: hide answers for self-testing"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg><span>Recall</span></button>
   <button id="quick-btn" type="button" aria-pressed="false" title="Quick: hide explanations &amp; flashcards, keep the answer"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Quick</span></button>
-  <button id="collapse-all" type="button" title="Collapse all lessons">Collapse all</button>
-  <button id="expand-all" type="button" title="Expand all lessons">Expand all</button>
+  <button id="collapse-toggle" type="button" title="Collapse all lessons" aria-label="Collapse all lessons"></button>
   <span class="font-dd reset-dd"><button id="reset-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Reset saved data">Reset &#9662;</button><div id="reset-menu" class="font-menu" role="menu" hidden></div></span>
   </span>
 </div>
@@ -338,7 +339,7 @@
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
-  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.8</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.9</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
   <div class="sb-focus">
     <div class="sb-focus-label">Focus</div>
     <div class="sb-focus-row">
@@ -1948,12 +1949,15 @@ window.smoothScrollTo=function(el){
   secs.forEach(function(sec){
     var title=sec.querySelector('.lesson-title'); if(!title)return;
     var cb=document.createElement('button'); cb.type='button'; cb.className='les-caret'; cb.setAttribute('aria-label','Collapse or expand lesson'); cb.innerHTML=CARET;
-    cb.onclick=function(){ sec.classList.toggle('collapsed'); };
+    cb.onclick=function(){ sec.classList.toggle('collapsed'); if(window.updateCollToggle) window.updateCollToggle(); };
     title.insertBefore(cb, title.firstChild);
   });
-  var ca=document.getElementById('collapse-all'), ea=document.getElementById('expand-all');
-  if(ca) ca.onclick=function(){ secs.forEach(function(s){s.classList.add('collapsed');}); };
-  if(ea) ea.onclick=function(){ secs.forEach(function(s){s.classList.remove('collapsed');}); };
+  var collBtn=document.getElementById('collapse-toggle');
+  var COL_IC='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 5 12 9 20 5"/><polyline points="4 19 12 15 20 19"/></svg>';
+  var EXP_IC='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 9 12 5 20 9"/><polyline points="4 15 12 19 20 15"/></svg>';
+  function allCollapsed(){ return secs.length>0 && secs.every(function(s){ return s.classList.contains('collapsed'); }); }
+  window.updateCollToggle=function(){ if(!collBtn)return; var ac=allCollapsed(); collBtn.innerHTML=ac?EXP_IC:COL_IC; collBtn.title=ac?'Expand all lessons':'Collapse all lessons'; collBtn.setAttribute('aria-label',collBtn.title); };
+  if(collBtn){ collBtn.onclick=function(){ var doCollapse=!allCollapsed(); secs.forEach(function(s){ s.classList.toggle('collapsed',doCollapse); }); window.updateCollToggle(); }; window.updateCollToggle(); }
 
   /* reset dropdown */
   var rbtn=document.getElementById('reset-btn'), rmenu=document.getElementById('reset-menu');
