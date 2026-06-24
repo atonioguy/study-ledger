@@ -1359,7 +1359,7 @@ window.smoothScrollTo=function(el){
       var len=n.nodeValue.length, s=pos, e=pos+len; pos=e;
       var par=n.parentNode;
       if(par && par.classList && par.classList.contains('hl')) continue;     /* already highlighted */
-      if(n.nodeValue.replace(/\s/g,'')==='') continue;                       /* whitespace-only -> no slivers */
+      if(n.nodeValue.replace(/\s/g,'')==='' && /[\n\r]/.test(n.nodeValue)) continue;                       /* whitespace-only -> no slivers */
       if(inLabel(par,art)) continue;                                         /* don't highlight Answer/Explanation labels */
       var a=Math.max(start,s), b=Math.min(end,e);
       if(b>a) targets.push({node:n, from:a-s, to:b-s});
@@ -1459,16 +1459,30 @@ window.smoothScrollTo=function(el){
   });
 })();
 
-/* ---- kudos button: confetti + thank-you + per-browser counter ---- */
+/* ---- kudos button: confetti + warm message + GLOBAL counter (Abacus) with local fallback ---- */
 (function(){
-  var CK='exam3-kudos-sent', CC='exam3-kudos-count';
+  var NS='atonioguy-study-ledger', KEY='exam3-kudos', BASE='https://abacus.jasoncameron.dev';
+  var SENT='exam3-kudos-sent', LOCAL='exam3-kudos-local';
   var btn=document.getElementById('kudos-btn'), cnt=document.getElementById('kudos-count');
   if(!btn) return;
-  var count=0; try{ count=parseInt(localStorage.getItem(CC)||'0',10)||0; }catch(e){}
-  var sent=false; try{ sent=localStorage.getItem(CK)==='1'; }catch(e){}
-  function render(){ cnt.textContent=count; if(sent){ btn.classList.add('sent'); btn.title='Thanks for the kudos!'; } }
-  render();
-  function toast(msg){ var t=document.getElementById('kudos-toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('show'); },3200); }
+  var sent=false; try{ sent=localStorage.getItem(SENT)==='1'; }catch(e){}
+  var localN=0; try{ localN=parseInt(localStorage.getItem(LOCAL)||'0',10)||0; }catch(e){}
+  function show(n){ cnt.textContent=(n==null?'\u2026':n); }
+  function markSent(){ if(sent){ btn.classList.add('sent'); btn.title='Thanks for the kudos!'; } }
+  markSent();
+  function getCount(){
+    fetch(BASE+'/get/'+NS+'/'+KEY).then(function(r){ return r.ok?r.json():null; })
+      .then(function(d){ show(d&&typeof d.value!=='undefined'? d.value : (localN||0)); })
+      .catch(function(){ show(localN||0); });
+  }
+  function hit(){ return fetch(BASE+'/hit/'+NS+'/'+KEY).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(d){ return d.value; }); }
+  show('\u2026'); getCount();
+  var warm=[
+    'So glad these notes are helping \u2014 good luck studying! \uD83C\uDF40',
+    'Happy these notes help \u2014 you\u2019ve got this! \uD83C\uDF40',
+    'Glad they\u2019re useful \u2014 go ace that exam! \uD83C\uDF89'
+  ];
+  function toast(msg){ var t=document.getElementById('kudos-toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('show'); },3400); }
   function confetti(){
     var layer=document.getElementById('confetti-layer'); if(!layer) return;
     var cols=['#E0922A','#1A4D8F','#C0492B','#2E7D52','#D9B877','#7FB5F0'];
@@ -1487,8 +1501,15 @@ window.smoothScrollTo=function(el){
   }
   btn.onclick=function(){
     confetti();
-    if(!sent){ sent=true; count++; try{localStorage.setItem(CK,'1'); localStorage.setItem(CC,String(count));}catch(e){} render(); toast('Thanks for the kudos! Good luck on the exam 🎉'); }
-    else { toast('You already sent kudos — thanks again! 🎉'); }
+    if(!sent){
+      sent=true; try{localStorage.setItem(SENT,'1');}catch(e){}
+      markSent();
+      hit().then(function(v){ show(v); }).catch(function(){ localN++; try{localStorage.setItem(LOCAL,String(localN));}catch(e){} show(localN); });
+      toast('Thanks for the kudos! Good luck on the exam \uD83C\uDF89');
+    } else {
+      toast(warm[Math.floor(Math.random()*warm.length)]);
+      getCount();
+    }
   };
 })();
 </script>
