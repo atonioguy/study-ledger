@@ -63,6 +63,22 @@
 
   .explain{ margin-top:14px; }
   .explain.bl{ font-size:.97em; }
+  /* answer: scannable takeaway + nestled support */
+  .takeaway{ font-size:1.03em; line-height:1.5; padding:9px 12px; margin:2px 0 0; border-left:3px solid var(--accent); background:color-mix(in srgb, var(--accent) 7%, transparent); border-radius:0 6px 6px 0; }
+  .takeaway p{ margin:0; } .takeaway p+p{ margin-top:6px; } .takeaway ul{ margin:4px 0 0; padding-left:18px; } .takeaway li{ margin:0 0 4px; }
+  .support{ margin-top:10px; padding-left:13px; border-left:1px dashed var(--border); }
+  .support, .support p, .support li{ font-size:.93em; color:var(--ink-soft); }
+  .support p{ margin:0 0 6px; } .support p:last-child{ margin-bottom:0; }
+  .support ul{ margin:2px 0 4px; padding-left:18px; } .support li{ margin:0 0 5px; }
+  .support .mem{ color:var(--mem); } .support .concept{ color:var(--concept); }
+  .sub{ font-family:var(--font-sans); font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); opacity:.85; margin:11px 0 4px; }
+  .sub:first-child{ margin-top:2px; }
+  /* explanation split: concept half + exam half */
+  .explain .ex-why + .ex-exam{ margin-top:9px; padding-top:9px; border-top:1px dashed var(--border); }
+  .ex-lab{ display:inline-block; font-family:var(--font-sans); font-size:10px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; opacity:.8; margin-right:7px; }
+  .ex-why .ex-lab{ color:var(--accent); } .ex-exam .ex-lab{ color:var(--mem); }
+  /* quick-review mode: show just the question + core takeaway */
+  body.quick-active .support, body.quick-active .explain, body.quick-active article.q .fc{ display:none; }
 
   /* flashcards */
   .fc{ background:var(--fc-bg); border:1px solid var(--border-soft); border-left:3px solid var(--fc-accent); border-radius:8px; padding:13px 15px; margin:14px 0 4px; }
@@ -232,6 +248,7 @@
     mark.hl{ background:#eaeaea !important; color:#000 !important; box-shadow:none !important; }
     .fc-a{ display:block !important; }
     body.recall-active article.q .answer, body.recall-active article.q .explain{ display:block !important; }
+    body.quick-active .support, body.quick-active .explain, body.quick-active article.q .fc{ display:block !important; }
     section.lesson.collapsed > :not(.quiz-shell){ display:block !important; }
     a{ color:#000 !important; text-decoration:none !important; }
     .lesson-title, .topic-divider, article.q, .fc{ page-break-inside:avoid; break-inside:avoid; }
@@ -266,6 +283,7 @@
 </header>
 <div class="bar" id="study-bar">
   <button id="recall-btn" type="button" aria-pressed="false" title="Hide answers for self-testing">Recall mode</button>
+  <button id="quick-btn" type="button" aria-pressed="false" title="Quick view: show just the core answer for each question">Quick view</button>
   <button id="collapse-all" type="button" title="Collapse all lessons">Collapse all</button>
   <button id="expand-all" type="button" title="Expand all lessons">Expand all</button>
   <span class="font-dd reset-dd"><button id="reset-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Reset saved data">Reset &#9662;</button><div id="reset-menu" class="font-menu" role="menu" hidden></div></span>
@@ -281,7 +299,7 @@
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
-  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.2</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.3</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
   <div class="sb-focus">
     <div class="sb-focus-label">Focus</div>
     <div class="sb-focus-row">
@@ -309,17 +327,22 @@
     <article class="q" id="m5l1-q1" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q1</span><span class="q-text">What is the difference between habitat, community, ecosystem, guild, and population — and how do they rank in order of diversity?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>These are nested <span class="concept">levels of ecological organization</span>, broadest to narrowest:</p>
-        <ul>
-          <li><span class="mem">Ecosystem</span> — the sum total of all organisms <em>and</em> abiotic factors in a particular environment; contains many habitats.</li>
-          <li><span class="mem">Habitat</span> — the portion of an ecosystem where a community can reside.</li>
-          <li><span class="mem">Community</span> — populations living in association with other populations.</li>
-          <li><span class="mem">Guild</span> — a set of <span class="concept">metabolically related</span> populations within that community.</li>
-          <li><span class="mem">Population</span> — microbes of the <span class="concept">same species</span>, same place, same time.</li>
-        </ul>
-        <p><strong>Order of diversity (most &rarr; least):</strong> <span class="mem">Ecosystem &gt; Habitat &gt; Community &gt; Guild &gt; Population</span>.</p>
+        <div class="takeaway"><strong>Most &rarr; least diverse:</strong> <span class="mem">Ecosystem &gt; Habitat &gt; Community &gt; Guild &gt; Population</span>.</div>
+        <div class="support">
+          <div class="sub">The five levels</div>
+          <ul>
+            <li><span class="mem">Ecosystem</span> &mdash; all organisms <em>plus</em> abiotic factors in an environment; contains many habitats.</li>
+            <li><span class="mem">Habitat</span> &mdash; the part of an ecosystem where a community can live.</li>
+            <li><span class="mem">Community</span> &mdash; populations living together.</li>
+            <li><span class="mem">Guild</span> &mdash; the <span class="concept">metabolically related</span> subset within a community.</li>
+            <li><span class="mem">Population</span> &mdash; one <span class="concept">species</span>, same place and time.</li>
+          </ul>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The exam might give a ranking or matching item — the five terms scrambled to order by diversity, or a one-line definition to match to a term. The trap is the middle tiers — a community is <em>all</em> the populations together, a guild is only the metabolically-related subset (same kind of chemistry), and a population is a single species. Anchor the ends first (ecosystem = everything, including the nonliving parts; population = one species) and the middle falls into place.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Nested scales: ecosystem = everything (including nonliving), zooming in to population = one species. The middle tiers are the confusable part &mdash; a community is <em>all</em> populations together, a guild is only the metabolically related subset.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>A question might scramble the terms to rank, or give a one-line definition to match. Anchor the ends first (ecosystem = everything; population = one species) and the middle falls into place.</div>
+      </div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Rank by diversity, most to least: population, ecosystem, guild, community, habitat.</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -329,15 +352,20 @@
     <article class="q" id="m5l1-q2" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q2</span><span class="q-text">Contrast species richness and species abundance — how would you explain each with an example, and what does each tell you about an environment?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>Two ways to express the <span class="concept">diversity of species</span> in an ecosystem:</p>
-        <ul>
-          <li><span class="mem">Species richness</span> = the total <em>number</em> of different species present.</li>
-          <li><span class="mem">Species abundance</span> = the <em>proportion</em> of each species present (how evenly the community is distributed).</li>
-        </ul>
-        <p>Both are functions of the <span class="concept">nutrients available (kind and amount) and the conditions</span>. <strong>Example:</strong> a pond with 10 species where one alga is 90% of the cells has <span class="mem">high richness</span> but <span class="mem">low / uneven abundance</span>.</p>
-        <p>Richness tells you <em>how many kinds</em> live there; abundance tells you <em>which dominate</em> and how evenly resources are shared.</p>
+        <div class="takeaway"><span class="mem">Richness</span> = how many different species (a count). <span class="mem">Abundance</span> = the proportion / evenness of each species present.</div>
+        <div class="support">
+          <table>
+            <tr><th>Term</th><th>Measures</th><th>Tells you</th></tr>
+            <tr><td><span class="mem">Species richness</span></td><td>number of different species</td><td>how many kinds live there</td></tr>
+            <tr><td><span class="mem">Species abundance</span></td><td>proportion / evenness of each</td><td>which species dominate, how evenly resources are shared</td></tr>
+          </table>
+          <p>Both depend on the <span class="concept">nutrients (kind + amount) and conditions</span>. <strong>Example:</strong> a pond of 10 species where one alga is 90% of cells = high richness but low / uneven abundance.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>A question might hand you a count of species plus a lopsided proportion and ask you to characterize the environment. Don&rsquo;t conflate them: a place can be rich (many species) yet have very uneven abundance (one species dominating). Richness is a headcount; abundance is the distribution. A stable, resource-varied habitat tends to support both high richness and more even abundance, so the numbers also hint at how favorable the environment is.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Rich &ne; even: a place can hold many species (rich) yet be dominated by one (uneven abundance). Richness is a headcount; abundance is the distribution.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>A question might give a species count plus a lopsided proportion and ask you to characterize the environment &mdash; a stable, resource-varied habitat tends toward both high richness and even abundance.</div>
+      </div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Richness vs. abundance — which is a count, which is a proportion?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -347,13 +375,16 @@
     <article class="q" id="m5l1-q3" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q3</span><span class="q-text">What is a niche, and what distinguishes a prime/realized niche from a fundamental niche?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <ul>
-          <li><span class="mem">Niche</span> — the habitat shared by a guild; supplies both the <span class="concept">nutrients and the conditions</span> needed for growth.</li>
-          <li><span class="mem">Fundamental niche</span> — the <em>full range</em> of environmental conditions under which an organism <em>can</em> exist.</li>
-          <li><span class="mem">Realized / prime niche</span> — the one niche in which an organism is <em>most successful</em>. It does not mean the organism cannot live elsewhere — just that this is where it does best.</li>
-        </ul>
+        <div class="takeaway"><span class="mem">Fundamental niche</span> = everywhere an organism <em>could</em> survive (full tolerance range). <span class="mem">Realized / prime niche</span> = where it <em>actually</em> thrives once competition and real limits apply.</div>
+        <div class="support">
+          <table>
+            <tr><th>Fundamental</th><th>Realized (prime)</th></tr>
+            <tr><td>full range it could occupy on paper</td><td>the narrower band where it actually dominates</td></tr>
+          </table>
+          <p>A niche belongs to a <span class="concept">guild</span> &mdash; don&rsquo;t confuse it with a <span class="concept">microenvironment</span> (the immediate surroundings of a single cell).</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The distinction to nail is potential vs. actual. Fundamental = everywhere it <em>could</em> survive on paper (its full tolerance range); realized / prime = where it actually thrives once competition and real-world limits apply. A question might describe an organism living across a broad range but dominating in one narrow set of conditions, then ask which term names that optimum (realized / prime). Keep niche separate from microenvironment — a niche belongs to a guild; a microenvironment is the immediate surroundings of a single cell.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The whole distinction is <em>potential vs. actual</em>. A question might describe an organism living across a broad range but dominating in one narrow set of conditions, then ask which term names that optimum &mdash; that&rsquo;s the realized / prime niche.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Fundamental niche vs. realized (prime) niche?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -364,11 +395,12 @@
     <article class="q" id="m5l1-q4" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q4</span><span class="q-text">What is a microenvironment? Using a soil particle as an example, what types of microbes live in the different microenvironments?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><span class="mem">Microenvironment</span> = the immediate environmental surroundings of a microbial cell or group of cells. Its <span class="concept">physiochemical conditions change rapidly</span> over very small distances and short times (spatially and temporally).</p>
-        <p><strong>Soil-particle example:</strong> a single soil aggregate holds many microenvironments. The <span class="concept">oxygenated outer surface</span> supports <span class="mem">aerobes</span>; as those cells consume O<sub>2</sub>, the <span class="concept">interior turns anoxic</span>, creating a niche for <span class="mem">anaerobes</span>. Different microbes occupy different microenvironments on the <em>same</em> particle.</p>
-        <p>Because resources are patchy, many microbes face a <span class="concept">feast-or-famine</span> existence and grow well below their lab-defined maximum rates.</p>
+        <div class="takeaway">A <span class="mem">microenvironment</span> is the immediate, fast-changing surroundings of a single cell. On one soil particle, an <span class="mem">O<sub>2</sub> gradient</span> over a few millimeters lets <span class="concept">aerobes</span> live on the oxygenated surface and <span class="concept">obligate anaerobes</span> in the anoxic core.</div>
+        <div class="support">
+          <p>Surface microbes use up the oxygen, leaving the interior anoxic &mdash; so anaerobes sit in the core. Keep microenvironment distinct from a <span class="concept">niche</span> (a guild&rsquo;s shared habitat, not one cell&rsquo;s surroundings).</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The soil aggregate is the go-to illustration of why &ldquo;the environment&rdquo; is never uniform: an oxygen gradient across a few millimeters lets aerobes and obligate anaerobes live on one grain at once. A question might ask where on a particle you would find anaerobes (the anoxic core, after surface microbes use up the oxygen). Keep microenvironment distinct from niche — it is the tiny, fast-changing surroundings of a cell, not a guild&rsquo;s shared habitat.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The soil aggregate is the classic illustration that &ldquo;the environment&rdquo; is never uniform. A question might ask where on a particle you&rsquo;d find anaerobes &mdash; the anoxic core, after surface microbes consume the oxygen.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">On one soil particle, where are aerobes vs. anaerobes, and why?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -379,11 +411,18 @@
     <article class="q" id="m5l1-q5" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q5</span><span class="q-text">What components make up soil, what are its four layers, and which layer is the most species-abundant?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><span class="mem">Soil</span> = the loose outer material of Earth&rsquo;s surface. It is either <span class="concept">mineral soil</span> (from rock weathering / inorganic material) or <span class="concept">organic soil</span> (from sedimentation in bogs and marshes).</p>
-        <p><strong>Composition:</strong> ~<span class="mem">40% inorganic matter</span>, ~<span class="mem">5% organic matter</span>, ~<span class="mem">50% air and water</span>, ~<span class="mem">5% organisms</span>.</p>
-        <p><strong>Four layers (soil horizons):</strong> <span class="mem">O</span> (organic litter) &rarr; <span class="mem">A</span> (topsoil) &rarr; <span class="mem">B</span> (subsoil) &rarr; <span class="mem">C</span> (parent material / weathered rock). The <span class="mem">surface / topsoil</span> is the <span class="concept">most species-abundant</span> — most microbial growth is found at the soil surface.</p>
+        <div class="takeaway">Soil &asymp; <span class="mem">50% air + water</span>, <span class="mem">40% inorganic mineral matter</span>, <span class="mem">5% organic matter</span>, <span class="mem">5% organisms</span>. The <span class="mem">surface / topsoil</span> holds the most organic matter and microbial life; richness drops with depth.</div>
+        <div class="support">
+          <div class="sub">Composition (by volume)</div>
+          <p>Air + water ~50% &middot; inorganic mineral ~40% &middot; organic ~5% &middot; living organisms ~5%.</p>
+          <div class="sub">Layers</div>
+          <p>The column has four distinct layers; the takeaway is that the <span class="concept">top is where the action is</span> &mdash; most microbial growth sits at the surface.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Worth memorizing the four proportions — a question might ask for the <em>largest</em> component (air + water at ~50%, just ahead of inorganic mineral matter at ~40%). For the layers, the takeaway is that the top of the column is where the action is: the surface / topsoil is richest in organic matter and microbial life, and richness drops with depth. <em>[Flag: the deck text states only &ldquo;4 distinct layers&rdquo; and &ldquo;most microbial growth on the soil surface&rdquo; — the O/A/B/C horizon names are the standard soil-science scheme; the explicitly-stated point to lock in is &ldquo;surface = most abundant.&rdquo;]</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Counterintuitively, air + water (~50%) just edges out mineral matter (~40%) as the largest component &mdash; soil is mostly pore space.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>A question might ask for the <em>largest</em> component (air + water) or where microbes concentrate (surface). <em>[Flag: the deck states only &ldquo;4 distinct layers&rdquo; + &ldquo;most growth on the surface&rdquo;; the O/A/B/C horizon names are standard soil science &mdash; the stated point to lock in is &ldquo;surface = most abundant.&rdquo;]</em></div>
+      </div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Soil is ~__% air/water, ~__% inorganic, ~__% organic, ~__% organisms — and which layer is most species-abundant?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -393,11 +432,12 @@
     <article class="q" id="m5l1-q6" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q6</span><span class="q-text">What is the benefit of having smaller cells in subsurface environments?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>The deep subsurface (extending hundreds of meters down) is <span class="concept">extremely nutrient-limited</span>, so <span class="mem">small cells are common</span>.</p>
-        <p><strong>Benefit:</strong> smaller cells have a higher <span class="mem">surface-area-to-volume ratio</span>, which makes <span class="concept">nutrient uptake and waste exchange more efficient per unit of cell</span> — a decisive advantage when nutrients are scarce.</p>
-        <p>Both <span class="mem">Archaea and Bacteria</span> live there in variable concentrations (set by nutrient availability); the deep subsurface is thought to host <span class="concept">Lokiarchaeota</span>, the archaea most closely related to eukaryotes.</p>
+        <div class="takeaway">Subsurface microbes are <span class="mem">very small</span> &mdash; a high <span class="mem">surface-area-to-volume ratio</span> maximizes nutrient exchange in a nutrient-poor (<span class="concept">oligotrophic</span>) environment.</div>
+        <div class="support">
+          <p>Same principle as &ldquo;why are cells small&rdquo; from Module 1: more membrane per unit volume = more efficient scavenging of scarce nutrients.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>This is the Module 1 surface-area-to-volume principle resurfacing in an ecology context — the logic is identical to &ldquo;why are cells small.&rdquo; The point to land on: high SA:V &rarr; more efficient scavenging of scarce nutrients in an oligotrophic environment. A distractor might point to storing nutrients or dividing faster; the point is exchange efficiency, not storage or speed.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The point to land on: high SA:V &rarr; efficient scavenging of scarce nutrients. A distractor might point to storing nutrients or dividing faster &mdash; the point is exchange efficiency, not storage or speed.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Why are small cells favored in the nutrient-poor deep subsurface?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -408,10 +448,12 @@
     <article class="q" id="m5l1-q7" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q7</span><span class="q-text">What impact does water depth have on microbial species richness and abundance, and what are benthic species (where would you find them)?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><strong>Depth effect:</strong> as depth increases, <span class="concept">light, oxygen, and nutrients all decline</span> — light fails (no photosynthesis below the photic zone), O<sub>2</sub> has limited solubility so deep layers go <span class="concept">anoxic</span>, and nutrients drop. So microbial <span class="mem">richness and abundance generally decrease with depth</span>; the illuminated surface water is most productive and diverse.</p>
-        <p><span class="mem">Benthic species</span> = microbes <span class="concept">attached to the bottom or sides</span> of a lake or stream — contrast with <span class="mem">phytoplankton</span>, the oxygenic phototrophs freely suspended in the water. You find benthic organisms on the sediments and substrate at the bottom.</p>
+        <div class="takeaway">Deeper water = <span class="concept">less light, less O<sub>2</sub>, fewer nutrients</span> = fewer, more specialized organisms. <span class="mem">Benthic</span> = attached to the bottom / sides; <span class="mem">planktonic</span> (phytoplankton) = freely suspended.</div>
+        <div class="support">
+          <p>The depth trend follows the resources: as light and nutrients fall off, communities thin out and specialize.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Tie the trend to a mechanism, because that is how it is framed: deeper = less light + less oxygen + fewer nutrients = fewer, more specialized organisms. The benthic-vs-planktonic contrast is the one to know — &ldquo;attached to the bottom / sides&rdquo; = benthic; &ldquo;freely suspended&rdquo; = phytoplankton. A question might describe an organism&rsquo;s location and ask which category it is.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Tie the trend to its mechanism (less light/O<sub>2</sub>/nutrients with depth). The benthic-vs-planktonic contrast is the one to know &mdash; a question might describe an organism&rsquo;s location and ask which category it is.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">What are benthic species, and how does depth affect richness / abundance?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -421,15 +463,21 @@
     <article class="q" id="m5l1-q8" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q8</span><span class="q-text">What are the layers associated with temperate lakes, and can you identify them?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>Many temperate lakes <span class="concept">stratify in summer</span> into three layers (top to bottom):</p>
-        <ul>
-          <li><span class="mem">Epilimnion</span> — warm, less-dense surface layer.</li>
-          <li><span class="mem">Thermocline</span> — middle layer of moderate, rapidly-changing temperature.</li>
-          <li><span class="mem">Hypolimnion</span> — cool, dense bottom layer.</li>
-        </ul>
-        <p>The layers differ in <span class="concept">temperature, oxygen, and chemical composition</span>, which supports <span class="mem">high microbial diversity</span>.</p>
+        <div class="takeaway">Three thermal layers: <span class="mem">epilimnion</span> (warm surface), <span class="mem">thermocline</span> (transition), <span class="mem">hypolimnion</span> (cold dense bottom).</div>
+        <div class="support">
+          <table>
+            <tr><th>Layer</th><th>Position</th><th>Character</th></tr>
+            <tr><td><span class="mem">Epilimnion</span></td><td>top</td><td>warm, oxygenated surface</td></tr>
+            <tr><td><span class="mem">Thermocline</span></td><td>middle</td><td>sharp temperature transition</td></tr>
+            <tr><td><span class="mem">Hypolimnion</span></td><td>bottom</td><td>cold, dense, low-O<sub>2</sub></td></tr>
+          </table>
+          <p>Each layer has its own temp / O<sub>2</sub> / chemistry &mdash; effectively its own set of microenvironments, which is why diversity is high.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The exam might frame this as an identification item — a description (&ldquo;warm surface,&rdquo; &ldquo;cold dense bottom,&rdquo; &ldquo;the transitional middle&rdquo;) and you pick the term. The Greek roots make it painless: <em>epi-</em> = upon (top), <em>hypo-</em> = under (bottom), thermocline = the temperature transition between them. Because each layer has its own temp / O<sub>2</sub> / chemistry, each is effectively its own set of microenvironments — which is why diversity is high.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>The Greek roots make it painless: <em>epi-</em> = upon (top), <em>hypo-</em> = under (bottom), thermocline = the temperature break between them.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>The exam might frame this as an identification item &mdash; a description (&ldquo;warm surface,&rdquo; &ldquo;cold dense bottom,&rdquo; &ldquo;transitional middle&rdquo;) and you pick the term.</div>
+      </div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Name the three temperate-lake layers, top to bottom.</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -439,11 +487,12 @@
     <article class="q" id="m5l1-q9" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q9</span><span class="q-text">What is biochemical oxygen demand (BOD), what alters it, and how does eutrophication impact BOD?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><span class="mem">Biochemical oxygen demand (BOD)</span> = the <span class="concept">microbial oxygen-consuming capacity</span> of a body of water — how much O<sub>2</sub> microbes use as they break down organic matter.</p>
-        <p><strong>What alters it:</strong> BOD <span class="mem">increases with an influx of organic material</span> (waste / pollution) and <span class="concept">decreases over time</span> as that material is consumed. Rivers are well-mixed by flow but can still go oxygen-deficient when polluted.</p>
-        <p><strong>Eutrophication</strong> = over-enrichment with nutrients &rarr; excess plant and algal growth. When that biomass dies, microbial decomposition consumes oxygen, so eutrophication <span class="mem">raises BOD</span> and can drive the water <span class="concept">intermittently anoxic</span>.</p>
+        <div class="takeaway"><span class="mem">Eutrophication</span>: extra nutrients &rarr; algal/plant bloom &rarr; die-off &rarr; microbial decomposition consumes O<sub>2</sub> &rarr; <span class="mem">BOD up, dissolved O<sub>2</sub> down</span>, water trends anoxic.</div>
+        <div class="support">
+          <p><span class="mem">BOD</span> = biochemical oxygen demand, the O<sub>2</sub> microbes need to break down organic matter. High BOD = water headed toward oxygen depletion.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The causal chain <em>is</em> the question: extra nutrients &rarr; more algae / plants &rarr; die-off &rarr; microbes decompose it &rarr; O<sub>2</sub> consumed &rarr; BOD up, dissolved oxygen down, water trends anoxic. A question might give a scenario (runoff, a bloom, sewage input) asking what happens to BOD and oxygen. The direction is the point — eutrophication <em>increases</em> BOD, and a high-BOD water is one headed toward oxygen depletion.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The causal chain <em>is</em> the answer. A question might give a scenario (runoff, a bloom, sewage input) and ask what happens to BOD and oxygen &mdash; direction is the point: eutrophication <em>increases</em> BOD.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">What is BOD, and does eutrophication raise or lower it?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -453,11 +502,12 @@
     <article class="q" id="m5l1-q10" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q10</span><span class="q-text">What types of microbes thrive in marine waters, and which are most important for photosynthetic production?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>Marine waters are <span class="concept">high in salinity, cool, and low in nutrients</span> (often short on nitrogen, phosphorus, and iron), yet so vast that their microbial activity is a major driver of Earth&rsquo;s carbon balance.</p>
-        <p>Key marine phototrophs: <span class="mem">Prochlorococcus</span>, <span class="mem">Trichodesmium</span> (a filamentous, N<sub>2</sub>-fixing cyanobacterium), <span class="mem">Ostreococcus</span> (a eukaryote), plus anoxygenic phototrophs.</p>
-        <p><strong>Most important for photosynthetic production:</strong> <span class="mem">Prochlorococcus</span> — responsible for ~<span class="mem">50% of marine photosynthetic production</span>.</p>
+        <div class="takeaway"><span class="mem">Prochlorococcus &asymp; 50%</span> of marine photosynthetic production &mdash; the dominant marine phototroph.</div>
+        <div class="support">
+          <p>Other marine names to keep separate: <span class="concept">Trichodesmium</span> (nitrogen fixation), <span class="concept">Ostreococcus</span> (a eukaryote), and <span class="concept">Pelagibacter</span> (a heterotroph, <em>not</em> a phototroph).</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The number to anchor on: <em>Prochlorococcus &asymp; 50% of marine photosynthetic production</em>. Likely distractors are the other marine names — Trichodesmium (think nitrogen fixation), Ostreococcus (a eukaryote), and especially Pelagibacter, which is a heterotroph, not a phototroph, so it cannot be the photosynthesis answer. If a question says &ldquo;photosynthetic production,&rdquo; the answer is Prochlorococcus.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>If a question says &ldquo;photosynthetic production,&rdquo; the answer is Prochlorococcus. Pelagibacter is the trap &mdash; it&rsquo;s a heterotroph, so it can&rsquo;t be the photosynthesis answer.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Which marine microbe accounts for ~50% of photosynthetic production?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -467,11 +517,12 @@
     <article class="q" id="m5l1-q11" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q11</span><span class="q-text">What is the pelagic zone, what organisms tell you that&#x27;s where you are, and what is most abundant there?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>The <span class="mem">pelagic zone</span> = the <span class="concept">open waters</span> of the ocean.</p>
-        <p><strong>Indicator organism:</strong> <span class="mem">Pelagibacter</span> — the most abundant marine <span class="mem">heterotroph</span> and an <span class="mem">oligotroph</span> (grows best at very low nutrient concentrations). It carries <span class="concept">proteorhodopsin</span>, letting it use light energy to drive ATP synthesis. Its presence signals the nutrient-poor open ocean.</p>
-        <p><strong>Most abundant overall:</strong> <span class="mem">viruses</span> — the most abundant microorganisms in the ocean (up to ~<span class="concept">10<sup>8</sup> virions/mL</span>), highly diverse (non-tailed dsDNA viruses dominate), and major regulators of prokaryotic populations.</p>
+        <div class="takeaway">Most abundant <span class="mem">heterotroph</span> in open ocean = <span class="mem">Pelagibacter</span> (oligotroph with proteorhodopsin). Most abundant <span class="mem">microorganism overall</span> = <span class="mem">viruses</span> (&asymp; 10<sup>8</sup>/mL).</div>
+        <div class="support">
+          <p>Pelagibacter signals you&rsquo;re in open <span class="concept">pelagic</span> water; viruses are simply the most numerous of all.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>This one rewards reading the question carefully, because there are two &ldquo;most abundant&rdquo; answers depending on wording. Most abundant <em>heterotroph</em> &rarr; Pelagibacter (the oligotroph with proteorhodopsin). Most abundant <em>microorganism overall</em> &rarr; viruses. If it asks what organism tells you that you are in open pelagic water, that is Pelagibacter; if it asks what is most abundant out there, that is viruses.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Read the wording carefully &mdash; there are two &ldquo;most abundant&rdquo; answers. &ldquo;Most abundant heterotroph&rdquo; &rarr; Pelagibacter; &ldquo;most abundant overall&rdquo; &rarr; viruses.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Pelagic zone: most abundant <em>heterotroph</em> vs. most abundant <em>microorganism</em> overall?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -481,11 +532,12 @@
     <article class="q" id="m5l1-q12" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q12</span><span class="q-text">What is the typical condition of the deep sea, and what causes variations from this?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>The <span class="mem">deep sea</span> (~1000&ndash;6000 m) is over <span class="concept">75% of all ocean</span>. Typical conditions: <span class="mem">low temperature, high pressure, no light, and low nutrients</span>.</p>
-        <p>Survivors must be <span class="mem">chemotrophic</span> (no light for phototrophy) and <span class="mem">piezophilic / piezotolerant</span> (pressure), and are often <span class="mem">psychrophilic / psychrotolerant</span> (cold).</p>
-        <p><strong>What causes variation:</strong> <span class="mem">hydrothermal vents</span> — localized hot, chemical-rich oases supporting thriving communities of <span class="concept">chemolithotrophic bacteria</span> and <span class="mem">thermophiles / hyperthermophiles</span>. (In sediment, Proteobacteria dominate, then Bacteroidetes, with widespread uncultured Archaea.)</p>
+        <div class="takeaway"><strong>Default deep sea</strong> = <span class="concept">cold, dark, high-pressure, nutrient-poor</span> &rarr; <span class="mem">chemotrophic, piezophilic</span> microbes. <strong>Exception:</strong> <span class="mem">hydrothermal vents</span> inject heat + reduced chemicals &rarr; thermophilic chemolithotrophs.</div>
+        <div class="support">
+          <p>&ldquo;No light&rdquo; is why deep-sea life is chemotrophic, not phototrophic. Vents resolve the apparent contradiction of heat-lovers in a freezing ocean.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Hold two ideas together: the <em>default</em> deep sea (cold, dark, high-pressure, nutrient-poor &rarr; chemotrophic piezophiles) and the <em>exception</em> that resolves apparent contradictions. If a question asks how thermophiles can exist in a freezing deep ocean, the answer is hydrothermal vents — they inject heat and reduced chemicals, fueling chemolithotrophic, heat-loving communities. &ldquo;No light&rdquo; is why everything down there is chemotrophic rather than phototrophic.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Hold the default and the exception together. If a question asks how thermophiles can exist in a freezing deep ocean, the answer is hydrothermal vents.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Typical deep-sea conditions, and what creates the exceptions?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -507,10 +559,12 @@
     <article class="q" id="m5l2-q1" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q1</span><span class="q-text">What is the largest carbon reservoir?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>The <span class="mem">largest carbon reservoir = sediments and rocks in Earth’s crust</span>.</p>
-        <p>Carbon cycles through the atmosphere, land, oceans, freshwater, sediments, rocks, and biomass. The <span class="concept">atmosphere is the most rapidly transferred reservoir</span> (CO<sub>2</sub> pulled out by land plants and marine microbes via photosynthesis). Note: more carbon is held in <span class="concept">humus than in living organisms</span>.</p>
+        <div class="takeaway"><span class="mem">Sediments and rocks</span> &mdash; the largest carbon reservoir.</div>
+        <div class="support">
+          <p>The <span class="concept">atmosphere</span> is the most <em>rapidly transferred</em> reservoir, but not the largest; oceans are an active exchange pool, not the biggest sink.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The trap is &ldquo;largest&rdquo; vs. &ldquo;fastest-cycling.&rdquo; Largest reservoir = sediments and rocks; the most rapidly transferred reservoir = the atmosphere. If a question asks for the biggest store of carbon, do not pick the atmosphere or the oceans — those are active exchange pools, not the largest sink.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The trap is &ldquo;largest&rdquo; vs. &ldquo;fastest-cycling.&rdquo; If a question asks for the biggest store of carbon, the answer is sediments and rocks &mdash; not the atmosphere or oceans.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Largest carbon reservoir vs. most rapidly transferred?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -520,10 +574,18 @@
     <article class="q" id="m5l2-q2" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q2</span><span class="q-text">What have humans done to disrupt the carbon cycle, and what parts of the cycle create harmful gases?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><strong>Human disruption:</strong> since the Industrial Revolution, atmospheric carbon has risen ~<span class="mem">40%</span>, driving steady global temperature increases. CO<sub>2</sub> traps long-wave heat — <span class="mem">radiative forcing</span>. Knock-on effects: larger ocean <span class="concept">oxygen minimum zones</span>, and dissolved CO<sub>2</sub> lowering ocean pH (<span class="concept">acidification</span>), which endangers coral reefs — they <span class="concept">release calcium carbonate as they die</span>.</p>
-        <p><strong>Harmful gases:</strong> the largest natural source of CO<sub>2</sub> release is <span class="mem">microbial decomposition</span>, which generates <span class="mem">CO<sub>2</sub> and CH<sub>4</sub></span> (both greenhouse gases), especially in <span class="concept">anoxic environments</span>. (Respiration oxidizes carbs &rarr; CO<sub>2</sub>; photosynthesis fixes CO<sub>2</sub> &rarr; carbs.)</p>
+        <div class="takeaway">Humans raised atmospheric <span class="mem">CO<sub>2</sub></span> (~40% since the Industrial Revolution), driving <span class="mem">radiative forcing</span> and <span class="mem">ocean acidification</span>. The gas-making step is <span class="mem">decomposition</span> &mdash; it produces both CO<sub>2</sub> and CH<sub>4</sub> and is the single largest CO<sub>2</sub> source.</div>
+        <div class="support">
+          <div class="sub">Effects</div>
+          <p><span class="concept">Radiative forcing</span> = CO<sub>2</sub> trapping long-wave heat. <span class="concept">Acidification chain:</span> CO<sub>2</sub> &rarr; lower pH &rarr; reefs die &rarr; calcium carbonate released.</p>
+          <div class="sub">Which step makes the gases</div>
+          <p>Decomposition makes CO<sub>2</sub> + CH<sub>4</sub>; photosynthesis is the counterweight, not a gas producer.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Two things worth holding onto here. First, the vocabulary term <em>radiative forcing</em> for CO<sub>2</sub> trapping long-wave heat, plus the acidification chain (CO<sub>2</sub> &rarr; lower pH &rarr; reefs die &rarr; calcium carbonate released). Second, which step makes the greenhouse gases: <em>decomposition</em> produces both CO<sub>2</sub> and CH<sub>4</sub>, and it is also the single largest CO<sub>2</sub> source. Photosynthesis is the counterweight, not a gas producer.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Two ideas: the vocabulary term <em>radiative forcing</em>, and the acidification chain that ties CO<sub>2</sub> to dying reefs.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>Which step makes the greenhouse gases? Decomposition &mdash; both CO<sub>2</sub> and CH<sub>4</sub>, and the largest CO<sub>2</sub> source.</div>
+      </div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">What human change disrupted the carbon cycle, and which process makes the greenhouse gases?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -533,10 +595,12 @@
     <article class="q" id="m5l2-q3" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q3</span><span class="q-text">What is the largest methane reservoir?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>The largest methane reservoir = <span class="mem">methane hydrates</span>, formed where there is <span class="concept">high methane + high pressure + low temperature</span>. Huge amounts are trapped beneath <span class="mem">Arctic permafrost</span> and in <span class="mem">marine sediments</span>; they absorb and release methane and fuel deep-sea <span class="concept">cold-seep</span> ecosystems.</p>
-        <p>Methane itself is made by <span class="mem">methanogens</span>, which use <span class="concept">CO<sub>2</sub> as a terminal electron acceptor</span> to form CH<sub>4</sub> (often in syntrophic partnerships — e.g., protists with endosymbionts in termite guts).</p>
+        <div class="takeaway"><span class="mem">Methane hydrates</span> &mdash; the largest methane reservoir (form under <span class="concept">high methane, high pressure, low temperature</span>).</div>
+        <div class="support">
+          <p>Warming-Arctic risk: thawing permafrost can release the trapped methane. Keep <span class="concept">methanogens</span> (the producers, using CO<sub>2</sub> as an electron acceptor) distinct from hydrates (the storage form).</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The reservoir answer is <em>methane hydrates</em>, and the three conditions (high methane, high pressure, low temperature) are the ones to remember. The reason this matters ecologically — a warming-Arctic risk — is that thawing permafrost can release that trapped methane. Keep methanogens (the producers, using CO<sub>2</sub> as an electron acceptor) distinct from hydrates (the storage form).</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The three conditions (high CH<sub>4</sub>, high pressure, low temperature) are the ones to remember.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Largest methane reservoir and the conditions that form it?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -547,14 +611,12 @@
     <article class="q" id="m5l2-q4" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q4</span><span class="q-text">What process results in a loss of organic nitrogen in the biosphere, and what impact does overuse of nitrogenous fertilizer have (what is being generated)?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><strong>Loss of organic nitrogen</strong> from the biosphere comes from <span class="mem">denitrification and anammox</span> combined — both end in <span class="concept">N<sub>2</sub> gas</span>, returning fixed nitrogen to the atmosphere.</p>
-        <ul>
-          <li><span class="mem">Denitrification:</span> NO<sub>3</sub><sup>-</sup> &rarr; NO<sub>2</sub><sup>-</sup> &rarr; NO &rarr; N<sub>2</sub>O &rarr; N<sub>2</sub>.</li>
-          <li><span class="mem">Anammox:</span> NH<sub>4</sub><sup>+</sup> + NO<sub>2</sub><sup>-</sup> &rarr; N<sub>2</sub> + H<sub>2</sub>O (anaerobic ammonia oxidation).</li>
-        </ul>
-        <p><strong>Fertilizer overuse:</strong> humans produce huge amounts of <span class="mem">nitrogenous fertilizer</span>, which perturbs the nitrogen cycle and is known to shift the <span class="concept">iron and carbon cycles</span> (broader effects largely unknown). Excess fixed nitrogen feeds denitrification, generating <span class="mem">N<sub>2</sub>O (nitrous oxide, a greenhouse gas)</span> along with N<sub>2</sub>.</p>
+        <div class="takeaway">Loss of organic nitrogen = <span class="mem">denitrification + anammox</span>, both producing <span class="mem">N<sub>2</sub></span>. Fertilizer overuse &rarr; more denitrification &rarr; generates <span class="mem">N<sub>2</sub>O</span>.</div>
+        <div class="support">
+          <p>&ldquo;Two combined&rdquo; = denitrification + anammox. The fertilizer chain: more fixed N &rarr; more denitrification &rarr; more N<sub>2</sub>O released.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>&ldquo;Two combined&rdquo; is the phrasing to recognize — denitrification + anammox, both producing N<sub>2</sub>. For the fertilizer part, the chain is: more fixed nitrogen &rarr; more denitrification &rarr; more N<sub>2</sub>O released. <em>[Flag: the deck is thin here — it states fertilizer overuse changes the iron and carbon cycles and that effects are largely unknown; the specific &ldquo;generates N<sub>2</sub>O&rdquo; link is the standard denitrification mechanism, worth confirming against the lecture video.]</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Recognize the &ldquo;two combined&rdquo; phrasing &mdash; both pathways end in N<sub>2</sub>. <em>[Flag: the deck is thin here &mdash; it says fertilizer overuse changes the iron and carbon cycles and that effects are largely unknown; the specific &ldquo;generates N<sub>2</sub>O&rdquo; link is the standard denitrification mechanism, worth confirming against the lecture video.]</em></div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Which two processes lose organic N, and what does fertilizer overuse generate?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -564,10 +626,12 @@
     <article class="q" id="m5l2-q5" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q5</span><span class="q-text">What is biologically available nitrogen, and how is it produced?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><span class="mem">Biologically available nitrogen</span> = the fixed form cells can actually use, namely <span class="mem">ammonia (NH<sub>3</sub>)</span>. Atmospheric <span class="concept">N<sub>2</sub> is ~70% of air and the most stable form</span>, but it is unusable by most organisms.</p>
-        <p>It is produced by <span class="mem">nitrogen fixation</span>: <span class="concept">N<sub>2</sub> &rarr; NH<sub>3</sub></span>, carried out by a few prokaryotes that convert inert N<sub>2</sub> into usable ammonia.</p>
+        <div class="takeaway">Biologically available nitrogen = <span class="mem">NH<sub>3</sub> (ammonia)</span>, produced by <span class="mem">nitrogen fixation</span> (N<sub>2</sub> &rarr; NH<sub>3</sub>).</div>
+        <div class="support">
+          <p>N<sub>2</sub> is everywhere but inert; fixation makes it usable. Don&rsquo;t confuse fixation with <span class="concept">nitrification</span> (NH<sub>3</sub> &rarr; NO<sub>2</sub><sup>-</sup> &rarr; NO<sub>3</sub><sup>-</sup>) or <span class="concept">denitrification</span> (the loss pathway).</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The contrast is reservoir vs. usable: N<sub>2</sub> is everywhere but inert; fixation turns it into NH<sub>3</sub>, the biologically available form. Do not confuse fixation with nitrification (NH<sub>3</sub> &rarr; NO<sub>2</sub><sup>-</sup> &rarr; NO<sub>3</sub><sup>-</sup>) or with denitrification (the loss pathway). The directional arrow N<sub>2</sub> &rarr; NH<sub>3</sub> is the thing to have memorized.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The contrast is reservoir vs. usable. The directional arrow N<sub>2</sub> &rarr; NH<sub>3</sub> is the one to hold.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">What is biologically available nitrogen, and how is it produced?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -577,11 +641,17 @@
     <article class="q" id="m5l2-q6" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q6</span><span class="q-text">What is a typical entry point of the sulfur cycle, what organisms oxidize sulfur, and what form of sulfur do they oxidize?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><strong>Entry point:</strong> <span class="mem">SO<sub>2</sub> gas from fossil-fuel combustion</span> (plus H<sub>2</sub>S from sulfate reduction and geochemical sources). The bulk of sulfur sits in sediments/rocks as sulfate and sulfide minerals; the <span class="concept">most significant reservoir is the oceans</span> (as SO<sub>4</sub><sup>2-</sup>).</p>
-        <p><strong>Who oxidizes it:</strong> <span class="mem">sulfur-oxidizing chemolithotrophs</span>, working at <span class="concept">oxic/anoxic interfaces</span>.</p>
-        <p><strong>What form:</strong> they oxidize reduced sulfur — <span class="mem">sulfide (H<sub>2</sub>S) and elemental sulfur (S<sup>0</sup>)</span> — up to <span class="mem">sulfate (SO<sub>4</sub><sup>2-</sup>)</span>: H<sub>2</sub>S &rarr; S<sup>0</sup> &rarr; SO<sub>4</sub><sup>2-</sup>. (Aside: H<sub>2</sub>S is the major volatile sulfur gas, detoxified by iron into FeS/FeS<sub>2</sub>; DMS is the most abundant organic sulfur compound.)</p>
+        <div class="takeaway"><strong>Entry:</strong> <span class="mem">SO<sub>2</sub> from fossil fuels</span>. <strong>Oxidizers:</strong> <span class="mem">chemolithotrophs</span>. <strong>Form oxidized:</strong> reduced sulfur (<span class="mem">H<sub>2</sub>S, S<sup>0</sup></span>) taken up to <span class="mem">sulfate (SO<sub>4</sub><sup>2-</sup>)</span>.</div>
+        <div class="support">
+          <table>
+            <tr><th>Aspect</th><th>Answer</th></tr>
+            <tr><td>Entry point</td><td>SO<sub>2</sub> from fossil fuels</td></tr>
+            <tr><td>Oxidizers</td><td>chemolithotrophs</td></tr>
+            <tr><td>Form oxidized</td><td>reduced sulfur (H<sub>2</sub>S, S<sup>0</sup>) &rarr; sulfate</td></tr>
+          </table>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Three-part question, three crisp answers: entry = SO<sub>2</sub> from fossil fuels; oxidizers = chemolithotrophs; form = reduced sulfur (H<sub>2</sub>S, S<sup>0</sup>) taken up to sulfate. The mnemonic is that chemolithotrophs eat the <em>reduced</em> end and push it toward the <em>oxidized</em> end (sulfate). A distractor might flip the direction (reducing sulfate to sulfide is the opposite, anaerobic process).</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Mnemonic: chemolithotrophs eat the <em>reduced</em> end and push it toward the <em>oxidized</em> end (sulfate). A distractor might flip the direction &mdash; reducing sulfate to sulfide is the opposite, anaerobic process.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Sulfur cycle: entry point, oxidizers, and the form they oxidize (to what)?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -592,10 +662,12 @@
     <article class="q" id="m5l2-q7" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q7</span><span class="q-text">What is often cycled with iron?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><span class="mem">Manganese (Mn)</span> is the element cycled with iron. Mn alternates between oxidized <span class="mem">Mn<sup>4+</sup></span> and reduced <span class="mem">Mn<sup>2+</sup></span>, mirroring iron’s ferric <span class="concept">Fe<sup>3+</sup></span> / ferrous <span class="concept">Fe<sup>2+</sup></span> pair.</p>
-        <p>Iron is abundant in the crust yet still a <span class="concept">limiting nutrient</span>. Under anoxic conditions bacteria reduce Fe<sup>3+</sup> &rarr; Fe<sup>2+</sup> (Fe<sup>3+</sup> as an electron acceptor in anaerobic respiration; humic substances act as electron shuttles; little energy). Acidophilic chemolithotrophs oxidize Fe<sup>2+</sup> &rarr; Fe<sup>3+</sup> — e.g., <span class="mem">Acidithiobacillus ferrooxidans</span>, <span class="mem">Leptospirillum ferrooxidans</span>. Mn<sup>2+</sup> oxidizers include Alpha-/Betaproteobacteria and some Pseudomonas.</p>
+        <div class="takeaway"><span class="mem">Manganese</span> &mdash; cycled in parallel with iron (Mn <span class="concept">4+/2+</span> mirroring Fe <span class="concept">3+/2+</span>).</div>
+        <div class="support">
+          <p>Named iron oxidizers: <span class="concept">Acidithiobacillus / Leptospirillum ferrooxidans</span>. Fe<sup>3+</sup> reduction happens <em>outside</em> the cell because the mineral is insoluble.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>If a question says &ldquo;cycled with iron,&rdquo; the answer is manganese — both swing between a 4+/3+ oxidized state and a 2+ reduced state. Be ready to recognize the named iron oxidizers (Acidithiobacillus / Leptospirillum ferrooxidans) and the idea that Fe<sup>3+</sup> reduction happens outside the cell because the mineral is insoluble.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>If a question says &ldquo;cycled with iron,&rdquo; the answer is manganese &mdash; both swing between an oxidized and a reduced state.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">What is cycled with iron, and in what oxidation states?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -605,10 +677,12 @@
     <article class="q" id="m5l2-q8" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q8</span><span class="q-text">Where would you find calcium in marine microbes?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>Calcium reservoirs are in <span class="concept">rocks and oceans</span>. In marine microbes, calcium (Ca<sup>2+</sup>) is found in <span class="mem">exoskeletons / shells</span> — <span class="mem">marine phototrophs use Ca<sup>2+</sup> for exoskeleton formation</span> (calcium-carbonate shells).</p>
-        <p>This is the same <span class="concept">calcium carbonate</span> that coral reefs release as they die under ocean acidification — a direct link back to the carbon cycle.</p>
+        <div class="takeaway">In the <span class="mem">exoskeletons / shells</span> that marine phototrophs build &mdash; <span class="concept">calcium carbonate (CaCO<sub>3</sub>)</span>.</div>
+        <div class="support">
+          <p>Ties straight to the carbon cycle: acidifying oceans dissolve these CaCO<sub>3</sub> structures, which is why reefs are endangered.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Short and specific: Ca<sup>2+</sup> shows up in the <em>exoskeletons/shells</em> that marine phototrophs build. The high-value connection is tying it to the carbon-cycle point — acidifying oceans dissolve those calcium-carbonate structures, which is why reefs are endangered.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Short and specific &mdash; Ca<sup>2+</sup> lives in the shells/exoskeletons. The high-value link is the acidification connection.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Where is calcium found in marine microbes?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -618,10 +692,12 @@
     <article class="q" id="m5l2-q9" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q9</span><span class="q-text">What is the concern with mercury, and what is a benefit of microbes here?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><strong>The concern:</strong> mercury is <span class="mem">highly toxic and concentrates in living tissues</span>. The atmospheric form is mostly elemental <span class="concept">Hg<sup>0</sup></span> (volatile), photochemically oxidized to mercuric ion <span class="concept">Hg<sup>2+</sup></span>, which enters aquatic systems and adsorbs to particulates. Microbes can methylate it into <span class="mem">methylmercury (CH<sub>3</sub>Hg<sup>+</sup>)</span> — <span class="mem">extremely soluble and toxic</span> — and with few elimination routes it <span class="concept">bioaccumulates and biomagnifies</span>.</p>
-        <p><strong>Microbial benefit:</strong> several bacteria can transform mercury into <span class="mem">nontoxic forms</span>; this resistance is linked to <span class="concept">plasmids encoding detoxifying enzymes</span>. Microbes are double-edged — some create methylmercury, others detoxify mercury.</p>
+        <div class="takeaway"><strong>Concern:</strong> microbes methylate mercury into <span class="mem">methylmercury (CH<sub>3</sub>Hg<sup>+</sup>)</span> &mdash; soluble, toxic, biomagnifies. <strong>Benefit:</strong> some bacteria <span class="mem">detoxify mercury</span> using plasmid-encoded enzymes.</div>
+        <div class="support">
+          <p>Microbes are double-edged here &mdash; some make the toxin, others remove it.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The product to know is <em>methylmercury</em> (soluble, toxic, biomagnifies) — made by microbes. The twist is that microbes also solve the problem: some bacteria detoxify mercury using plasmid-encoded enzymes. If a question asks for a microbial &ldquo;benefit&rdquo; in the mercury cycle, that detoxification is the answer, not the methylation.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>If a question asks for a microbial &ldquo;benefit&rdquo; in the mercury cycle, the answer is the detoxification, not the methylation.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Mercury: the concern, and the microbial benefit?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -631,12 +707,16 @@
     <article class="q" id="m5l2-q10" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q10</span><span class="q-text">What is bioaccumulation, and how does it differ from biomagnification?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <ul>
-          <li><span class="mem">Bioaccumulation</span> = a substance (e.g., mercury) <span class="concept">builds up within a single organism over time</span>, when intake outpaces elimination.</li>
-          <li><span class="mem">Biomagnification</span> = the concentration <span class="concept">increases as it passes up the food chain</span>, so top predators carry the highest loads.</li>
-        </ul>
+        <div class="takeaway"><span class="mem">Bioaccumulation</span> = buildup <em>within one organism, over time</em>. <span class="mem">Biomagnification</span> = increase <em>across trophic levels, up the food chain</em>.</div>
+        <div class="support">
+          <table>
+            <tr><th>Bioaccumulation</th><th>Biomagnification</th></tr>
+            <tr><td>within one organism, over time</td><td>across trophic levels, up the food chain</td></tr>
+          </table>
+          <p>A scenario contrasting a top predator (e.g., a tuna) with bottom organisms (plankton) points at biomagnification.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Classic distinguish-the-pair. Bioaccumulation is <em>within one organism, over time</em>; biomagnification is <em>across trophic levels, up the food chain</em>. A scenario contrasting a top predator (e.g., a tuna) with organisms at the bottom (plankton) is pointing at biomagnification — the increase from one level to the next.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Classic distinguish-the-pair &mdash; the increase from one level to the next is biomagnification.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Bioaccumulation vs. biomagnification?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -658,10 +738,15 @@
     <article class="q" id="m5l3-q1" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q1</span><span class="q-text">What is microbial leaching, and what is the general process?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><span class="mem">Microbial leaching</span> = the removal of valuable metals from <span class="concept">sulfide ores</span> by microbes. Microbes oxidize the sulfides so that <span class="concept">sulfates form soluble minerals with the metals</span>, dissolving the metal out. (Recall <span class="concept">pyrite, FeS<sub>2</sub></span>.) It makes low-grade ores worth mining — economical only if the metal can be concentrated. Especially used for <span class="mem">copper (~25% of all copper ore)</span>, plus uranium and gold.</p>
-        <p><strong>General process:</strong> low-grade ore goes into a <span class="mem">leach dump</span> &rarr; <span class="mem">dilute sulfuric acid</span> is added &rarr; the liquid emerging is <span class="concept">enriched in dissolved metals</span>.</p>
+        <div class="takeaway"><span class="mem">Microbial leaching</span> = microbes oxidize metal sulfides in ore into <span class="concept">soluble sulfates</span>, freeing the metal. <strong>Process:</strong> ore &rarr; <span class="mem">leach dump</span> &rarr; <span class="mem">dilute sulfuric acid</span> &rarr; metal-enriched liquid.</div>
+        <div class="support">
+          <p>Especially <span class="mem">copper (~25% of all copper ore)</span>; also uranium and gold. (Recall pyrite, FeS<sub>2</sub>.) Economical only if the metal can be concentrated.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The mechanism is the same oxidation that shows up again in acid mine drainage: microbes turn insoluble metal sulfides into soluble sulfates, freeing the metal. Worth holding onto: the ~25% copper figure, and the three process steps (ore &rarr; leach dump &rarr; sulfuric acid &rarr; metal-rich leachate). Keep &ldquo;leaching&rdquo; (mobilizing metals into solution) opposite to the uranium clean-up step coming up (locking a metal down).</div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Microbes turn insoluble metal sulfides into soluble sulfates &mdash; the same oxidation that reappears (unwanted) in acid mine drainage.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>Worth holding onto: the ~25% copper figure and the three process steps. Keep leaching (mobilizing metals) opposite to the uranium clean-up (locking a metal down).</div>
+      </div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">What is microbial leaching, and what is the process?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -671,10 +756,12 @@
     <article class="q" id="m5l3-q2" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q2</span><span class="q-text">What causes acid mine drainage, and what type of reaction is happening?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><span class="mem">Acid mine drainage</span> is the environmental damage caused by leaching. In sulfide-rich minerals, <span class="mem">bacterial oxidation of metal sulfides produces acidic conditions</span>. The mine waters run off and mix with natural waters, where the <span class="concept">acid and dissolved metals are toxic to aquatic organisms</span>.</p>
-        <p><strong>Reaction type:</strong> <span class="mem">oxidation</span> (of metal sulfides).</p>
+        <div class="takeaway"><span class="mem">Acid mine drainage</span> = bacterial <span class="mem">oxidation of metal sulfides</span> produces acidic, metal-laden runoff toxic to aquatic life. <strong>Reaction type:</strong> oxidation.</div>
+        <div class="support">
+          <p>Same chemistry as leaching, just unwanted &mdash; mine waters run off and mix with natural waters.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Same chemistry as leaching, just unwanted: the bacterial <em>oxidation</em> of sulfides generates acid, and the runoff carries acid plus dissolved metals into waterways. If asked &ldquo;what type of reaction,&rdquo; the answer is oxidation. The link to remember: leaching is the deliberate version; acid mine drainage is the pollution version of the very same process.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Leaching is the deliberate version; acid mine drainage is the pollution version of the same oxidation. If asked &ldquo;what type of reaction,&rdquo; the answer is oxidation.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">What causes acid mine drainage, and what reaction is it?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -684,10 +771,12 @@
     <article class="q" id="m5l3-q3" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q3</span><span class="q-text">What happens when U6+ is converted to U4+, and what types of microbes are able to do this?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>This is uranium bioremediation, and it turns on <span class="concept">solubility</span>. <span class="mem">U<sup>6+</sup> is water-soluble</span> — so it spreads through groundwater near uranium processing/storage sites. <span class="mem">U<sup>4+</sup> is NOT water-soluble</span>. Bacteria that <span class="mem">reduce uranium (U<sup>6+</sup> &rarr; U<sup>4+</sup>)</span> convert it into an insoluble solid, immobilizing it in place.</p>
-        <p><strong>Key caveat:</strong> the uranium is <span class="concept">contained as a solid, not removed</span>. The microbes are metal-reducing bacteria working by <span class="concept">reduction</span> (under anoxic conditions).</p>
+        <div class="takeaway">Reducing soluble <span class="mem">U<sup>6+</sup></span> to insoluble <span class="mem">U<sup>4+</sup></span> immobilizes the uranium in place &mdash; <span class="concept">contained as a solid, not removed</span>. Done by <span class="mem">uranium / metal-reducing bacteria</span> (reduction).</div>
+        <div class="support">
+          <p>The solubility flip is the point: U<sup>6+</sup> soluble/mobile, U<sup>4+</sup> insoluble. The reaction is <em>reduction</em> &mdash; opposite of leaching&rsquo;s oxidation.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The whole point is the solubility flip: reducing soluble U<sup>6+</sup> to insoluble U<sup>4+</sup> stops it from migrating. Two traps to avoid — (1) the reaction is <em>reduction</em>, the opposite of leaching/acid mine drainage&rsquo;s oxidation; (2) the uranium is contained, not eliminated. A question might ask what happens to mobility (it drops) or which organisms do it (uranium/metal-reducing bacteria).</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>A question might ask what happens to mobility (it drops) or which organisms do it (uranium/metal-reducing bacteria). Trap: the uranium is contained, not eliminated.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">What does reducing U<sup>6+</sup> to U<sup>4+</sup> accomplish, and who does it?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -698,10 +787,12 @@
     <article class="q" id="m5l3-q4" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q4</span><span class="q-text">What is one way to improve oil spill cleanup using microbes?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>Organic pollutants can be <span class="concept">fully degraded to CO<sub>2</sub></span> by microbes. Diverse microbes oxidize petroleum products <span class="mem">aerobically</span> — attaching to oil droplets, decomposing the oil, and dispersing the slick.</p>
-        <p><strong>One way to improve cleanup:</strong> <span class="mem">add inorganic nutrients</span> (e.g., nitrogen and phosphorus) to optimize and stimulate these hydrocarbon-oxidizing microbes (biostimulation). This is the same principle behind the Deepwater Horizon bloom from Lesson 1.</p>
+        <div class="takeaway">Add <span class="mem">inorganic nutrients (N, P)</span> to stimulate the native <span class="concept">aerobic hydrocarbon-oxidizing microbes</span> (biostimulation).</div>
+        <div class="support">
+          <p>Organic pollutants can be fully degraded to CO<sub>2</sub>; the degraders are usually nutrient-limited. Deepwater Horizon is the example to anchor it.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The &ldquo;improvement&rdquo; answer here is supplementing inorganic nutrients — the native hydrocarbon degraders are usually nutrient-limited, so adding N/P speeds aerobic breakdown. Tie it back to Deepwater Horizon (the hydrocarbon-degrading Gammaproteobacteria bloom) to anchor it.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The &ldquo;improvement&rdquo; answer here is supplementing inorganic nutrients &mdash; nutrients are the bottleneck, so adding N/P speeds aerobic breakdown.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">One way to improve microbial oil-spill cleanup?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -711,10 +802,12 @@
     <article class="q" id="m5l3-q5" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q5</span><span class="q-text">What causes breakdown of gasoline within storage tanks, and what would be a good way to avoid this?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>Gasoline and crude-oil storage tanks are habitats for hydrocarbon-oxidizing microbes. The breakdown is driven by <span class="mem">sulfate-reducing bacteria</span>: if <span class="concept">sufficient sulfate is present</span> in the oil, SRB grow and consume the hydrocarbons in the tank.</p>
-        <p><strong>How to avoid it:</strong> <span class="mem">limit or remove the sulfate</span> — without sulfate as an electron acceptor, the sulfate-reducing bacteria cannot thrive.</p>
+        <div class="takeaway">Breakdown is driven by <span class="mem">sulfate-reducing bacteria</span> (when sulfate is present). <strong>Avoid it:</strong> <span class="mem">limit / remove the sulfate</span>.</div>
+        <div class="support">
+          <p>SRB need sulfate as an electron acceptor &mdash; take that away and they can&rsquo;t thrive.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The named culprit is specific — sulfate-reducing bacteria, gated by sulfate availability — so the avoidance answer follows directly: keep sulfate out. A distractor might blame aerobes or &ldquo;just add biocide&rdquo;; the deck ties the problem (and the fix) to sulfate.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>A distractor might blame aerobes or &ldquo;just add biocide&rdquo;; the deck ties both the problem and the fix to sulfate.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">What breaks down gasoline in storage tanks, and how do you avoid it?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -724,10 +817,12 @@
     <article class="q" id="m5l3-q6" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q6</span><span class="q-text">What are xenobiotic compounds, and why are microbes unable to break them down?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><span class="mem">Xenobiotic compounds</span> = <span class="concept">synthetic chemicals</span> — pesticides, polychlorinated biphenyls (PCBs), munitions, dyes, chlorinated solvents.</p>
-        <p><strong>Why microbes struggle:</strong> they degrade these slowly because organisms <span class="mem">lack the enzymes to recognize and degrade</span> such new, man-made compounds — evolution never produced machinery for them. Some can only be broken down by <span class="mem">cometabolism</span> (degrading the xenobiotic alongside another organic molecule). <span class="concept">Plastics</span> are the extreme case — recalcitrant, not readily degraded by any microbe.</p>
+        <div class="takeaway"><span class="mem">Xenobiotics</span> = synthetic chemicals (PCBs, pesticides, dyes, solvents). Microbes degrade them slowly because they <span class="mem">lack the enzymes</span> to recognize and break down novel man-made structures.</div>
+        <div class="support">
+          <p>Some can only go via <span class="concept">cometabolism</span> (degraded alongside another organic molecule). Plastics are the extreme case &mdash; recalcitrant.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The &ldquo;why&rdquo; is the heart of the question: no pre-existing enzymes for novel synthetic structures. Know a couple of examples (PCBs, pesticides, chlorinated solvents) and the term <em>cometabolism</em> (needs a co-substrate to drive the breakdown). Plastics are the poster child for recalcitrance.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The &ldquo;why&rdquo; is the heart of it: no pre-existing enzymes for novel synthetic structures.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">What are xenobiotics, and why are they hard to degrade?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -738,11 +833,12 @@
     <article class="q" id="m5l3-q7" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q7</span><span class="q-text">What is the goal of wastewater treatment, and what is the general treatment process?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><strong>Goal:</strong> reduce <span class="mem">organic and inorganic material to a level that no longer supports microbial growth</span>, and eliminate other potentially toxic materials. Efficiency is measured as the <span class="mem">reduction in BOD</span> (biochemical oxygen demand).</p>
-        <p><strong>Terms:</strong> wastewater = domestic sewage + liquid industrial waste; <span class="concept">effluent</span> = the discharged treated water, fit for release to surface waters or to drinking-water purification.</p>
-        <p><strong>General process:</strong> a multistep <span class="mem">physical + biological</span> sequence — <span class="mem">primary, secondary, and sometimes advanced/tertiary</span> treatments — often finished with <span class="concept">chlorination</span> to cut biological contamination.</p>
+        <div class="takeaway"><strong>Goal:</strong> reduce <span class="mem">organic + inorganic material below what supports microbial growth</span> (measured by <span class="mem">BOD reduction</span>) and remove toxics. <strong>Process:</strong> multistep physical + biological &mdash; <span class="mem">primary &rarr; secondary &rarr; optional tertiary &rarr; chlorination</span>.</div>
+        <div class="support">
+          <p>Wastewater = domestic sewage + liquid industrial waste; <span class="concept">effluent</span> = the discharged treated water.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Note the goal is framed in BOD terms — a direct callback to Lesson 2 (BOD = microbial O<sub>2</sub> demand). The process is a sequence to keep in order: physical (primary) &rarr; biological (secondary) &rarr; optional tertiary &rarr; chlorination. The next block breaks down what each stage actually does.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The goal is framed by BOD &mdash; a direct callback to Lesson 2. The next block breaks down what each stage does.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Goal of wastewater treatment, and how is efficiency measured?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -752,14 +848,18 @@
     <article class="q" id="m5l3-q8" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q8</span><span class="q-text">What are primary, secondary, and tertiary treatments (including anaerobic vs. aerobic processes and what the end products are used for)? Can you classify examples of each?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <ul>
-          <li><span class="mem">Primary</span> = <span class="concept">physical separation</span> of solid and particulate organic/inorganic material from the wastewater.</li>
-          <li><span class="mem">Secondary</span> = <span class="concept">microbial digestive reactions</span> on water with low organic levels. <span class="mem">Aerobic:</span> activated sludge, trickling filter. <span class="mem">Anaerobic:</span> sludge digester, bioreactor (microbial digestive + fermentative reactions under anoxic conditions).</li>
-          <li><span class="mem">Tertiary / advanced</span> = any added physiochemical or biological step: extra removal of organics + suspended solids, and reduction of <span class="concept">inorganic nutrients (phosphate, nitrate, nitrite)</span> — e.g., <span class="mem">enhanced biological phosphorus removal</span> (P-accumulating organisms) and chemical precipitation.</li>
-        </ul>
-        <p><strong>Aerobic vs. anaerobic:</strong> aerobic uses O<sub>2</sub> (activated sludge / trickling filter); anaerobic runs under anoxic conditions (sludge digester / bioreactor) via fermentation. <strong>End products:</strong> treated <span class="concept">effluent</span> is released to surface waters or sent on to drinking-water purification.</p>
+        <div class="takeaway"><span class="mem">Primary</span> = physical separation. <span class="mem">Secondary</span> = microbial (aerobic: activated sludge / trickling filter; anaerobic: sludge digester / bioreactor). <span class="mem">Tertiary</span> = nutrient / phosphorus removal.</div>
+        <div class="support">
+          <table>
+            <tr><th>Stage</th><th>What it does</th><th>Examples</th></tr>
+            <tr><td><span class="mem">Primary</span></td><td>physical separation of solids</td><td>settling, screening</td></tr>
+            <tr><td><span class="mem">Secondary &mdash; aerobic</span></td><td>microbial digestion with O<sub>2</sub></td><td>activated sludge, trickling filter</td></tr>
+            <tr><td><span class="mem">Secondary &mdash; anaerobic</span></td><td>microbial digestion, anoxic</td><td>sludge digester, bioreactor</td></tr>
+            <tr><td><span class="mem">Tertiary</span></td><td>remove inorganic nutrients</td><td>EBPR, chemical precipitation</td></tr>
+          </table>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>This is a classify-the-example block: physical separation = primary; activated sludge / trickling filter (aerobic) or sludge digester / bioreactor (anaerobic) = secondary; nutrient/phosphorus removal + chemical precipitation = tertiary. Map each named process to its tier and to aerobic vs. anaerobic. <em>[Flag: the deck doesn&rsquo;t spell out &ldquo;what the end products are used for&rdquo; beyond effluent release; in practice anaerobic digestion yields biogas/methane (energy) and stabilized sludge (fertilizer) — worth confirming against the lecture video.]</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Classify-the-example: map each named process to its tier and to aerobic vs. anaerobic. <em>[Flag: the deck doesn&rsquo;t spell out &ldquo;what the end products are used for&rdquo; beyond effluent release; in practice anaerobic digestion yields biogas/methane (energy) and stabilized sludge (fertilizer) &mdash; worth confirming against the lecture video.]</em></div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Primary vs. secondary vs. tertiary treatment (with an aerobic vs. anaerobic example)?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -770,10 +870,12 @@
     <article class="q" id="m5l3-q9" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q9</span><span class="q-text">What are some current concerns for water treatment, and why are they such an issue?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>Current treatment systems were designed for <span class="concept">human and industrial waste</span>, so emerging pollutants now demand new treatment approaches. The flagged classes are <span class="mem">pharmaceuticals, personal care products, household products, and sunscreens</span>.</p>
-        <p><strong>Why it&rsquo;s an issue:</strong> existing processes were never built to capture these compounds, so they <span class="concept">pass through treatment into the discharged effluent</span>.</p>
+        <div class="takeaway">Emerging pollutants: <span class="mem">pharmaceuticals, personal care products, household products, sunscreens</span>. They&rsquo;re an issue because existing treatment <span class="concept">wasn&rsquo;t designed to remove them</span>, so they pass through into the effluent.</div>
+        <div class="support">
+          <p>Legacy plants target classic organic / inorganic waste, not these novel micro-pollutants.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The list worth knowing is pharmaceuticals, personal care products, household products, and sunscreens. The &ldquo;why&rdquo; is that legacy plants target classic organic/inorganic waste, not these novel micro-pollutants — so they slip through. This pairs naturally with the xenobiotics block: new synthetic compounds outrun both microbes and treatment design.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Pairs naturally with the xenobiotics block &mdash; new synthetic compounds outrun both microbes and treatment design.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Emerging water-treatment concerns, and why are they a problem?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -783,11 +885,12 @@
     <article class="q" id="m5l3-q10" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q10</span><span class="q-text">What are some concerns with transporting drinking water, what microbes are the primary issues, and how are they able to survive?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>Drinking water travels through <span class="concept">miles of municipal and domestic pipes</span>, and the journey introduces problems: <span class="mem">taste and odor</span>, plus conditions that <span class="mem">protect and promote pathogen growth</span> and <span class="concept">select for pathogenic and/or resistant bacteria</span>.</p>
-        <p><strong>Primary microbial issues:</strong> <span class="mem">opportunistic pathogens</span> (alongside grazing protists). It is impossible to completely eliminate microbial growth in distribution systems — even with no nutrients and high chlorine.</p>
-        <p><strong>How they survive:</strong> they tolerate the low-nutrient, high-chlorine environment, typically by living in <span class="concept">biofilms</span> on pipe walls and/or being harbored inside grazing <span class="concept">protists</span>.</p>
+        <div class="takeaway">Pipes cause <span class="concept">taste / odor</span> and select for <span class="mem">opportunistic / resistant pathogens</span>. They survive the low-nutrient, high-chlorine water by living in <span class="mem">biofilms</span> and inside grazing <span class="mem">protists</span>.</div>
+        <div class="support">
+          <p>Microbial growth in distribution systems can never be fully eliminated &mdash; even with high chlorine and almost no nutrients.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The named survivors are opportunistic pathogens (and resistant strains), with grazing protists in the mix. The &ldquo;how do they survive&rdquo; answer is persistence despite chlorine and starvation — biofilm shelter on pipe surfaces and protection inside protists. The headline fact: you can&rsquo;t fully sterilize a distribution system.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The named survivors are opportunistic pathogens (+ protists); the &ldquo;how do they survive&rdquo; answer is biofilm shelter and protist hosts.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">Drinking-water transport: the concern, which microbes, and how they survive?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -797,11 +900,16 @@
     <article class="q" id="m5l3-q11" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q11</span><span class="q-text">What is the difference between microbial diversity inside vs. outside, and what impact does a shared environment/home (including pets) have on the microbiome?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><strong>Inside vs. outside:</strong> humans spend most time indoors, and indoor microbiomes are dominated by <span class="concept">human-associated microbes</span> (skin, gut), making them generally <span class="mem">less diverse</span> than the more varied environmental microbes outdoors.</p>
-        <p><strong>Shared environment:</strong> a home&rsquo;s microbiota is <span class="mem">predictive of the specific family</span> living there and <span class="concept">shifts within days of new occupancy</span> — cohabitants share and shape a common microbiome (a flushing toilet alone releases ~100,000 bacteria into the air, spreading enteric bacteria person to person).</p>
-        <p><strong>Exposure paradox &amp; pets:</strong> indoor life raises exposure to some pathogens but <span class="mem">decreases overall microbial exposure, which is linked to allergies</span>. Pets increase household microbial diversity (associated with reduced allergy risk).</p>
+        <div class="takeaway"><span class="mem">Indoor</span> microbiomes are <span class="mem">less diverse</span>, dominated by human-associated microbes; <span class="mem">outdoor</span> is more varied / environmental. A <span class="mem">shared home</span> &rarr; a shared microbiota (predictive of the family, shifts within days of occupancy); <span class="mem">pets</span> raise household diversity.</div>
+        <div class="support">
+          <table>
+            <tr><th>Indoor</th><th>Outdoor</th></tr>
+            <tr><td>less diverse, human-associated (skin/gut)</td><td>more diverse, environmental</td></tr>
+          </table>
+          <p>Reduced overall exposure indoors is linked to <span class="concept">allergies</span>; pets increase diversity (associated with fewer allergies).</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>The strongest deck-supported hooks: home microbiota predicts the family and changes within days of occupancy, and reduced overall exposure indoors is tied to allergies. <em>[Flag: the &ldquo;indoor is less diverse than outdoor&rdquo; framing and the pets &rarr; higher-diversity / fewer-allergies points are standard built-environment microbiology but only lightly stated in the deck — confirm against the lecture video.]</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Strongest deck-supported hooks: home microbiota predicts the family and changes within days of occupancy, and reduced exposure indoors is tied to allergies. <em>[Flag: the &ldquo;indoor less diverse than outdoor&rdquo; framing and the pets points are standard built-environment microbiology but only lightly stated in the deck &mdash; confirm against the lecture video.]</em></div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">What does a shared home do to the microbiome (and pets)?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -811,11 +919,12 @@
     <article class="q" id="m5l3-q12" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q12</span><span class="q-text">What are some ways microbes can corrode your home?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p>Microorganisms <span class="mem">accelerate corrosion</span> by <span class="concept">changing pH</span> and producing <span class="concept">corrosive metabolites and microenvironments (biofilms)</span>. <span class="mem">Microbially influenced corrosion (MIC)</span> = corrosion in which microbes are implicated.</p>
-        <p>Key culprits: <span class="mem">sulfate-reducing bacteria</span> (iron corrosion by seawater), ferric-iron-reducing bacteria, ferrous-iron-oxidizing bacteria, and methanogens.</p>
-        <p><span class="mem">Biodeterioration</span> = loss of structural integrity of <span class="concept">stone or concrete</span> caused by microbes (they colonize surfaces or live inside stone — <span class="concept">endolithic</span>). A classic case is rapid <span class="mem">crown corrosion of concrete sewer lines</span> by sulfate-reducing and sulfide-oxidizing bacteria.</p>
+        <div class="takeaway"><span class="mem">Microbially influenced corrosion (MIC)</span> of metals &mdash; microbes change pH + form corrosive biofilms (<span class="mem">sulfate-reducing bacteria</span> headline; also iron-cycling bacteria, methanogens). <span class="mem">Biodeterioration</span> of stone / concrete &mdash; e.g., crown corrosion of sewer lines by sulfate-reducing + sulfide-oxidizing bacteria.</div>
+        <div class="support">
+          <p>Two terms to separate: <span class="concept">MIC</span> (metals) vs. <span class="concept">biodeterioration</span> (stone/concrete, including endolithic colonization).</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Two terms to separate: <em>microbially influenced corrosion</em> (metals — via pH shifts, corrosive metabolites, and biofilms, with sulfate-reducing bacteria as the headline) and <em>biodeterioration</em> (stone/concrete — e.g., crown corrosion of sewer lines by sulfate-reducers + sulfide-oxidizers). A question might give a scenario and ask which organisms are responsible.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>A question might give a scenario and ask which organisms are responsible &mdash; sulfate-reducing bacteria for metal corrosion; sulfate-reducers + sulfide-oxidizers for concrete sewer lines.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
         <div class="fc-q">How do microbes corrode a home?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
@@ -1308,7 +1417,7 @@ window.smoothScrollTo=function(el){
           if(/^\s+$/.test(tok))f.appendChild(document.createTextNode(tok));
           else{var s=document.createElement('span');s.className='blw';s.textContent=tok;f.appendChild(s);} });
         n.replaceChild(f,k);
-      } else if(k.nodeType===1 && !k.classList.contains('lbl') && !k.classList.contains('hl')) wrapNode(k);
+      } else if(k.nodeType===1 && !k.classList.contains('lbl') && !k.classList.contains('hl') && !k.classList.contains('ex-lab')) wrapNode(k);
     });
   }
   function ensure(el){ if(el.dataset.w)return;
@@ -1850,6 +1959,18 @@ window.smoothScrollTo=function(el){
   var rinit=false; try{rinit=localStorage.getItem(RKEY)==='1';}catch(e){}
   setRecall(rinit,false);
   if(recallBtn) recallBtn.onclick=function(){ setRecall(!body.classList.contains('recall-active'),true); };
+
+  var QKEY='exam3-quick';
+  var quickBtn=document.getElementById('quick-btn');
+  function setQuick(on,persist){
+    body.classList.toggle('quick-active',on);
+    if(quickBtn) quickBtn.setAttribute('aria-pressed',on);
+    if(persist){ try{localStorage.setItem(QKEY,on?'1':'0');}catch(e){} }
+    setTimeout(function(){window.recolorAll&&window.recolorAll();},30);
+  }
+  var qinit=false; try{qinit=localStorage.getItem(QKEY)==='1';}catch(e){}
+  setQuick(qinit,false);
+  if(quickBtn) quickBtn.onclick=function(){ setQuick(!body.classList.contains('quick-active'),true); };
 
   /* per-lesson collapse + collapse/expand all */
   var CARET='<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 6 8 10 12 6"/></svg>';
