@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600&family=Lexend:wght@400;500;600&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root{ --font-serif:'Newsreader',Georgia,serif; --font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; --read:'Newsreader',Georgia,serif; --radius:10px; --maxw:760px; --sidebar-w:300px; }
+  :root{ --font-serif:'Newsreader',Georgia,serif; --font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; --read:'Newsreader',Georgia,serif; --radius:10px; --maxw:760px; --sidebar-w:300px; --stack-h:64px; }
   *{ box-sizing:border-box; }
   html{ scroll-behavior:auto; }
   body.paper{ --bg:#F3F0E7; --card:#FBFAF4; --ink:#2C2A24; --ink-soft:#6E685C; --border:rgba(40,36,28,.14); --border-soft:rgba(40,36,28,.08); --accent:#1A4D8F; --tag-bg:#E9E4D6; --tag-ink:#5A5446; --fc-bg:#F2EEE2; --fc-accent:#8A6D2F; --mem:#1858A8; --concept:#C0492B; --ok:#2E7D52; --bad:#B23A2E; --hl:#FCE58A; --hl-ink:#2C2A24; --book:#D8362B; --flag:#E0922A; }
@@ -17,7 +17,7 @@
   *{ transition: background-color .3s ease, border-color .3s ease, color .3s ease, fill .3s ease; }
 
   /* header */
-  header.bar{ position:sticky; top:0; z-index:60; background:var(--bg); border-bottom:1px solid var(--border); padding:10px 14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  header.bar{ background:var(--bg); border-bottom:1px solid var(--border); padding:10px 14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
   .bar button, .bar .fs{ font-family:var(--font-sans); font-size:13px; color:var(--ink); background:var(--card); border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; line-height:1.2; }
   .bar button:hover{ border-color:var(--ink-soft); }
   .bar button[aria-pressed="true"]{ border-color:var(--accent); color:var(--accent); }
@@ -34,16 +34,16 @@
   .doc-title{ font-family:var(--read); font-size:30px; font-weight:600; margin:4px 0 6px; }
   .doc-sub{ color:var(--ink-soft); font-size:14px; margin:0 0 26px; }
 
-  .lesson-title{ font-family:var(--read); font-size:23px; font-weight:500; margin:38px 0 2px; padding-top:16px; border-top:1px solid var(--border); scroll-margin-top:64px; }
+  .lesson-title{ font-family:var(--read); font-size:23px; font-weight:500; margin:38px 0 2px; padding-top:16px; border-top:1px solid var(--border); scroll-margin-top:var(--stack-h); }
   .lesson-meta{ color:var(--ink-soft); font-size:13px; margin:0 0 16px; font-style:italic; }
 
   /* topic divider */
-  .topic-divider{ margin:26px 0 14px; scroll-margin-top:64px; }
+  .topic-divider{ margin:26px 0 14px; scroll-margin-top:var(--stack-h); }
   .topic-divider .td-inner{ font-family:var(--read); font-size:16px; font-weight:600; color:var(--accent); display:flex; align-items:center; gap:12px; }
   .topic-divider .td-line{ flex:1; height:1px; background:var(--border); }
 
   /* block */
-  article.q{ position:relative; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; margin:0 0 16px; scroll-margin-top:64px; overflow:hidden; }
+  article.q{ position:relative; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; margin:0 0 16px; scroll-margin-top:var(--stack-h); overflow:hidden; }
   .q-head{ display:flex; gap:10px; align-items:flex-start; margin-bottom:10px; }
   .q-num{ flex:none; font-size:11.5px; font-weight:600; color:var(--accent); border:1px solid var(--accent); border-radius:6px; padding:2px 7px; line-height:1.35; white-space:nowrap; -webkit-user-select:none; user-select:none; }
   .q-text{ flex:1; min-width:0; font-family:var(--read); font-size:17px; line-height:1.36; }
@@ -105,9 +105,18 @@
   .sb-top{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border); }
   .sb-top h2{ font-family:var(--font-serif); font-size:16px; font-weight:600; margin:0; }
   .sb-close{ background:transparent; border:none; color:var(--ink-soft); font-size:20px; line-height:1; cursor:pointer; padding:2px 6px; }
-  .sb-flagtoggle{ padding:10px 16px; border-bottom:1px solid var(--border); }
-  .sb-flagtoggle button{ width:100%; font-size:12.5px; color:var(--ink); background:transparent; border:1px solid var(--border); border-radius:7px; padding:7px 10px; cursor:pointer; display:flex; align-items:center; gap:7px; justify-content:center; }
-  .sb-flagtoggle button[aria-pressed="true"]{ border-color:var(--flag); color:var(--flag); }
+  .sb-focus{ padding:11px 16px 12px; border-bottom:1px solid var(--border); }
+  .sb-focus-label{ font-size:10.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 8px 2px; }
+  .sb-focus-row{ display:flex; flex-wrap:wrap; gap:6px; }
+  .focus-btn{ display:inline-flex; align-items:center; gap:5px; font-family:var(--font-sans); font-size:12px; color:var(--ink-soft); background:transparent; border:1px solid var(--border); border-radius:999px; padding:5px 11px; cursor:pointer; transition:background .12s,color .12s,border-color .12s,opacity .12s; }
+  .focus-btn .fc-n{ font-weight:700; color:var(--ink); }
+  .focus-btn:hover:not([disabled]){ border-color:var(--ink-soft); }
+  .focus-btn[disabled]{ opacity:.36; cursor:default; }
+  .focus-btn[aria-pressed="true"]{ color:var(--ink); }
+  .focus-btn[data-focus="flag"][aria-pressed="true"]{ background:color-mix(in srgb, var(--flag) 15%, transparent); border-color:var(--flag); }
+  .focus-btn[data-focus="new"][aria-pressed="true"]{ background:color-mix(in srgb, var(--ink-soft) 15%, transparent); border-color:var(--ink-soft); }
+  .focus-btn[data-focus="hard"][aria-pressed="true"]{ background:color-mix(in srgb, var(--bad) 15%, transparent); border-color:var(--bad); }
+  .focus-btn[data-focus="unsure"][aria-pressed="true"]{ background:color-mix(in srgb, var(--flag) 15%, transparent); border-color:var(--flag); }
   .sb-tree{ overflow-y:auto; padding:8px 8px 30px; flex:1; }
   .sb-mod{ margin:6px 0; }
   .sb-mod > .sb-modname{ font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); padding:8px 10px 4px; }
@@ -118,7 +127,7 @@
   .sb-les.collapsed .caret{ transform:rotate(-90deg); }
   .sb-divs{ padding:2px 0 4px 22px; }
   .sb-les.collapsed .sb-divs{ display:none; }
-  .sb-div{ display:block; width:100%; text-align:left; font-size:12.8px; color:var(--ink-soft); background:transparent; border:none; border-left:1px solid var(--border); border-radius:0; padding:5px 10px; cursor:pointer; }
+  .sb-div{ display:flex; align-items:flex-start; gap:6px; width:100%; text-align:left; font-size:12.8px; color:var(--ink-soft); background:transparent; border:none; border-left:1px solid var(--border); border-radius:0; padding:5px 10px; cursor:pointer; }
   .sb-div:hover{ color:var(--accent); border-left-color:var(--accent); }
   .sb-div.quiz{ font-style:italic; }
 
@@ -151,13 +160,13 @@
   .confetti{ position:fixed; top:14px; width:9px; height:14px; opacity:1; animation:confetti-fall var(--dur,2.4s) cubic-bezier(.2,.6,.3,1) forwards; }
   @keyframes confetti-fall{ to{ transform:translate(var(--dx,0), 108vh) rotateZ(var(--rot,720deg)); opacity:0; } }
   .font-dd{ position:relative; display:inline-block; }
-  .font-menu{ position:absolute; top:calc(100% + 6px); left:0; min-width:184px; background:var(--card); border:1px solid var(--border); border-radius:10px; box-shadow:0 10px 28px rgba(0,0,0,.20); padding:5px; z-index:130; }
+  .font-menu{ position:absolute; top:calc(100% + 6px); left:0; min-width:184px; background:var(--card); border:1px solid var(--border); border-radius:10px; box-shadow:0 10px 28px rgba(0,0,0,.20); padding:5px; z-index:140; }
   .font-menu[hidden]{ display:none; }
   .font-opt{ display:flex; align-items:center; gap:8px; width:100%; text-align:left; background:transparent; border:none; border-radius:7px; padding:8px 10px; cursor:pointer; color:var(--ink); font-size:15px; line-height:1.25; }
   .font-opt:hover{ background:var(--tag-bg); }
   .font-opt .tick{ width:13px; flex:0 0 13px; color:var(--accent); font-size:12px; }
   .font-opt[aria-checked="true"]{ font-weight:600; }
-  body.bar-hidden header.bar{ display:none; }
+  body.bar-hidden #tbstack{ display:none; }
   #bar-tab{ position:fixed; top:0; right:18px; z-index:90; display:inline-flex; align-items:center; justify-content:center; width:36px; height:19px; padding:0; font-size:12px; line-height:1; color:var(--ink-soft); background:var(--card); border:1px solid var(--border); border-top:none; border-radius:0 0 9px 9px; cursor:pointer; box-shadow:0 5px 11px rgba(0,0,0,.10); opacity:.85; transition:opacity .15s, color .15s, top .18s ease; }
   #bar-tab:hover{ opacity:1; color:var(--ink); }
   #theme-toggle{ display:inline-flex; align-items:center; justify-content:center; min-width:34px; }
@@ -170,6 +179,62 @@
   #hl-toggle[aria-pressed="true"] svg{ fill:var(--hl); }
   .fs-grp{ display:inline-flex; align-items:center; gap:3px; }
   #bar-tab svg{ display:block; }
+  /* ===== study-mode features ===== */
+  #tbstack{ position:sticky; top:0; z-index:95; }
+  #study-bar{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:8px 14px; background:var(--bg); border-bottom:1px solid var(--border); }
+  body.study-hidden #study-bar{ display:none; }
+  #study-tab{ position:fixed; right:62px; top:0; z-index:90; display:inline-flex; align-items:center; gap:5px; height:19px; padding:0 9px; color:var(--ink-soft); background:var(--card); border:1px solid var(--border); border-top:none; border-radius:0 0 9px 9px; cursor:pointer; box-shadow:0 5px 11px rgba(0,0,0,.10); opacity:.85; transition:opacity .15s, color .15s, top .18s ease; }
+  #study-tab:hover{ opacity:1; color:var(--ink); }
+  #study-tab .st-brain{ font-size:12px; line-height:1; }
+  #study-tab svg{ display:block; }
+  body.bar-hidden #study-tab{ display:none; }
+  #progress{ position:fixed; top:0; left:0; right:0; height:3px; z-index:200; background:transparent; pointer-events:none; }
+  #progress-fill{ height:100%; width:0; background:var(--accent); transition:width .08s linear; }
+  .recall-hint{ display:none; width:100%; text-align:left; font-family:var(--read); font-size:.92em; color:var(--accent); background:var(--border-soft); border:1px dashed var(--border); border-radius:8px; padding:10px 12px; margin:10px 0 0; cursor:pointer; }
+  .recall-hint:hover{ border-color:var(--accent); }
+  body.recall-active article.q .answer, body.recall-active article.q .explain{ display:none; }
+  body.recall-active article.q:not(.revealed) .recall-hint{ display:block; }
+  body.recall-active article.q.revealed .answer, body.recall-active article.q.revealed .explain{ display:block; }
+  .conf{ display:flex; margin:14px -18px -16px; border-top:1px solid var(--border); -webkit-user-select:none; user-select:none; }
+  .conf button{ flex:1; font-family:var(--font-sans); font-size:10.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); background:transparent; border:none; border-right:1px solid var(--border); padding:7px 4px; cursor:pointer; transition:background .12s, color .12s; }
+  .conf button:last-child{ border-right:none; }
+  .conf button:hover{ color:var(--ink); }
+  .conf button[aria-pressed="true"]{ font-weight:700; }
+  .conf button[data-c="easy"][aria-pressed="true"]{ background:color-mix(in srgb, var(--ok) 16%, transparent); color:var(--ok); }
+  .conf button[data-c="hard"][aria-pressed="true"]{ background:color-mix(in srgb, var(--bad) 16%, transparent); color:var(--bad); }
+  .conf button[data-c="unsure"][aria-pressed="true"]{ background:color-mix(in srgb, var(--flag) 18%, transparent); color:var(--flag); }
+  .les-caret{ display:inline-flex; align-items:center; justify-content:center; vertical-align:middle; margin-right:9px; width:22px; height:22px; padding:0; color:var(--ink-soft); background:transparent; border:1px solid var(--border); border-radius:6px; cursor:pointer; }
+  .les-caret:hover{ color:var(--ink); border-color:var(--ink-soft); }
+  .les-caret svg{ display:block; transition:transform .15s; }
+  section.lesson.collapsed .les-caret svg{ transform:rotate(-90deg); }
+  section.lesson.collapsed > :not(.lesson-title){ display:none !important; }
+  .sb-prog{ margin-left:auto; flex:none; font-size:10.5px; font-weight:700; color:var(--ink-soft); padding:1px 7px; border-radius:8px; background:var(--border-soft); }
+  .sb-prog:empty{ display:none; }
+  .sb-prog.done{ color:var(--ok); background:color-mix(in srgb, var(--ok) 14%, transparent); }
+  .sb-div-lab{ flex:1; min-width:0; }
+  .sb-tdtally{ flex:none; display:inline-flex; gap:4px; margin-left:8px; }
+  .sb-tdtally .td{ font-size:10px; font-weight:700; padding:0 5px; border-radius:6px; line-height:1.55; white-space:nowrap; }
+  .sb-tdtally .td.flag{ color:var(--flag); background:color-mix(in srgb, var(--flag) 15%, transparent); }
+  .sb-tdtally .td.hard{ color:var(--bad); background:color-mix(in srgb, var(--bad) 15%, transparent); }
+  .sb-tdtally .td.unsure{ color:var(--flag); background:color-mix(in srgb, var(--flag) 15%, transparent); }
+  @media print{
+    #tbstack, #bar-tab, #study-tab, #progress, #sidebar, #overlay, #book-dock, #confetti-layer, #kudos-toast, .flag-btn, .les-caret, .conf, .recall-hint, .fc-btn, .quiz-shell{ display:none !important; }
+    html, body, body.paper, body.dark{ background:#fff !important; }
+    body{ color:#000 !important; }
+    main{ max-width:100% !important; margin:0 !important; padding:0 14px !important; }
+    article.q, .answer, .explain, .fc{ background:#fff !important; color:#000 !important; box-shadow:none !important; }
+    article.q{ border:1px solid #ccc !important; }
+    .explain, .explain *{ color:#000 !important; }
+    .mem{ color:#000 !important; font-weight:700; }
+    .concept{ color:#000 !important; font-style:italic; }
+    mark.hl{ background:#eaeaea !important; color:#000 !important; box-shadow:none !important; }
+    .fc-a{ display:block !important; }
+    body.recall-active article.q .answer, body.recall-active article.q .explain{ display:block !important; }
+    section.lesson.collapsed > :not(.quiz-shell){ display:block !important; }
+    a{ color:#000 !important; text-decoration:none !important; }
+    .lesson-title, .topic-divider, article.q, .fc{ page-break-inside:avoid; break-inside:avoid; }
+    .lesson-title{ page-break-after:avoid; break-after:avoid; }
+  }
 </style>
 <script>
 (function(){try{var p=parseInt(localStorage.getItem('exam3-fspx'),10);if(!(p>=14&&p<=26))p=18;document.documentElement.style.setProperty('--root-fs',p+'px');}catch(e){}})();
@@ -177,6 +242,8 @@
 </head>
 <body class="paper">
 
+<div id="progress"><div id="progress-fill"></div></div>
+<div id="tbstack">
 <header class="bar">
   <button id="menu-btn" aria-label="Open navigation" aria-expanded="false"><span class="ic"><span></span></span>Menu</button>
   <span class="bar-title">Exam 3 Review</span>
@@ -194,7 +261,15 @@
   <span class="fs-grp"><button id="fs-dn" title="Smaller text">A&minus;</button><span class="fs" id="fs-val">18px</span><button id="fs-up" title="Larger text">A&plus;</button></span>
   <button id="theme-toggle" title="Toggle theme" aria-label="Toggle light/dark mode"></button>
 </header>
+<div class="bar" id="study-bar">
+  <button id="recall-btn" type="button" aria-pressed="false" title="Hide answers for self-testing">Recall mode</button>
+  <button id="collapse-all" type="button" title="Collapse all lessons">Collapse all</button>
+  <button id="expand-all" type="button" title="Expand all lessons">Expand all</button>
+  <span class="font-dd reset-dd"><button id="reset-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Reset saved data">Reset &#9662;</button><div id="reset-menu" class="font-menu" role="menu" hidden></div></span>
+</div>
+</div>
 <button id="bar-tab" type="button" title="Hide the toolbar" aria-label="Toggle toolbar" aria-expanded="true"><svg viewBox="0 0 20 12" width="18" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8.5 10 3.5 17 8.5"/></svg></button>
+<button id="study-tab" type="button" aria-label="Toggle study tools" aria-expanded="true"></button>
 
 <div id="book-dock">
   <button id="book-clear" title="Remove bookmark" aria-label="Remove bookmark">&times;</button>
@@ -204,7 +279,15 @@
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
   <div class="sb-top"><h2>Contents</h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
-  <div class="sb-flagtoggle"><button id="flag-only" aria-pressed="false">&#x2691; Show flagged content only</button></div>
+  <div class="sb-focus">
+    <div class="sb-focus-label">Focus</div>
+    <div class="sb-focus-row">
+      <button class="focus-btn" data-focus="flag" type="button" aria-pressed="false">&#x2691; <b class="fc-n">0</b> flagged</button>
+      <button class="focus-btn" data-focus="new" type="button" aria-pressed="false"><b class="fc-n">0</b> new</button>
+      <button class="focus-btn" data-focus="hard" type="button" aria-pressed="false"><b class="fc-n">0</b> hard</button>
+      <button class="focus-btn" data-focus="unsure" type="button" aria-pressed="false"><b class="fc-n">0</b> unsure</button>
+    </div>
+  </div>
   <nav class="sb-tree" id="sb-tree"></nav>
 </aside>
 
@@ -217,169 +300,196 @@
 
   <section class="lesson" id="m5l1" data-module="Module 5 — Microbial Ecology">
     <h2 class="lesson-title">Module 5 · Lesson 1 — Introduction to Microbial Ecology</h2>
-    <p class="lesson-meta">12 topics · filler content shown for layout testing.</p>
+    <p class="lesson-meta">Built from the M5L1 review doc + lecture deck · 9 of Exam 3’s questions come from this lesson.</p>
     <div class="topic-divider" id="m5l1-d1" data-topic="Ecological Terms &amp; Diversity"><div class="td-inner"><span>Ecological Terms &amp; Diversity</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l1-q1" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q1</span><span class="q-text">What is the difference between habitat, community, ecosystem, guild, and population — and how do they rank in order of diversity?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p>These are nested <span class="concept">levels of ecological organization</span>, broadest to narrowest:</p>
+        <ul>
+          <li><span class="mem">Ecosystem</span> — the sum total of all organisms <em>and</em> abiotic factors in a particular environment; contains many habitats.</li>
+          <li><span class="mem">Habitat</span> — the portion of an ecosystem where a community can reside.</li>
+          <li><span class="mem">Community</span> — populations living in association with other populations.</li>
+          <li><span class="mem">Guild</span> — a set of <span class="concept">metabolically related</span> populations within that community.</li>
+          <li><span class="mem">Population</span> — microbes of the <span class="concept">same species</span>, same place, same time.</li>
+        </ul>
+        <p><strong>Order of diversity (most &rarr; least):</strong> <span class="mem">Ecosystem &gt; Habitat &gt; Community &gt; Guild &gt; Population</span>.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Expect a ranking or matching item: the five terms scrambled to order by diversity, or a one-line definition to match to a term. The trap is the middle tiers — a community is <em>all</em> the populations together, a guild is only the metabolically-related subset (same kind of chemistry), and a population is a single species. Anchor the ends first (ecosystem = everything, including the nonliving parts; population = one species) and the middle falls into place.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Rank by diversity, most to least: population, ecosystem, guild, community, habitat.</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Ecosystem &gt; Habitat &gt; Community &gt; Guild &gt; Population. (Ecosystem = organisms + abiotic factors; guild = metabolically related populations; population = one species.)</div>
       </div>
     </article>
     <article class="q" id="m5l1-q2" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q2</span><span class="q-text">Contrast species richness and species abundance — how would you explain each with an example, and what does each tell you about an environment?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p>Two ways to express the <span class="concept">diversity of species</span> in an ecosystem:</p>
+        <ul>
+          <li><span class="mem">Species richness</span> = the total <em>number</em> of different species present.</li>
+          <li><span class="mem">Species abundance</span> = the <em>proportion</em> of each species present (how evenly the community is distributed).</li>
+        </ul>
+        <p>Both are functions of the <span class="concept">nutrients available (kind and amount) and the conditions</span>. <strong>Example:</strong> a pond with 10 species where one alga is 90% of the cells has <span class="mem">high richness</span> but <span class="mem">low / uneven abundance</span>.</p>
+        <p>Richness tells you <em>how many kinds</em> live there; abundance tells you <em>which dominate</em> and how evenly resources are shared.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The classic stem hands you a count of species plus a lopsided proportion and asks you to characterize the environment. Don&rsquo;t conflate them: a place can be rich (many species) yet have very uneven abundance (one species dominating). Richness is a headcount; abundance is the distribution. A stable, resource-varied habitat tends to support both high richness and more even abundance, so the numbers also hint at how favorable the environment is.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Richness vs. abundance — which is a count, which is a proportion?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Richness = number of different species (a count). Abundance = proportion / evenness of each species present.</div>
       </div>
     </article>
     <article class="q" id="m5l1-q3" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q3</span><span class="q-text">What is a niche, and what distinguishes a prime/realized niche from a fundamental niche?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <ul>
+          <li><span class="mem">Niche</span> — the habitat shared by a guild; supplies both the <span class="concept">nutrients and the conditions</span> needed for growth.</li>
+          <li><span class="mem">Fundamental niche</span> — the <em>full range</em> of environmental conditions under which an organism <em>can</em> exist.</li>
+          <li><span class="mem">Realized / prime niche</span> — the one niche in which an organism is <em>most successful</em>. It does not mean the organism cannot live elsewhere — just that this is where it does best.</li>
+        </ul>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The distinction to nail is potential vs. actual. Fundamental = everywhere it <em>could</em> survive on paper (its full tolerance range); realized / prime = where it actually thrives once competition and real-world limits apply. A common stem describes an organism living across a broad range but dominating in one narrow set of conditions, then asks which term names that optimum (realized / prime). Keep niche separate from microenvironment — a niche belongs to a guild; a microenvironment is the immediate surroundings of a single cell.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Fundamental niche vs. realized (prime) niche?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Fundamental = the full range of conditions an organism <em>could</em> live in. Realized / prime = the niche where it is actually <em>most successful</em>.</div>
       </div>
     </article>
     <div class="topic-divider" id="m5l1-d2" data-topic="The Microbial Environment"><div class="td-inner"><span>The Microbial Environment</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l1-q4" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q4</span><span class="q-text">What is a microenvironment? Using a soil particle as an example, what types of microbes live in the different microenvironments?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p><span class="mem">Microenvironment</span> = the immediate environmental surroundings of a microbial cell or group of cells. Its <span class="concept">physiochemical conditions change rapidly</span> over very small distances and short times (spatially and temporally).</p>
+        <p><strong>Soil-particle example:</strong> a single soil aggregate holds many microenvironments. The <span class="concept">oxygenated outer surface</span> supports <span class="mem">aerobes</span>; as those cells consume O<sub>2</sub>, the <span class="concept">interior turns anoxic</span>, creating a niche for <span class="mem">anaerobes</span>. Different microbes occupy different microenvironments on the <em>same</em> particle.</p>
+        <p>Because resources are patchy, many microbes face a <span class="concept">feast-or-famine</span> existence and grow well below their lab-defined maximum rates.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The soil aggregate is the go-to illustration of why &ldquo;the environment&rdquo; is never uniform: an oxygen gradient across a few millimeters lets aerobes and obligate anaerobes live on one grain at once. Expect a question asking where on a particle you would find anaerobes (the anoxic core, after surface microbes use up the oxygen). Keep microenvironment distinct from niche — it is the tiny, fast-changing surroundings of a cell, not a guild&rsquo;s shared habitat.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">On one soil particle, where are aerobes vs. anaerobes, and why?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Aerobes on the oxygenated outer surface; anaerobes in the anoxic interior, because surface microbes consume the O<sub>2</sub> before it diffuses inward. Each is a separate microenvironment on the same particle.</div>
       </div>
     </article>
     <div class="topic-divider" id="m5l1-d3" data-topic="Terrestrial Environments"><div class="td-inner"><span>Terrestrial Environments</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l1-q5" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q5</span><span class="q-text">What components make up soil, what are its four layers, and which layer is the most species-abundant?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p><span class="mem">Soil</span> = the loose outer material of Earth&rsquo;s surface. It is either <span class="concept">mineral soil</span> (from rock weathering / inorganic material) or <span class="concept">organic soil</span> (from sedimentation in bogs and marshes).</p>
+        <p><strong>Composition:</strong> ~<span class="mem">40% inorganic matter</span>, ~<span class="mem">5% organic matter</span>, ~<span class="mem">50% air and water</span>, ~<span class="mem">5% organisms</span>.</p>
+        <p><strong>Four layers (soil horizons):</strong> <span class="mem">O</span> (organic litter) &rarr; <span class="mem">A</span> (topsoil) &rarr; <span class="mem">B</span> (subsoil) &rarr; <span class="mem">C</span> (parent material / weathered rock). The <span class="mem">surface / topsoil</span> is the <span class="concept">most species-abundant</span> — most microbial growth is found at the soil surface.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Memorize the four proportions — a likely stem asks for the <em>largest</em> component (air + water at ~50%, just ahead of inorganic mineral matter at ~40%). For the layers, the takeaway is that the top of the column is where the action is: the surface / topsoil is richest in organic matter and microbial life, and richness drops with depth. <em>[Flag: the deck text states only &ldquo;4 distinct layers&rdquo; and &ldquo;most microbial growth on the soil surface&rdquo; — the O/A/B/C horizon names are the standard soil-science scheme; the explicitly-stated point to lock in is &ldquo;surface = most abundant.&rdquo;]</em></div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Soil is ~__% air/water, ~__% inorganic, ~__% organic, ~__% organisms — and which layer is most species-abundant?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>~50% air + water, ~40% inorganic, ~5% organic, ~5% organisms. The surface / topsoil is the most species-abundant layer (most microbial growth is at the surface).</div>
       </div>
     </article>
     <article class="q" id="m5l1-q6" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q6</span><span class="q-text">What is the benefit of having smaller cells in subsurface environments?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p>The deep subsurface (extending hundreds of meters down) is <span class="concept">extremely nutrient-limited</span>, so <span class="mem">small cells are common</span>.</p>
+        <p><strong>Benefit:</strong> smaller cells have a higher <span class="mem">surface-area-to-volume ratio</span>, which makes <span class="concept">nutrient uptake and waste exchange more efficient per unit of cell</span> — a decisive advantage when nutrients are scarce.</p>
+        <p>Both <span class="mem">Archaea and Bacteria</span> live there in variable concentrations (set by nutrient availability); the deep subsurface is thought to host <span class="concept">Lokiarchaeota</span>, the archaea most closely related to eukaryotes.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>This is the Module 1 surface-area-to-volume principle resurfacing in an ecology context — the logic is identical to &ldquo;why are cells small.&rdquo; The answer she wants: high SA:V &rarr; more efficient scavenging of scarce nutrients in an oligotrophic environment. Watch for a distractor about storing nutrients or dividing faster; the point is exchange efficiency, not storage or speed.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Why are small cells favored in the nutrient-poor deep subsurface?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Smaller cells = higher surface-area-to-volume ratio = more efficient nutrient uptake / waste exchange, which wins when nutrients are extremely limited.</div>
       </div>
     </article>
     <div class="topic-divider" id="m5l1-d4" data-topic="Aquatic &amp; Marine Environments"><div class="td-inner"><span>Aquatic &amp; Marine Environments</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l1-q7" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q7</span><span class="q-text">What impact does water depth have on microbial species richness and abundance, and what are benthic species (where would you find them)?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p><strong>Depth effect:</strong> as depth increases, <span class="concept">light, oxygen, and nutrients all decline</span> — light fails (no photosynthesis below the photic zone), O<sub>2</sub> has limited solubility so deep layers go <span class="concept">anoxic</span>, and nutrients drop. So microbial <span class="mem">richness and abundance generally decrease with depth</span>; the illuminated surface water is most productive and diverse.</p>
+        <p><span class="mem">Benthic species</span> = microbes <span class="concept">attached to the bottom or sides</span> of a lake or stream — contrast with <span class="mem">phytoplankton</span>, the oxygenic phototrophs freely suspended in the water. You find benthic organisms on the sediments and substrate at the bottom.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Tie the trend to a mechanism, because that is how it is framed: deeper = less light + less oxygen + fewer nutrients = fewer, more specialized organisms. The benthic-vs-planktonic contrast is the testable pair — &ldquo;attached to the bottom / sides&rdquo; = benthic; &ldquo;freely suspended&rdquo; = phytoplankton. A stem may describe an organism&rsquo;s location and ask which category it is.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">What are benthic species, and how does depth affect richness / abundance?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Benthic = attached to the bottom / sides of a lake or stream. Greater depth &rarr; less light, O<sub>2</sub>, and nutrients &rarr; lower richness and abundance.</div>
       </div>
     </article>
     <article class="q" id="m5l1-q8" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q8</span><span class="q-text">What are the layers associated with temperate lakes, and can you identify them?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p>Many temperate lakes <span class="concept">stratify in summer</span> into three layers (top to bottom):</p>
+        <ul>
+          <li><span class="mem">Epilimnion</span> — warm, less-dense surface layer.</li>
+          <li><span class="mem">Thermocline</span> — middle layer of moderate, rapidly-changing temperature.</li>
+          <li><span class="mem">Hypolimnion</span> — cool, dense bottom layer.</li>
+        </ul>
+        <p>The layers differ in <span class="concept">temperature, oxygen, and chemical composition</span>, which supports <span class="mem">high microbial diversity</span>.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Plan on an identification item — a description (&ldquo;warm surface,&rdquo; &ldquo;cold dense bottom,&rdquo; &ldquo;the transitional middle&rdquo;) and you pick the term. The Greek roots make it painless: <em>epi-</em> = upon (top), <em>hypo-</em> = under (bottom), thermocline = the temperature transition between them. Because each layer has its own temp / O<sub>2</sub> / chemistry, each is effectively its own set of microenvironments — which is why diversity is high.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Name the three temperate-lake layers, top to bottom.</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Epilimnion (warm surface) &rarr; thermocline (moderate middle) &rarr; hypolimnion (cool, dense bottom).</div>
       </div>
     </article>
     <article class="q" id="m5l1-q9" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q9</span><span class="q-text">What is biochemical oxygen demand (BOD), what alters it, and how does eutrophication impact BOD?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p><span class="mem">Biochemical oxygen demand (BOD)</span> = the <span class="concept">microbial oxygen-consuming capacity</span> of a body of water — how much O<sub>2</sub> microbes use as they break down organic matter.</p>
+        <p><strong>What alters it:</strong> BOD <span class="mem">increases with an influx of organic material</span> (waste / pollution) and <span class="concept">decreases over time</span> as that material is consumed. Rivers are well-mixed by flow but can still go oxygen-deficient when polluted.</p>
+        <p><strong>Eutrophication</strong> = over-enrichment with nutrients &rarr; excess plant and algal growth. When that biomass dies, microbial decomposition consumes oxygen, so eutrophication <span class="mem">raises BOD</span> and can drive the water <span class="concept">intermittently anoxic</span>.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The causal chain <em>is</em> the question: extra nutrients &rarr; more algae / plants &rarr; die-off &rarr; microbes decompose it &rarr; O<sub>2</sub> consumed &rarr; BOD up, dissolved oxygen down, water trends anoxic. Expect a scenario (runoff, a bloom, sewage input) asking what happens to BOD and oxygen. The direction is the point — eutrophication <em>increases</em> BOD, and a high-BOD water is one headed toward oxygen depletion.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">What is BOD, and does eutrophication raise or lower it?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>BOD = the microbial O<sub>2</sub>-consuming capacity of water (rises with organic input). Eutrophication <em>raises</em> BOD — decomposing bloom biomass consumes oxygen, pushing the water toward anoxia.</div>
       </div>
     </article>
     <article class="q" id="m5l1-q10" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q10</span><span class="q-text">What types of microbes thrive in marine waters, and which are most important for photosynthetic production?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p>Marine waters are <span class="concept">high in salinity, cool, and low in nutrients</span> (often short on nitrogen, phosphorus, and iron), yet so vast that their microbial activity is a major driver of Earth&rsquo;s carbon balance.</p>
+        <p>Key marine phototrophs: <span class="mem">Prochlorococcus</span>, <span class="mem">Trichodesmium</span> (a filamentous, N<sub>2</sub>-fixing cyanobacterium), <span class="mem">Ostreococcus</span> (a eukaryote), plus anoxygenic phototrophs.</p>
+        <p><strong>Most important for photosynthetic production:</strong> <span class="mem">Prochlorococcus</span> — responsible for ~<span class="mem">50% of marine photosynthetic production</span>.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The number is the answer being fished for: <em>Prochlorococcus &asymp; 50% of marine photosynthetic production</em>. The distractors will be the other marine names — Trichodesmium (think nitrogen fixation), Ostreococcus (a eukaryote), and especially Pelagibacter, which is a heterotroph, not a phototroph, so it cannot be the photosynthesis answer. If the stem says &ldquo;photosynthetic production,&rdquo; go straight to Prochlorococcus.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Which marine microbe accounts for ~50% of photosynthetic production?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Prochlorococcus (~50% of marine photosynthetic production). Trichodesmium fixes N<sub>2</sub>; Pelagibacter is a heterotroph, not a phototroph.</div>
       </div>
     </article>
     <article class="q" id="m5l1-q11" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q11</span><span class="q-text">What is the pelagic zone, what organisms tell you that&#x27;s where you are, and what is most abundant there?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p>The <span class="mem">pelagic zone</span> = the <span class="concept">open waters</span> of the ocean.</p>
+        <p><strong>Indicator organism:</strong> <span class="mem">Pelagibacter</span> — the most abundant marine <span class="mem">heterotroph</span> and an <span class="mem">oligotroph</span> (grows best at very low nutrient concentrations). It carries <span class="concept">proteorhodopsin</span>, letting it use light energy to drive ATP synthesis. Its presence signals the nutrient-poor open ocean.</p>
+        <p><strong>Most abundant overall:</strong> <span class="mem">viruses</span> — the most abundant microorganisms in the ocean (up to ~<span class="concept">10<sup>8</sup> virions/mL</span>), highly diverse (non-tailed dsDNA viruses dominate), and major regulators of prokaryotic populations.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>This one rewards reading the stem, because there are two &ldquo;most abundant&rdquo; answers depending on wording. Most abundant <em>heterotroph</em> &rarr; Pelagibacter (the oligotroph with proteorhodopsin). Most abundant <em>microorganism overall</em> &rarr; viruses. If it asks what organism tells you that you are in open pelagic water, that is Pelagibacter; if it asks what is most abundant out there, that is viruses.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Pelagic zone: most abundant <em>heterotroph</em> vs. most abundant <em>microorganism</em> overall?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Most abundant heterotroph = Pelagibacter (oligotroph, proteorhodopsin). Most abundant microorganism overall = viruses (up to ~10<sup>8</sup>/mL).</div>
       </div>
     </article>
     <article class="q" id="m5l1-q12" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q12</span><span class="q-text">What is the typical condition of the deep sea, and what causes variations from this?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p>The <span class="mem">deep sea</span> (~1000&ndash;6000 m) is over <span class="concept">75% of all ocean</span>. Typical conditions: <span class="mem">low temperature, high pressure, no light, and low nutrients</span>.</p>
+        <p>Survivors must be <span class="mem">chemotrophic</span> (no light for phototrophy) and <span class="mem">piezophilic / piezotolerant</span> (pressure), and are often <span class="mem">psychrophilic / psychrotolerant</span> (cold).</p>
+        <p><strong>What causes variation:</strong> <span class="mem">hydrothermal vents</span> — localized hot, chemical-rich oases supporting thriving communities of <span class="concept">chemolithotrophic bacteria</span> and <span class="mem">thermophiles / hyperthermophiles</span>. (In sediment, Proteobacteria dominate, then Bacteroidetes, with widespread uncultured Archaea.)</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Hold two ideas together: the <em>default</em> deep sea (cold, dark, high-pressure, nutrient-poor &rarr; chemotrophic piezophiles) and the <em>exception</em> that resolves apparent contradictions. If a stem asks how thermophiles can exist in a freezing deep ocean, the answer is hydrothermal vents — they inject heat and reduced chemicals, fueling chemolithotrophic, heat-loving communities. &ldquo;No light&rdquo; is why everything down there is chemotrophic rather than phototrophic.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Typical deep-sea conditions, and what creates the exceptions?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Default: cold, high-pressure, dark, low-nutrient &rarr; chemotrophic, piezophilic, often psychrophilic microbes. Exception: hydrothermal vents support chemolithotrophic thermophiles / hyperthermophiles.</div>
       </div>
     </article>
     <div class="topic-divider" id="m5l1-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
-    <div id="m5l1-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+    <div id="m5l1-quiz" class="quiz-shell" style="scroll-margin-top:var(--stack-h);">
       <h3 class="quiz-title">M5L1 — reinforcement quiz</h3>
       <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
       <p class="todo">—</p>
@@ -523,7 +633,7 @@
       </div>
     </article>
     <div class="topic-divider" id="m5l2-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
-    <div id="m5l2-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+    <div id="m5l2-quiz" class="quiz-shell" style="scroll-margin-top:var(--stack-h);">
       <h3 class="quiz-title">M5L2 — reinforcement quiz</h3>
       <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
       <p class="todo">—</p>
@@ -694,7 +804,7 @@
       </div>
     </article>
     <div class="topic-divider" id="m5l3-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
-    <div id="m5l3-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+    <div id="m5l3-quiz" class="quiz-shell" style="scroll-margin-top:var(--stack-h);">
       <h3 class="quiz-title">M5L3 — reinforcement quiz</h3>
       <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
       <p class="todo">—</p>
@@ -759,7 +869,7 @@
       </div>
     </article>
     <div class="topic-divider" id="m6l1-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
-    <div id="m6l1-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+    <div id="m6l1-quiz" class="quiz-shell" style="scroll-margin-top:var(--stack-h);">
       <h3 class="quiz-title">M6L1 — reinforcement quiz</h3>
       <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
       <p class="todo">—</p>
@@ -838,7 +948,7 @@
       </div>
     </article>
     <div class="topic-divider" id="m6l2-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
-    <div id="m6l2-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+    <div id="m6l2-quiz" class="quiz-shell" style="scroll-margin-top:var(--stack-h);">
       <h3 class="quiz-title">M6L2 — reinforcement quiz</h3>
       <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
       <p class="todo">—</p>
@@ -930,7 +1040,7 @@
       </div>
     </article>
     <div class="topic-divider" id="m6l3-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
-    <div id="m6l3-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+    <div id="m6l3-quiz" class="quiz-shell" style="scroll-margin-top:var(--stack-h);">
       <h3 class="quiz-title">M6L3 — reinforcement quiz</h3>
       <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
       <p class="todo">—</p>
@@ -1114,7 +1224,7 @@
       </div>
     </article>
     <div class="topic-divider" id="m6l4-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
-    <div id="m6l4-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+    <div id="m6l4-quiz" class="quiz-shell" style="scroll-margin-top:var(--stack-h);">
       <h3 class="quiz-title">M6L4 — reinforcement quiz</h3>
       <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
       <p class="todo">—</p>
@@ -1126,7 +1236,7 @@
 /* ---- smooth scroll (manual rAF — consistent on desktop + mobile, zoom-safe) ---- */
 window.smoothScrollTo=function(el){
   if(!el) return;
-  var hb=document.querySelector('header.bar');
+  var hb=document.getElementById('tbstack')||document.querySelector('header.bar');
   var off=(hb?hb.offsetHeight:54)+10;
   var startY=window.pageYOffset||document.documentElement.scrollTop||0;
   var targetY=startY+el.getBoundingClientRect().top-off;
@@ -1254,18 +1364,20 @@ window.smoothScrollTo=function(el){
     var mdiv=document.createElement('div'); mdiv.className='sb-mod';
     var mn=document.createElement('div'); mn.className='sb-modname'; mn.textContent=mod; mdiv.appendChild(mn);
     mods[mod].forEach(function(sec){
-      var les=document.createElement('div'); les.className='sb-les';
+      var les=document.createElement('div'); les.className='sb-les'; les.dataset.lesson=sec.id;
       var btn=document.createElement('button'); btn.className='sb-lesname';
       var car=document.createElement('span'); car.className='caret'; car.textContent='\u25BE';
       var lname=sec.querySelector('.lesson-title').textContent.replace(/^Module (\d+) · Lesson (\d+) — /, 'M$1 · L$2 — ');
       var txt=document.createElement('span'); txt.textContent=lname;
       btn.appendChild(car); btn.appendChild(txt);
+      var prog=document.createElement('span'); prog.className='sb-prog'; prog.dataset.lesson=sec.id; btn.appendChild(prog);
       var divs=document.createElement('div'); divs.className='sb-divs';
       sec.querySelectorAll('.topic-divider').forEach(function(d){
         var a=document.createElement('button'); a.className='sb-div';
         var tp=d.getAttribute('data-topic');
         if(tp==='Reinforcement quiz') a.className+=' quiz';
-        a.textContent=tp;
+        var lab=document.createElement('span'); lab.className='sb-div-lab'; lab.textContent=tp; a.appendChild(lab);
+        var tt=document.createElement('span'); tt.className='sb-tdtally'; tt.dataset.divId=d.id; a.appendChild(tt);
         a.onclick=function(){ smoothScrollTo(d); close(); };
         divs.appendChild(a);
       });
@@ -1281,37 +1393,7 @@ window.smoothScrollTo=function(el){
     tree.appendChild(mdiv);
   });
 
-  /* flagged-only */
-  var fo=document.getElementById('flag-only');
-  fo.onclick=function(){
-    var on=document.body.classList.toggle('flagged-only-active');
-    this.setAttribute('aria-pressed',on);
-    applyFlaggedOnly(on);
-  };
-  window.applyFlaggedOnly=function(on){
-    document.querySelectorAll('section.lesson').forEach(function(sec){
-      var anyFlag=false;
-      /* walk children; track current divider */
-      var kids=Array.prototype.slice.call(sec.children);
-      var pendingDiv=null, divHasFlag=false;
-      function flushDiv(){ if(pendingDiv){ pendingDiv.style.display=(on&&!divHasFlag)?'none':''; } }
-      kids.forEach(function(el){
-        if(el.classList.contains('topic-divider')){ flushDiv(); pendingDiv=el; divHasFlag=false; }
-        else if(el.classList.contains('q')){
-          var f=el.classList.contains('flagged');
-          el.style.display=(on&&!f)?'none':'';
-          if(f){ anyFlag=true; divHasFlag=true; }
-        } else if(el.classList.contains('quiz-shell')){
-          el.style.display=on?'none':'';
-        }
-      });
-      flushDiv();
-      /* hide lesson title/meta if nothing flagged */
-      var title=sec.querySelector('.lesson-title'), meta=sec.querySelector('.lesson-meta');
-      sec.style.display=(on&&!anyFlag)?'none':'';
-    });
-    setTimeout(function(){window.recolorAll&&window.recolorAll();},30);
-  };
+  /* filtering is unified in the study-features Focus bar (see refreshFocus) */
 })();
 
 /* ---- flag system (many) ---- */
@@ -1329,9 +1411,10 @@ window.smoothScrollTo=function(el){
       if(on && i<0) flags.push(art.id);
       if(!on && i>=0) flags.splice(i,1);
       save(flags);
-      if(document.body.classList.contains('flagged-only-active')) applyFlaggedOnly(true);
+      if(window.refreshFocus) window.refreshFocus();
     };
   });
+  window.clearAllFlags=function(){ flags.length=0; save(flags); document.querySelectorAll('article.q.flagged').forEach(function(a){ a.classList.remove('flagged'); var b=a.querySelector('.flag-btn'); if(b)b.setAttribute('aria-pressed','false'); }); if(window.refreshFocus) window.refreshFocus(); };
 })();
 
 /* ---- bookmark (one, red ribbon) — floating button: set, then becomes jump + clear ---- */
@@ -1491,6 +1574,7 @@ window.smoothScrollTo=function(el){
   (function(){var _b=document.getElementById('hl-toggle');var _st=_b&&_b.querySelector('.hl-state'); if(_st)_st.textContent=ON?'on':'off'; if(_b)_b.setAttribute('aria-pressed',ON); document.body.classList.toggle('hl-off',!ON);})();
   window.addEventListener('DOMContentLoaded', applyStored);
   if(document.readyState!=='loading') applyStored();
+  window.clearAllHighlights=function(){ try{localStorage.removeItem('exam3-highlights');}catch(e){} Array.prototype.slice.call(document.querySelectorAll('mark.hl')).forEach(unwrap); };
 })();
 
 /* ---- font picker ---- */
@@ -1583,19 +1667,286 @@ window.smoothScrollTo=function(el){
   };
 })();
 
-/* ---- collapsible toolbar (pull-tab) ---- */
+/* ---- two-tier toolbar: main + study rows, two pull-tabs ---- */
 (function(){
-  var body=document.body, header=document.querySelector('header.bar'), tab=document.getElementById('bar-tab');
-  var CHEV_UP='<svg viewBox="0 0 20 12" width="18" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8.5 10 3.5 17 8.5"/></svg>', CHEV_DN='<svg viewBox="0 0 20 12" width="18" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 3.5 10 8.5 17 3.5"/></svg>';
-  if(!tab||!header) return;
-  function place(){ tab.style.top = body.classList.contains('bar-hidden') ? '0px' : Math.max(0,(header.offsetHeight-1))+'px'; }
+  var body=document.body;
+  var stack=document.getElementById('tbstack');
+  var tab=document.getElementById('bar-tab');
+  var stab=document.getElementById('study-tab');
+  if(!stack||!tab) return;
+  var CHEV_UP='<svg viewBox="0 0 20 12" width="18" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8.5 10 3.5 17 8.5"/></svg>';
+  var CHEV_DN='<svg viewBox="0 0 20 12" width="18" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 3.5 10 8.5 17 3.5"/></svg>';
+  function setVar(){ document.documentElement.style.setProperty('--stack-h',(stack.offsetHeight+10)+'px'); }
+  function place(){ var hidden=body.classList.contains('bar-hidden'); var top=hidden?0:Math.max(0,stack.offsetHeight-1); tab.style.top=top+'px'; if(stab)stab.style.top=top+'px'; setVar(); }
   function expand(){ body.classList.remove('bar-hidden'); tab.innerHTML=CHEV_UP; tab.title='Hide the toolbar'; tab.setAttribute('aria-expanded','true'); place(); }
   function collapse(){ body.classList.add('bar-hidden'); tab.innerHTML=CHEV_DN; tab.title='Show the toolbar'; tab.setAttribute('aria-expanded','false'); place(); }
-  tab.onclick=function(){ if(body.classList.contains('bar-hidden')) expand(); else collapse(); };
+  tab.onclick=function(){ body.classList.contains('bar-hidden')?expand():collapse(); };
+  function setStudyIcon(){ if(!stab)return; var open=!body.classList.contains('study-hidden'); stab.innerHTML='<span class="st-brain">🧠</span>'+(open?CHEV_UP:CHEV_DN); stab.title=open?'Hide study tools':'Show study tools'; stab.setAttribute('aria-expanded',open); }
+  if(stab){ setStudyIcon(); stab.onclick=function(){ body.classList.toggle('study-hidden'); setStudyIcon(); place(); }; }
   document.addEventListener('keydown', function(e){ if(e.key==='Escape' && body.classList.contains('bar-hidden')) expand(); });
   window.addEventListener('resize', place);
   window.addEventListener('load', place);
   place();
+})();
+
+/* ---- reading progress bar ---- */
+(function(){
+  var fill=document.getElementById('progress-fill'); if(!fill) return;
+  var ticking=false;
+  function upd(){ ticking=false; var d=document.documentElement; var max=(d.scrollHeight-window.innerHeight); var p=max>0?(d.scrollTop||window.pageYOffset)/max:0; fill.style.width=Math.max(0,Math.min(1,p))*100+'%'; }
+  function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(upd); } }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  upd();
+})();
+
+/* ---- study features: recall mode, confidence, per-lesson collapse, reset ---- */
+(function(){
+  var body=document.body;
+  var arts=Array.prototype.slice.call(document.querySelectorAll('article.q'));
+  var secs=Array.prototype.slice.call(document.querySelectorAll('section.lesson'));
+
+  /* confidence ratings */
+  var CKEY='exam3-confidence';
+  function loadC(){ try{return JSON.parse(localStorage.getItem(CKEY))||{};}catch(e){return {};} }
+  function saveC(){ try{localStorage.setItem(CKEY,JSON.stringify(conf));}catch(e){} }
+  var conf=loadC();
+  var ORDER=[['easy','Easy'],['hard','Hard'],['unsure','Unsure']];
+  function ratingOf(id){ return conf[id]||''; }
+  /* build confidence strips on each block */
+  arts.forEach(function(art){
+    var strip=document.createElement('div'); strip.className='conf';
+    ORDER.forEach(function(o){
+      var b=document.createElement('button'); b.type='button'; b.setAttribute('data-c',o[0]); b.textContent=o[1];
+      b.setAttribute('aria-pressed', conf[art.id]===o[0]?'true':'false');
+      b.onclick=function(e){ e.stopPropagation();
+        if(conf[art.id]===o[0]) delete conf[art.id]; else conf[art.id]=o[0];
+        saveC();
+        Array.prototype.slice.call(strip.children).forEach(function(sib){ sib.setAttribute('aria-pressed', conf[art.id]===sib.getAttribute('data-c')?'true':'false'); });
+        refreshFocus();
+      };
+      strip.appendChild(b);
+    });
+    art.appendChild(strip);
+  });
+
+  /* ----- unified Focus filter (multi-select union) + sidebar counts ----- */
+  function isFlagged(art){ return art.classList.contains('flagged'); }
+  var FOCI=['flag','new','hard','unsure'];
+  var active={flag:false,'new':false,hard:false,unsure:false};
+  var focusBtns={};
+  FOCI.forEach(function(k){ focusBtns[k]=document.querySelector('.focus-btn[data-focus="'+k+'"]'); });
+
+  function tallyAll(){
+    var t={flag:0,'new':0,hard:0,unsure:0};
+    arts.forEach(function(a){
+      if(isFlagged(a)) t.flag++;
+      var r=ratingOf(a.id);
+      if(r==='') t['new']++; else if(r==='hard') t.hard++; else if(r==='unsure') t.unsure++;
+    });
+    return t;
+  }
+  function matchesFocus(art){
+    if(active.flag && isFlagged(art)) return true;
+    var r=ratingOf(art.id);
+    if(active['new'] && r==='') return true;
+    if(active.hard && r==='hard') return true;
+    if(active.unsure && r==='unsure') return true;
+    return false;
+  }
+  function anyFocus(){ return active.flag||active['new']||active.hard||active.unsure; }
+  function applyFocus(){
+    var on=anyFocus();
+    document.body.classList.toggle('focus-active',on);
+    secs.forEach(function(sec){
+      var any=false, kids=Array.prototype.slice.call(sec.children), pend=null, dh=false;
+      function flush(){ if(pend){ pend.style.display=(on&&!dh)?'none':''; } }
+      kids.forEach(function(el){
+        if(el.classList.contains('topic-divider')){ flush(); pend=el; dh=false; }
+        else if(el.classList.contains('q')){ var keep=matchesFocus(el); el.style.display=(on&&!keep)?'none':''; if(keep){any=true;dh=true;} }
+        else if(el.classList.contains('quiz-shell')){ el.style.display=on?'none':''; }
+      });
+      flush();
+      sec.style.display=(on&&!any)?'none':'';
+    });
+    setTimeout(function(){window.recolorAll&&window.recolorAll();},30);
+  }
+  function updateSidebarCounts(){
+    secs.forEach(function(sec){
+      var total=0, reviewed=0, curDiv=null, buckets={};
+      Array.prototype.slice.call(sec.children).forEach(function(el){
+        if(!el.classList) return;
+        if(el.classList.contains('topic-divider')){ curDiv=el.id; buckets[curDiv]={flag:0,hard:0,unsure:0}; }
+        else if(el.classList.contains('q')){
+          total++; var r=ratingOf(el.id); if(r!=='') reviewed++;
+          if(curDiv){ var bk=buckets[curDiv]; if(isFlagged(el)) bk.flag++; if(r==='hard') bk.hard++; else if(r==='unsure') bk.unsure++; }
+        }
+      });
+      var prog=document.querySelector('.sb-prog[data-lesson="'+sec.id+'"]');
+      if(prog){ if(total>0){ prog.textContent=reviewed+'/'+total; prog.classList.toggle('done', reviewed===total); } else prog.textContent=''; }
+      Object.keys(buckets).forEach(function(divId){
+        var tt=document.querySelector('.sb-tdtally[data-div-id="'+divId+'"]'); if(!tt)return;
+        var bk=buckets[divId], html='';
+        if(bk.flag>0) html+='<span class="td flag">⚑'+bk.flag+'</span>';
+        if(bk.hard>0) html+='<span class="td hard">'+bk.hard+'</span>';
+        if(bk.unsure>0) html+='<span class="td unsure">'+bk.unsure+'</span>';
+        tt.innerHTML=html;
+      });
+    });
+  }
+  function updateFocusButtons(){
+    var t=tallyAll();
+    FOCI.forEach(function(k){
+      var b=focusBtns[k]; if(!b)return;
+      var n=b.querySelector('.fc-n'); if(n)n.textContent=t[k];
+      if(t[k]===0){ b.setAttribute('disabled','disabled'); if(active[k]){ active[k]=false; b.setAttribute('aria-pressed','false'); } }
+      else b.removeAttribute('disabled');
+    });
+  }
+  function refreshFocus(){ updateFocusButtons(); updateSidebarCounts(); applyFocus(); }
+  window.refreshFocus=refreshFocus;
+  FOCI.forEach(function(k){
+    var b=focusBtns[k]; if(!b)return;
+    b.onclick=function(){ if(b.hasAttribute('disabled'))return; active[k]=!active[k]; b.setAttribute('aria-pressed',active[k]?'true':'false'); applyFocus(); };
+  });
+  refreshFocus();
+
+  /* recall mode */
+  var RKEY='exam3-recall';
+  arts.forEach(function(art){
+    var head=art.querySelector('.q-head'); if(!head)return;
+    var hint=document.createElement('button'); hint.type='button'; hint.className='recall-hint'; hint.textContent='Reveal answer';
+    hint.onclick=function(e){ e.stopPropagation(); art.classList.add('revealed'); setTimeout(function(){window.recolorAll&&window.recolorAll();},20); };
+    head.parentNode.insertBefore(hint, head.nextSibling);
+  });
+  var recallBtn=document.getElementById('recall-btn');
+  function setRecall(on,persist){
+    body.classList.toggle('recall-active',on);
+    if(!on) arts.forEach(function(a){a.classList.remove('revealed');});
+    if(recallBtn) recallBtn.setAttribute('aria-pressed',on);
+    if(persist){ try{localStorage.setItem(RKEY,on?'1':'0');}catch(e){} }
+    setTimeout(function(){window.recolorAll&&window.recolorAll();},30);
+  }
+  var rinit=false; try{rinit=localStorage.getItem(RKEY)==='1';}catch(e){}
+  setRecall(rinit,false);
+  if(recallBtn) recallBtn.onclick=function(){ setRecall(!body.classList.contains('recall-active'),true); };
+
+  /* per-lesson collapse + collapse/expand all */
+  var CARET='<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 6 8 10 12 6"/></svg>';
+  secs.forEach(function(sec){
+    var title=sec.querySelector('.lesson-title'); if(!title)return;
+    var cb=document.createElement('button'); cb.type='button'; cb.className='les-caret'; cb.setAttribute('aria-label','Collapse or expand lesson'); cb.innerHTML=CARET;
+    cb.onclick=function(){ sec.classList.toggle('collapsed'); };
+    title.insertBefore(cb, title.firstChild);
+  });
+  var ca=document.getElementById('collapse-all'), ea=document.getElementById('expand-all');
+  if(ca) ca.onclick=function(){ secs.forEach(function(s){s.classList.add('collapsed');}); };
+  if(ea) ea.onclick=function(){ secs.forEach(function(s){s.classList.remove('collapsed');}); };
+
+  /* reset dropdown */
+  var rbtn=document.getElementById('reset-btn'), rmenu=document.getElementById('reset-menu');
+  if(rbtn&&rmenu){
+    var items=[
+      ['Clear confidence ratings','Clear all confidence ratings? This cannot be undone.',function(){ conf={}; saveC(); document.querySelectorAll('.conf button[aria-pressed="true"]').forEach(function(b){b.setAttribute('aria-pressed','false');}); refreshFocus(); }],
+      ['Clear flags','Clear all flags? This cannot be undone.',function(){ if(window.clearAllFlags)window.clearAllFlags(); }],
+      ['Clear highlights','Clear all highlights? This cannot be undone.',function(){ if(window.clearAllHighlights)window.clearAllHighlights(); }]
+    ];
+    items.forEach(function(it){
+      var b=document.createElement('button'); b.type='button'; b.className='font-opt'; b.innerHTML='<span class="tick"></span>'+it[0];
+      b.onclick=function(){ closeR(); if(window.confirm(it[1])) it[2](); };
+      rmenu.appendChild(b);
+    });
+    function openR(){ rmenu.hidden=false; rbtn.setAttribute('aria-expanded','true'); }
+    function closeR(){ rmenu.hidden=true; rbtn.setAttribute('aria-expanded','false'); }
+    rbtn.onclick=function(e){ e.stopPropagation(); rmenu.hidden?openR():closeR(); };
+    document.addEventListener('click',function(e){ if(!rmenu.hidden && !rmenu.contains(e.target) && e.target!==rbtn) closeR(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeR(); });
+  }
+})();
+</script>
+<script>
+/* ---- reusable reinforcement-quiz engine ---- */
+(function(){
+  var QUIZZES={};
+  QUIZZES.m5l1=[
+    {p:'Arrange from most inclusive (most diverse) to least. Which sequence is correct?',
+     o:['Population → Guild → Community → Habitat → Ecosystem','Ecosystem → Habitat → Community → Guild → Population','Ecosystem → Community → Habitat → Population → Guild','Habitat → Ecosystem → Community → Guild → Population'],
+     a:1, fb:'An ecosystem (organisms + abiotic factors) contains many habitats; each habitat houses a community, made of guilds, made of populations.'},
+    {p:'A pond contains 12 bacterial species, but one cyanobacterium makes up 95% of all cells. This pond shows:',
+     o:['high species richness but uneven abundance','low species richness and high abundance','high abundance evenness and low richness','low richness and low abundance'],
+     a:0, fb:'Richness is the count of different species (12 is fairly rich); abundance is the proportion of each — 95% in one species means very uneven abundance.'},
+    {p:'The fundamental niche of an organism is best described as:',
+     o:['the single niche where it is most successful','the full range of conditions under which it could exist','the habitat shared by a guild','the immediate surroundings of one cell'],
+     a:1, fb:'Fundamental = full potential range. Realized/prime = where it actually does best. Niche = habitat shared by a guild. Microenvironment = surroundings of one cell.'},
+    {p:'On a single soil aggregate, where would you most expect to find obligate anaerobes?',
+     o:['on the oxygenated outer surface','in the anoxic interior, after surface microbes consume the O<sub>2</sub>','spread evenly throughout the particle','only in well-drained surface films'],
+     a:1, fb:'Aerobes consume O<sub>2</sub> at the surface, leaving the interior anoxic — the microenvironment that suits anaerobes.'},
+    {p:'Using the proportions from lecture, the single largest component of soil is:',
+     o:['organic matter (~5%)','living organisms (~5%)','inorganic / mineral matter (~40%)','air and water (~50%)'],
+     a:3, fb:'~50% air + water, ~40% inorganic, ~5% organic, ~5% organisms. Most microbial growth sits at the surface / topsoil.'},
+    {p:'Why are very small cells favored in the nutrient-starved deep subsurface?',
+     o:['they store more nutrients internally','a higher surface-area-to-volume ratio improves uptake efficiency','they divide faster than large cells','their small size lets them resist pressure'],
+     a:1, fb:'Small size → high surface-area-to-volume ratio → more efficient scavenging of scarce nutrients (the Module 1 SA:V idea).'},
+    {p:'In a summer-stratified temperate lake, the cool, dense bottom layer is the:',
+     o:['epilimnion','thermocline','hypolimnion','benthos'],
+     a:2, fb:'Epilimnion = warm surface; thermocline = transitional middle; hypolimnion = cold, dense bottom (hypo = under).'},
+    {p:'Heavy nutrient runoff triggers an algal bloom that then dies and decomposes. The most direct microbial result is:',
+     o:['BOD falls and the water becomes oxygen-rich','BOD rises and the water can become anoxic','richness rises as oxygen increases','BOD is unchanged because rivers are well-mixed'],
+     a:1, fb:'Eutrophication → more biomass → microbial decomposition consumes O<sub>2</sub> → BOD rises → water trends anoxic.'},
+    {p:'Which microbe is credited with roughly 50% of marine photosynthetic production?',
+     o:['Trichodesmium','Pelagibacter','Prochlorococcus','Ostreococcus'],
+     a:2, fb:'Prochlorococcus ≈ 50% of marine photosynthetic production. Pelagibacter is a heterotroph, not a phototroph.'},
+    {p:'In the open pelagic ocean, the most abundant microorganisms overall are:',
+     o:['Pelagibacter (oligotrophic heterotrophs)','viruses (up to ~10<sup>8</sup> per mL)','Prochlorococcus','piezophilic archaea'],
+     a:1, fb:'Watch the wording: Pelagibacter is the most abundant heterotroph, but viruses are the most abundant microorganisms overall.'},
+    {p:'Which organism, sampled from open water, best tells you that you are in the nutrient-poor pelagic zone?',
+     o:['Pelagibacter, an oligotroph with proteorhodopsin','Trichodesmium, a nitrogen fixer','a benthic diatom','a hyperthermophilic archaeon'],
+     a:0, fb:'Pelagibacter is the abundant pelagic oligotroph (grows best at very low nutrients) and carries proteorhodopsin.'},
+    {p:'The deep sea is cold, dark, high-pressure, and nutrient-poor. What explains how thermophiles can still be found there?',
+     o:['sunlight penetrates below 1000 m','hydrothermal vents create localized hot, chemolithotroph-fueled habitats','high pressure raises water temperature globally','piezophiles generate their own metabolic heat'],
+     a:1, fb:'Hydrothermal vents are the exception — they supply heat and reduced chemicals, supporting chemolithotrophic thermophiles and hyperthermophiles.'}
+  ];
+
+  function render(shell,title,data){
+    while(shell.firstChild) shell.removeChild(shell.firstChild);
+    if(title) shell.appendChild(title);
+    var sub=document.createElement('p'); sub.className='lesson-meta';
+    sub.textContent='Exam-style multiple choice — '+data.length+' questions. One attempt each; use Reset to start over.';
+    shell.appendChild(sub);
+    var head=document.createElement('div'); head.className='quiz-head';
+    var score=document.createElement('span'); score.className='quiz-score';
+    var reset=document.createElement('button'); reset.type='button'; reset.className='qbtn'; reset.textContent='Reset quiz';
+    head.appendChild(score); head.appendChild(reset); shell.appendChild(head);
+    var answered=0, correct=0;
+    function upd(){ score.textContent='Score: '+correct+' / '+data.length+(answered>=data.length?'  — complete':'  ('+answered+' answered)'); }
+    data.forEach(function(item,qi){
+      var q=document.createElement('div'); q.className='quiz-q';
+      var pr=document.createElement('div'); pr.className='quiz-prompt'; pr.innerHTML='<strong>'+(qi+1)+'.</strong> '+item.p; q.appendChild(pr);
+      var opts=document.createElement('div'); opts.className='quiz-opts';
+      var fb=document.createElement('div'); fb.className='quiz-fb';
+      var locked=false, btns=[];
+      item.o.forEach(function(txt,oi){
+        var b=document.createElement('button'); b.type='button'; b.className='opt'; b.innerHTML=String.fromCharCode(65+oi)+'. '+txt;
+        b.onclick=function(){
+          if(locked) return; locked=true; answered++;
+          if(oi===item.a){ b.classList.add('correct'); correct++; fb.className='quiz-fb correct-fb'; fb.innerHTML='Correct. '+(item.fb||''); }
+          else { b.classList.add('wrong'); btns[item.a].classList.add('correct'); fb.className='quiz-fb wrong-fb'; fb.innerHTML='Not quite — the answer is '+String.fromCharCode(65+item.a)+'. '+(item.fb||''); }
+          btns.forEach(function(x){ x.disabled=true; }); upd();
+        };
+        btns.push(b); opts.appendChild(b);
+      });
+      q.appendChild(opts); q.appendChild(fb); shell.appendChild(q);
+    });
+    reset.onclick=function(){ render(shell,title,data); };
+    upd();
+  }
+
+  Object.keys(QUIZZES).forEach(function(lid){
+    var shell=document.getElementById(lid+'-quiz'); if(!shell) return;
+    var data=QUIZZES[lid]; if(!data||!data.length) return;
+    var title=shell.querySelector('.quiz-title');
+    render(shell,title,data);
+  });
 })();
 </script>
 </body>
