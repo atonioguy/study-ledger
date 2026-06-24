@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-<title>BMSC 3404 — Exam 3 Study Notes</title>
+<title>Applied Microbiology — Exam 3 Study Notes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600&family=Lexend:wght@400;500;600&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{ --font-serif:'Newsreader',Georgia,serif; --font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; --radius:10px; --maxw:760px; --sidebar-w:300px; }
   *{ box-sizing:border-box; }
@@ -128,23 +128,37 @@
     .bar-title{ display:none; }
     .doc-title{ font-size:25px; }
   }
+  .bar select{ font-family:var(--font-sans); font-size:13px; color:var(--ink); background:var(--card); border:1px solid var(--border); border-radius:8px; padding:6px 8px; cursor:pointer; line-height:1.2; }
+  .bar select:hover{ border-color:var(--ink-soft); }
+  #book-float{ position:fixed; right:16px; bottom:18px; z-index:55; width:46px; height:46px; border-radius:50%; background:var(--card); border:1px solid var(--border); color:var(--book); cursor:pointer; box-shadow:0 3px 12px rgba(0,0,0,.16); display:flex; align-items:center; justify-content:center; transition:background .15s,color .15s,transform .1s; }
+  #book-float:hover{ border-color:var(--book); }
+  #book-float:active{ transform:scale(.92); }
+  #book-float.flash{ background:var(--book); color:#fff; border-color:var(--book); }
 </style>
 </head>
 <body class="paper">
 
 <header class="bar">
   <button id="menu-btn" aria-label="Open navigation" aria-expanded="false"><span class="ic"><span></span></span>Menu</button>
-  <span class="bar-title">BMSC 3404 · Exam 3</span>
+  <span class="bar-title">Exam 3 Study Notes</span>
   <span class="spacer"></span>
+  <select id="font-pick" title="Reading font" aria-label="Reading font">
+    <option value="newsreader">Font: Newsreader</option>
+    <option value="georgia">Font: Georgia</option>
+    <option value="inter">Font: Inter</option>
+    <option value="lexend">Font: Lexend</option>
+    <option value="atkinson">Font: Atkinson</option>
+  </select>
   <button id="hl-toggle" aria-pressed="true" title="Toggle drag-to-highlight">Highlight: on</button>
   <button id="grad-toggle" aria-pressed="true" title="Toggle explanation color gradient">Gradient</button>
-  <button id="book-set" title="Bookmark the block at the top of the screen">Set bookmark</button>
   <button id="book-go" title="Jump to your bookmark" style="display:none;">&#x2191; Bookmark</button>
   <button id="fs-dn" title="Smaller text">A&minus;</button>
   <span class="fs" id="fs-val">100%</span>
   <button id="fs-up" title="Larger text">A&plus;</button>
   <button id="theme-toggle" title="Toggle light/dark">Dark</button>
 </header>
+
+<button id="book-float" title="Bookmark the block you're viewing" aria-label="Set bookmark"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg></button>
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
@@ -159,70 +173,166 @@
 
   <section class="lesson" id="m5l1" data-module="Module 5 — Microbial Ecology">
     <h2 class="lesson-title">M5 · L1 — Introduction to Microbial Ecology</h2>
-    <p class="lesson-meta">12 topics · content to be filled in.</p>
+    <p class="lesson-meta">12 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m5l1-d1" data-topic="Ecological Terms &amp; Diversity"><div class="td-inner"><span>Ecological Terms &amp; Diversity</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l1-q1" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q1</span><span class="q-text">What is the difference between habitat, community, ecosystem, guild, and population — and how do they rank in order of diversity?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l1-q2" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q2</span><span class="q-text">Contrast species richness and species abundance — how would you explain each with an example, and what does each tell you about an environment?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l1-q3" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q3</span><span class="q-text">What is a niche, and what distinguishes a prime/realized niche from a fundamental niche?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m5l1-d2" data-topic="The Microbial Environment"><div class="td-inner"><span>The Microbial Environment</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l1-q4" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q4</span><span class="q-text">What is a microenvironment? Using a soil particle as an example, what types of microbes live in the different microenvironments?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m5l1-d3" data-topic="Terrestrial Environments"><div class="td-inner"><span>Terrestrial Environments</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l1-q5" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q5</span><span class="q-text">What components make up soil, what are its four layers, and which layer is the most species-abundant?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l1-q6" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q6</span><span class="q-text">What is the benefit of having smaller cells in subsurface environments?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m5l1-d4" data-topic="Aquatic &amp; Marine Environments"><div class="td-inner"><span>Aquatic &amp; Marine Environments</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l1-q7" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q7</span><span class="q-text">What impact does water depth have on microbial species richness and abundance, and what are benthic species (where would you find them)?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l1-q8" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q8</span><span class="q-text">What are the layers associated with temperate lakes, and can you identify them?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l1-q9" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q9</span><span class="q-text">What is biochemical oxygen demand (BOD), what alters it, and how does eutrophication impact BOD?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l1-q10" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q10</span><span class="q-text">What types of microbes thrive in marine waters, and which are most important for photosynthetic production?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l1-q11" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q11</span><span class="q-text">What is the pelagic zone, what organisms tell you that&#x27;s where you are, and what is most abundant there?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l1-q12" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q12</span><span class="q-text">What is the typical condition of the deep sea, and what causes variations from this?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m5l1-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
     <div id="m5l1-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
@@ -234,59 +344,139 @@
 
   <section class="lesson" id="m5l2" data-module="Module 5 — Microbial Ecology">
     <h2 class="lesson-title">M5 · L2 — Nutrient Cycles</h2>
-    <p class="lesson-meta">10 topics · content to be filled in.</p>
+    <p class="lesson-meta">10 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m5l2-d5" data-topic="The Carbon Cycle"><div class="td-inner"><span>The Carbon Cycle</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l2-q1" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q1</span><span class="q-text">What is the largest carbon reservoir?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l2-q2" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q2</span><span class="q-text">What have humans done to disrupt the carbon cycle, and what parts of the cycle create harmful gases?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l2-q3" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q3</span><span class="q-text">What is the largest methane reservoir?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m5l2-d6" data-topic="Nitrogen &amp; Sulfur Cycles"><div class="td-inner"><span>Nitrogen &amp; Sulfur Cycles</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l2-q4" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q4</span><span class="q-text">What process results in a loss of organic nitrogen in the biosphere, and what impact does overuse of nitrogenous fertilizer have (what is being generated)?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l2-q5" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q5</span><span class="q-text">What is biologically available nitrogen, and how is it produced?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l2-q6" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q6</span><span class="q-text">What is a typical entry point of the sulfur cycle, what organisms oxidize sulfur, and what form of sulfur do they oxidize?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m5l2-d7" data-topic="Other Nutrient Cycles"><div class="td-inner"><span>Other Nutrient Cycles</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l2-q7" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q7</span><span class="q-text">What is often cycled with iron?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l2-q8" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q8</span><span class="q-text">Where would you find calcium in marine microbes?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l2-q9" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q9</span><span class="q-text">What is the concern with mercury, and what is a benefit of microbes here?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l2-q10" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q10</span><span class="q-text">What is bioaccumulation, and how does it differ from biomagnification?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m5l2-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
     <div id="m5l2-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
@@ -298,70 +488,166 @@
 
   <section class="lesson" id="m5l3" data-module="Module 5 — Microbial Ecology">
     <h2 class="lesson-title">M5 · L3 — Microbes &amp; the Built Environment</h2>
-    <p class="lesson-meta">12 topics · content to be filled in.</p>
+    <p class="lesson-meta">12 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m5l3-d8" data-topic="Microbial Leaching &amp; Mining"><div class="td-inner"><span>Microbial Leaching &amp; Mining</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l3-q1" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q1</span><span class="q-text">What is microbial leaching, and what is the general process?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l3-q2" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q2</span><span class="q-text">What causes acid mine drainage, and what type of reaction is happening?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l3-q3" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q3</span><span class="q-text">What happens when U6+ is converted to U4+, and what types of microbes are able to do this?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m5l3-d9" data-topic="Bioremediation"><div class="td-inner"><span>Bioremediation</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l3-q4" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q4</span><span class="q-text">What is one way to improve oil spill cleanup using microbes?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l3-q5" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q5</span><span class="q-text">What causes breakdown of gasoline within storage tanks, and what would be a good way to avoid this?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l3-q6" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q6</span><span class="q-text">What are xenobiotic compounds, and why are microbes unable to break them down?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m5l3-d10" data-topic="Wastewater Treatment"><div class="td-inner"><span>Wastewater Treatment</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l3-q7" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q7</span><span class="q-text">What is the goal of wastewater treatment, and what is the general treatment process?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l3-q8" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q8</span><span class="q-text">What are primary, secondary, and tertiary treatments (including anaerobic vs. aerobic processes and what the end products are used for)? Can you classify examples of each?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m5l3-d11" data-topic="Drinking Water &amp; the Home"><div class="td-inner"><span>Drinking Water &amp; the Home</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l3-q9" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q9</span><span class="q-text">What are some current concerns for water treatment, and why are they such an issue?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l3-q10" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q10</span><span class="q-text">What are some concerns with transporting drinking water, what microbes are the primary issues, and how are they able to survive?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l3-q11" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q11</span><span class="q-text">What is the difference between microbial diversity inside vs. outside, and what impact does a shared environment/home (including pets) have on the microbiome?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m5l3-q12" data-lesson="m5l3">
       <div class="q-head"><span class="q-num">M5L3 Q12</span><span class="q-text">What are some ways microbes can corrode your home?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m5l3-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
     <div id="m5l3-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
@@ -373,28 +659,60 @@
 
   <section class="lesson" id="m6l1" data-module="Module 6 — Symbiosis">
     <h2 class="lesson-title">M6 · L1 — Introduction to Symbiosis</h2>
-    <p class="lesson-meta">4 topics · content to be filled in.</p>
+    <p class="lesson-meta">4 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m6l1-d12" data-topic="Types of Symbiosis"><div class="td-inner"><span>Types of Symbiosis</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l1-q1" data-lesson="m6l1">
       <div class="q-head"><span class="q-num">M6L1 Q1</span><span class="q-text">What are the 3 types of symbiotic relationships discussed, what are examples of each, and can you identify each from an example or description?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m6l1-d13" data-topic="Microbial Associations"><div class="td-inner"><span>Microbial Associations</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l1-q2" data-lesson="m6l1">
       <div class="q-head"><span class="q-num">M6L1 Q2</span><span class="q-text">What is a lichen — what organisms make it up, and what does each bring to the relationship?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l1-q3" data-lesson="m6l1">
       <div class="q-head"><span class="q-num">M6L1 Q3</span><span class="q-text">What is a Consortium aggregatum — what organisms make it up, and what does each provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l1-q4" data-lesson="m6l1">
       <div class="q-head"><span class="q-num">M6L1 Q4</span><span class="q-text">What type of relationship is a methanotrophic consortium (specifically DIET), and what makes it this instead of synergism?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m6l1-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
     <div id="m6l1-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
@@ -406,34 +724,74 @@
 
   <section class="lesson" id="m6l2" data-module="Module 6 — Symbiosis">
     <h2 class="lesson-title">M6 · L2 — Microbe–Plant Symbiosis</h2>
-    <p class="lesson-meta">5 topics · content to be filled in.</p>
+    <p class="lesson-meta">5 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m6l2-d14" data-topic="Rhizobia &amp; Legumes"><div class="td-inner"><span>Rhizobia &amp; Legumes</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l2-q1" data-lesson="m6l2">
       <div class="q-head"><span class="q-num">M6L2 Q1</span><span class="q-text">What are Rhizobia, what is their relationship with a legume, how do they prevent oxygen degradation, and what is the nodule formation process?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l2-q2" data-lesson="m6l2">
       <div class="q-head"><span class="q-num">M6L2 Q2</span><span class="q-text">What is the function of nodABC, and what happens if one of these is mutated?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l2-q3" data-lesson="m6l2">
       <div class="q-head"><span class="q-num">M6L2 Q3</span><span class="q-text">What are bacteroids, how are they different from traditional cells, and what does the plant provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m6l2-d15" data-topic="Mycorrhizae"><div class="td-inner"><span>Mycorrhizae</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l2-q4" data-lesson="m6l2">
       <div class="q-head"><span class="q-num">M6L2 Q4–Q5</span><span class="q-text">What are mycorrhizae — what does each organism provide, what is the benefit of the mycelium, what is ectomycorrhizae, and where would you expect to find these?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m6l2-d16" data-topic="Plant Pathogens"><div class="td-inner"><span>Plant Pathogens</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l2-q6" data-lesson="m6l2">
       <div class="q-head"><span class="q-num">M6L2 Q6</span><span class="q-text">What is crown gall disease, and what is the causative agent?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m6l2-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
     <div id="m6l2-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
@@ -445,39 +803,87 @@
 
   <section class="lesson" id="m6l3" data-module="Module 6 — Symbiosis">
     <h2 class="lesson-title">M6 · L3 — Microbe–Animal Symbiosis</h2>
-    <p class="lesson-meta">6 topics · content to be filled in.</p>
+    <p class="lesson-meta">6 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m6l3-d17" data-topic="Insect Symbionts"><div class="td-inner"><span>Insect Symbionts</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l3-q1" data-lesson="m6l3">
       <div class="q-head"><span class="q-num">M6L3 Q1</span><span class="q-text">What is the difference between horizontal and vertical transmission in insect symbionts, and can you identify each from examples or descriptions?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l3-q2" data-lesson="m6l3">
       <div class="q-head"><span class="q-num">M6L3 Q2–Q3</span><span class="q-text">What is the difference between a primary and a secondary symbiont, which is required for host reproduction, and what benefit could Wolbachia provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l3-q4" data-lesson="m6l3">
       <div class="q-head"><span class="q-num">M6L3 Q4</span><span class="q-text">What is an example of a defensive symbiont, and how would you describe the relationship?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m6l3-d18" data-topic="Marine Symbioses"><div class="td-inner"><span>Marine Symbioses</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l3-q5" data-lesson="m6l3">
       <div class="q-head"><span class="q-num">M6L3 Q5</span><span class="q-text">What is the relationship between Aliivibrio fischeri and the bobtail squid, and what does each provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l3-q6" data-lesson="m6l3">
       <div class="q-head"><span class="q-num">M6L3 Q6</span><span class="q-text">What is an example of a phototrophic symbiotic relationship (what does each organism provide), and what causes coral bleaching?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m6l3-d19" data-topic="Herbivore Digestion"><div class="td-inner"><span>Herbivore Digestion</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l3-q7" data-lesson="m6l3">
       <div class="q-head"><span class="q-num">M6L3 Q7</span><span class="q-text">What types of mammals consume high levels of plants, what organ assists with digestion, what environment is within it, what microbes are found there, and what nutrition do these microbes provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m6l3-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
     <div id="m6l3-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
@@ -489,75 +895,179 @@
 
   <section class="lesson" id="m6l4" data-module="Module 6 — Symbiosis">
     <h2 class="lesson-title">M6 · L4 — The Human Microbiome</h2>
-    <p class="lesson-meta">13 topics · content to be filled in.</p>
+    <p class="lesson-meta">13 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m6l4-d20" data-topic="Microbiome Overview"><div class="td-inner"><span>Microbiome Overview</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l4-q1" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q1</span><span class="q-text">What are some reasons to study the microbiome, and what benefit does the microbiome have against infection?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m6l4-d21" data-topic="GI Tract"><div class="td-inner"><span>GI Tract</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l4-q2" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q2</span><span class="q-text">What does the human gut microbiome tend to look like, what benefits can they provide, and what organisms do you expect in the GI tract of a healthy individual?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l4-q3" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q3</span><span class="q-text">What is the cause of peptic ulcers, and why is it able to survive in the stomach?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l4-q4" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q4</span><span class="q-text">What is the relationship between microbes in the large intestine and propensity for obesity, and what did they see in mice and humans?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l4-q5" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q5</span><span class="q-text">What are some concerns with using a mouse model for GI microbiota studies?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m6l4-d22" data-topic="Other Body Sites"><div class="td-inner"><span>Other Body Sites</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l4-q6" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q6</span><span class="q-text">What are the factors that impact the composition of the skin microbiota?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l4-q7" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q7</span><span class="q-text">What causes dental plaque and periodontitis, and is this an increase or decrease in species diversity within the oral cavity?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l4-q8" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q8</span><span class="q-text">What does the microbiota within the lower respiratory tract look like, and what types of microbes are able to reach the lungs?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l4-q9" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q9</span><span class="q-text">What is the common environment for a female urogenital tract, and what happens when antibiotics are taken?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m6l4-d23" data-topic="Virome &amp; Clinical"><div class="td-inner"><span>Virome &amp; Clinical</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l4-q10" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q10</span><span class="q-text">What is a benefit to the human virome?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l4-q11" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q11</span><span class="q-text">What is commonly seen in patients with IBD?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l4-q12" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q12</span><span class="q-text">What are some risks with antibiotic use in newborns?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <article class="q" id="m6l4-q13" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q13</span><span class="q-text">What are probiotics and prebiotics, and when should these be taken?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
-      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+      <div class="answer"><span class="lbl">Answer</span>
+        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
+        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+      </div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="fc"><span class="fc-tag">Flashcard</span>
+        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
+        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      </div>
     </article>
     <div class="topic-divider" id="m6l4-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
     <div id="m6l4-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
@@ -576,10 +1086,13 @@
     var dark=body.classList.toggle('dark'); body.classList.toggle('paper',!dark);
     this.textContent=dark?'Light':'Dark'; setTimeout(recolorAll,20);
   };
-  var sizes=[90,100,112,125], si=1;
-  function applyFs(){ document.documentElement.style.setProperty('--root-fs', sizes[si]+'%'); document.getElementById('fs-val').textContent=sizes[si]+'%'; setTimeout(recolorAll,30); }
+  var sizes=[85,92,100,110,122,135], si=2;
+  var mainEl=document.querySelector('main');
+  function applyFs(){ mainEl.style.zoom=(sizes[si]/100); document.getElementById('fs-val').textContent=sizes[si]+'%'; try{localStorage.setItem('exam3-fs',si);}catch(e){} setTimeout(recolorAll,40); }
   document.getElementById('fs-up').onclick=function(){ if(si<sizes.length-1){si++;applyFs();} };
   document.getElementById('fs-dn').onclick=function(){ if(si>0){si--;applyFs();} };
+  try{var _fs=localStorage.getItem('exam3-fs'); if(_fs!==null){si=Math.max(0,Math.min(sizes.length-1,parseInt(_fs,10)||0));}}catch(e){}
+  applyFs();
 
   /* explanation per-line color gradient (same engine as exam2) */
   var GRAD=true;
@@ -726,11 +1239,12 @@
   });
 })();
 
-/* ---- bookmark (one, red ribbon) ---- */
+/* ---- bookmark (one, red ribbon) — floating button targets the most-visible block ---- */
 (function(){
   var KEY='exam3-bookmark-id';
   var cur=null; try{cur=localStorage.getItem(KEY);}catch(e){}
   var goBtn=document.getElementById('book-go');
+  var floatBtn=document.getElementById('book-float');
   function mark(id){
     document.querySelectorAll('.q.bookmarked').forEach(function(a){a.classList.remove('bookmarked');});
     var el=id&&document.getElementById(id);
@@ -738,13 +1252,15 @@
     else goBtn.style.display='none';
   }
   mark(cur);
-  document.getElementById('book-set').onclick=function(){
-    /* bookmark the article whose top is nearest just below the header */
+  floatBtn.onclick=function(){
+    var vh=window.innerHeight||document.documentElement.clientHeight;
     var arts=Array.prototype.slice.call(document.querySelectorAll('article.q')).filter(function(a){return a.offsetParent!==null;});
-    var best=null,bd=1e9;
-    arts.forEach(function(a){ var t=a.getBoundingClientRect().top-70; var d=t>=-4?t:1e9; if(d<bd){bd=d;best=a;} });
-    if(best){ cur=best.id; try{localStorage.setItem(KEY,cur);}catch(e){} mark(cur);
-      best.scrollIntoView({behavior:'smooth',block:'start'}); }
+    var best=null,bestVis=-1,bestTop=1e9;
+    arts.forEach(function(a){ var r=a.getBoundingClientRect();
+      var vis=Math.max(0, Math.min(r.bottom,vh)-Math.max(r.top,64));
+      if(vis>bestVis+0.5 || (Math.abs(vis-bestVis)<=0.5 && r.top<bestTop)){ bestVis=vis; best=a; bestTop=r.top; } });
+    if(best && bestVis>0){ cur=best.id; try{localStorage.setItem(KEY,cur);}catch(e){} mark(cur);
+      floatBtn.classList.add('flash'); setTimeout(function(){floatBtn.classList.remove('flash');},550); }
   };
   goBtn.onclick=function(){ var el=cur&&document.getElementById(cur); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); };
 })();
@@ -807,6 +1323,31 @@
   document.getElementById('hl-toggle').onclick=function(){ ON=!ON; this.textContent='Highlight: '+(ON?'on':'off'); this.setAttribute('aria-pressed',ON); document.body.classList.toggle('hl-off',!ON); };
   window.addEventListener('DOMContentLoaded', applyStored);
   if(document.readyState!=='loading') applyStored();
+})();
+
+/* ---- font picker ---- */
+(function(){
+  var FONTS={
+    newsreader:{serif:"'Newsreader',Georgia,serif", sans:"'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif"},
+    georgia:{serif:"Georgia,'Times New Roman',serif", sans:"system-ui,-apple-system,'Segoe UI',Roboto,sans-serif"},
+    inter:{serif:"'Inter',system-ui,sans-serif", sans:"'Inter',system-ui,sans-serif"},
+    lexend:{serif:"'Lexend',system-ui,sans-serif", sans:"'Lexend',system-ui,sans-serif"},
+    atkinson:{serif:"'Atkinson Hyperlegible',system-ui,sans-serif", sans:"'Atkinson Hyperlegible',system-ui,sans-serif"}
+  };
+  var sel=document.getElementById('font-pick'); if(!sel) return;
+  function apply(k){ var f=FONTS[k]||FONTS.newsreader; var r=document.documentElement.style; r.setProperty('--font-serif',f.serif); r.setProperty('--font-sans',f.sans); try{localStorage.setItem('exam3-font',k);}catch(e){} setTimeout(recolorAll,50); }
+  sel.onchange=function(){ apply(this.value); };
+  var saved='newsreader'; try{var s=localStorage.getItem('exam3-font'); if(s&&FONTS[s])saved=s;}catch(e){}
+  sel.value=saved; apply(saved);
+})();
+
+/* ---- flashcard reveal (global) ---- */
+(function(){
+  document.addEventListener('click', function(e){
+    var b=e.target.closest && e.target.closest('.fc-btn'); if(!b) return;
+    var a=b.parentElement.querySelector('.fc-a'); if(!a) return;
+    var open=!a.hidden; a.hidden=open; b.textContent=open?'Reveal answer':'Hide answer'; b.setAttribute('aria-expanded',!open);
+  });
 })();
 </script>
 </body>
