@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<title>BMSC 3404 — Exam 3 Study Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{ --font-serif:'Newsreader',Georgia,serif; --font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; --radius:10px; --maxw:760px; --sidebar-w:300px; }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body.paper{ --bg:#F3F0E7; --card:#FBFAF4; --ink:#2C2A24; --ink-soft:#6E685C; --border:rgba(40,36,28,.14); --border-soft:rgba(40,36,28,.08); --accent:#1A4D8F; --tag-bg:#E9E4D6; --tag-ink:#5A5446; --fc-bg:#F2EEE2; --fc-accent:#8A6D2F; --mem:#1858A8; --concept:#C0492B; --ok:#2E7D52; --bad:#B23A2E; --hl:#FCE58A; --hl-ink:#2C2A24; --book:#D8362B; --flag:#E0922A; }
+  body.dark{ --bg:#101216; --card:#191B20; --ink:#D6D4CC; --ink-soft:#928F86; --border:rgba(255,255,255,.13); --border-soft:rgba(255,255,255,.07); --accent:#7FB5F0; --tag-bg:#23262D; --tag-ink:#9BA3AE; --fc-bg:#1E2127; --fc-accent:#D9B877; --mem:#6FB0F2; --concept:#F0936A; --ok:#5FCF95; --bad:#F0936A; --hl:#5E5320; --hl-ink:#F4EFD8; --book:#E2554B; --flag:#E6A94E; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-sans); line-height:1.7; font-size:var(--root-fs,16px); -webkit-text-size-adjust:100%; }
+
+  /* header */
+  header.bar{ position:sticky; top:0; z-index:60; background:var(--bg); border-bottom:1px solid var(--border); padding:10px 14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .bar button, .bar .fs{ font-family:var(--font-sans); font-size:13px; color:var(--ink); background:var(--card); border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; line-height:1.2; }
+  .bar button:hover{ border-color:var(--ink-soft); }
+  .bar button[aria-pressed="true"]{ border-color:var(--accent); color:var(--accent); }
+  .bar .fs{ min-width:50px; text-align:center; cursor:default; }
+  .bar .spacer{ flex:1; }
+  #menu-btn{ font-weight:600; display:flex; align-items:center; gap:7px; }
+  #menu-btn .ic{ display:inline-block; width:15px; height:11px; position:relative; }
+  #menu-btn .ic::before, #menu-btn .ic::after, #menu-btn .ic span{ content:""; position:absolute; left:0; right:0; height:2px; background:currentColor; border-radius:2px; }
+  #menu-btn .ic::before{ top:0; } #menu-btn .ic span{ top:4.5px; } #menu-btn .ic::after{ top:9px; }
+  .bar-title{ font-family:var(--font-serif); font-weight:600; font-size:15px; white-space:nowrap; }
+
+  /* layout */
+  main{ max-width:var(--maxw); margin:0 auto; padding:28px 18px 120px; }
+  .doc-title{ font-family:var(--font-serif); font-size:30px; font-weight:600; margin:4px 0 6px; }
+  .doc-sub{ color:var(--ink-soft); font-size:14px; margin:0 0 26px; }
+
+  .lesson-title{ font-family:var(--font-serif); font-size:23px; font-weight:500; margin:38px 0 2px; padding-top:16px; border-top:1px solid var(--border); scroll-margin-top:64px; }
+  .lesson-meta{ color:var(--ink-soft); font-size:13px; margin:0 0 16px; font-style:italic; }
+
+  /* topic divider */
+  .topic-divider{ margin:26px 0 14px; scroll-margin-top:64px; }
+  .topic-divider .td-inner{ font-family:var(--font-serif); font-size:16px; font-weight:600; color:var(--accent); display:flex; align-items:center; gap:12px; }
+  .topic-divider .td-line{ flex:1; height:1px; background:var(--border); }
+
+  /* block */
+  article.q{ position:relative; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; margin:0 0 16px; scroll-margin-top:64px; overflow:hidden; }
+  .q-head{ display:flex; gap:10px; align-items:flex-start; margin-bottom:10px; }
+  .q-num{ flex:none; font-size:11.5px; font-weight:600; color:var(--accent); border:1px solid var(--accent); border-radius:6px; padding:2px 7px; line-height:1.35; white-space:nowrap; }
+  .q-text{ flex:1; min-width:0; font-family:var(--font-serif); font-size:17px; line-height:1.36; }
+  .flag-btn{ flex:none; background:transparent; border:none; cursor:pointer; font-size:16px; line-height:1; padding:2px 3px; color:var(--ink-soft); opacity:.45; transition:opacity .15s, color .15s; }
+  .flag-btn:hover{ opacity:1; color:var(--flag); }
+  .q.flagged .flag-btn{ opacity:1; color:var(--flag); }
+
+  .lbl{ display:inline-block; font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--tag-ink); background:var(--tag-bg); padding:2px 8px; border-radius:5px; margin-bottom:7px; }
+  .answer{ margin-bottom:2px; }
+  .answer p{ margin:0 0 8px; } .answer p:last-child{ margin-bottom:0; }
+  .answer ul{ margin:0 0 4px; padding-left:20px; } .answer li{ margin:0 0 7px; }
+  .answer table, table.cmp{ width:100%; border-collapse:collapse; margin:6px 0 4px; font-size:.92em; }
+  .answer th, .answer td{ border:1px solid var(--border); padding:7px 9px; text-align:left; vertical-align:top; }
+  .answer th{ font-weight:600; color:var(--ink-soft); background:var(--border-soft); font-size:.82em; text-transform:uppercase; letter-spacing:.04em; }
+  .mem{ font-weight:500; color:var(--mem); } .concept{ font-weight:500; color:var(--concept); }
+  .todo{ color:var(--ink-soft); opacity:.5; }
+
+  .explain{ margin-top:14px; }
+  .explain.bl{ font-size:.97em; }
+
+  /* flashcards */
+  .fc{ background:var(--fc-bg); border:1px solid var(--border-soft); border-left:3px solid var(--fc-accent); border-radius:8px; padding:13px 15px; margin:14px 0 4px; }
+  .fc-tag{ font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--fc-accent); }
+  .fc-q{ font-size:.97em; margin:4px 0 10px; }
+  .fc-btn{ font-size:12px; color:var(--ink); background:transparent; border:1px solid var(--border); border-radius:7px; padding:5px 11px; cursor:pointer; }
+  .fc-btn:hover{ border-color:var(--fc-accent); color:var(--fc-accent); }
+  .fc-a{ margin-top:10px; font-size:.97em; border-top:1px dashed var(--border); padding-top:10px; }
+
+  /* quiz shell + (future) engine styles */
+  .quiz-shell{ margin-top:28px; }
+  .quiz-title{ font-family:var(--font-serif); font-size:20px; font-weight:500; margin:0 0 4px; }
+  .quiz-head{ display:flex; gap:10px; align-items:center; margin:8px 0 14px; flex-wrap:wrap; }
+  .quiz-score{ font-size:13px; color:var(--ink-soft); }
+  .qbtn{ font-size:12px; color:var(--ink); background:var(--card); border:1px solid var(--border); border-radius:7px; padding:5px 11px; cursor:pointer; }
+  .quiz-q{ background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px 16px; margin:0 0 12px; }
+  .quiz-prompt{ font-size:.97em; margin-bottom:10px; }
+  .quiz-opts{ display:flex; flex-direction:column; gap:7px; }
+  .opt{ text-align:left; font-size:.93em; color:var(--ink); background:transparent; border:1px solid var(--border); border-radius:7px; padding:8px 11px; cursor:pointer; }
+  .opt:hover:not(:disabled){ border-color:var(--ink-soft); }
+  .opt.correct{ border-color:var(--ok); color:var(--ok); } .opt.wrong{ border-color:var(--bad); color:var(--bad); }
+  .quiz-fb{ margin-top:9px; font-size:.88em; } .quiz-fb.correct-fb{ color:var(--ok); } .quiz-fb.wrong-fb{ color:var(--bad); }
+
+  /* highlight */
+  mark.hl{ background:var(--hl); color:var(--hl-ink); border-radius:2px; padding:0 1px; cursor:pointer; }
+  body.hl-off mark.hl{ cursor:default; }
+
+  /* BOOKMARK = red ribbon, top-left (one) */
+  .q.bookmarked{ border-left:3px solid var(--book); }
+  .q.bookmarked::before{ content:""; position:absolute; top:0; left:0; width:34px; height:34px; background:var(--book); -webkit-clip-path:polygon(0 0,100% 0,0 100%); clip-path:polygon(0 0,100% 0,0 100%); }
+  /* FLAG = amber tab, top-right + right bar (many) */
+  .q.flagged{ border-right:3px solid var(--flag); }
+  .q.flagged::after{ content:""; position:absolute; top:0; right:0; width:30px; height:30px; background:var(--flag); -webkit-clip-path:polygon(100% 0,100% 100%,0 0); clip-path:polygon(100% 0,100% 100%,0 0); }
+
+  /* SIDEBAR drawer */
+  #overlay{ position:fixed; inset:0; background:rgba(0,0,0,.38); opacity:0; visibility:hidden; transition:opacity .2s; z-index:70; }
+  #overlay.show{ opacity:1; visibility:visible; }
+  #sidebar{ position:fixed; top:0; left:0; height:100%; width:var(--sidebar-w); max-width:86vw; background:var(--card); border-right:1px solid var(--border); transform:translateX(-103%); transition:transform .24s ease; z-index:80; display:flex; flex-direction:column; box-shadow:2px 0 18px rgba(0,0,0,.12); }
+  #sidebar.open{ transform:translateX(0); }
+  .sb-top{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border); }
+  .sb-top h2{ font-family:var(--font-serif); font-size:16px; font-weight:600; margin:0; }
+  .sb-close{ background:transparent; border:none; color:var(--ink-soft); font-size:20px; line-height:1; cursor:pointer; padding:2px 6px; }
+  .sb-flagtoggle{ padding:10px 16px; border-bottom:1px solid var(--border); }
+  .sb-flagtoggle button{ width:100%; font-size:12.5px; color:var(--ink); background:transparent; border:1px solid var(--border); border-radius:7px; padding:7px 10px; cursor:pointer; display:flex; align-items:center; gap:7px; justify-content:center; }
+  .sb-flagtoggle button[aria-pressed="true"]{ border-color:var(--flag); color:var(--flag); }
+  .sb-tree{ overflow-y:auto; padding:8px 8px 30px; flex:1; }
+  .sb-mod{ margin:6px 0; }
+  .sb-mod > .sb-modname{ font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); padding:8px 10px 4px; }
+  .sb-les{ margin:1px 0; }
+  .sb-lesname{ display:flex; align-items:center; gap:6px; width:100%; text-align:left; font-family:var(--font-serif); font-size:14.5px; font-weight:500; color:var(--ink); background:transparent; border:none; border-radius:7px; padding:7px 9px; cursor:pointer; }
+  .sb-lesname:hover{ background:var(--border-soft); }
+  .sb-lesname .caret{ flex:none; font-size:10px; color:var(--ink-soft); transition:transform .15s; width:10px; }
+  .sb-les.collapsed .caret{ transform:rotate(-90deg); }
+  .sb-divs{ padding:2px 0 4px 22px; }
+  .sb-les.collapsed .sb-divs{ display:none; }
+  .sb-div{ display:block; width:100%; text-align:left; font-size:12.8px; color:var(--ink-soft); background:transparent; border:none; border-left:1px solid var(--border); border-radius:0; padding:5px 10px; cursor:pointer; }
+  .sb-div:hover{ color:var(--accent); border-left-color:var(--accent); }
+  .sb-div.quiz{ font-style:italic; }
+
+  @media (min-width:1180px){
+    /* on very wide screens, keep drawer behavior (user requested slide-over everywhere) */
+  }
+  @media (max-width:520px){
+    .bar-title{ display:none; }
+    .doc-title{ font-size:25px; }
+  }
+</style>
+</head>
+<body class="paper">
+
+<header class="bar">
+  <button id="menu-btn" aria-label="Open navigation" aria-expanded="false"><span class="ic"><span></span></span>Menu</button>
+  <span class="bar-title">BMSC 3404 · Exam 3</span>
+  <span class="spacer"></span>
+  <button id="hl-toggle" aria-pressed="true" title="Toggle drag-to-highlight">Highlight: on</button>
+  <button id="grad-toggle" aria-pressed="true" title="Toggle explanation color gradient">Gradient</button>
+  <button id="book-set" title="Bookmark the block at the top of the screen">Set bookmark</button>
+  <button id="book-go" title="Jump to your bookmark" style="display:none;">&#x2191; Bookmark</button>
+  <button id="fs-dn" title="Smaller text">A&minus;</button>
+  <span class="fs" id="fs-val">100%</span>
+  <button id="fs-up" title="Larger text">A&plus;</button>
+  <button id="theme-toggle" title="Toggle light/dark">Dark</button>
+</header>
+
+<div id="overlay"></div>
+<aside id="sidebar" aria-label="Lesson navigation">
+  <div class="sb-top"><h2>Contents</h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-flagtoggle"><button id="flag-only" aria-pressed="false">&#x2691; Flagged only</button></div>
+  <nav class="sb-tree" id="sb-tree"></nav>
+</aside>
+
+<main>
+  <h1 class="doc-title">Applied Microbiology — Exam 3</h1>
+  <p class="doc-sub">Modules 5 &amp; 6 · Microbial Ecology &amp; Symbiosis. Working template — questions mapped from the lesson review docs; Answer &amp; Explanation to be filled in.</p>
+
+  <section class="lesson" id="m5l1" data-module="Module 5 — Microbial Ecology">
+    <h2 class="lesson-title">M5 · L1 — Introduction to Microbial Ecology</h2>
+    <p class="lesson-meta">12 topics · content to be filled in.</p>
+    <div class="topic-divider" id="m5l1-d1" data-topic="Ecological Terms &amp; Diversity"><div class="td-inner"><span>Ecological Terms &amp; Diversity</span><span class="td-line"></span></div></div>
+    <article class="q" id="m5l1-q1" data-lesson="m5l1">
+      <div class="q-head"><span class="q-num">M5L1 Q1</span><span class="q-text">What is the difference between habitat, community, ecosystem, guild, and population — and how do they rank in order of diversity?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l1-q2" data-lesson="m5l1">
+      <div class="q-head"><span class="q-num">M5L1 Q2</span><span class="q-text">Contrast species richness and species abundance — how would you explain each with an example, and what does each tell you about an environment?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l1-q3" data-lesson="m5l1">
+      <div class="q-head"><span class="q-num">M5L1 Q3</span><span class="q-text">What is a niche, and what distinguishes a prime/realized niche from a fundamental niche?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m5l1-d2" data-topic="The Microbial Environment"><div class="td-inner"><span>The Microbial Environment</span><span class="td-line"></span></div></div>
+    <article class="q" id="m5l1-q4" data-lesson="m5l1">
+      <div class="q-head"><span class="q-num">M5L1 Q4</span><span class="q-text">What is a microenvironment? Using a soil particle as an example, what types of microbes live in the different microenvironments?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m5l1-d3" data-topic="Terrestrial Environments"><div class="td-inner"><span>Terrestrial Environments</span><span class="td-line"></span></div></div>
+    <article class="q" id="m5l1-q5" data-lesson="m5l1">
+      <div class="q-head"><span class="q-num">M5L1 Q5</span><span class="q-text">What components make up soil, what are its four layers, and which layer is the most species-abundant?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l1-q6" data-lesson="m5l1">
+      <div class="q-head"><span class="q-num">M5L1 Q6</span><span class="q-text">What is the benefit of having smaller cells in subsurface environments?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m5l1-d4" data-topic="Aquatic &amp; Marine Environments"><div class="td-inner"><span>Aquatic &amp; Marine Environments</span><span class="td-line"></span></div></div>
+    <article class="q" id="m5l1-q7" data-lesson="m5l1">
+      <div class="q-head"><span class="q-num">M5L1 Q7</span><span class="q-text">What impact does water depth have on microbial species richness and abundance, and what are benthic species (where would you find them)?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l1-q8" data-lesson="m5l1">
+      <div class="q-head"><span class="q-num">M5L1 Q8</span><span class="q-text">What are the layers associated with temperate lakes, and can you identify them?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l1-q9" data-lesson="m5l1">
+      <div class="q-head"><span class="q-num">M5L1 Q9</span><span class="q-text">What is biochemical oxygen demand (BOD), what alters it, and how does eutrophication impact BOD?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l1-q10" data-lesson="m5l1">
+      <div class="q-head"><span class="q-num">M5L1 Q10</span><span class="q-text">What types of microbes thrive in marine waters, and which are most important for photosynthetic production?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l1-q11" data-lesson="m5l1">
+      <div class="q-head"><span class="q-num">M5L1 Q11</span><span class="q-text">What is the pelagic zone, what organisms tell you that&#x27;s where you are, and what is most abundant there?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l1-q12" data-lesson="m5l1">
+      <div class="q-head"><span class="q-num">M5L1 Q12</span><span class="q-text">What is the typical condition of the deep sea, and what causes variations from this?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m5l1-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
+    <div id="m5l1-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+      <h3 class="quiz-title">M5L1 — reinforcement quiz</h3>
+      <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
+      <p class="todo">—</p>
+    </div>
+  </section>
+
+  <section class="lesson" id="m5l2" data-module="Module 5 — Microbial Ecology">
+    <h2 class="lesson-title">M5 · L2 — Nutrient Cycles</h2>
+    <p class="lesson-meta">10 topics · content to be filled in.</p>
+    <div class="topic-divider" id="m5l2-d5" data-topic="The Carbon Cycle"><div class="td-inner"><span>The Carbon Cycle</span><span class="td-line"></span></div></div>
+    <article class="q" id="m5l2-q1" data-lesson="m5l2">
+      <div class="q-head"><span class="q-num">M5L2 Q1</span><span class="q-text">What is the largest carbon reservoir?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l2-q2" data-lesson="m5l2">
+      <div class="q-head"><span class="q-num">M5L2 Q2</span><span class="q-text">What have humans done to disrupt the carbon cycle, and what parts of the cycle create harmful gases?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l2-q3" data-lesson="m5l2">
+      <div class="q-head"><span class="q-num">M5L2 Q3</span><span class="q-text">What is the largest methane reservoir?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m5l2-d6" data-topic="Nitrogen &amp; Sulfur Cycles"><div class="td-inner"><span>Nitrogen &amp; Sulfur Cycles</span><span class="td-line"></span></div></div>
+    <article class="q" id="m5l2-q4" data-lesson="m5l2">
+      <div class="q-head"><span class="q-num">M5L2 Q4</span><span class="q-text">What process results in a loss of organic nitrogen in the biosphere, and what impact does overuse of nitrogenous fertilizer have (what is being generated)?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l2-q5" data-lesson="m5l2">
+      <div class="q-head"><span class="q-num">M5L2 Q5</span><span class="q-text">What is biologically available nitrogen, and how is it produced?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l2-q6" data-lesson="m5l2">
+      <div class="q-head"><span class="q-num">M5L2 Q6</span><span class="q-text">What is a typical entry point of the sulfur cycle, what organisms oxidize sulfur, and what form of sulfur do they oxidize?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m5l2-d7" data-topic="Other Nutrient Cycles"><div class="td-inner"><span>Other Nutrient Cycles</span><span class="td-line"></span></div></div>
+    <article class="q" id="m5l2-q7" data-lesson="m5l2">
+      <div class="q-head"><span class="q-num">M5L2 Q7</span><span class="q-text">What is often cycled with iron?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l2-q8" data-lesson="m5l2">
+      <div class="q-head"><span class="q-num">M5L2 Q8</span><span class="q-text">Where would you find calcium in marine microbes?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l2-q9" data-lesson="m5l2">
+      <div class="q-head"><span class="q-num">M5L2 Q9</span><span class="q-text">What is the concern with mercury, and what is a benefit of microbes here?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l2-q10" data-lesson="m5l2">
+      <div class="q-head"><span class="q-num">M5L2 Q10</span><span class="q-text">What is bioaccumulation, and how does it differ from biomagnification?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m5l2-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
+    <div id="m5l2-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+      <h3 class="quiz-title">M5L2 — reinforcement quiz</h3>
+      <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
+      <p class="todo">—</p>
+    </div>
+  </section>
+
+  <section class="lesson" id="m5l3" data-module="Module 5 — Microbial Ecology">
+    <h2 class="lesson-title">M5 · L3 — Microbes &amp; the Built Environment</h2>
+    <p class="lesson-meta">12 topics · content to be filled in.</p>
+    <div class="topic-divider" id="m5l3-d8" data-topic="Microbial Leaching &amp; Mining"><div class="td-inner"><span>Microbial Leaching &amp; Mining</span><span class="td-line"></span></div></div>
+    <article class="q" id="m5l3-q1" data-lesson="m5l3">
+      <div class="q-head"><span class="q-num">M5L3 Q1</span><span class="q-text">What is microbial leaching, and what is the general process?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l3-q2" data-lesson="m5l3">
+      <div class="q-head"><span class="q-num">M5L3 Q2</span><span class="q-text">What causes acid mine drainage, and what type of reaction is happening?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l3-q3" data-lesson="m5l3">
+      <div class="q-head"><span class="q-num">M5L3 Q3</span><span class="q-text">What happens when U6+ is converted to U4+, and what types of microbes are able to do this?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m5l3-d9" data-topic="Bioremediation"><div class="td-inner"><span>Bioremediation</span><span class="td-line"></span></div></div>
+    <article class="q" id="m5l3-q4" data-lesson="m5l3">
+      <div class="q-head"><span class="q-num">M5L3 Q4</span><span class="q-text">What is one way to improve oil spill cleanup using microbes?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l3-q5" data-lesson="m5l3">
+      <div class="q-head"><span class="q-num">M5L3 Q5</span><span class="q-text">What causes breakdown of gasoline within storage tanks, and what would be a good way to avoid this?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l3-q6" data-lesson="m5l3">
+      <div class="q-head"><span class="q-num">M5L3 Q6</span><span class="q-text">What are xenobiotic compounds, and why are microbes unable to break them down?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m5l3-d10" data-topic="Wastewater Treatment"><div class="td-inner"><span>Wastewater Treatment</span><span class="td-line"></span></div></div>
+    <article class="q" id="m5l3-q7" data-lesson="m5l3">
+      <div class="q-head"><span class="q-num">M5L3 Q7</span><span class="q-text">What is the goal of wastewater treatment, and what is the general treatment process?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l3-q8" data-lesson="m5l3">
+      <div class="q-head"><span class="q-num">M5L3 Q8</span><span class="q-text">What are primary, secondary, and tertiary treatments (including anaerobic vs. aerobic processes and what the end products are used for)? Can you classify examples of each?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m5l3-d11" data-topic="Drinking Water &amp; the Home"><div class="td-inner"><span>Drinking Water &amp; the Home</span><span class="td-line"></span></div></div>
+    <article class="q" id="m5l3-q9" data-lesson="m5l3">
+      <div class="q-head"><span class="q-num">M5L3 Q9</span><span class="q-text">What are some current concerns for water treatment, and why are they such an issue?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l3-q10" data-lesson="m5l3">
+      <div class="q-head"><span class="q-num">M5L3 Q10</span><span class="q-text">What are some concerns with transporting drinking water, what microbes are the primary issues, and how are they able to survive?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l3-q11" data-lesson="m5l3">
+      <div class="q-head"><span class="q-num">M5L3 Q11</span><span class="q-text">What is the difference between microbial diversity inside vs. outside, and what impact does a shared environment/home (including pets) have on the microbiome?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m5l3-q12" data-lesson="m5l3">
+      <div class="q-head"><span class="q-num">M5L3 Q12</span><span class="q-text">What are some ways microbes can corrode your home?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m5l3-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
+    <div id="m5l3-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+      <h3 class="quiz-title">M5L3 — reinforcement quiz</h3>
+      <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
+      <p class="todo">—</p>
+    </div>
+  </section>
+
+  <section class="lesson" id="m6l1" data-module="Module 6 — Symbiosis">
+    <h2 class="lesson-title">M6 · L1 — Introduction to Symbiosis</h2>
+    <p class="lesson-meta">4 topics · content to be filled in.</p>
+    <div class="topic-divider" id="m6l1-d12" data-topic="Types of Symbiosis"><div class="td-inner"><span>Types of Symbiosis</span><span class="td-line"></span></div></div>
+    <article class="q" id="m6l1-q1" data-lesson="m6l1">
+      <div class="q-head"><span class="q-num">M6L1 Q1</span><span class="q-text">What are the 3 types of symbiotic relationships discussed, what are examples of each, and can you identify each from an example or description?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m6l1-d13" data-topic="Microbial Associations"><div class="td-inner"><span>Microbial Associations</span><span class="td-line"></span></div></div>
+    <article class="q" id="m6l1-q2" data-lesson="m6l1">
+      <div class="q-head"><span class="q-num">M6L1 Q2</span><span class="q-text">What is a lichen — what organisms make it up, and what does each bring to the relationship?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l1-q3" data-lesson="m6l1">
+      <div class="q-head"><span class="q-num">M6L1 Q3</span><span class="q-text">What is a Consortium aggregatum — what organisms make it up, and what does each provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l1-q4" data-lesson="m6l1">
+      <div class="q-head"><span class="q-num">M6L1 Q4</span><span class="q-text">What type of relationship is a methanotrophic consortium (specifically DIET), and what makes it this instead of synergism?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m6l1-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
+    <div id="m6l1-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+      <h3 class="quiz-title">M6L1 — reinforcement quiz</h3>
+      <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
+      <p class="todo">—</p>
+    </div>
+  </section>
+
+  <section class="lesson" id="m6l2" data-module="Module 6 — Symbiosis">
+    <h2 class="lesson-title">M6 · L2 — Microbe–Plant Symbiosis</h2>
+    <p class="lesson-meta">5 topics · content to be filled in.</p>
+    <div class="topic-divider" id="m6l2-d14" data-topic="Rhizobia &amp; Legumes"><div class="td-inner"><span>Rhizobia &amp; Legumes</span><span class="td-line"></span></div></div>
+    <article class="q" id="m6l2-q1" data-lesson="m6l2">
+      <div class="q-head"><span class="q-num">M6L2 Q1</span><span class="q-text">What are Rhizobia, what is their relationship with a legume, how do they prevent oxygen degradation, and what is the nodule formation process?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l2-q2" data-lesson="m6l2">
+      <div class="q-head"><span class="q-num">M6L2 Q2</span><span class="q-text">What is the function of nodABC, and what happens if one of these is mutated?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l2-q3" data-lesson="m6l2">
+      <div class="q-head"><span class="q-num">M6L2 Q3</span><span class="q-text">What are bacteroids, how are they different from traditional cells, and what does the plant provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m6l2-d15" data-topic="Mycorrhizae"><div class="td-inner"><span>Mycorrhizae</span><span class="td-line"></span></div></div>
+    <article class="q" id="m6l2-q4" data-lesson="m6l2">
+      <div class="q-head"><span class="q-num">M6L2 Q4–Q5</span><span class="q-text">What are mycorrhizae — what does each organism provide, what is the benefit of the mycelium, what is ectomycorrhizae, and where would you expect to find these?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m6l2-d16" data-topic="Plant Pathogens"><div class="td-inner"><span>Plant Pathogens</span><span class="td-line"></span></div></div>
+    <article class="q" id="m6l2-q6" data-lesson="m6l2">
+      <div class="q-head"><span class="q-num">M6L2 Q6</span><span class="q-text">What is crown gall disease, and what is the causative agent?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m6l2-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
+    <div id="m6l2-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+      <h3 class="quiz-title">M6L2 — reinforcement quiz</h3>
+      <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
+      <p class="todo">—</p>
+    </div>
+  </section>
+
+  <section class="lesson" id="m6l3" data-module="Module 6 — Symbiosis">
+    <h2 class="lesson-title">M6 · L3 — Microbe–Animal Symbiosis</h2>
+    <p class="lesson-meta">6 topics · content to be filled in.</p>
+    <div class="topic-divider" id="m6l3-d17" data-topic="Insect Symbionts"><div class="td-inner"><span>Insect Symbionts</span><span class="td-line"></span></div></div>
+    <article class="q" id="m6l3-q1" data-lesson="m6l3">
+      <div class="q-head"><span class="q-num">M6L3 Q1</span><span class="q-text">What is the difference between horizontal and vertical transmission in insect symbionts, and can you identify each from examples or descriptions?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l3-q2" data-lesson="m6l3">
+      <div class="q-head"><span class="q-num">M6L3 Q2–Q3</span><span class="q-text">What is the difference between a primary and a secondary symbiont, which is required for host reproduction, and what benefit could Wolbachia provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l3-q4" data-lesson="m6l3">
+      <div class="q-head"><span class="q-num">M6L3 Q4</span><span class="q-text">What is an example of a defensive symbiont, and how would you describe the relationship?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m6l3-d18" data-topic="Marine Symbioses"><div class="td-inner"><span>Marine Symbioses</span><span class="td-line"></span></div></div>
+    <article class="q" id="m6l3-q5" data-lesson="m6l3">
+      <div class="q-head"><span class="q-num">M6L3 Q5</span><span class="q-text">What is the relationship between Aliivibrio fischeri and the bobtail squid, and what does each provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l3-q6" data-lesson="m6l3">
+      <div class="q-head"><span class="q-num">M6L3 Q6</span><span class="q-text">What is an example of a phototrophic symbiotic relationship (what does each organism provide), and what causes coral bleaching?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m6l3-d19" data-topic="Herbivore Digestion"><div class="td-inner"><span>Herbivore Digestion</span><span class="td-line"></span></div></div>
+    <article class="q" id="m6l3-q7" data-lesson="m6l3">
+      <div class="q-head"><span class="q-num">M6L3 Q7</span><span class="q-text">What types of mammals consume high levels of plants, what organ assists with digestion, what environment is within it, what microbes are found there, and what nutrition do these microbes provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m6l3-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
+    <div id="m6l3-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+      <h3 class="quiz-title">M6L3 — reinforcement quiz</h3>
+      <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
+      <p class="todo">—</p>
+    </div>
+  </section>
+
+  <section class="lesson" id="m6l4" data-module="Module 6 — Symbiosis">
+    <h2 class="lesson-title">M6 · L4 — The Human Microbiome</h2>
+    <p class="lesson-meta">13 topics · content to be filled in.</p>
+    <div class="topic-divider" id="m6l4-d20" data-topic="Microbiome Overview"><div class="td-inner"><span>Microbiome Overview</span><span class="td-line"></span></div></div>
+    <article class="q" id="m6l4-q1" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q1</span><span class="q-text">What are some reasons to study the microbiome, and what benefit does the microbiome have against infection?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m6l4-d21" data-topic="GI Tract"><div class="td-inner"><span>GI Tract</span><span class="td-line"></span></div></div>
+    <article class="q" id="m6l4-q2" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q2</span><span class="q-text">What does the human gut microbiome tend to look like, what benefits can they provide, and what organisms do you expect in the GI tract of a healthy individual?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l4-q3" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q3</span><span class="q-text">What is the cause of peptic ulcers, and why is it able to survive in the stomach?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l4-q4" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q4</span><span class="q-text">What is the relationship between microbes in the large intestine and propensity for obesity, and what did they see in mice and humans?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l4-q5" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q5</span><span class="q-text">What are some concerns with using a mouse model for GI microbiota studies?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m6l4-d22" data-topic="Other Body Sites"><div class="td-inner"><span>Other Body Sites</span><span class="td-line"></span></div></div>
+    <article class="q" id="m6l4-q6" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q6</span><span class="q-text">What are the factors that impact the composition of the skin microbiota?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l4-q7" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q7</span><span class="q-text">What causes dental plaque and periodontitis, and is this an increase or decrease in species diversity within the oral cavity?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l4-q8" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q8</span><span class="q-text">What does the microbiota within the lower respiratory tract look like, and what types of microbes are able to reach the lungs?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l4-q9" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q9</span><span class="q-text">What is the common environment for a female urogenital tract, and what happens when antibiotics are taken?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m6l4-d23" data-topic="Virome &amp; Clinical"><div class="td-inner"><span>Virome &amp; Clinical</span><span class="td-line"></span></div></div>
+    <article class="q" id="m6l4-q10" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q10</span><span class="q-text">What is a benefit to the human virome?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l4-q11" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q11</span><span class="q-text">What is commonly seen in patients with IBD?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l4-q12" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q12</span><span class="q-text">What are some risks with antibiotic use in newborns?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <article class="q" id="m6l4-q13" data-lesson="m6l4">
+      <div class="q-head"><span class="q-num">M6L4 Q13</span><span class="q-text">What are probiotics and prebiotics, and when should these be taken?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
+      <div class="answer"><span class="lbl">Answer</span><p class="todo">—</p></div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br><span class="todo">—</span></div>
+    </article>
+    <div class="topic-divider" id="m6l4-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
+    <div id="m6l4-quiz" class="quiz-shell" style="scroll-margin-top:72px;">
+      <h3 class="quiz-title">M6L4 — reinforcement quiz</h3>
+      <p class="lesson-meta">Exam-style multiple choice — to be built when this lesson's content is filled in.</p>
+      <p class="todo">—</p>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ---- theme / font-size / gradient ---- */
+(function(){
+  var body=document.body;
+  document.getElementById('theme-toggle').onclick=function(){
+    var dark=body.classList.toggle('dark'); body.classList.toggle('paper',!dark);
+    this.textContent=dark?'Light':'Dark'; setTimeout(recolorAll,20);
+  };
+  var sizes=[90,100,112,125], si=1;
+  function applyFs(){ document.documentElement.style.setProperty('--root-fs', sizes[si]+'%'); document.getElementById('fs-val').textContent=sizes[si]+'%'; setTimeout(recolorAll,30); }
+  document.getElementById('fs-up').onclick=function(){ if(si<sizes.length-1){si++;applyFs();} };
+  document.getElementById('fs-dn').onclick=function(){ if(si>0){si--;applyFs();} };
+
+  /* explanation per-line color gradient (same engine as exam2) */
+  var GRAD=true;
+  var PAL={paper:['#1A4D8F','#B23A2E'], dark:['#7FB5F0','#F2A488']};
+  function theme(){ return body.classList.contains('dark')?'dark':'paper'; }
+  function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+  function mix(c1,c2,t){var a=hx(c1),b=hx(c2),r=function(i){return Math.round(a[i]+(b[i]-a[i])*t);};return 'rgb('+r(0)+','+r(1)+','+r(2)+')';}
+  function wrapNode(n){
+    Array.prototype.slice.call(n.childNodes).forEach(function(k){
+      if(k.nodeType===3){ var f=document.createDocumentFragment();
+        k.textContent.split(/(\s+)/).forEach(function(tok){ if(tok==='')return;
+          if(/^\s+$/.test(tok))f.appendChild(document.createTextNode(tok));
+          else{var s=document.createElement('span');s.className='blw';s.textContent=tok;f.appendChild(s);} });
+        n.replaceChild(f,k);
+      } else if(k.nodeType===1 && !k.classList.contains('lbl') && !k.classList.contains('hl')) wrapNode(k);
+    });
+  }
+  function ensure(el){ if(el.dataset.w)return;
+    Array.prototype.slice.call(el.childNodes).forEach(function(c){
+      if(c.nodeType===1 && c.classList && c.classList.contains('lbl'))return;
+      if(c.nodeType===3 && c.textContent.trim()==='')return;
+      if(c.nodeType===3){var w=document.createElement('span');el.replaceChild(w,c);w.appendChild(c);wrapNode(w);}
+      else if(c.nodeType===1) wrapNode(c);
+    }); el.dataset.w='1';
+  }
+  window.recolorAll=function(){
+    document.querySelectorAll('.explain.bl').forEach(function(el){
+      if(el.querySelector('.todo')) return;
+      ensure(el);
+      var words=Array.prototype.slice.call(el.querySelectorAll('.blw'));
+      if(!GRAD){ words.forEach(function(w){w.style.color='';}); return; }
+      var lines=[],cur=[],top=null;
+      words.forEach(function(w){var t=w.offsetTop; if(top===null)top=t; if(Math.abs(t-top)>4){lines.push(cur);cur=[];top=t;} cur.push(w);});
+      if(cur.length)lines.push(cur);
+      var pal=PAL[theme()];
+      lines.forEach(function(line,li){var s=pal[li%2],e=pal[(li+1)%2],ln=line.length; line.forEach(function(w,wi){w.style.color=mix(s,e,ln>1?wi/(ln-1):0);});});
+    });
+  };
+  document.getElementById('grad-toggle').onclick=function(){ GRAD=!GRAD; this.setAttribute('aria-pressed',GRAD); recolorAll(); };
+  var rt; window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(recolorAll,140);});
+  window.addEventListener('load',function(){setTimeout(recolorAll,80);});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){setTimeout(recolorAll,40);});
+})();
+
+/* ---- sidebar build + drawer + flagged-only ---- */
+(function(){
+  var sb=document.getElementById('sidebar'), ov=document.getElementById('overlay');
+  function open(){ sb.classList.add('open'); ov.classList.add('show'); document.getElementById('menu-btn').setAttribute('aria-expanded','true'); }
+  function close(){ sb.classList.remove('open'); ov.classList.remove('show'); document.getElementById('menu-btn').setAttribute('aria-expanded','false'); }
+  document.getElementById('menu-btn').onclick=open;
+  document.getElementById('sb-close').onclick=close;
+  ov.onclick=close;
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape')close(); });
+
+  /* build tree from DOM */
+  var tree=document.getElementById('sb-tree');
+  var mods={}; var order=[];
+  document.querySelectorAll('section.lesson').forEach(function(sec){
+    var mod=sec.getAttribute('data-module')||'';
+    if(!mods[mod]){ mods[mod]=[]; order.push(mod); }
+    mods[mod].push(sec);
+  });
+  order.forEach(function(mod){
+    var mdiv=document.createElement('div'); mdiv.className='sb-mod';
+    var mn=document.createElement('div'); mn.className='sb-modname'; mn.textContent=mod; mdiv.appendChild(mn);
+    mods[mod].forEach(function(sec){
+      var les=document.createElement('div'); les.className='sb-les';
+      var btn=document.createElement('button'); btn.className='sb-lesname';
+      var car=document.createElement('span'); car.className='caret'; car.textContent='\u25BE';
+      var lname=sec.querySelector('.lesson-title').textContent;
+      var txt=document.createElement('span'); txt.textContent=lname;
+      btn.appendChild(car); btn.appendChild(txt);
+      var divs=document.createElement('div'); divs.className='sb-divs';
+      sec.querySelectorAll('.topic-divider').forEach(function(d){
+        var a=document.createElement('button'); a.className='sb-div';
+        var tp=d.getAttribute('data-topic');
+        if(tp==='Reinforcement quiz') a.className+=' quiz';
+        a.textContent=tp;
+        a.onclick=function(){ d.scrollIntoView({behavior:'smooth',block:'start'}); close(); };
+        divs.appendChild(a);
+      });
+      btn.onclick=function(e){
+        /* clicking caret toggles; clicking name jumps */
+        if(les.classList.contains('collapsed')){ les.classList.remove('collapsed'); }
+        else { /* jump to lesson, keep expanded */ sec.scrollIntoView({behavior:'smooth',block:'start'}); close(); }
+      };
+      /* separate caret toggle */
+      car.onclick=function(e){ e.stopPropagation(); les.classList.toggle('collapsed'); };
+      les.appendChild(btn); les.appendChild(divs); mdiv.appendChild(les);
+    });
+    tree.appendChild(mdiv);
+  });
+
+  /* flagged-only */
+  var fo=document.getElementById('flag-only');
+  fo.onclick=function(){
+    var on=document.body.classList.toggle('flagged-only-active');
+    this.setAttribute('aria-pressed',on);
+    applyFlaggedOnly(on);
+  };
+  window.applyFlaggedOnly=function(on){
+    document.querySelectorAll('section.lesson').forEach(function(sec){
+      var anyFlag=false;
+      /* walk children; track current divider */
+      var kids=Array.prototype.slice.call(sec.children);
+      var pendingDiv=null, divHasFlag=false;
+      function flushDiv(){ if(pendingDiv){ pendingDiv.style.display=(on&&!divHasFlag)?'none':''; } }
+      kids.forEach(function(el){
+        if(el.classList.contains('topic-divider')){ flushDiv(); pendingDiv=el; divHasFlag=false; }
+        else if(el.classList.contains('q')){
+          var f=el.classList.contains('flagged');
+          el.style.display=(on&&!f)?'none':'';
+          if(f){ anyFlag=true; divHasFlag=true; }
+        } else if(el.classList.contains('quiz-shell')){
+          el.style.display=on?'none':'';
+        }
+      });
+      flushDiv();
+      /* hide lesson title/meta if nothing flagged */
+      var title=sec.querySelector('.lesson-title'), meta=sec.querySelector('.lesson-meta');
+      sec.style.display=(on&&!anyFlag)?'none':'';
+    });
+    setTimeout(recolorAll,30);
+  };
+})();
+
+/* ---- flag system (many) ---- */
+(function(){
+  var KEY='exam3-flags';
+  function load(){ try{return JSON.parse(localStorage.getItem(KEY))||[];}catch(e){return [];} }
+  function save(a){ try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){} }
+  var flags=load();
+  document.querySelectorAll('article.q').forEach(function(art){
+    if(flags.indexOf(art.id)>=0){ art.classList.add('flagged'); var b=art.querySelector('.flag-btn'); if(b)b.setAttribute('aria-pressed','true'); }
+    var btn=art.querySelector('.flag-btn'); if(!btn)return;
+    btn.onclick=function(e){ e.stopPropagation();
+      var on=art.classList.toggle('flagged'); btn.setAttribute('aria-pressed',on);
+      var i=flags.indexOf(art.id);
+      if(on && i<0) flags.push(art.id);
+      if(!on && i>=0) flags.splice(i,1);
+      save(flags);
+      if(document.body.classList.contains('flagged-only-active')) applyFlaggedOnly(true);
+    };
+  });
+})();
+
+/* ---- bookmark (one, red ribbon) ---- */
+(function(){
+  var KEY='exam3-bookmark-id';
+  var cur=null; try{cur=localStorage.getItem(KEY);}catch(e){}
+  var goBtn=document.getElementById('book-go');
+  function mark(id){
+    document.querySelectorAll('.q.bookmarked').forEach(function(a){a.classList.remove('bookmarked');});
+    var el=id&&document.getElementById(id);
+    if(el){ el.classList.add('bookmarked'); goBtn.style.display='inline-block'; }
+    else goBtn.style.display='none';
+  }
+  mark(cur);
+  document.getElementById('book-set').onclick=function(){
+    /* bookmark the article whose top is nearest just below the header */
+    var arts=Array.prototype.slice.call(document.querySelectorAll('article.q')).filter(function(a){return a.offsetParent!==null;});
+    var best=null,bd=1e9;
+    arts.forEach(function(a){ var t=a.getBoundingClientRect().top-70; var d=t>=-4?t:1e9; if(d<bd){bd=d;best=a;} });
+    if(best){ cur=best.id; try{localStorage.setItem(KEY,cur);}catch(e){} mark(cur);
+      best.scrollIntoView({behavior:'smooth',block:'start'}); }
+  };
+  goBtn.onclick=function(){ var el=cur&&document.getElementById(cur); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); };
+})();
+
+/* ---- highlight (drag-to-select, experimental, per-browser) ---- */
+(function(){
+  var KEY='exam3-highlights';
+  var ON=true;
+  function store(){ try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};} }
+  function save(o){ try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){} }
+  function artOf(node){ while(node && node!==document){ if(node.nodeType===1 && node.classList && node.classList.contains('q')) return node; node=node.parentNode; } return null; }
+  function serialize(art){
+    var ranges=[], pos=0;
+    (function walk(node){
+      for(var i=0;i<node.childNodes.length;i++){ var c=node.childNodes[i];
+        if(c.nodeType===3){ pos+=c.nodeValue.length; }
+        else if(c.nodeType===1){
+          if(c.classList && c.classList.contains('hl')){ var s=pos,len=c.textContent.length; ranges.push([s,s+len]); pos+=len; }
+          else walk(c);
+        } }
+    })(art);
+    ranges.sort(function(a,b){return a[0]-b[0];});
+    var out=[]; ranges.forEach(function(r){ if(out.length&&r[0]<=out[out.length-1][1]) out[out.length-1][1]=Math.max(out[out.length-1][1],r[1]); else out.push(r.slice()); });
+    return out;
+  }
+  function persist(art){ var o=store(); var s=serialize(art); if(s.length)o[art.id]=s; else delete o[art.id]; save(o); }
+  function wrapRange(art,start,end){
+    var tw=document.createTreeWalker(art,NodeFilter.SHOW_TEXT,null), n, pos=0, sN=null,sO=0,eN=null,eO=0;
+    while((n=tw.nextNode())){ var len=n.nodeValue.length;
+      if(sN===null && pos+len>start){ sN=n; sO=start-pos; }
+      if(pos+len>=end){ eN=n; eO=end-pos; break; } pos+=len; }
+    if(!sN||!eN)return;
+    var range=document.createRange(); range.setStart(sN,sO); range.setEnd(eN,eO);
+    var m=document.createElement('mark'); m.className='hl';
+    try{ range.surroundContents(m); }catch(e){ try{ var frag=range.extractContents(); m.appendChild(frag); range.insertNode(m); }catch(e2){} }
+  }
+  function applyStored(){ var o=store(); Object.keys(o).forEach(function(id){ var art=document.getElementById(id); if(!art)return; o[id].slice().sort(function(a,b){return b[0]-a[0];}).forEach(function(r){ wrapRange(art,r[0],r[1]); }); }); }
+
+  var guard=0;
+  document.addEventListener('mouseup', function(){
+    if(!ON) return;
+    var sel=window.getSelection(); if(!sel||sel.isCollapsed||!sel.rangeCount) return;
+    var r=sel.getRangeAt(0); if(r.collapsed||!sel.toString().trim()) return;
+    var a1=artOf(r.startContainer), a2=artOf(r.endContainer);
+    if(!a1||a1!==a2) return;
+    if(artOf(r.startContainer)===null) return;
+    /* avoid wrapping if selection is inside header/sidebar etc (already filtered by artOf) */
+    var m=document.createElement('mark'); m.className='hl';
+    try{ r.surroundContents(m); }catch(e){ try{ var frag=r.extractContents(); m.appendChild(frag); r.insertNode(m); }catch(e2){ return; } }
+    sel.removeAllRanges(); guard=Date.now(); persist(a1); setTimeout(recolorAll,20);
+  });
+  document.addEventListener('click', function(e){
+    var m=e.target; while(m&&m!==document){ if(m.nodeType===1&&m.classList&&m.classList.contains('hl'))break; m=m.parentNode; }
+    if(!m||m===document) return;
+    if(Date.now()-guard<350) return; /* don't instantly remove a fresh highlight */
+    var art=artOf(m); var p=m.parentNode;
+    while(m.firstChild) p.insertBefore(m.firstChild,m); p.removeChild(m); p.normalize();
+    if(art) persist(art); setTimeout(recolorAll,20);
+  });
+  document.getElementById('hl-toggle').onclick=function(){ ON=!ON; this.textContent='Highlight: '+(ON?'on':'off'); this.setAttribute('aria-pressed',ON); document.body.classList.toggle('hl-off',!ON); };
+  window.addEventListener('DOMContentLoaded', applyStored);
+  if(document.readyState!=='loading') applyStored();
+})();
+</script>
+</body>
+</html>
