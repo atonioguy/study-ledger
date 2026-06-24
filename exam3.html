@@ -1462,7 +1462,7 @@ window.smoothScrollTo=function(el){
 /* ---- kudos button: confetti + warm message + GLOBAL counter (Abacus) with local fallback ---- */
 (function(){
   var NS='atonioguy-study-ledger', KEY='exam3-kudos', BASE='https://abacus.jasoncameron.dev';
-  var SENT='exam3-kudos-sent', LOCAL='exam3-kudos-local';
+  var SENT='exam3-kudos-sent2', LOCAL='exam3-kudos-local';   /* v2 key: lets browsers that clicked the old local-only button fire one real global hit */
   var btn=document.getElementById('kudos-btn'), cnt=document.getElementById('kudos-count');
   if(!btn) return;
   var sent=false; try{ sent=localStorage.getItem(SENT)==='1'; }catch(e){}
