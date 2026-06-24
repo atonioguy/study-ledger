@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-<title>Applied Microbiology — Exam 3 Review</title>
+<title>Applied Microbiology — Exam 3 Study Notes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600&family=Lexend:wght@400;500;600&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
@@ -165,6 +165,8 @@
   .grad-dd{ position:relative; display:inline-block; }
   .grad-sw{ display:inline-block; width:26px; height:12px; border-radius:3px; flex:0 0 26px; border:1px solid var(--border); }
   .grad-sw-none{ background:repeating-linear-gradient(45deg,var(--border-soft),var(--border-soft) 3px,transparent 3px,transparent 6px); }
+  #hl-toggle{ display:inline-flex; align-items:center; gap:5px; }
+  #hl-toggle svg{ display:block; }
 </style>
 </head>
 <body class="paper">
@@ -178,13 +180,13 @@
     <button id="font-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Reading font">Font ▾</button>
     <div id="font-menu" class="font-menu" role="menu" hidden></div>
   </span>
-  <button id="hl-toggle" aria-pressed="true" title="Toggle drag-to-highlight">Highlight: on</button>
+  <button id="hl-toggle" aria-pressed="true" title="Toggle highlighting"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span class="hl-state">on</span></button>
   <span class="grad-dd">
     <button id="grad-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Explanation gradient style">Gradient ▾</button>
     <div id="grad-menu" class="font-menu" role="menu" hidden></div>
   </span>
   <button id="fs-dn" title="Smaller text">A&minus;</button>
-  <span class="fs" id="fs-val">100%</span>
+  <span class="fs" id="fs-val">18px</span>
   <button id="fs-up" title="Larger text">A&plus;</button>
   <button id="theme-toggle" title="Toggle theme" aria-label="Toggle light/dark mode"></button>
 </header>
@@ -1143,12 +1145,13 @@ window.smoothScrollTo=function(el){
   function setThemeIcon(){ var dark=body.classList.contains('dark'); tbtn.innerHTML=dark?SUN:MOON; tbtn.setAttribute('aria-label', dark?'Switch to light mode':'Switch to dark mode'); tbtn.title=dark?'Light mode':'Dark mode'; }
   tbtn.onclick=function(){ var dark=body.classList.toggle('dark'); body.classList.toggle('paper',!dark); setThemeIcon(); setTimeout(function(){window.recolorAll&&window.recolorAll();},20); };
   setThemeIcon();
-  var sizes=[85,92,100,110,122,135], si=2;
+  var FS_MIN=14, FS_MAX=26, fsPx=18;
+  var fsEl=document.getElementById('fs-val');
+  try{var _p=parseInt(localStorage.getItem('exam3-fspx'),10); if(_p>=FS_MIN&&_p<=FS_MAX) fsPx=_p;}catch(e){}
   var mainEl=document.querySelector('main');
-  function applyFs(){ mainEl.style.zoom=(sizes[si]/100); document.getElementById('fs-val').textContent=sizes[si]+'%'; try{localStorage.setItem('exam3-fs',si);}catch(e){} setTimeout(function(){window.recolorAll&&window.recolorAll();},40); }
-  document.getElementById('fs-up').onclick=function(){ if(si<sizes.length-1){si++;applyFs();} };
-  document.getElementById('fs-dn').onclick=function(){ if(si>0){si--;applyFs();} };
-  try{var _fs=localStorage.getItem('exam3-fs'); if(_fs!==null){si=Math.max(0,Math.min(sizes.length-1,parseInt(_fs,10)||0));}}catch(e){}
+  function applyFs(){ document.body.style.setProperty('--root-fs', fsPx+'px'); if(mainEl) mainEl.style.zoom=''; fsEl.textContent=fsPx+'px'; try{localStorage.setItem('exam3-fspx',fsPx);}catch(e){} setTimeout(function(){window.recolorAll&&window.recolorAll();},40); }
+  document.getElementById('fs-up').onclick=function(){ if(fsPx<FS_MAX){fsPx++;applyFs();} };
+  document.getElementById('fs-dn').onclick=function(){ if(fsPx>FS_MIN){fsPx--;applyFs();} };
   applyFs();
 
   /* explanation per-line color gradient (same engine as exam2) */
@@ -1479,7 +1482,7 @@ window.smoothScrollTo=function(el){
       persist(art); setTimeout(recolor,20);
     });
   }
-  document.getElementById('hl-toggle').onclick=function(){ ON=!ON; this.textContent='Highlight: '+(ON?'on':'off'); this.setAttribute('aria-pressed',ON); document.body.classList.toggle('hl-off',!ON); };
+  document.getElementById('hl-toggle').onclick=function(){ ON=!ON; var st=this.querySelector('.hl-state'); if(st) st.textContent=ON?'on':'off'; this.setAttribute('aria-pressed',ON); document.body.classList.toggle('hl-off',!ON); };
   window.addEventListener('DOMContentLoaded', applyStored);
   if(document.readyState!=='loading') applyStored();
 })();
