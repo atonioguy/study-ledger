@@ -13,7 +13,7 @@
   html{ scroll-behavior:auto; }
   body.paper{ --bg:#F3F0E7; --card:#FBFAF4; --ink:#2C2A24; --ink-soft:#6E685C; --border:rgba(40,36,28,.14); --border-soft:rgba(40,36,28,.08); --accent:#1A4D8F; --tag-bg:#E9E4D6; --tag-ink:#5A5446; --fc-bg:#F2EEE2; --fc-accent:#8A6D2F; --mem:#1858A8; --concept:#C0492B; --ok:#2E7D52; --bad:#B23A2E; --hl:#FCE58A; --hl-ink:#2C2A24; --book:#D8362B; --flag:#E0922A; }
   body.dark{ --bg:#101216; --card:#191B20; --ink:#D6D4CC; --ink-soft:#928F86; --border:rgba(255,255,255,.13); --border-soft:rgba(255,255,255,.07); --accent:#7FB5F0; --tag-bg:#23262D; --tag-ink:#9BA3AE; --fc-bg:#1E2127; --fc-accent:#D9B877; --mem:#6FB0F2; --concept:#F0936A; --ok:#5FCF95; --bad:#F0936A; --hl:#5E5320; --hl-ink:#F4EFD8; --book:#E2554B; --flag:#E6A94E; }
-  body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-sans); line-height:1.7; font-size:var(--root-fs,16px); -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-sans); line-height:1.7; font-size:var(--root-fs,18px); -webkit-text-size-adjust:100%; }
   *{ transition: background-color .3s ease, border-color .3s ease, color .3s ease, fill .3s ease; }
 
   /* header */
@@ -21,7 +21,7 @@
   .bar button, .bar .fs{ font-family:var(--font-sans); font-size:13px; color:var(--ink); background:var(--card); border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; line-height:1.2; }
   .bar button:hover{ border-color:var(--ink-soft); }
   .bar button[aria-pressed="true"]{ border-color:var(--accent); color:var(--accent); }
-  .bar .fs{ min-width:50px; text-align:center; cursor:default; }
+  .bar .fs{ min-width:32px; text-align:center; cursor:default; border:none; background:transparent; padding:0; }
   .bar .spacer{ flex:1; }
   #menu-btn{ font-weight:600; display:flex; align-items:center; gap:7px; }
   #menu-btn .ic{ display:inline-block; width:15px; height:11px; position:relative; }
@@ -167,7 +167,13 @@
   .grad-sw-none{ background:repeating-linear-gradient(45deg,var(--border-soft),var(--border-soft) 3px,transparent 3px,transparent 6px); }
   #hl-toggle{ display:inline-flex; align-items:center; gap:5px; }
   #hl-toggle svg{ display:block; }
+  #hl-toggle[aria-pressed="true"] svg{ fill:var(--hl); }
+  .fs-grp{ display:inline-flex; align-items:center; gap:3px; }
+  #bar-tab svg{ display:block; }
 </style>
+<script>
+(function(){try{var p=parseInt(localStorage.getItem('exam3-fspx'),10);if(!(p>=14&&p<=26))p=18;document.documentElement.style.setProperty('--root-fs',p+'px');}catch(e){}})();
+</script>
 </head>
 <body class="paper">
 
@@ -176,21 +182,19 @@
   <span class="bar-title">Exam 3 Review</span>
   <button id="kudos-btn" title="Send some kudos if you liked these notes!">👏 Kudos <span id="kudos-count">0</span></button>
   <span class="spacer"></span>
+  <span class="grad-dd">
+    <button id="grad-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Explanation gradient style">Gradient ▾</button>
+    <div id="grad-menu" class="font-menu" role="menu" hidden></div>
+  </span>
   <span class="font-dd">
     <button id="font-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Reading font">Font ▾</button>
     <div id="font-menu" class="font-menu" role="menu" hidden></div>
   </span>
   <button id="hl-toggle" aria-pressed="true" title="Toggle highlighting"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span class="hl-state">on</span></button>
-  <span class="grad-dd">
-    <button id="grad-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Explanation gradient style">Gradient ▾</button>
-    <div id="grad-menu" class="font-menu" role="menu" hidden></div>
-  </span>
-  <button id="fs-dn" title="Smaller text">A&minus;</button>
-  <span class="fs" id="fs-val">18px</span>
-  <button id="fs-up" title="Larger text">A&plus;</button>
+  <span class="fs-grp"><button id="fs-dn" title="Smaller text">A&minus;</button><span class="fs" id="fs-val">18px</span><button id="fs-up" title="Larger text">A&plus;</button></span>
   <button id="theme-toggle" title="Toggle theme" aria-label="Toggle light/dark mode"></button>
 </header>
-<button id="bar-tab" type="button" title="Hide the toolbar" aria-label="Toggle toolbar" aria-expanded="true">▴</button>
+<button id="bar-tab" type="button" title="Hide the toolbar" aria-label="Toggle toolbar" aria-expanded="true"><svg viewBox="0 0 20 12" width="18" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8.5 10 3.5 17 8.5"/></svg></button>
 
 <div id="book-dock">
   <button id="book-clear" title="Remove bookmark" aria-label="Remove bookmark">&times;</button>
@@ -1580,10 +1584,11 @@ window.smoothScrollTo=function(el){
 /* ---- collapsible toolbar (pull-tab) ---- */
 (function(){
   var body=document.body, header=document.querySelector('header.bar'), tab=document.getElementById('bar-tab');
+  var CHEV_UP='<svg viewBox="0 0 20 12" width="18" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8.5 10 3.5 17 8.5"/></svg>', CHEV_DN='<svg viewBox="0 0 20 12" width="18" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 3.5 10 8.5 17 3.5"/></svg>';
   if(!tab||!header) return;
   function place(){ tab.style.top = body.classList.contains('bar-hidden') ? '0px' : Math.max(0,(header.offsetHeight-1))+'px'; }
-  function expand(){ body.classList.remove('bar-hidden'); tab.textContent='\u25B4'; tab.title='Hide the toolbar'; tab.setAttribute('aria-expanded','true'); place(); }
-  function collapse(){ body.classList.add('bar-hidden'); tab.textContent='\u25BE'; tab.title='Show the toolbar'; tab.setAttribute('aria-expanded','false'); place(); }
+  function expand(){ body.classList.remove('bar-hidden'); tab.innerHTML=CHEV_UP; tab.title='Hide the toolbar'; tab.setAttribute('aria-expanded','true'); place(); }
+  function collapse(){ body.classList.add('bar-hidden'); tab.innerHTML=CHEV_DN; tab.title='Show the toolbar'; tab.setAttribute('aria-expanded','false'); place(); }
   tab.onclick=function(){ if(body.classList.contains('bar-hidden')) expand(); else collapse(); };
   document.addEventListener('keydown', function(e){ if(e.key==='Escape' && body.classList.contains('bar-hidden')) expand(); });
   window.addEventListener('resize', place);
