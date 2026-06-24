@@ -149,6 +149,17 @@
   #confetti-layer{ position:fixed; inset:0; pointer-events:none; z-index:110; overflow:hidden; }
   .confetti{ position:fixed; top:14px; width:9px; height:14px; opacity:1; animation:confetti-fall var(--dur,2.4s) cubic-bezier(.2,.6,.3,1) forwards; }
   @keyframes confetti-fall{ to{ transform:translate(var(--dx,0), 108vh) rotateZ(var(--rot,720deg)); opacity:0; } }
+  .font-dd{ position:relative; display:inline-block; }
+  .font-menu{ position:absolute; top:calc(100% + 6px); left:0; min-width:184px; background:var(--card); border:1px solid var(--border); border-radius:10px; box-shadow:0 10px 28px rgba(0,0,0,.20); padding:5px; z-index:130; }
+  .font-menu[hidden]{ display:none; }
+  .font-opt{ display:flex; align-items:center; gap:8px; width:100%; text-align:left; background:transparent; border:none; border-radius:7px; padding:8px 10px; cursor:pointer; color:var(--ink); font-size:15px; line-height:1.25; }
+  .font-opt:hover{ background:var(--tag-bg); }
+  .font-opt .tick{ width:13px; flex:0 0 13px; color:var(--accent); font-size:12px; }
+  .font-opt[aria-checked="true"]{ font-weight:600; }
+  body.bar-hidden header.bar{ display:none; }
+  #bar-reveal{ position:fixed; top:10px; right:12px; z-index:90; display:none; align-items:center; gap:5px; font-family:var(--font-sans); font-size:12.5px; color:var(--ink-soft); background:var(--card); border:1px solid var(--border); border-radius:20px; padding:6px 12px; cursor:pointer; opacity:.55; box-shadow:0 3px 12px rgba(0,0,0,.14); transition:opacity .15s; }
+  #bar-reveal:hover{ opacity:1; }
+  body.bar-hidden #bar-reveal{ display:inline-flex; }
 </style>
 </head>
 <body class="paper">
@@ -156,22 +167,22 @@
 <header class="bar">
   <button id="menu-btn" aria-label="Open navigation" aria-expanded="false"><span class="ic"><span></span></span>Menu</button>
   <span class="bar-title">Exam 3 Study Notes</span>
-  <button id="kudos-btn" title="Send some kudos">👏 Kudos <span id="kudos-count">0</span></button>
+  <button id="kudos-btn" title="Send some kudos if you liked these notes!">👏 Kudos <span id="kudos-count">0</span></button>
   <span class="spacer"></span>
-  <select id="font-pick" title="Reading font" aria-label="Reading font">
-    <option value="newsreader">Font: Newsreader</option>
-    <option value="georgia">Font: Georgia</option>
-    <option value="inter">Font: Inter</option>
-    <option value="lexend">Font: Lexend</option>
-    <option value="atkinson">Font: Atkinson</option>
-  </select>
+  <span class="font-dd">
+    <button id="font-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Reading font">Font ▾</button>
+    <div id="font-menu" class="font-menu" role="menu" hidden></div>
+  </span>
   <button id="hl-toggle" aria-pressed="true" title="Toggle drag-to-highlight">Highlight: on</button>
   <button id="grad-toggle" aria-pressed="true" title="Toggle explanation color gradient">Gradient</button>
   <button id="fs-dn" title="Smaller text">A&minus;</button>
   <span class="fs" id="fs-val">100%</span>
   <button id="fs-up" title="Larger text">A&plus;</button>
   <button id="theme-toggle" title="Toggle light/dark">Dark</button>
+  <button id="full-btn" title="Toggle fullscreen">Full</button>
+  <button id="focus-btn" title="Hide the toolbar for distraction-free reading">Focus</button>
 </header>
+<button id="bar-reveal" type="button" title="Show the toolbar">▾ Show bar</button>
 
 <div id="book-dock">
   <button id="book-clear" title="Remove bookmark" aria-label="Remove bookmark">&times;</button>
@@ -1443,11 +1454,22 @@ window.smoothScrollTo=function(el){
     lexend:{serif:"'Lexend',system-ui,sans-serif", sans:"'Lexend',system-ui,sans-serif"},
     atkinson:{serif:"'Atkinson Hyperlegible',system-ui,sans-serif", sans:"'Atkinson Hyperlegible',system-ui,sans-serif"}
   };
-  var sel=document.getElementById('font-pick'); if(!sel) return;
-  function apply(k){ var f=FONTS[k]||FONTS.newsreader; var r=document.documentElement.style; r.setProperty('--font-serif',f.serif); r.setProperty('--font-sans',f.sans); try{localStorage.setItem('exam3-font',k);}catch(e){} setTimeout(function(){window.recolorAll&&window.recolorAll();},50); }
-  sel.onchange=function(){ apply(this.value); };
-  var saved='newsreader'; try{var s=localStorage.getItem('exam3-font'); if(s&&FONTS[s])saved=s;}catch(e){}
-  sel.value=saved; apply(saved);
+  var LABELS={ newsreader:'Newsreader', georgia:'Georgia', inter:'Inter', lexend:'Lexend', atkinson:'Atkinson Hyperlegible' };
+  var ORDER=['newsreader','georgia','inter','lexend','atkinson'];
+  var btn=document.getElementById('font-btn'), menu=document.getElementById('font-menu'); if(!btn||!menu) return;
+  var cur='newsreader'; try{var s=localStorage.getItem('exam3-font'); if(s&&FONTS[s])cur=s;}catch(e){}
+  function apply(k){ var f=FONTS[k]||FONTS.newsreader; var r=document.documentElement.style; r.setProperty('--font-serif',f.serif); r.setProperty('--font-sans',f.sans); cur=k; try{localStorage.setItem('exam3-font',k);}catch(e){} setTimeout(function(){window.recolorAll&&window.recolorAll();},50); }
+  function build(){ menu.innerHTML=''; ORDER.forEach(function(k){
+    var o=document.createElement('button'); o.type='button'; o.className='font-opt'; o.setAttribute('role','menuitemradio'); o.setAttribute('aria-checked', k===cur?'true':'false');
+    o.style.fontFamily=FONTS[k].serif;
+    o.innerHTML='<span class="tick">'+(k===cur?'\u2713':'')+'</span><span>'+LABELS[k]+'</span>';
+    o.onclick=function(){ apply(k); build(); close(); }; menu.appendChild(o); }); }
+  function open(){ build(); menu.hidden=false; btn.setAttribute('aria-expanded','true'); }
+  function close(){ menu.hidden=true; btn.setAttribute('aria-expanded','false'); }
+  btn.onclick=function(e){ e.stopPropagation(); if(menu.hidden) open(); else close(); };
+  document.addEventListener('click', function(e){ if(!menu.hidden && !menu.contains(e.target) && e.target!==btn) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  apply(cur);
 })();
 
 /* ---- flashcard reveal (global) ---- */
@@ -1511,6 +1533,38 @@ window.smoothScrollTo=function(el){
       getCount();
     }
   };
+})();
+
+/* ---- focus mode (hide toolbar) + fullscreen ---- */
+(function(){
+  var body=document.body;
+  var focusBtn=document.getElementById('focus-btn'), reveal=document.getElementById('bar-reveal');
+  function showBar(){ body.classList.remove('bar-hidden'); }
+  if(focusBtn) focusBtn.onclick=function(){ body.classList.add('bar-hidden'); };
+  if(reveal) reveal.onclick=showBar;
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && body.classList.contains('bar-hidden')) showBar(); });
+
+  var fsBtn=document.getElementById('full-btn');
+  if(fsBtn){
+    var de=document.documentElement;
+    var req=de.requestFullscreen||de.webkitRequestFullscreen;
+    var exit=document.exitFullscreen||document.webkitExitFullscreen;
+    function fsEl(){ return document.fullscreenElement||document.webkitFullscreenElement||null; }
+    var supported=!!req && document.fullscreenEnabled!==false;
+    if(!supported){ fsBtn.style.display='none'; }
+    else{
+      fsBtn.onclick=function(){
+        try{
+          if(!fsEl()){ var pr=req.call(de); if(pr&&pr.catch)pr.catch(function(){}); }
+          else{ var px=exit.call(document); if(px&&px.catch)px.catch(function(){}); }
+        }catch(e){}
+      };
+      var sync=function(){ var on=!!fsEl(); fsBtn.textContent=on?'Exit full':'Full'; fsBtn.setAttribute('aria-pressed',on); };
+      document.addEventListener('fullscreenchange', sync);
+      document.addEventListener('webkitfullscreenchange', sync);
+      sync();
+    }
+  }
 })();
 </script>
 </body>
