@@ -45,9 +45,9 @@
   /* block */
   article.q{ position:relative; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; margin:0 0 16px; scroll-margin-top:64px; overflow:hidden; }
   .q-head{ display:flex; gap:10px; align-items:flex-start; margin-bottom:10px; }
-  .q-num{ flex:none; font-size:11.5px; font-weight:600; color:var(--accent); border:1px solid var(--accent); border-radius:6px; padding:2px 7px; line-height:1.35; white-space:nowrap; }
+  .q-num{ flex:none; font-size:11.5px; font-weight:600; color:var(--accent); border:1px solid var(--accent); border-radius:6px; padding:2px 7px; line-height:1.35; white-space:nowrap; -webkit-user-select:none; user-select:none; }
   .q-text{ flex:1; min-width:0; font-family:var(--read); font-size:17px; line-height:1.36; }
-  .flag-btn{ flex:none; background:transparent; border:none; cursor:pointer; font-size:16px; line-height:1; padding:2px 3px; color:var(--ink-soft); opacity:.45; transition:opacity .15s, color .15s; }
+  .flag-btn{ flex:none; background:transparent; border:none; cursor:pointer; font-size:16px; line-height:1; padding:2px 3px; color:var(--ink-soft); opacity:.45; transition:opacity .15s, color .15s; -webkit-user-select:none; user-select:none; }
   .flag-btn:hover{ opacity:1; color:var(--flag); }
   .q.flagged .flag-btn{ opacity:1; color:var(--flag); }
 
@@ -66,7 +66,7 @@
 
   /* flashcards */
   .fc{ background:var(--fc-bg); border:1px solid var(--border-soft); border-left:3px solid var(--fc-accent); border-radius:8px; padding:13px 15px; margin:14px 0 4px; }
-  .fc-tag{ font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--fc-accent); }
+  .fc-tag{ font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--fc-accent); -webkit-user-select:none; user-select:none; }
   .fc-q{ font-size:.97em; margin:4px 0 10px; }
   .fc-btn{ font-size:12px; color:var(--ink); background:transparent; border:1px solid var(--border); border-radius:7px; padding:5px 11px; cursor:pointer; }
   .fc-btn:hover{ border-color:var(--fc-accent); color:var(--fc-accent); }
@@ -190,7 +190,7 @@
     <button id="font-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Reading font">Font ▾</button>
     <div id="font-menu" class="font-menu" role="menu" hidden></div>
   </span>
-  <button id="hl-toggle" aria-pressed="true" title="Toggle highlighting"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span class="hl-state">on</span></button>
+  <button id="hl-toggle" aria-pressed="false" title="Toggle highlighting"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span class="hl-state">off</span></button>
   <span class="fs-grp"><button id="fs-dn" title="Smaller text">A&minus;</button><span class="fs" id="fs-val">18px</span><button id="fs-up" title="Larger text">A&plus;</button></span>
   <button id="theme-toggle" title="Toggle theme" aria-label="Toggle light/dark mode"></button>
 </header>
@@ -216,7 +216,7 @@
   <p class="doc-sub">Modules 5 &amp; 6 · Microbial Ecology &amp; Symbiosis. Working template — questions mapped from the lesson review docs; Answer &amp; Explanation to be filled in.</p>
 
   <section class="lesson" id="m5l1" data-module="Module 5 — Microbial Ecology">
-    <h2 class="lesson-title">M5 · L1 — Introduction to Microbial Ecology</h2>
+    <h2 class="lesson-title">Module 5 · Lesson 1 — Introduction to Microbial Ecology</h2>
     <p class="lesson-meta">12 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m5l1-d1" data-topic="Ecological Terms &amp; Diversity"><div class="td-inner"><span>Ecological Terms &amp; Diversity</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l1-q1" data-lesson="m5l1">
@@ -387,7 +387,7 @@
   </section>
 
   <section class="lesson" id="m5l2" data-module="Module 5 — Microbial Ecology">
-    <h2 class="lesson-title">M5 · L2 — Nutrient Cycles</h2>
+    <h2 class="lesson-title">Module 5 · Lesson 2 — Nutrient Cycles</h2>
     <p class="lesson-meta">10 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m5l2-d5" data-topic="The Carbon Cycle"><div class="td-inner"><span>The Carbon Cycle</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l2-q1" data-lesson="m5l2">
@@ -531,7 +531,7 @@
   </section>
 
   <section class="lesson" id="m5l3" data-module="Module 5 — Microbial Ecology">
-    <h2 class="lesson-title">M5 · L3 — Microbes &amp; the Built Environment</h2>
+    <h2 class="lesson-title">Module 5 · Lesson 3 — Microbes &amp; the Built Environment</h2>
     <p class="lesson-meta">12 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m5l3-d8" data-topic="Microbial Leaching &amp; Mining"><div class="td-inner"><span>Microbial Leaching &amp; Mining</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l3-q1" data-lesson="m5l3">
@@ -702,7 +702,7 @@
   </section>
 
   <section class="lesson" id="m6l1" data-module="Module 6 — Symbiosis">
-    <h2 class="lesson-title">M6 · L1 — Introduction to Symbiosis</h2>
+    <h2 class="lesson-title">Module 6 · Lesson 1 — Introduction to Symbiosis</h2>
     <p class="lesson-meta">4 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m6l1-d12" data-topic="Types of Symbiosis"><div class="td-inner"><span>Types of Symbiosis</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l1-q1" data-lesson="m6l1">
@@ -767,7 +767,7 @@
   </section>
 
   <section class="lesson" id="m6l2" data-module="Module 6 — Symbiosis">
-    <h2 class="lesson-title">M6 · L2 — Microbe–Plant Symbiosis</h2>
+    <h2 class="lesson-title">Module 6 · Lesson 2 — Microbe–Plant Symbiosis</h2>
     <p class="lesson-meta">5 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m6l2-d14" data-topic="Rhizobia &amp; Legumes"><div class="td-inner"><span>Rhizobia &amp; Legumes</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l2-q1" data-lesson="m6l2">
@@ -846,7 +846,7 @@
   </section>
 
   <section class="lesson" id="m6l3" data-module="Module 6 — Symbiosis">
-    <h2 class="lesson-title">M6 · L3 — Microbe–Animal Symbiosis</h2>
+    <h2 class="lesson-title">Module 6 · Lesson 3 — Microbe–Animal Symbiosis</h2>
     <p class="lesson-meta">6 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m6l3-d17" data-topic="Insect Symbionts"><div class="td-inner"><span>Insect Symbionts</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l3-q1" data-lesson="m6l3">
@@ -938,7 +938,7 @@
   </section>
 
   <section class="lesson" id="m6l4" data-module="Module 6 — Symbiosis">
-    <h2 class="lesson-title">M6 · L4 — The Human Microbiome</h2>
+    <h2 class="lesson-title">Module 6 · Lesson 4 — The Human Microbiome</h2>
     <p class="lesson-meta">13 topics · filler content shown for layout testing.</p>
     <div class="topic-divider" id="m6l4-d20" data-topic="Microbiome Overview"><div class="td-inner"><span>Microbiome Overview</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l4-q1" data-lesson="m6l4">
@@ -1257,7 +1257,7 @@ window.smoothScrollTo=function(el){
       var les=document.createElement('div'); les.className='sb-les';
       var btn=document.createElement('button'); btn.className='sb-lesname';
       var car=document.createElement('span'); car.className='caret'; car.textContent='\u25BE';
-      var lname=sec.querySelector('.lesson-title').textContent;
+      var lname=sec.querySelector('.lesson-title').textContent.replace(/^Module (\d+) · Lesson (\d+) — /, 'M$1 · L$2 — ');
       var txt=document.createElement('span'); txt.textContent=lname;
       btn.appendChild(car); btn.appendChild(txt);
       var divs=document.createElement('div'); divs.className='sb-divs';
@@ -1373,7 +1373,8 @@ window.smoothScrollTo=function(el){
 
 /* ---- highlight: drag-select (mouse) + tap-a-sentence (touch); whitespace-safe, run-grouped ---- */
 (function(){
-  var KEY='exam3-highlights', ON=true, coarse=false, RUN=0;
+  var KEY='exam3-highlights', ON=false, coarse=false, RUN=0;
+  try{ON=(localStorage.getItem('exam3-hl')==='1');}catch(e){}
   try{ coarse=window.matchMedia('(pointer: coarse)').matches; }catch(e){}
   function recolor(){ window.recolorAll&&window.recolorAll(); }
   function store(){ try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};} }
@@ -1486,7 +1487,8 @@ window.smoothScrollTo=function(el){
       persist(art); setTimeout(recolor,20);
     });
   }
-  document.getElementById('hl-toggle').onclick=function(){ ON=!ON; var st=this.querySelector('.hl-state'); if(st) st.textContent=ON?'on':'off'; this.setAttribute('aria-pressed',ON); document.body.classList.toggle('hl-off',!ON); };
+  document.getElementById('hl-toggle').onclick=function(){ ON=!ON; var st=this.querySelector('.hl-state'); if(st) st.textContent=ON?'on':'off'; this.setAttribute('aria-pressed',ON); document.body.classList.toggle('hl-off',!ON); try{localStorage.setItem('exam3-hl',ON?'1':'0');}catch(e){} };
+  (function(){var _b=document.getElementById('hl-toggle');var _st=_b&&_b.querySelector('.hl-state'); if(_st)_st.textContent=ON?'on':'off'; if(_b)_b.setAttribute('aria-pressed',ON); document.body.classList.toggle('hl-off',!ON);})();
   window.addEventListener('DOMContentLoaded', applyStored);
   if(document.readyState!=='loading') applyStored();
 })();
