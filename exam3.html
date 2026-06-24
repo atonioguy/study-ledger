@@ -130,10 +130,15 @@
   }
   .bar select{ font-family:var(--font-sans); font-size:13px; color:var(--ink); background:var(--card); border:1px solid var(--border); border-radius:8px; padding:6px 8px; cursor:pointer; line-height:1.2; }
   .bar select:hover{ border-color:var(--ink-soft); }
-  #book-float{ position:fixed; right:16px; bottom:18px; z-index:55; width:46px; height:46px; border-radius:50%; background:var(--card); border:1px solid var(--border); color:var(--book); cursor:pointer; box-shadow:0 3px 12px rgba(0,0,0,.16); display:flex; align-items:center; justify-content:center; transition:background .15s,color .15s,transform .1s; }
+  #book-dock{ position:fixed; right:16px; bottom:18px; z-index:55; display:flex; align-items:center; gap:8px; }
+  #book-float{ width:46px; height:46px; border-radius:50%; background:var(--card); border:1px solid var(--border); color:var(--book); cursor:pointer; box-shadow:0 3px 12px rgba(0,0,0,.16); display:flex; align-items:center; justify-content:center; transition:background .15s,color .15s,transform .1s; }
   #book-float:hover{ border-color:var(--book); }
   #book-float:active{ transform:scale(.92); }
+  #book-dock.has-bm #book-float{ background:var(--book); color:#fff; border-color:var(--book); }
   #book-float.flash{ background:var(--book); color:#fff; border-color:var(--book); }
+  #book-clear{ display:none; width:34px; height:34px; border-radius:50%; background:var(--card); border:1px solid var(--border); color:var(--ink-soft); font-size:17px; line-height:1; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.14); align-items:center; justify-content:center; }
+  #book-dock.has-bm #book-clear{ display:flex; }
+  #book-clear:hover{ border-color:var(--bad); color:var(--bad); }
 </style>
 </head>
 <body class="paper">
@@ -151,14 +156,16 @@
   </select>
   <button id="hl-toggle" aria-pressed="true" title="Toggle drag-to-highlight">Highlight: on</button>
   <button id="grad-toggle" aria-pressed="true" title="Toggle explanation color gradient">Gradient</button>
-  <button id="book-go" title="Jump to your bookmark" style="display:none;">&#x2191; Bookmark</button>
   <button id="fs-dn" title="Smaller text">A&minus;</button>
   <span class="fs" id="fs-val">100%</span>
   <button id="fs-up" title="Larger text">A&plus;</button>
   <button id="theme-toggle" title="Toggle light/dark">Dark</button>
 </header>
 
-<button id="book-float" title="Bookmark the block you're viewing" aria-label="Set bookmark"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg></button>
+<div id="book-dock">
+  <button id="book-clear" title="Remove bookmark" aria-label="Remove bookmark">&times;</button>
+  <button id="book-float" title="Bookmark the block you're viewing" aria-label="Set bookmark"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg></button>
+</div>
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
@@ -1239,20 +1246,21 @@
   });
 })();
 
-/* ---- bookmark (one, red ribbon) — floating button targets the most-visible block ---- */
+/* ---- bookmark (one, red ribbon) — floating button: set, then becomes jump + clear ---- */
 (function(){
   var KEY='exam3-bookmark-id';
   var cur=null; try{cur=localStorage.getItem(KEY);}catch(e){}
-  var goBtn=document.getElementById('book-go');
+  var dock=document.getElementById('book-dock');
   var floatBtn=document.getElementById('book-float');
+  var clearBtn=document.getElementById('book-clear');
   function mark(id){
     document.querySelectorAll('.q.bookmarked').forEach(function(a){a.classList.remove('bookmarked');});
     var el=id&&document.getElementById(id);
-    if(el){ el.classList.add('bookmarked'); goBtn.style.display='inline-block'; }
-    else goBtn.style.display='none';
+    if(el){ el.classList.add('bookmarked'); dock.classList.add('has-bm'); floatBtn.title='Jump to your bookmark'; }
+    else { dock.classList.remove('has-bm'); floatBtn.title="Bookmark the block you're viewing"; cur=null; }
   }
   mark(cur);
-  floatBtn.onclick=function(){
+  function setBookmark(){
     var vh=window.innerHeight||document.documentElement.clientHeight;
     var arts=Array.prototype.slice.call(document.querySelectorAll('article.q')).filter(function(a){return a.offsetParent!==null;});
     var best=null,bestVis=-1,bestTop=1e9;
@@ -1261,8 +1269,12 @@
       if(vis>bestVis+0.5 || (Math.abs(vis-bestVis)<=0.5 && r.top<bestTop)){ bestVis=vis; best=a; bestTop=r.top; } });
     if(best && bestVis>0){ cur=best.id; try{localStorage.setItem(KEY,cur);}catch(e){} mark(cur);
       floatBtn.classList.add('flash'); setTimeout(function(){floatBtn.classList.remove('flash');},550); }
+  }
+  floatBtn.onclick=function(){
+    if(dock.classList.contains('has-bm')){ var el=cur&&document.getElementById(cur); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+    else setBookmark();
   };
-  goBtn.onclick=function(){ var el=cur&&document.getElementById(cur); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); };
+  clearBtn.onclick=function(){ try{localStorage.removeItem(KEY);}catch(e){} mark(null); };
 })();
 
 /* ---- highlight (drag-to-select, experimental, per-browser) ---- */
