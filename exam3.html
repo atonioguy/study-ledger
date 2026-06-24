@@ -157,9 +157,8 @@
   .font-opt .tick{ width:13px; flex:0 0 13px; color:var(--accent); font-size:12px; }
   .font-opt[aria-checked="true"]{ font-weight:600; }
   body.bar-hidden header.bar{ display:none; }
-  #bar-reveal{ position:fixed; top:10px; right:12px; z-index:90; display:none; align-items:center; gap:5px; font-family:var(--font-sans); font-size:12.5px; color:var(--ink-soft); background:var(--card); border:1px solid var(--border); border-radius:20px; padding:6px 12px; cursor:pointer; opacity:.55; box-shadow:0 3px 12px rgba(0,0,0,.14); transition:opacity .15s; }
-  #bar-reveal:hover{ opacity:1; }
-  body.bar-hidden #bar-reveal{ display:inline-flex; }
+  #bar-tab{ position:fixed; top:0; right:18px; z-index:90; display:inline-flex; align-items:center; justify-content:center; width:36px; height:19px; padding:0; font-size:12px; line-height:1; color:var(--ink-soft); background:var(--card); border:1px solid var(--border); border-top:none; border-radius:0 0 9px 9px; cursor:pointer; box-shadow:0 5px 11px rgba(0,0,0,.10); opacity:.85; transition:opacity .15s, color .15s, top .18s ease; }
+  #bar-tab:hover{ opacity:1; color:var(--ink); }
 </style>
 </head>
 <body class="paper">
@@ -179,10 +178,8 @@
   <span class="fs" id="fs-val">100%</span>
   <button id="fs-up" title="Larger text">A&plus;</button>
   <button id="theme-toggle" title="Toggle light/dark">Dark</button>
-  <button id="full-btn" title="Toggle fullscreen">Full</button>
-  <button id="focus-btn" title="Hide the toolbar for distraction-free reading">Focus</button>
 </header>
-<button id="bar-reveal" type="button" title="Show the toolbar">▾ Show bar</button>
+<button id="bar-tab" type="button" title="Hide the toolbar" aria-label="Toggle toolbar" aria-expanded="true">▴</button>
 
 <div id="book-dock">
   <button id="book-clear" title="Remove bookmark" aria-label="Remove bookmark">&times;</button>
@@ -1535,36 +1532,18 @@ window.smoothScrollTo=function(el){
   };
 })();
 
-/* ---- focus mode (hide toolbar) + fullscreen ---- */
+/* ---- collapsible toolbar (pull-tab) ---- */
 (function(){
-  var body=document.body;
-  var focusBtn=document.getElementById('focus-btn'), reveal=document.getElementById('bar-reveal');
-  function showBar(){ body.classList.remove('bar-hidden'); }
-  if(focusBtn) focusBtn.onclick=function(){ body.classList.add('bar-hidden'); };
-  if(reveal) reveal.onclick=showBar;
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && body.classList.contains('bar-hidden')) showBar(); });
-
-  var fsBtn=document.getElementById('full-btn');
-  if(fsBtn){
-    var de=document.documentElement;
-    var req=de.requestFullscreen||de.webkitRequestFullscreen;
-    var exit=document.exitFullscreen||document.webkitExitFullscreen;
-    function fsEl(){ return document.fullscreenElement||document.webkitFullscreenElement||null; }
-    var supported=!!req && document.fullscreenEnabled!==false;
-    if(!supported){ fsBtn.style.display='none'; }
-    else{
-      fsBtn.onclick=function(){
-        try{
-          if(!fsEl()){ var pr=req.call(de); if(pr&&pr.catch)pr.catch(function(){}); }
-          else{ var px=exit.call(document); if(px&&px.catch)px.catch(function(){}); }
-        }catch(e){}
-      };
-      var sync=function(){ var on=!!fsEl(); fsBtn.textContent=on?'Exit full':'Full'; fsBtn.setAttribute('aria-pressed',on); };
-      document.addEventListener('fullscreenchange', sync);
-      document.addEventListener('webkitfullscreenchange', sync);
-      sync();
-    }
-  }
+  var body=document.body, header=document.querySelector('header.bar'), tab=document.getElementById('bar-tab');
+  if(!tab||!header) return;
+  function place(){ tab.style.top = body.classList.contains('bar-hidden') ? '0px' : Math.max(0,(header.offsetHeight-1))+'px'; }
+  function expand(){ body.classList.remove('bar-hidden'); tab.textContent='\u25B4'; tab.title='Hide the toolbar'; tab.setAttribute('aria-expanded','true'); place(); }
+  function collapse(){ body.classList.add('bar-hidden'); tab.textContent='\u25BE'; tab.title='Show the toolbar'; tab.setAttribute('aria-expanded','false'); place(); }
+  tab.onclick=function(){ if(body.classList.contains('bar-hidden')) expand(); else collapse(); };
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && body.classList.contains('bar-hidden')) expand(); });
+  window.addEventListener('resize', place);
+  window.addEventListener('load', place);
+  place();
 })();
 </script>
 </body>
