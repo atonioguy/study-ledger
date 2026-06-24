@@ -1084,11 +1084,11 @@
   var body=document.body;
   document.getElementById('theme-toggle').onclick=function(){
     var dark=body.classList.toggle('dark'); body.classList.toggle('paper',!dark);
-    this.textContent=dark?'Light':'Dark'; setTimeout(recolorAll,20);
+    this.textContent=dark?'Light':'Dark'; setTimeout(function(){window.recolorAll&&window.recolorAll();},20);
   };
   var sizes=[85,92,100,110,122,135], si=2;
   var mainEl=document.querySelector('main');
-  function applyFs(){ mainEl.style.zoom=(sizes[si]/100); document.getElementById('fs-val').textContent=sizes[si]+'%'; try{localStorage.setItem('exam3-fs',si);}catch(e){} setTimeout(recolorAll,40); }
+  function applyFs(){ mainEl.style.zoom=(sizes[si]/100); document.getElementById('fs-val').textContent=sizes[si]+'%'; try{localStorage.setItem('exam3-fs',si);}catch(e){} setTimeout(function(){window.recolorAll&&window.recolorAll();},40); }
   document.getElementById('fs-up').onclick=function(){ if(si<sizes.length-1){si++;applyFs();} };
   document.getElementById('fs-dn').onclick=function(){ if(si>0){si--;applyFs();} };
   try{var _fs=localStorage.getItem('exam3-fs'); if(_fs!==null){si=Math.max(0,Math.min(sizes.length-1,parseInt(_fs,10)||0));}}catch(e){}
@@ -1132,9 +1132,9 @@
     });
   };
   document.getElementById('grad-toggle').onclick=function(){ GRAD=!GRAD; this.setAttribute('aria-pressed',GRAD); recolorAll(); };
-  var rt; window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(recolorAll,140);});
-  window.addEventListener('load',function(){setTimeout(recolorAll,80);});
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){setTimeout(recolorAll,40);});
+  var rt; window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){window.recolorAll&&window.recolorAll();},140);});
+  window.addEventListener('load',function(){setTimeout(function(){window.recolorAll&&window.recolorAll();},80);});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){setTimeout(function(){window.recolorAll&&window.recolorAll();},40);});
 })();
 
 /* ---- sidebar build + drawer + flagged-only ---- */
@@ -1215,7 +1215,7 @@
       var title=sec.querySelector('.lesson-title'), meta=sec.querySelector('.lesson-meta');
       sec.style.display=(on&&!anyFlag)?'none':'';
     });
-    setTimeout(recolorAll,30);
+    setTimeout(function(){window.recolorAll&&window.recolorAll();},30);
   };
 })();
 
@@ -1310,7 +1310,7 @@
     /* avoid wrapping if selection is inside header/sidebar etc (already filtered by artOf) */
     var m=document.createElement('mark'); m.className='hl';
     try{ r.surroundContents(m); }catch(e){ try{ var frag=r.extractContents(); m.appendChild(frag); r.insertNode(m); }catch(e2){ return; } }
-    sel.removeAllRanges(); guard=Date.now(); persist(a1); setTimeout(recolorAll,20);
+    sel.removeAllRanges(); guard=Date.now(); persist(a1); setTimeout(function(){window.recolorAll&&window.recolorAll();},20);
   });
   document.addEventListener('click', function(e){
     var m=e.target; while(m&&m!==document){ if(m.nodeType===1&&m.classList&&m.classList.contains('hl'))break; m=m.parentNode; }
@@ -1318,7 +1318,7 @@
     if(Date.now()-guard<350) return; /* don't instantly remove a fresh highlight */
     var art=artOf(m); var p=m.parentNode;
     while(m.firstChild) p.insertBefore(m.firstChild,m); p.removeChild(m); p.normalize();
-    if(art) persist(art); setTimeout(recolorAll,20);
+    if(art) persist(art); setTimeout(function(){window.recolorAll&&window.recolorAll();},20);
   });
   document.getElementById('hl-toggle').onclick=function(){ ON=!ON; this.textContent='Highlight: '+(ON?'on':'off'); this.setAttribute('aria-pressed',ON); document.body.classList.toggle('hl-off',!ON); };
   window.addEventListener('DOMContentLoaded', applyStored);
@@ -1335,7 +1335,7 @@
     atkinson:{serif:"'Atkinson Hyperlegible',system-ui,sans-serif", sans:"'Atkinson Hyperlegible',system-ui,sans-serif"}
   };
   var sel=document.getElementById('font-pick'); if(!sel) return;
-  function apply(k){ var f=FONTS[k]||FONTS.newsreader; var r=document.documentElement.style; r.setProperty('--font-serif',f.serif); r.setProperty('--font-sans',f.sans); try{localStorage.setItem('exam3-font',k);}catch(e){} setTimeout(recolorAll,50); }
+  function apply(k){ var f=FONTS[k]||FONTS.newsreader; var r=document.documentElement.style; r.setProperty('--font-serif',f.serif); r.setProperty('--font-sans',f.sans); try{localStorage.setItem('exam3-font',k);}catch(e){} setTimeout(function(){window.recolorAll&&window.recolorAll();},50); }
   sel.onchange=function(){ apply(this.value); };
   var saved='newsreader'; try{var s=localStorage.getItem('exam3-font'); if(s&&FONTS[s])saved=s;}catch(e){}
   sel.value=saved; apply(saved);
