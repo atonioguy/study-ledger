@@ -1,4 +1,4 @@
-<!-- build log: v2.7 live · next: fill M6 (Symbiosis) blocks with real content + build M6 reinforcement quizzes -->
+<!-- build log: v2.8 live · next: fill M6 (Symbiosis) blocks with real content + build M6 reinforcement quizzes -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,6 +25,7 @@
   .bar button[aria-pressed="true"]{ border-color:var(--accent); color:var(--accent); }
   .bar .fs{ min-width:32px; text-align:center; cursor:default; border:none; background:transparent; padding:0; }
   .bar .spacer{ flex:1; }
+  .bar-right{ margin-left:auto; display:flex; flex-wrap:wrap; align-items:center; gap:8px; justify-content:flex-end; }
   #menu-btn{ font-weight:600; display:flex; align-items:center; gap:7px; }
   #menu-btn .ic{ display:inline-block; width:15px; height:11px; position:relative; }
   #menu-btn .ic::before, #menu-btn .ic::after, #menu-btn .ic span{ content:""; position:absolute; left:0; right:0; height:2px; background:currentColor; border-radius:2px; }
@@ -98,15 +99,20 @@
   .fc-print{ display:none; }
   .fc-deck-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:2px; }
   .fc-count{ font-size:10px; font-weight:600; letter-spacing:.08em; color:var(--ink-soft); -webkit-user-select:none; user-select:none; white-space:nowrap; }
+  .fc-head-right{ display:inline-flex; align-items:center; gap:8px; }
+  .fcd-shuffle{ display:inline-flex; align-items:center; justify-content:center; width:24px; height:22px; padding:0; color:var(--ink-soft); background:transparent; border:1px solid var(--border); border-radius:6px; cursor:pointer; }
+  .fcd-shuffle:hover{ border-color:var(--fc-accent); color:var(--fc-accent); }
+  .fcd-shuffle svg{ display:block; }
   .fcd-card{ cursor:pointer; }
-  .fcd-q{ font-size:.97em; margin:4px 0 10px; }
+  .fcd-q{ font-size:.97em; margin:4px 0 8px; }
+  .fcd-reveal-row{ display:flex; justify-content:flex-end; margin:0 0 2px; }
   .fcd-a{ margin-top:10px; font-size:.97em; border-top:1px dashed var(--border); padding-top:10px; }
   .fcd-reveal{ font-size:12px; color:var(--ink); background:transparent; border:1px solid var(--border); border-radius:7px; padding:5px 11px; cursor:pointer; }
   .fcd-reveal:hover{ border-color:var(--fc-accent); color:var(--fc-accent); }
-  .fcd-controls{ display:flex; align-items:center; gap:7px; margin-top:12px; }
-  .fcd-nav{ font-size:12px; color:var(--ink-soft); background:transparent; border:1px solid var(--border); border-radius:7px; padding:4px 10px; cursor:pointer; line-height:1.3; }
+  .fcd-controls{ display:flex; align-items:center; justify-content:flex-end; gap:7px; margin-top:12px; }
+  .fcd-nav{ display:inline-flex; align-items:center; justify-content:center; min-width:38px; height:30px; padding:0 8px; color:var(--ink-soft); background:transparent; border:1px solid var(--border); border-radius:7px; cursor:pointer; }
   .fcd-nav:hover{ border-color:var(--fc-accent); color:var(--fc-accent); }
-  .fcd-spacer{ flex:1; }
+  .fcd-nav svg{ display:block; }
   .fc-print ol{ margin:6px 0 0; padding-left:20px; }
   .fc-print li{ margin:0 0 8px; }
   .fc-print .pq{ font-weight:600; }
@@ -229,12 +235,16 @@
   #study-tab .st-brain{ font-size:12px; line-height:1; }
   #study-tab svg{ display:block; }
   body.bar-hidden #study-tab{ display:none; }
+  #menu-tab{ position:fixed; top:10px; left:14px; z-index:90; display:none; align-items:center; justify-content:center; padding:6px 10px; color:var(--ink); background:transparent; border:1px solid transparent; cursor:pointer; opacity:.4; transition:opacity .15s; }
+  #menu-tab:hover{ opacity:.9; }
+  #menu-tab svg{ display:block; }
+  body.bar-hidden #menu-tab{ display:inline-flex; }
   #progress{ position:fixed; top:0; left:0; right:0; height:3px; z-index:200; background:transparent; pointer-events:none; }
   #progress-fill{ height:100%; width:0; background:var(--accent); transition:width .08s linear; }
   .recall-hint{ display:none; width:100%; text-align:left; font-family:var(--read); font-size:.92em; color:var(--accent); background:var(--border-soft); border:1px dashed var(--border); border-radius:8px; padding:10px 12px; margin:10px 0 0; cursor:pointer; }
   .recall-hint:hover{ border-color:var(--accent); }
   body.recall-active article.q .answer, body.recall-active article.q .explain{ display:none; }
-  body.recall-active article.q:not(.revealed) .recall-hint{ display:block; }
+  body.recall-active article.q .recall-hint{ display:block; }
   body.recall-active article.q.revealed .answer, body.recall-active article.q.revealed .explain{ display:block; }
   .conf{ display:flex; margin:14px -18px -16px; border-top:1px solid var(--border); -webkit-user-select:none; user-select:none; }
   .conf button{ flex:1; font-family:var(--font-sans); font-size:10.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); background:transparent; border:none; border-right:1px solid var(--border); padding:7px 4px; cursor:pointer; transition:background .12s, color .12s; }
@@ -293,7 +303,7 @@
   <button id="menu-btn" aria-label="Open navigation" aria-expanded="false"><span class="ic"><span></span></span>Menu</button>
   <span class="bar-title">Exam 3 Review</span>
   <button id="kudos-btn" title="Send some kudos if you liked these notes!">👏 Kudos <span id="kudos-count">0</span></button>
-  <span class="spacer"></span>
+  <span class="bar-right">
   <span class="grad-dd">
     <button id="grad-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Explanation gradient style">Gradient ▾</button>
     <div id="grad-menu" class="font-menu" role="menu" hidden></div>
@@ -305,17 +315,21 @@
   <button id="hl-toggle" aria-pressed="false" title="Toggle highlighting"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span class="hl-state">off</span></button>
   <span class="fs-grp"><button id="fs-dn" title="Smaller text">A&minus;</button><span class="fs" id="fs-val">18px</span><button id="fs-up" title="Larger text">A&plus;</button></span>
   <button id="theme-toggle" title="Toggle theme" aria-label="Toggle light/dark mode"></button>
+  </span>
 </header>
 <div class="bar" id="study-bar">
+  <span class="bar-right">
   <button id="recall-btn" type="button" aria-pressed="false" title="Recall: hide answers for self-testing"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg><span>Recall</span></button>
   <button id="quick-btn" type="button" aria-pressed="false" title="Quick: hide explanations &amp; flashcards, keep the answer"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Quick</span></button>
   <button id="collapse-all" type="button" title="Collapse all lessons">Collapse all</button>
   <button id="expand-all" type="button" title="Expand all lessons">Expand all</button>
   <span class="font-dd reset-dd"><button id="reset-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Reset saved data">Reset &#9662;</button><div id="reset-menu" class="font-menu" role="menu" hidden></div></span>
+  </span>
 </div>
 </div>
 <button id="bar-tab" type="button" title="Hide the toolbar" aria-label="Toggle toolbar" aria-expanded="true"><svg viewBox="0 0 20 12" width="18" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8.5 10 3.5 17 8.5"/></svg></button>
 <button id="study-tab" type="button" aria-label="Toggle study tools" aria-expanded="true"></button>
+<button id="menu-tab" type="button" aria-label="Open navigation" title="Open menu"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
 
 <div id="book-dock">
   <button id="book-clear" title="Remove bookmark" aria-label="Remove bookmark">&times;</button>
@@ -324,7 +338,7 @@
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
-  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.7</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.8</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
   <div class="sb-focus">
     <div class="sb-focus-label">Focus</div>
     <div class="sb-focus-row">
@@ -1413,6 +1427,7 @@ window.smoothScrollTo=function(el){
   function open(){ sb.classList.add('open'); ov.classList.add('show'); document.getElementById('menu-btn').setAttribute('aria-expanded','true'); }
   function close(){ sb.classList.remove('open'); ov.classList.remove('show'); document.getElementById('menu-btn').setAttribute('aria-expanded','false'); }
   document.getElementById('menu-btn').onclick=function(){ if(sb.classList.contains('open')) close(); else open(); };
+  var menuTab=document.getElementById('menu-tab'); if(menuTab) menuTab.onclick=open;
   document.getElementById('sb-close').onclick=close;
   ov.onclick=close;
   document.addEventListener('keydown',function(e){ if(e.key==='Escape')close(); });
@@ -1901,13 +1916,13 @@ window.smoothScrollTo=function(el){
   arts.forEach(function(art){
     var head=art.querySelector('.q-head'); if(!head)return;
     var hint=document.createElement('button'); hint.type='button'; hint.className='recall-hint'; hint.textContent='Reveal answer';
-    hint.onclick=function(e){ e.stopPropagation(); art.classList.add('revealed'); setTimeout(function(){window.recolorAll&&window.recolorAll();},20); };
+    hint.onclick=function(e){ e.stopPropagation(); var rev=art.classList.toggle('revealed'); hint.textContent=rev?'Hide answer':'Reveal answer'; setTimeout(function(){window.recolorAll&&window.recolorAll();},20); };
     head.parentNode.insertBefore(hint, head.nextSibling);
   });
   var recallBtn=document.getElementById('recall-btn');
   function setRecall(on,persist){
     body.classList.toggle('recall-active',on);
-    if(!on) arts.forEach(function(a){a.classList.remove('revealed');});
+    if(!on) arts.forEach(function(a){a.classList.remove('revealed'); var h=a.querySelector('.recall-hint'); if(h)h.textContent='Reveal answer';});
     if(recallBtn) recallBtn.setAttribute('aria-pressed',on);
     if(persist){ try{localStorage.setItem(RKEY,on?'1':'0');}catch(e){} }
     setTimeout(function(){window.recolorAll&&window.recolorAll();},30);
@@ -2288,28 +2303,40 @@ window.smoothScrollTo=function(el){
   function buildDeck(host, cards){
     var n = cards.length, multi = n>1;
     var live = document.createElement('div'); live.className='fc-deck-live';
+
+    /* head: tag (left) | counter + shuffle icon (right) */
     var head = document.createElement('div'); head.className='fc-deck-head';
     var tag = document.createElement('span'); tag.className='fc-tag'; tag.textContent = multi ? 'Flashcards' : 'Flashcard';
     head.appendChild(tag);
-    var count = null;
-    if(multi){ count = document.createElement('span'); count.className='fc-count'; head.appendChild(count); }
+    var count = null, shuf = null;
+    if(multi){
+      var hr = document.createElement('span'); hr.className='fc-head-right';
+      count = document.createElement('span'); count.className='fc-count';
+      shuf = document.createElement('button'); shuf.type='button'; shuf.className='fcd-shuffle'; shuf.title='Shuffle'; shuf.setAttribute('aria-label','Shuffle cards');
+      shuf.innerHTML='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>';
+      hr.appendChild(count); hr.appendChild(shuf); head.appendChild(hr);
+    }
     live.appendChild(head);
 
+    /* card: question, right-aligned Reveal, then answer */
     var card = document.createElement('div'); card.className='fcd-card';
     var q = document.createElement('div'); q.className='fcd-q';
+    var revRow = document.createElement('div'); revRow.className='fcd-reveal-row';
     var btn = document.createElement('button'); btn.type='button'; btn.className='fcd-reveal'; btn.textContent='Reveal';
+    revRow.appendChild(btn);
     var a = document.createElement('div'); a.className='fcd-a'; a.hidden=true;
-    card.appendChild(q); card.appendChild(btn); card.appendChild(a);
+    card.appendChild(q); card.appendChild(revRow); card.appendChild(a);
     live.appendChild(card);
 
-    var prev, next, shuf;
+    /* nav: arrows only, bottom-right */
+    var prev, next;
     if(multi){
       var ctr = document.createElement('div'); ctr.className='fcd-controls';
-      prev = document.createElement('button'); prev.type='button'; prev.className='fcd-nav'; prev.innerHTML='&lsaquo; Prev';
-      shuf = document.createElement('button'); shuf.type='button'; shuf.className='fcd-nav'; shuf.textContent='Shuffle';
-      var sp = document.createElement('span'); sp.className='fcd-spacer';
-      next = document.createElement('button'); next.type='button'; next.className='fcd-nav'; next.innerHTML='Next &rsaquo;';
-      ctr.appendChild(prev); ctr.appendChild(shuf); ctr.appendChild(sp); ctr.appendChild(next);
+      prev = document.createElement('button'); prev.type='button'; prev.className='fcd-nav'; prev.title='Previous'; prev.setAttribute('aria-label','Previous card');
+      prev.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>';
+      next = document.createElement('button'); next.type='button'; next.className='fcd-nav'; next.title='Next'; next.setAttribute('aria-label','Next card');
+      next.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>';
+      ctr.appendChild(prev); ctr.appendChild(next);
       live.appendChild(ctr);
     }
 
