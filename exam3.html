@@ -98,12 +98,13 @@
   .q.flagged::after{ content:""; position:absolute; top:0; right:0; width:30px; height:30px; background:var(--flag); -webkit-clip-path:polygon(100% 0,100% 100%,0 0); clip-path:polygon(100% 0,100% 100%,0 0); }
 
   /* SIDEBAR drawer */
-  #overlay{ position:fixed; inset:0; background:rgba(0,0,0,.38); opacity:0; visibility:hidden; transition:opacity .2s; z-index:70; }
+  #overlay{ position:fixed; inset:0; background:rgba(0,0,0,.38); opacity:0; visibility:hidden; transition:opacity .2s; z-index:210; }
   #overlay.show{ opacity:1; visibility:visible; }
-  #sidebar{ position:fixed; top:0; left:0; height:100%; width:var(--sidebar-w); max-width:86vw; background:var(--card); border-right:1px solid var(--border); transform:translateX(-103%); transition:transform .24s ease; z-index:80; display:flex; flex-direction:column; box-shadow:2px 0 18px rgba(0,0,0,.12); }
+  #sidebar{ position:fixed; top:0; left:0; height:100%; width:var(--sidebar-w); max-width:86vw; background:var(--card); border-right:1px solid var(--border); transform:translateX(-103%); transition:transform .24s ease; z-index:220; display:flex; flex-direction:column; box-shadow:2px 0 18px rgba(0,0,0,.12); }
   #sidebar.open{ transform:translateX(0); }
   .sb-top{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border); }
   .sb-top h2{ font-family:var(--font-serif); font-size:16px; font-weight:600; margin:0; }
+  .sb-ver{ font-family:var(--font-sans); font-size:9.5px; font-weight:500; letter-spacing:.04em; color:var(--ink-soft); opacity:.6; margin-left:8px; vertical-align:middle; white-space:nowrap; }
   .sb-close{ background:transparent; border:none; color:var(--ink-soft); font-size:20px; line-height:1; cursor:pointer; padding:2px 6px; }
   .sb-focus{ padding:11px 16px 12px; border-bottom:1px solid var(--border); }
   .sb-focus-label{ font-size:10.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 8px 2px; }
@@ -241,6 +242,7 @@
 </script>
 </head>
 <body class="paper">
+<script>(function(){try{if(localStorage.getItem('exam3-theme')==='dark'){document.body.classList.remove('paper');document.body.classList.add('dark');}}catch(e){}})();</script>
 
 <div id="progress"><div id="progress-fill"></div></div>
 <div id="tbstack">
@@ -278,7 +280,7 @@
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
-  <div class="sb-top"><h2>Contents</h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build tag — check this to confirm your push went live">build · jun 24 · m5l2</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
   <div class="sb-focus">
     <div class="sb-focus-label">Focus</div>
     <div class="sb-focus-row">
@@ -498,138 +500,145 @@
 
   <section class="lesson" id="m5l2" data-module="Module 5 — Microbial Ecology">
     <h2 class="lesson-title">Module 5 · Lesson 2 — Nutrient Cycles</h2>
-    <p class="lesson-meta">10 topics · filler content shown for layout testing.</p>
+    <p class="lesson-meta">Built from the M5L2 review doc + lecture deck · 8 of Exam 3’s questions come from this lesson.</p>
     <div class="topic-divider" id="m5l2-d5" data-topic="The Carbon Cycle"><div class="td-inner"><span>The Carbon Cycle</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l2-q1" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q1</span><span class="q-text">What is the largest carbon reservoir?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p>The <span class="mem">largest carbon reservoir = sediments and rocks in Earth’s crust</span>.</p>
+        <p>Carbon cycles through the atmosphere, land, oceans, freshwater, sediments, rocks, and biomass. The <span class="concept">atmosphere is the most rapidly transferred reservoir</span> (CO<sub>2</sub> pulled out by land plants and marine microbes via photosynthesis). Note: more carbon is held in <span class="concept">humus than in living organisms</span>.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The trap is &ldquo;largest&rdquo; vs. &ldquo;fastest-cycling.&rdquo; Largest reservoir = sediments and rocks; the most rapidly transferred reservoir = the atmosphere. If the stem asks for the biggest store of carbon, do not pick the atmosphere or the oceans — those are active exchange pools, not the largest sink.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Largest carbon reservoir vs. most rapidly transferred?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Largest = sediments and rocks in the crust. Most rapidly transferred = the atmosphere.</div>
       </div>
     </article>
     <article class="q" id="m5l2-q2" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q2</span><span class="q-text">What have humans done to disrupt the carbon cycle, and what parts of the cycle create harmful gases?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p><strong>Human disruption:</strong> since the Industrial Revolution, atmospheric carbon has risen ~<span class="mem">40%</span>, driving steady global temperature increases. CO<sub>2</sub> traps long-wave heat — <span class="mem">radiative forcing</span>. Knock-on effects: larger ocean <span class="concept">oxygen minimum zones</span>, and dissolved CO<sub>2</sub> lowering ocean pH (<span class="concept">acidification</span>), which endangers coral reefs — they <span class="concept">release calcium carbonate as they die</span>.</p>
+        <p><strong>Harmful gases:</strong> the largest natural source of CO<sub>2</sub> release is <span class="mem">microbial decomposition</span>, which generates <span class="mem">CO<sub>2</sub> and CH<sub>4</sub></span> (both greenhouse gases), especially in <span class="concept">anoxic environments</span>. (Respiration oxidizes carbs &rarr; CO<sub>2</sub>; photosynthesis fixes CO<sub>2</sub> &rarr; carbs.)</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Two testable hooks here. First, the vocabulary term <em>radiative forcing</em> for CO<sub>2</sub> trapping long-wave heat, plus the acidification chain (CO<sub>2</sub> &rarr; lower pH &rarr; reefs die &rarr; calcium carbonate released). Second, which step makes the greenhouse gases: <em>decomposition</em> produces both CO<sub>2</sub> and CH<sub>4</sub>, and it is also the single largest CO<sub>2</sub> source. Photosynthesis is the counterweight, not a gas producer.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">What human change disrupted the carbon cycle, and which process makes the greenhouse gases?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>~40% rise in atmospheric carbon since the Industrial Revolution (radiative forcing + ocean acidification). Microbial decomposition makes CO<sub>2</sub> and CH<sub>4</sub>, especially in anoxic environments.</div>
       </div>
     </article>
     <article class="q" id="m5l2-q3" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q3</span><span class="q-text">What is the largest methane reservoir?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p>The largest methane reservoir = <span class="mem">methane hydrates</span>, formed where there is <span class="concept">high methane + high pressure + low temperature</span>. Huge amounts are trapped beneath <span class="mem">Arctic permafrost</span> and in <span class="mem">marine sediments</span>; they absorb and release methane and fuel deep-sea <span class="concept">cold-seep</span> ecosystems.</p>
+        <p>Methane itself is made by <span class="mem">methanogens</span>, which use <span class="concept">CO<sub>2</sub> as a terminal electron acceptor</span> to form CH<sub>4</sub> (often in syntrophic partnerships — e.g., protists with endosymbionts in termite guts).</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The reservoir answer is <em>methane hydrates</em>, and the three conditions (high methane, high pressure, low temperature) are the likely fill-in. The reason this matters ecologically — a warming-Arctic risk — is that thawing permafrost can release that trapped methane. Keep methanogens (the producers, using CO<sub>2</sub> as an electron acceptor) distinct from hydrates (the storage form).</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Largest methane reservoir and the conditions that form it?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Methane hydrates — high methane + high pressure + low temperature — beneath Arctic permafrost and in marine sediments.</div>
       </div>
     </article>
     <div class="topic-divider" id="m5l2-d6" data-topic="Nitrogen &amp; Sulfur Cycles"><div class="td-inner"><span>Nitrogen &amp; Sulfur Cycles</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l2-q4" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q4</span><span class="q-text">What process results in a loss of organic nitrogen in the biosphere, and what impact does overuse of nitrogenous fertilizer have (what is being generated)?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p><strong>Loss of organic nitrogen</strong> from the biosphere comes from <span class="mem">denitrification and anammox</span> combined — both end in <span class="concept">N<sub>2</sub> gas</span>, returning fixed nitrogen to the atmosphere.</p>
+        <ul>
+          <li><span class="mem">Denitrification:</span> NO<sub>3</sub><sup>-</sup> &rarr; NO<sub>2</sub><sup>-</sup> &rarr; NO &rarr; N<sub>2</sub>O &rarr; N<sub>2</sub>.</li>
+          <li><span class="mem">Anammox:</span> NH<sub>4</sub><sup>+</sup> + NO<sub>2</sub><sup>-</sup> &rarr; N<sub>2</sub> + H<sub>2</sub>O (anaerobic ammonia oxidation).</li>
+        </ul>
+        <p><strong>Fertilizer overuse:</strong> humans produce huge amounts of <span class="mem">nitrogenous fertilizer</span>, which perturbs the nitrogen cycle and is known to shift the <span class="concept">iron and carbon cycles</span> (broader effects largely unknown). Excess fixed nitrogen feeds denitrification, generating <span class="mem">N<sub>2</sub>O (nitrous oxide, a greenhouse gas)</span> along with N<sub>2</sub>.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>&ldquo;Two combined&rdquo; is the phrasing to recognize — denitrification + anammox, both producing N<sub>2</sub>. For the fertilizer part, the chain is: more fixed nitrogen &rarr; more denitrification &rarr; more N<sub>2</sub>O released. <em>[Flag: the deck is thin here — it states fertilizer overuse changes the iron and carbon cycles and that effects are largely unknown; the specific &ldquo;generates N<sub>2</sub>O&rdquo; link is the standard denitrification mechanism, worth confirming against the lecture video.]</em></div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Which two processes lose organic N, and what does fertilizer overuse generate?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Denitrification + anammox (both &rarr; N<sub>2</sub>). Fertilizer overuse drives denitrification, generating N<sub>2</sub>O (a greenhouse gas).</div>
       </div>
     </article>
     <article class="q" id="m5l2-q5" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q5</span><span class="q-text">What is biologically available nitrogen, and how is it produced?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p><span class="mem">Biologically available nitrogen</span> = the fixed form cells can actually use, namely <span class="mem">ammonia (NH<sub>3</sub>)</span>. Atmospheric <span class="concept">N<sub>2</sub> is ~70% of air and the most stable form</span>, but it is unusable by most organisms.</p>
+        <p>It is produced by <span class="mem">nitrogen fixation</span>: <span class="concept">N<sub>2</sub> &rarr; NH<sub>3</sub></span>, carried out by a few prokaryotes that convert inert N<sub>2</sub> into usable ammonia.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The contrast is reservoir vs. usable: N<sub>2</sub> is everywhere but inert; fixation turns it into NH<sub>3</sub>, the biologically available form. Do not confuse fixation with nitrification (NH<sub>3</sub> &rarr; NO<sub>2</sub><sup>-</sup> &rarr; NO<sub>3</sub><sup>-</sup>) or with denitrification (the loss pathway). The directional arrow N<sub>2</sub> &rarr; NH<sub>3</sub> is the thing to have memorized.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">What is biologically available nitrogen, and how is it produced?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Ammonia (NH<sub>3</sub>), produced by nitrogen fixation (N<sub>2</sub> &rarr; NH<sub>3</sub>) by a few prokaryotes.</div>
       </div>
     </article>
     <article class="q" id="m5l2-q6" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q6</span><span class="q-text">What is a typical entry point of the sulfur cycle, what organisms oxidize sulfur, and what form of sulfur do they oxidize?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p><strong>Entry point:</strong> <span class="mem">SO<sub>2</sub> gas from fossil-fuel combustion</span> (plus H<sub>2</sub>S from sulfate reduction and geochemical sources). The bulk of sulfur sits in sediments/rocks as sulfate and sulfide minerals; the <span class="concept">most significant reservoir is the oceans</span> (as SO<sub>4</sub><sup>2-</sup>).</p>
+        <p><strong>Who oxidizes it:</strong> <span class="mem">sulfur-oxidizing chemolithotrophs</span>, working at <span class="concept">oxic/anoxic interfaces</span>.</p>
+        <p><strong>What form:</strong> they oxidize reduced sulfur — <span class="mem">sulfide (H<sub>2</sub>S) and elemental sulfur (S<sup>0</sup>)</span> — up to <span class="mem">sulfate (SO<sub>4</sub><sup>2-</sup>)</span>: H<sub>2</sub>S &rarr; S<sup>0</sup> &rarr; SO<sub>4</sub><sup>2-</sup>. (Aside: H<sub>2</sub>S is the major volatile sulfur gas, detoxified by iron into FeS/FeS<sub>2</sub>; DMS is the most abundant organic sulfur compound.)</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Three-part question, three crisp answers: entry = SO<sub>2</sub> from fossil fuels; oxidizers = chemolithotrophs; form = reduced sulfur (H<sub>2</sub>S, S<sup>0</sup>) taken up to sulfate. The mnemonic is that chemolithotrophs eat the <em>reduced</em> end and push it toward the <em>oxidized</em> end (sulfate). Watch a distractor that flips the direction (reducing sulfate to sulfide is the opposite, anaerobic process).</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Sulfur cycle: entry point, oxidizers, and the form they oxidize (to what)?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Entry = SO<sub>2</sub> from fossil fuels. Sulfur-oxidizing chemolithotrophs oxidize H<sub>2</sub>S and S<sup>0</sup> up to sulfate (SO<sub>4</sub><sup>2-</sup>) at oxic/anoxic interfaces.</div>
       </div>
     </article>
     <div class="topic-divider" id="m5l2-d7" data-topic="Other Nutrient Cycles"><div class="td-inner"><span>Other Nutrient Cycles</span><span class="td-line"></span></div></div>
     <article class="q" id="m5l2-q7" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q7</span><span class="q-text">What is often cycled with iron?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p><span class="mem">Manganese (Mn)</span> is the element cycled with iron. Mn alternates between oxidized <span class="mem">Mn<sup>4+</sup></span> and reduced <span class="mem">Mn<sup>2+</sup></span>, mirroring iron’s ferric <span class="concept">Fe<sup>3+</sup></span> / ferrous <span class="concept">Fe<sup>2+</sup></span> pair.</p>
+        <p>Iron is abundant in the crust yet still a <span class="concept">limiting nutrient</span>. Under anoxic conditions bacteria reduce Fe<sup>3+</sup> &rarr; Fe<sup>2+</sup> (Fe<sup>3+</sup> as an electron acceptor in anaerobic respiration; humic substances act as electron shuttles; little energy). Acidophilic chemolithotrophs oxidize Fe<sup>2+</sup> &rarr; Fe<sup>3+</sup> — e.g., <span class="mem">Acidithiobacillus ferrooxidans</span>, <span class="mem">Leptospirillum ferrooxidans</span>. Mn<sup>2+</sup> oxidizers include Alpha-/Betaproteobacteria and some Pseudomonas.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>If the stem says &ldquo;cycled with iron,&rdquo; the answer is manganese — both swing between a 4+/3+ oxidized state and a 2+ reduced state. Be ready to recognize the named iron oxidizers (Acidithiobacillus / Leptospirillum ferrooxidans) and the idea that Fe<sup>3+</sup> reduction happens outside the cell because the mineral is insoluble.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">What is cycled with iron, and in what oxidation states?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Manganese (Mn<sup>4+</sup> &harr; Mn<sup>2+</sup>), paralleling iron (Fe<sup>3+</sup> &harr; Fe<sup>2+</sup>).</div>
       </div>
     </article>
     <article class="q" id="m5l2-q8" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q8</span><span class="q-text">Where would you find calcium in marine microbes?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p>Calcium reservoirs are in <span class="concept">rocks and oceans</span>. In marine microbes, calcium (Ca<sup>2+</sup>) is found in <span class="mem">exoskeletons / shells</span> — <span class="mem">marine phototrophs use Ca<sup>2+</sup> for exoskeleton formation</span> (calcium-carbonate shells).</p>
+        <p>This is the same <span class="concept">calcium carbonate</span> that coral reefs release as they die under ocean acidification — a direct link back to the carbon cycle.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Short and specific: Ca<sup>2+</sup> shows up in the <em>exoskeletons/shells</em> that marine phototrophs build. The high-value connection is tying it to the carbon-cycle point — acidifying oceans dissolve those calcium-carbonate structures, which is why reefs are endangered.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Where is calcium found in marine microbes?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>In exoskeletons/shells — marine phototrophs use Ca<sup>2+</sup> for exoskeleton (calcium-carbonate) formation.</div>
       </div>
     </article>
     <article class="q" id="m5l2-q9" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q9</span><span class="q-text">What is the concern with mercury, and what is a benefit of microbes here?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <p><strong>The concern:</strong> mercury is <span class="mem">highly toxic and concentrates in living tissues</span>. The atmospheric form is mostly elemental <span class="concept">Hg<sup>0</sup></span> (volatile), photochemically oxidized to mercuric ion <span class="concept">Hg<sup>2+</sup></span>, which enters aquatic systems and adsorbs to particulates. Microbes can methylate it into <span class="mem">methylmercury (CH<sub>3</sub>Hg<sup>+</sup>)</span> — <span class="mem">extremely soluble and toxic</span> — and with few elimination routes it <span class="concept">bioaccumulates and biomagnifies</span>.</p>
+        <p><strong>Microbial benefit:</strong> several bacteria can transform mercury into <span class="mem">nontoxic forms</span>; this resistance is linked to <span class="concept">plasmids encoding detoxifying enzymes</span>. Microbes are double-edged — some create methylmercury, others detoxify mercury.</p>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The exam-worthy product is <em>methylmercury</em> (soluble, toxic, biomagnifies) — made by microbes. The twist is that microbes also solve the problem: some bacteria detoxify mercury using plasmid-encoded enzymes. If a question asks for a microbial &ldquo;benefit&rdquo; in the mercury cycle, that detoxification is the answer, not the methylation.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Mercury: the concern, and the microbial benefit?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Microbes methylate Hg into methylmercury (CH<sub>3</sub>Hg<sup>+</sup>) — soluble, toxic, biomagnifies. Benefit: other bacteria detoxify mercury via plasmid-encoded enzymes.</div>
       </div>
     </article>
     <article class="q" id="m5l2-q10" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q10</span><span class="q-text">What is bioaccumulation, and how does it differ from biomagnification?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <ul>
+          <li><span class="mem">Bioaccumulation</span> = a substance (e.g., mercury) <span class="concept">builds up within a single organism over time</span>, when intake outpaces elimination.</li>
+          <li><span class="mem">Biomagnification</span> = the concentration <span class="concept">increases as it passes up the food chain</span>, so top predators carry the highest loads.</li>
+        </ul>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Classic distinguish-the-pair. Bioaccumulation is <em>within one organism, over time</em>; biomagnification is <em>across trophic levels, up the food chain</em>. A scenario contrasting a top predator (e.g., a tuna) with organisms at the bottom (plankton) is pointing at biomagnification — the increase from one level to the next.</div>
       <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
+        <div class="fc-q">Bioaccumulation vs. biomagnification?</div>
         <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+        <div class="fc-a" hidden>Bioaccumulation = buildup within one organism over time. Biomagnification = rising concentration up the food chain (top predators highest).</div>
       </div>
     </article>
     <div class="topic-divider" id="m5l2-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
@@ -1257,7 +1266,7 @@ window.smoothScrollTo=function(el){
   var MOON='<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M20.5 13.2A8 8 0 1 1 10.8 3.5a6.3 6.3 0 0 0 9.7 9.7z"/></svg>';
   var tbtn=document.getElementById('theme-toggle');
   function setThemeIcon(){ var dark=body.classList.contains('dark'); tbtn.innerHTML=dark?SUN:MOON; tbtn.setAttribute('aria-label', dark?'Switch to light mode':'Switch to dark mode'); tbtn.title=dark?'Light mode':'Dark mode'; }
-  tbtn.onclick=function(){ var dark=body.classList.toggle('dark'); body.classList.toggle('paper',!dark); setThemeIcon(); setTimeout(function(){window.recolorAll&&window.recolorAll();},20); };
+  tbtn.onclick=function(){ var dark=body.classList.toggle('dark'); body.classList.toggle('paper',!dark); try{localStorage.setItem('exam3-theme',dark?'dark':'paper');}catch(e){} setThemeIcon(); setTimeout(function(){window.recolorAll&&window.recolorAll();},20); };
   setThemeIcon();
   var FS_MIN=14, FS_MAX=26, fsPx=18;
   var fsEl=document.getElementById('fs-val');
@@ -1347,7 +1356,7 @@ window.smoothScrollTo=function(el){
   var sb=document.getElementById('sidebar'), ov=document.getElementById('overlay');
   function open(){ sb.classList.add('open'); ov.classList.add('show'); document.getElementById('menu-btn').setAttribute('aria-expanded','true'); }
   function close(){ sb.classList.remove('open'); ov.classList.remove('show'); document.getElementById('menu-btn').setAttribute('aria-expanded','false'); }
-  document.getElementById('menu-btn').onclick=open;
+  document.getElementById('menu-btn').onclick=function(){ if(sb.classList.contains('open')) close(); else open(); };
   document.getElementById('sb-close').onclick=close;
   ov.onclick=close;
   document.addEventListener('keydown',function(e){ if(e.key==='Escape')close(); });
@@ -1905,6 +1914,42 @@ window.smoothScrollTo=function(el){
     {p:'The deep sea is cold, dark, high-pressure, and nutrient-poor. What explains how thermophiles can still be found there?',
      o:['sunlight penetrates below 1000 m','hydrothermal vents create localized hot, chemolithotroph-fueled habitats','high pressure raises water temperature globally','piezophiles generate their own metabolic heat'],
      a:1, fb:'Hydrothermal vents are the exception — they supply heat and reduced chemicals, supporting chemolithotrophic thermophiles and hyperthermophiles.'}
+  ];
+
+  QUIZZES.m5l2=[
+    {p:'Which is the LARGEST carbon reservoir on Earth?',
+     o:['the atmosphere','ocean surface waters','sediments and rocks in the crust','living biomass'],
+     a:2, fb:'Sediments and rocks hold the most carbon; the atmosphere is the most rapidly transferred reservoir, not the largest.'},
+    {p:'The single largest natural source of CO<sub>2</sub> release back to the atmosphere is:',
+     o:['volcanic outgassing','microbial decomposition','animal respiration','ocean evaporation'],
+     a:1, fb:'Microbial decomposition is the largest CO<sub>2</sub> source; in anoxic settings it also produces CH<sub>4</sub>.'},
+    {p:'Rising dissolved CO<sub>2</sub> lowers ocean pH. A direct consequence highlighted in lecture is:',
+     o:['coral reefs are endangered and release calcium carbonate as they die','methane hydrates instantly vaporize','nitrogen fixation stops worldwide','sulfate becomes the main carbon source'],
+     a:0, fb:'Ocean acidification endangers coral reefs, which release calcium carbonate as they die; CO<sub>2</sub> also traps long-wave heat (radiative forcing).'},
+    {p:'The largest methane reservoir, formed under high pressure and low temperature, is:',
+     o:['atmospheric methane','methane hydrates beneath permafrost and marine sediments','termite-gut methanogens','cold-seep bacterial mats'],
+     a:1, fb:'Methane hydrates (high CH<sub>4</sub> + high pressure + low temperature) trap huge amounts beneath Arctic permafrost and in marine sediments.'},
+    {p:'Which two processes together account for the loss of organic nitrogen from the biosphere?',
+     o:['nitrification and nitrogen fixation','denitrification and anammox','ammonification and assimilation','nitrification and anammox'],
+     a:1, fb:'Denitrification (NO<sub>3</sub><sup>-</sup> → ... → N<sub>2</sub>) and anammox (NH<sub>4</sub><sup>+</sup> + NO<sub>2</sub><sup>-</sup> → N<sub>2</sub>) both yield N<sub>2</sub> gas.'},
+    {p:'Atmospheric N<sub>2</sub> is ~70% of air but unusable by most life. Nitrogen fixation makes it available by converting it to:',
+     o:['nitrate (NO<sub>3</sub><sup>-</sup>)','nitrite (NO<sub>2</sub><sup>-</sup>)','ammonia (NH<sub>3</sub>)','nitrous oxide (N<sub>2</sub>O)'],
+     a:2, fb:'Nitrogen fixation: N<sub>2</sub> → NH<sub>3</sub>. Nitrate/nitrite come from nitrification; N<sub>2</sub>O is a denitrification intermediate.'},
+    {p:'Sulfur-oxidizing chemolithotrophs at oxic/anoxic interfaces oxidize reduced sulfur (H<sub>2</sub>S and S<sup>0</sup>) ultimately to:',
+     o:['sulfate (SO<sub>4</sub><sup>2-</sup>)','dimethyl sulfide','pyrite (FeS<sub>2</sub>)','thiosulfate'],
+     a:0, fb:'Oxidation runs H<sub>2</sub>S → S<sup>0</sup> → SO<sub>4</sub><sup>2-</sup>. Pyrite forms when sulfide is detoxified by iron; DMS is the abundant organic sulfur gas.'},
+    {p:'Which element cycles between oxidized and reduced states (4+ / 2+) alongside iron?',
+     o:['manganese','calcium','silicon','phosphorus'],
+     a:0, fb:'Manganese cycles (Mn<sup>4+</sup> ↔ Mn<sup>2+</sup>) with iron (Fe<sup>3+</sup> ↔ Fe<sup>2+</sup>); Alpha-/Betaproteobacteria and some Pseudomonas oxidize Mn<sup>2+</sup>.'},
+    {p:'In marine microbes, calcium (Ca<sup>2+</sup>) is most associated with:',
+     o:['electron transport chains','exoskeleton / shell formation by marine phototrophs','nitrogen fixation','methane production'],
+     a:1, fb:'Marine phototrophs use Ca<sup>2+</sup> to build exoskeletons/shells (the same calcium carbonate reefs release as they die).'},
+    {p:'A microbe converts mercury into methylmercury (CH<sub>3</sub>Hg<sup>+</sup>). Why is this the central concern?',
+     o:['it is insoluble and harmless','it is extremely soluble and toxic, and it bioaccumulates and biomagnifies','it is rapidly eliminated by all organisms','it converts mercury back to elemental Hg<sup>0</sup>'],
+     a:1, fb:'Methylmercury is extremely soluble and toxic with few elimination routes. Note: other bacteria detoxify mercury via plasmid-encoded enzymes.'},
+    {p:'A tuna at the top of the food chain carries far more mercury than the plankton at the bottom. This trophic-level increase is called:',
+     o:['bioaccumulation','biomagnification','denitrification','disproportionation'],
+     a:1, fb:'Biomagnification = concentration rises up the food chain. Bioaccumulation = buildup within a single organism over time.'}
   ];
 
   function render(shell,title,data){
