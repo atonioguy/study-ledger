@@ -10,7 +10,7 @@
 <style>
   :root{ --font-serif:'Newsreader',Georgia,serif; --font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; --radius:10px; --maxw:760px; --sidebar-w:300px; }
   *{ box-sizing:border-box; }
-  html{ scroll-behavior:smooth; }
+  html{ scroll-behavior:auto; }
   body.paper{ --bg:#F3F0E7; --card:#FBFAF4; --ink:#2C2A24; --ink-soft:#6E685C; --border:rgba(40,36,28,.14); --border-soft:rgba(40,36,28,.08); --accent:#1A4D8F; --tag-bg:#E9E4D6; --tag-ink:#5A5446; --fc-bg:#F2EEE2; --fc-accent:#8A6D2F; --mem:#1858A8; --concept:#C0492B; --ok:#2E7D52; --bad:#B23A2E; --hl:#FCE58A; --hl-ink:#2C2A24; --book:#D8362B; --flag:#E0922A; }
   body.dark{ --bg:#101216; --card:#191B20; --ink:#D6D4CC; --ink-soft:#928F86; --border:rgba(255,255,255,.13); --border-soft:rgba(255,255,255,.07); --accent:#7FB5F0; --tag-bg:#23262D; --tag-ink:#9BA3AE; --fc-bg:#1E2127; --fc-accent:#D9B877; --mem:#6FB0F2; --concept:#F0936A; --ok:#5FCF95; --bad:#F0936A; --hl:#5E5320; --hl-ink:#F4EFD8; --book:#E2554B; --flag:#E6A94E; }
   body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-sans); line-height:1.7; font-size:var(--root-fs,16px); -webkit-text-size-adjust:100%; }
@@ -131,7 +131,7 @@
   .bar select{ font-family:var(--font-sans); font-size:13px; color:var(--ink); background:var(--card); border:1px solid var(--border); border-radius:8px; padding:6px 8px; cursor:pointer; line-height:1.2; }
   .bar select:hover{ border-color:var(--ink-soft); }
   #book-dock{ position:fixed; right:16px; bottom:18px; z-index:55; display:flex; align-items:center; gap:8px; }
-  #book-float{ width:46px; height:46px; border-radius:50%; background:var(--card); border:1px solid var(--border); color:var(--book); cursor:pointer; box-shadow:0 3px 12px rgba(0,0,0,.16); display:flex; align-items:center; justify-content:center; transition:background .15s,color .15s,transform .1s; }
+  #book-float{ position:relative; width:46px; height:46px; border-radius:50%; background:var(--card); border:1px solid var(--border); color:var(--book); cursor:pointer; box-shadow:0 3px 12px rgba(0,0,0,.16); display:flex; align-items:center; justify-content:center; transition:background .15s,color .15s,transform .1s; }
   #book-float:hover{ border-color:var(--book); }
   #book-float:active{ transform:scale(.92); }
   #book-dock.has-bm #book-float{ background:var(--book); color:#fff; border-color:var(--book); }
@@ -139,6 +139,8 @@
   #book-clear{ display:none; width:34px; height:34px; border-radius:50%; background:var(--card); border:1px solid var(--border); color:var(--ink-soft); font-size:17px; line-height:1; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.14); align-items:center; justify-content:center; }
   #book-dock.has-bm #book-clear{ display:flex; }
   #book-clear:hover{ border-color:var(--bad); color:var(--bad); }
+  .bm-arrow{ display:none; position:absolute; right:-3px; bottom:-3px; width:19px; height:19px; border-radius:50%; background:var(--card); color:var(--book); border:1.5px solid var(--book); font-size:12px; font-weight:700; line-height:1; align-items:center; justify-content:center; }
+  #book-dock.has-bm .bm-arrow{ display:flex; }
 </style>
 </head>
 <body class="paper">
@@ -164,7 +166,7 @@
 
 <div id="book-dock">
   <button id="book-clear" title="Remove bookmark" aria-label="Remove bookmark">&times;</button>
-  <button id="book-float" title="Bookmark the block you're viewing" aria-label="Set bookmark"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg></button>
+  <button id="book-float" title="Bookmark the block you're viewing" aria-label="Set bookmark"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg><span class="bm-arrow" aria-hidden="true">↑</span></button>
 </div>
 
 <div id="overlay"></div>
@@ -1086,6 +1088,23 @@
 </main>
 
 <script>
+/* ---- smooth scroll (manual rAF — consistent on desktop + mobile, zoom-safe) ---- */
+window.smoothScrollTo=function(el){
+  if(!el) return;
+  var hb=document.querySelector('header.bar');
+  var off=(hb?hb.offsetHeight:54)+10;
+  var startY=window.pageYOffset||document.documentElement.scrollTop||0;
+  var targetY=startY+el.getBoundingClientRect().top-off;
+  var maxY=document.documentElement.scrollHeight-(window.innerHeight||document.documentElement.clientHeight);
+  if(targetY>maxY) targetY=maxY; if(targetY<0) targetY=0;
+  var dist=targetY-startY;
+  if(Math.abs(dist)<2){ window.scrollTo(0,targetY); return; }
+  var dur=Math.min(720, Math.max(260, Math.abs(dist)*0.55)), t0=null;
+  function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+  function step(ts){ if(t0===null)t0=ts; var p=Math.min(1,(ts-t0)/dur); window.scrollTo(0, startY+dist*ease(p)); if(p<1) requestAnimationFrame(step); }
+  requestAnimationFrame(step);
+};
+
 /* ---- theme / font-size / gradient ---- */
 (function(){
   var body=document.body;
@@ -1178,13 +1197,13 @@
         var tp=d.getAttribute('data-topic');
         if(tp==='Reinforcement quiz') a.className+=' quiz';
         a.textContent=tp;
-        a.onclick=function(){ d.scrollIntoView({behavior:'smooth',block:'start'}); close(); };
+        a.onclick=function(){ smoothScrollTo(d); close(); };
         divs.appendChild(a);
       });
       btn.onclick=function(e){
         /* clicking caret toggles; clicking name jumps */
         if(les.classList.contains('collapsed')){ les.classList.remove('collapsed'); }
-        else { /* jump to lesson, keep expanded */ sec.scrollIntoView({behavior:'smooth',block:'start'}); close(); }
+        else { /* jump to lesson, keep expanded */ smoothScrollTo(sec); close(); }
       };
       /* separate caret toggle */
       car.onclick=function(e){ e.stopPropagation(); les.classList.toggle('collapsed'); };
@@ -1253,10 +1272,15 @@
   var dock=document.getElementById('book-dock');
   var floatBtn=document.getElementById('book-float');
   var clearBtn=document.getElementById('book-clear');
+  var arrowEl=floatBtn.querySelector('.bm-arrow');
+  function updateArrow(){
+    if(!cur||!arrowEl) return; var el=document.getElementById(cur); if(!el) return;
+    arrowEl.textContent = (el.getBoundingClientRect().top < 60) ? '\u2191' : '\u2193';
+  }
   function mark(id){
     document.querySelectorAll('.q.bookmarked').forEach(function(a){a.classList.remove('bookmarked');});
     var el=id&&document.getElementById(id);
-    if(el){ el.classList.add('bookmarked'); dock.classList.add('has-bm'); floatBtn.title='Jump to your bookmark'; }
+    if(el){ el.classList.add('bookmarked'); dock.classList.add('has-bm'); floatBtn.title='Jump to your bookmark'; updateArrow(); }
     else { dock.classList.remove('has-bm'); floatBtn.title="Bookmark the block you're viewing"; cur=null; }
   }
   mark(cur);
@@ -1271,10 +1295,11 @@
       floatBtn.classList.add('flash'); setTimeout(function(){floatBtn.classList.remove('flash');},550); }
   }
   floatBtn.onclick=function(){
-    if(dock.classList.contains('has-bm')){ var el=cur&&document.getElementById(cur); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+    if(dock.classList.contains('has-bm')){ var el=cur&&document.getElementById(cur); if(el) smoothScrollTo(el); }
     else setBookmark();
   };
   clearBtn.onclick=function(){ try{localStorage.removeItem(KEY);}catch(e){} mark(null); };
+  var at=false; window.addEventListener('scroll',function(){ if(at)return; at=true; requestAnimationFrame(function(){ updateArrow(); at=false; }); }, {passive:true});
 })();
 
 /* ---- highlight (drag-to-select, experimental, per-browser) ---- */
