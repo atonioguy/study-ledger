@@ -73,20 +73,20 @@
   #calbar .rs{ background:rgba(255,255,255,.1); color:var(--soft); font-weight:400; }
 
   /* ===== right at-a-glance panel ===== */
-  #side{ width:300px; flex:none; padding:18px 16px; display:flex; flex-direction:column; gap:14px; overflow:auto;
+  #side{ width:188px; flex:none; padding:18px 14px; display:flex; flex-direction:column; gap:18px; overflow:auto;
     background:linear-gradient(180deg,rgba(10,16,26,.55),rgba(10,16,26,.3)); border-left:1px solid rgba(160,180,200,.12); z-index:5; }
-  #side .greet{ font-size:18px; font-weight:600; } #side .date{ font-size:12px; color:var(--faint); margin-top:2px; }
-  .scard{ background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:16px; padding:14px 15px; }
-  .scard h4{ font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); margin-bottom:10px; display:flex; align-items:center; gap:7px; }
-  .scard h4::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--sakura); box-shadow:0 0 7px var(--sakura); }
-  .swx{ display:flex; align-items:center; gap:10px; } .swx .ic{ font-size:28px; } .swx .tp{ font-size:24px; font-weight:300; } .swx .m{ margin-left:auto; text-align:right; font-size:11px; color:var(--faint); line-height:1.4; }
-  .st{ display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.05); cursor:pointer; }
-  .st:last-child{ border:none; } .st .ck{ width:16px; height:16px; border:1.6px solid var(--faint); border-radius:5px; flex:none; }
-  .st.dn .ck{ background:var(--sage); border-color:var(--sage); } .st .tm{ font-size:11px; color:var(--faint); min-width:42px; } .st .tx{ font-size:13px; flex:1; } .st.dn .tx{ color:var(--faint); text-decoration:line-through; }
-  .squick{ display:flex; gap:8px; flex-wrap:wrap; } .qb{ flex:1; min-width:80px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:var(--soft); border-radius:12px; padding:11px; font:inherit; font-size:12px; cursor:pointer; }
-  .qb:hover{ background:rgba(232,182,196,.16); color:var(--sakura); }
-  @media(max-width:1080px){ #side{ display:none; } }
-  @media(max-width:720px){ #rail{ width:56px; } }
+  #side .cl{ font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:8px; }
+  #side .crow{ display:flex; flex-wrap:wrap; gap:6px; }
+  #side button{ background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:var(--soft); border-radius:11px; padding:9px 11px; font:inherit; font-size:14px; cursor:pointer; transition:.2s; line-height:1; }
+  #side button:hover{ background:rgba(255,255,255,.1); } #side button.on{ background:var(--sakura); color:#2a1820; border-color:transparent; }
+  #side button.wide{ width:100%; font-size:13px; }
+  @media(max-width:900px){ #side{ width:60px; } #side .cl{ display:none; } #side button.wide{ font-size:0; padding:11px; } #side button.wide::before{ content:'⊹'; font-size:16px; } }
+  @media(max-width:640px){ #rail{ width:54px; } }
+  /* calbar transform controls */
+  #calbar #selName{ color:var(--sakura); font-weight:600; min-width:78px; }
+  .cgx{ display:inline-flex; gap:2px; padding:0 5px; border-left:1px solid rgba(255,255,255,.14); }
+  #calbar .cgx button{ background:rgba(255,255,255,.08); padding:6px 9px; font-size:14px; }
+  .el.sel{ outline:3px solid #ffd84d !important; }
 
   /* ===== popup panels ===== */
   .scrim{ position:fixed; inset:0; z-index:40; background:rgba(4,7,13,.55); backdrop-filter:blur(3px); opacity:0; pointer-events:none; transition:.4s; }
@@ -138,14 +138,21 @@
     </div>
 
     <aside id="side">
-      <div><div class="greet" id="sGreet">good evening, antonio</div><div class="date" id="sDate"></div></div>
-      <div class="scard"><h4>weather · 76018</h4><div class="swx"><span class="ic" id="sWic">🌆</span><span class="tp" id="sWtp">—°</span><span class="m" id="sWm">H —° L —°<br>feels —°</span></div></div>
-      <div class="scard"><h4>today · ticktick</h4><div id="sTasks"></div></div>
-      <div class="scard"><h4>quick</h4><div class="squick"><button class="qb" data-q="brain">🗒️ brain dump</button><button class="qb" data-q="focus">🍅 focus</button></div></div>
+      <div class="cgrp"><div class="cl">setup</div><button id="calBtn" class="wide">⊹ align screens</button></div>
+      <div class="cgrp"><div class="cl">time of day</div><div class="crow"><button data-sky="dawn">🌅</button><button data-sky="day">☀️</button><button data-sky="dusk" class="on">🌆</button><button data-sky="night">🌙</button></div></div>
+      <div class="cgrp"><div class="cl">weather</div><div class="crow"><button data-wx="clear" class="on">✨</button><button data-wx="rain">🌧️</button><button data-wx="snow">❄️</button><button id="soundBtn">🔇</button></div></div>
+      <div class="cgrp"><div class="cl">tone</div><div class="crow"><button id="coolBtn">🌊 cool</button><button id="autoBtn" class="on">🕐 auto</button></div></div>
     </aside>
   </div>
 
-  <div id="calbar"><b>⊹ setup:</b> drag each box onto its object · drag the corner to resize · this is saved to your device <button class="rs" id="calReset">reset</button><button id="calDone">done ✓</button></div>
+  <div id="calbar">
+    <b>⊹</b><span id="selName">tap a box to select</span>
+    <span class="cgx" title="rotate"><button data-t="rz-">↺</button><button data-t="rz+">↻</button></span>
+    <span class="cgx" title="tilt left/right"><button data-t="ry-">◧</button><button data-t="ry+">◨</button></span>
+    <span class="cgx" title="tilt up/down"><button data-t="rx+">⬒</button><button data-t="rx-">⬓</button></span>
+    <span class="cgx" title="layer"><button data-t="z+">⤒</button><button data-t="z-">⤓</button></span>
+    <button class="rs" id="calReset">reset all</button><button id="calDone">done ✓</button>
+  </div>
   <div class="tip" id="tip">click the monitor, phone, board, calendar, or 🍅 ✦ · ⊹ to align</div>
 
   <div class="scrim" id="scrim"></div>
@@ -169,21 +176,12 @@
     <div class="l">a calm 25-minute block · the room dims with you</div><div class="ct"><button class="b1" id="fStart">begin ✦</button><button class="b2" data-close>close</button></div></div></div>
   <div class="pop" id="soon"><div class="pc"><span class="px2" data-close>✕</span><h3 id="soonT">Mind</h3><p id="soonP">this room is coming soon ♡ — for now your Desk is home.</p></div></div>
 
-  <div id="dock">
-    <button id="calBtn" title="align / setup">⊹</button><span class="sep"></span>
-    <button data-sky="dawn">🌅</button><button data-sky="day">☀️</button><button data-sky="dusk" class="on">🌆</button><button data-sky="night">🌙</button>
-    <span class="sep"></span>
-    <button data-wx="clear" class="on">✨</button><button data-wx="rain">🌧️</button><button data-wx="snow">❄️</button><button id="soundBtn">🔇</button>
-    <span class="sep"></span>
-    <button id="coolBtn">🌊</button><button id="autoBtn" class="on">🕐</button>
-  </div>
-
 <script>
 const IMG_W=1448,IMG_H=1086,ASPECT=IMG_W/IMG_H;
 /* default boxes (% of stage) — user calibrates these */
-const DEF={ monitor:{x:41,y:33.5,w:22.5,h:23}, phone:{x:69.5,y:45,w:5.6,h:12.5}, clock:{x:81,y:44,w:7.4,h:7},
-  weather:{x:5,y:6,w:22,h:13}, corkboard:{x:57,y:16.5,w:15.5,h:25}, calendar:{x:84,y:14.5,w:14.5,h:26},
-  tomato:{x:75,y:65,w:6,h:8}, cat:{x:12,y:64,w:12,h:15}, tank:{x:8.5,y:46,w:16,h:14} };
+const DEF={ monitor:{x:41,y:33.5,w:22.5,h:23,rz:0,rx:0,ry:0,z:5}, phone:{x:69.5,y:45,w:5.6,h:12.5,rz:0,rx:0,ry:0,z:5}, clock:{x:81,y:44,w:7.4,h:7,rz:0,rx:0,ry:0,z:5},
+  weather:{x:5,y:6,w:22,h:13,rz:0,rx:0,ry:0,z:2}, corkboard:{x:57,y:16.5,w:15.5,h:25,rz:0,rx:0,ry:0,z:3}, calendar:{x:84,y:14.5,w:14.5,h:26,rz:0,rx:0,ry:0,z:3},
+  tomato:{x:75,y:65,w:6,h:8,rz:0,rx:0,ry:0,z:4}, cat:{x:12,y:64,w:12,h:15,rz:0,rx:0,ry:0,z:8}, tank:{x:8.5,y:46,w:16,h:14,rz:0,rx:0,ry:0,z:6} };
 let BOX=Object.assign({},DEF); try{ const s=JSON.parse(localStorage.getItem('aq_box')); if(s) for(const k in DEF) if(s[k]) BOX[k]=s[k]; }catch(e){}
 
 const stage=document.getElementById('stage'),sky=document.getElementById('sky'),room=document.getElementById('room'),
@@ -237,23 +235,30 @@ function renderMon(){ const done=TASKS.filter(t=>t[3]).length; E.monitor.querySe
   `<div class="hd"><b id="mHi">good evening, antonio</b><span class="wm">aqua</span></div><div class="sub">today · ticktick</div>`+
   TASKS.map(t=>`<div class="t ${t[3]?'dn':''}"><span class="ck"></span><span class="tm">${t[0]}</span><span class="tx">${t[1]}</span><span class="dot dot${t[2]}"></span></div>`).join('')+
   `<div class="ft"><span class="p">${done} of ${TASKS.length} done</span><span class="o">click to open ✦</span></div>`; }
-function renderSideTasks(){ document.getElementById('sTasks').innerHTML=TASKS.map((t,i)=>`<div class="st ${t[3]?'dn':''}" data-i="${i}"><span class="ck"></span><span class="tm">${t[0]}</span><span class="tx">${t[1]}</span></div>`).join('');
-  document.querySelectorAll('#sTasks .st').forEach(r=>r.onclick=()=>{ const i=+r.dataset.i; TASKS[i][3]=TASKS[i][3]?0:1; renderMon(); renderSideTasks(); }); }
-function layoutEls(){ for(const k in BOX){ const e=E[k]; if(!e) continue; const b=BOX[k]; e.style.left=b.x+'%'; e.style.top=b.y+'%'; e.style.width=b.w+'%'; e.style.height=b.h+'%'; } }
+function renderSideTasks(){ const s=document.getElementById('sTasks'); if(!s) return; }
+function layoutEls(){ for(const k in BOX){ const e=E[k]; if(!e) continue; const b=BOX[k]; e.style.left=b.x+'%'; e.style.top=b.y+'%'; e.style.width=b.w+'%'; e.style.height=b.h+'%';
+  e.style.transform=`perspective(900px) rotateX(${b.rx||0}deg) rotateY(${b.ry||0}deg) rotate(${b.rz||0}deg)`; e.style.zIndex=b.z||3; } }
 
 /* ===== pixel cat + fish ===== */
 function pxRect(c,x,y,w,h,col){ c.fillStyle=col; c.fillRect(x,y,w,h); }
+let catExpr='idle';
 function drawCat(blink){ const cv=document.getElementById('catPx'); if(!cv)return; const c=cv.getContext('2d'); c.clearRect(0,0,40,36); c.imageSmoothingEnabled=false;
-  // body
-  c.fillStyle='#f3efe6'; c.beginPath(); c.ellipse(20,22,15,13,0,0,7); c.fill();
-  pxRect(c,7,4,5,8,'#efe9dc'); pxRect(c,28,4,5,8,'#efe9dc'); // ears
-  pxRect(c,8,6,3,4,'#e8b6c4'); pxRect(c,29,6,3,4,'#e8b6c4'); // inner ear
-  // face (kaomoji-ish)
-  c.fillStyle='#5a4f42';
-  if(blink){ pxRect(c,12,20,6,2,'#5a4f42'); pxRect(c,22,20,6,2,'#5a4f42'); }
-  else { pxRect(c,13,18,3,4,'#5a4f42'); pxRect(c,24,18,3,4,'#5a4f42'); pxRect(c,13,18,1,2,'#fff'); pxRect(c,24,18,1,2,'#fff'); }
-  pxRect(c,18,24,4,2,'#5a4f42'); // mouth
-  pxRect(c,9,24,4,2,'#f4c9d4'); pxRect(c,27,24,4,2,'#f4c9d4'); // blush
+  // round squishy body — NO ears, just a kaomoji ball
+  c.fillStyle='#f3efe6'; c.beginPath(); c.ellipse(20,21,16,15,0,0,7); c.fill();
+  c.fillStyle='#e8e1d2'; c.beginPath(); c.ellipse(20,33,11,4,0,0,7); c.fill(); // soft bottom
+  const D='#4a4036', P='#f4a8bd', eL=11, eR=25, ey=16;
+  const caret=x=>{ pxRect(c,x,ey+2,1,1,D); pxRect(c,x+1,ey+1,1,1,D); pxRect(c,x+2,ey,1,1,D); pxRect(c,x+3,ey+1,1,1,D); pxRect(c,x+4,ey+2,1,1,D); };
+  const dot=x=>{ pxRect(c,x+1,ey,3,4,D); pxRect(c,x+1,ey,1,1,'#fff'); };
+  const line=x=>{ pxRect(c,x,ey+2,5,1,D); };
+  const heart=x=>{ pxRect(c,x+1,ey,1,1,P);pxRect(c,x+3,ey,1,1,P);pxRect(c,x,ey+1,5,1,P);pxRect(c,x+1,ey+2,3,1,P);pxRect(c,x+2,ey+3,1,1,P); };
+  const ang=(x,r)=>{ const o=r?[2,1,0,1,2]:[0,1,2,1,0]; for(let i=0;i<5;i++) pxRect(c,x+o[i],ey+i,1,1,D); };
+  let e=blink?'sleepy':catExpr;
+  if(e==='surprise'){ dot(eL); dot(eR); } else if(e==='sleepy'){ line(eL); line(eR); }
+  else if(e==='love'){ heart(eL); heart(eR); } else if(e==='focus'){ ang(eL,0); ang(eR,1); }
+  else { caret(eL); caret(eR); } // idle / happy
+  if(e==='happy'){ pxRect(c,17,24,6,1,D); pxRect(c,16,23,1,1,D); pxRect(c,23,23,1,1,D); }
+  else if(e==='surprise'){ pxRect(c,19,24,2,2,D); } else { pxRect(c,18,24,4,1,D); }
+  pxRect(c,8,23,4,2,P); pxRect(c,28,23,4,2,P); // blush
 }
 function drawFishSprite(c,x,y,dir,col,col2,wig){ c.save(); c.translate(x,y); if(dir<0) c.scale(-1,1);
   pxRect(c,-3,-1,4,4,col); // tail
@@ -276,8 +281,13 @@ function setCal(on){ calOn=on; document.body.classList.toggle('cal',on); documen
 document.getElementById('calBtn').onclick=()=>setCal(!calOn);
 document.getElementById('calDone').onclick=()=>{ localStorage.setItem('aq_box',JSON.stringify(BOX)); setCal(false); };
 document.getElementById('calReset').onclick=()=>{ BOX=Object.assign({},JSON.parse(JSON.stringify(DEF))); layoutEls(); };
-els.addEventListener('pointerdown',e=>{ if(!calOn)return; const el=e.target.closest('.el'); if(!el)return; const k=el.dataset.key; const rz=e.target.classList.contains('rz');
+let selEl=null;
+function selectEl(k){ selEl=k; document.querySelectorAll('.el').forEach(e=>e.classList.toggle('sel',e.dataset.key===k)); document.getElementById('selName').textContent=k; }
+els.addEventListener('pointerdown',e=>{ if(!calOn)return; const el=e.target.closest('.el'); if(!el)return; const k=el.dataset.key; selectEl(k); const rz=e.target.classList.contains('rz');
   drag={k,rz,sx:e.clientX,sy:e.clientY,b:Object.assign({},BOX[k])}; e.preventDefault(); });
+document.querySelectorAll('#calbar [data-t]').forEach(btn=>btn.onclick=()=>{ if(!selEl)return; const b=BOX[selEl],t=btn.dataset.t;
+  if(t==='rz+')b.rz=(b.rz||0)+2; else if(t==='rz-')b.rz=(b.rz||0)-2; else if(t==='ry+')b.ry=(b.ry||0)+3; else if(t==='ry-')b.ry=(b.ry||0)-3;
+  else if(t==='rx+')b.rx=(b.rx||0)+3; else if(t==='rx-')b.rx=(b.rx||0)-3; else if(t==='z+')b.z=(b.z||3)+1; else if(t==='z-')b.z=Math.max(1,(b.z||3)-1); layoutEls(); });
 addEventListener('pointermove',e=>{ if(!drag)return; const dx=(e.clientX-drag.sx)/SW*100, dy=(e.clientY-drag.sy)/SH*100; const b=BOX[drag.k];
   if(drag.rz){ b.w=Math.max(2,drag.b.w+dx); b.h=Math.max(2,drag.b.h+dy); } else { b.x=drag.b.x+dx; b.y=drag.b.y+dy; } layoutEls(); });
 addEventListener('pointerup',()=>drag=null);
@@ -316,11 +326,12 @@ document.querySelectorAll('.qb').forEach(b=>b.onclick=()=>{ if(b.dataset.q==='br
 let fTimer=null,fLeft=1500;
 function fFmt(){ const m=String(Math.floor(fLeft/60)).padStart(2,'0'),s=String(fLeft%60).padStart(2,'0'); document.getElementById('fNum').textContent=`${m}:${s}`; document.getElementById('fRing').style.strokeDashoffset=528*(1-fLeft/1500); }
 document.getElementById('fStart').onclick=function(){ if(fTimer){ clearInterval(fTimer); fTimer=null; this.textContent='begin ✦'; setFocus(false); return; } this.textContent='pause'; setFocus(true); fTimer=setInterval(()=>{ fLeft--; if(fLeft<=0){ clearInterval(fTimer); fTimer=null; fLeft=1500; this.textContent='begin ✦'; setFocus(false);} fFmt(); },1000); };
-let focusMode=false; function setFocus(on){ focusMode=on; applyGrade(); catFaceState=on?'focus':'idle'; }
+let focusMode=false; function setFocus(on){ focusMode=on; applyGrade(); catExpr=on?'focus':'idle'; }
 
 /* cat speak */
-const CL=['hi, antonio ♡','no rush, the desk is warm','sip of water? ✦','you’re doing okay','i’ll sit with you']; let ci=0,catFaceState='idle';
-function catSpeak(){ ci=(ci+1)%CL.length; document.getElementById('tip').textContent=CL[ci]; clearTimeout(catSpeak._t); catSpeak._t=setTimeout(()=>document.getElementById('tip').textContent='click the monitor, phone, board, calendar, or 🍅 ✦',2800); }
+const CL=['hi, antonio ♡','no rush, the desk is warm','sip of water? ✦','you’re doing okay','i’ll sit with you']; let ci=0;
+const CEXP=['happy','love','surprise','idle','happy'];
+function catSpeak(){ ci=(ci+1)%CL.length; catExpr=CEXP[ci]; document.getElementById('tip').textContent=CL[ci]; clearTimeout(catSpeak._t); catSpeak._t=setTimeout(()=>{ document.getElementById('tip').textContent='click the monitor, phone, board, calendar, or 🍅 ✦'; if(!focusMode)catExpr='idle'; },2800); }
 
 /* sky/weather/cool */
 function setSky(m){ skyMode=m; document.querySelectorAll('[data-sky]').forEach(b=>b.classList.toggle('on',b.dataset.sky===m)); applyGrade(); }
