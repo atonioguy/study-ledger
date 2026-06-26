@@ -5,107 +5,117 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=no">
 <title>Aquamarine</title>
 <style>
-  :root{
-    --sakura:#e8b6c4; --lav:#b7b3e0; --sage:#a8c4ab; --koi:#e89a6c; --cream:#efe9dc;
-    --text:#eef4f5; --soft:#c2d0d4; --faint:#8aa0ac;
-  }
+  :root{ --sakura:#e8b6c4; --lav:#b7b3e0; --sage:#a8c4ab; --koi:#e89a6c; --text:#eef4f5; --soft:#c2d0d4; --faint:#8aa0ac; }
   *{ box-sizing:border-box; margin:0; padding:0; }
-  html,body{ height:100%; background:#05070c; overflow:hidden;
-    font-family:'Avenir Next','Segoe UI',system-ui,sans-serif; color:var(--text);
-    -webkit-font-smoothing:antialiased; user-select:none; }
-
-  #stage{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-    overflow:hidden; box-shadow:0 30px 90px rgba(0,0,0,.7); }
+  html,body{ height:100%; background:#05070c; overflow:hidden; font-family:'Avenir Next','Segoe UI',system-ui,sans-serif; color:var(--text); -webkit-font-smoothing:antialiased; user-select:none; }
+  #stage{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); overflow:hidden; box-shadow:0 30px 90px rgba(0,0,0,.7); }
   #stage canvas, #overlays{ position:absolute; inset:0; width:100%; height:100%; }
   #sky{ z-index:1; } #room{ z-index:2; } #overlays{ z-index:3; }
+  #cool{ position:absolute; inset:0; z-index:3; pointer-events:none; mix-blend-mode:color; opacity:0; transition:opacity 1.2s;
+    background:linear-gradient(160deg,#1d4a6e,#2a3f7a 55%,#3a2f6e); }
   #grade{ position:absolute; inset:0; z-index:4; pointer-events:none; mix-blend-mode:soft-light; opacity:0; transition:opacity 1.4s, background 1.4s; }
-  #grain{ position:absolute; inset:0; z-index:5; pointer-events:none; opacity:.05; mix-blend-mode:overlay;
-    background-image:radial-gradient(rgba(255,255,255,.6) .5px, transparent .6px); background-size:3px 3px; }
-  #vig{ position:absolute; inset:0; z-index:6; pointer-events:none;
-    background:radial-gradient(78% 78% at 50% 46%, transparent 55%, rgba(3,5,10,.55) 100%); }
+  #grain{ position:absolute; inset:0; z-index:5; pointer-events:none; opacity:.045; mix-blend-mode:overlay; background-image:radial-gradient(rgba(255,255,255,.6) .5px, transparent .6px); background-size:3px 3px; }
+  #vig{ position:absolute; inset:0; z-index:6; pointer-events:none; background:radial-gradient(80% 80% at 50% 46%, transparent 56%, rgba(3,5,10,.5) 100%); }
 
-  /* positioned screen/life overlays */
-  .ov{ position:absolute; }
-  .screen{ cursor:pointer; overflow:hidden; }
+  .ov{ position:absolute; } .screen{ cursor:pointer; overflow:hidden; border-radius:1.5% / 2%; }
+  .zone{ position:absolute; cursor:pointer; }
 
-  /* monitor dashboard */
-  .monitor-ui{ width:100%; height:100%; background:linear-gradient(165deg,#12203360,#0c192880);
-    display:flex; flex-direction:column; padding:6% 6.5%; color:var(--text); }
-  .m-top{ display:flex; align-items:baseline; gap:.5em; }
-  .m-hi{ font-weight:600; } .m-wm{ margin-left:auto; letter-spacing:.35em; text-transform:uppercase; color:var(--faint); opacity:.8; }
-  .m-sub{ color:var(--soft); margin:.25em 0 .7em; }
-  .m-task{ display:flex; align-items:center; gap:.6em; padding:.32em 0; border-bottom:1px solid rgba(255,255,255,.07); }
-  .m-task .c{ width:1em; height:1em; border:.12em solid var(--faint); border-radius:.22em; flex:none; }
-  .m-task .tm{ color:var(--faint); min-width:2.6em; } .m-task .tx{ color:#dfeaec; }
-  .m-task .tg{ margin-left:auto; color:var(--sakura); opacity:.85; }
-  .m-foot{ margin-top:auto; color:var(--faint); display:flex; gap:.5em; align-items:center; }
-  .m-foot .k{ color:var(--sage); }
+  /* ---------- modern monitor dashboard ---------- */
+  .monitor-ui{ width:100%; height:100%; padding:5.5% 6%; display:flex; flex-direction:column; color:var(--text);
+    background:linear-gradient(165deg, rgba(18,28,44,.86), rgba(10,17,28,.92));
+    border:1px solid rgba(255,255,255,.05); }
+  .mu-head{ display:flex; align-items:center; gap:.6em; margin-bottom:.7em; }
+  .mu-hi{ font-weight:600; letter-spacing:.2px; } .mu-dot{ width:.5em; height:.5em; border-radius:50%; background:var(--sage); box-shadow:0 0 .5em var(--sage); }
+  .mu-wm{ margin-left:auto; font-size:.62em; letter-spacing:.34em; text-transform:uppercase; color:var(--faint); }
+  .mu-grid{ display:grid; grid-template-columns:1.55fr 1fr; gap:.55em; flex:1; min-height:0; }
+  .mu-card{ background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.07); border-radius:.7em; padding:.6em .7em; overflow:hidden; }
+  .mu-card h3{ font-size:.6em; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); margin-bottom:.5em; font-weight:600; }
+  .mu-task{ display:flex; align-items:center; gap:.5em; padding:.28em 0; }
+  .mu-task .c{ width:.85em; height:.85em; border:.13em solid var(--faint); border-radius:.25em; flex:none; }
+  .mu-task .tm{ color:var(--faint); min-width:2.4em; font-variant-numeric:tabular-nums; }
+  .mu-task .tx{ color:#e6eff0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .mu-task .tg{ margin-left:auto; width:.42em; height:.42em; border-radius:50%; flex:none; }
+  .tg.school{ background:var(--koi);} .tg.life{ background:var(--lav);} .tg.health{ background:var(--sage);}
+  .mu-mini{ color:var(--soft); padding:.26em 0; line-height:1.2; border-bottom:1px solid rgba(255,255,255,.05); }
+  .mu-mini b{ color:#eaf2f3; font-weight:600; } .mu-mini .u{ color:var(--sakura); }
+  .mu-foot{ margin-top:.55em; display:flex; gap:.5em; align-items:center; }
+  .mu-pill{ font-size:.7em; padding:.4em .8em; border-radius:2em; background:rgba(232,182,196,.14); color:var(--sakura); border:1px solid rgba(232,182,196,.32); }
+  .mu-foot .open{ margin-left:auto; font-size:.66em; color:var(--faint); }
 
   /* phone */
-  .phone-ui{ width:100%; height:100%; background:linear-gradient(180deg,#0c1320,#0a1018); padding:7% 6%; overflow:hidden; }
-  .phone-ui .ph-h{ color:var(--sage); font-weight:700; margin-bottom:.4em; }
-  .phone-ui .tw{ color:var(--soft); line-height:1.25; padding:.3em 0; border-bottom:1px solid rgba(255,255,255,.06); }
+  .phone-ui{ width:100%; height:100%; padding:9% 8% 7%; display:flex; flex-direction:column; gap:.2em;
+    background:linear-gradient(180deg,#0e1622,#0a121c); }
+  .ph-time{ font-size:1.05em; font-weight:300; letter-spacing:.5px; text-align:center; color:#e6eff0; }
+  .ph-h{ color:var(--sage); font-weight:700; font-size:.72em; margin:.3em 0 .2em; }
+  .ph-tw{ color:var(--soft); font-size:.66em; line-height:1.25; padding:.28em 0; border-bottom:1px solid rgba(255,255,255,.06); }
 
   /* clock */
-  .clock-ui{ width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    font-family:'Menlo',monospace; background:#0a0d12; }
-  .clock-ui .t{ color:#ff9a9a; font-weight:700; text-shadow:0 0 .35em #ff8a8a88; line-height:1; }
-  .clock-ui .d{ color:#8fd6e8; }
+  .clock-ui{ width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'DS-Digital','Menlo',monospace; background:#080b10; gap:.05em; }
+  .clock-ui .t{ color:#9fe6ff; font-weight:700; letter-spacing:1px; text-shadow:0 0 .4em #7fd6ff77; line-height:1; }
+  .clock-ui .d{ color:#ff9ab0; letter-spacing:.5px; }
 
   /* glows / life */
-  .glow{ position:absolute; border-radius:50%; pointer-events:none;
-    background:radial-gradient(circle, var(--gc,rgba(255,200,140,.5)), transparent 70%); mix-blend-mode:screen; }
-  .steam{ position:absolute; width:.5em; height:.5em; border-radius:50%; background:rgba(230,235,240,.5);
-    filter:blur(3px); pointer-events:none; animation:steam 4s ease-out infinite; }
-  @keyframes steam{ 0%{ transform:translateY(0) scale(.6); opacity:0; } 25%{ opacity:.5; } 100%{ transform:translateY(-3em) scale(1.8); opacity:0; } }
-  .mote{ position:absolute; width:2px; height:2px; border-radius:50%; background:rgba(255,240,210,.6); pointer-events:none; }
+  .glow{ position:absolute; border-radius:50%; pointer-events:none; background:radial-gradient(circle, var(--gc,rgba(255,200,140,.5)), transparent 70%); mix-blend-mode:screen; }
+  .steam{ position:absolute; width:.5em; height:.5em; border-radius:50%; background:rgba(225,232,238,.45); filter:blur(3px); pointer-events:none; animation:steam 4.5s ease-out infinite; }
+  @keyframes steam{ 0%{ transform:translateY(0) scale(.5); opacity:0;} 25%{opacity:.5;} 100%{ transform:translateY(-3.4em) scale(2); opacity:0;} }
+  .mote{ position:absolute; width:2px; height:2px; border-radius:50%; background:rgba(255,240,210,.55); pointer-events:none; }
+  .betta{ position:absolute; pointer-events:none; will-change:transform; }
 
-  .betta{ position:absolute; width:7%; height:auto; pointer-events:none; }
-
-  /* kaomoji cat companion (on desk) */
+  /* cat companion */
   .cat{ position:absolute; cursor:pointer; }
-  .cat .ball{ width:100%; height:100%; background:radial-gradient(circle at 38% 32%, #fbf8f1, #ddd7c9);
-    border-radius:46% 46% 42% 42%/ 52% 52% 44% 44%; position:relative; box-shadow:0 .15em .4em rgba(0,0,0,.45); }
-  .cat .ear{ position:absolute; top:-16%; width:0; height:0; border-left:.5em solid transparent; border-right:.5em solid transparent; border-bottom:.7em solid #efe9dc; }
-  .cat .ear.l{ left:14%; } .cat .ear.r{ right:14%; }
-  .cat .face{ position:absolute; inset:0; display:grid; place-items:center; font-weight:700; color:#5a4f42; }
-  .cat .bub{ position:absolute; bottom:108%; left:50%; transform:translateX(-50%) scale(.9); transform-origin:bottom;
-    background:rgba(247,243,234,.95); color:#2a2418; padding:.45em .7em; border-radius:.7em .7em .7em .15em;
-    white-space:nowrap; font-size:.8em; box-shadow:0 .2em .6em rgba(0,0,0,.4); opacity:0; transition:.3s; pointer-events:none; }
+  .cat .ball{ position:absolute; inset:0; }
+  .cat .shadow{ position:absolute; left:8%; right:8%; bottom:-6%; height:14%; border-radius:50%; background:rgba(0,0,0,.35); filter:blur(3px); }
+  .cat .face{ position:absolute; inset:0; display:grid; place-items:center; font-weight:700; color:#5a4f42; font-size:.42em; }
+  .cat .bub{ position:absolute; bottom:104%; left:50%; transform:translateX(-50%) scale(.85); transform-origin:bottom center;
+    background:rgba(247,243,234,.96); color:#2a2418; padding:.35em .55em; border-radius:.6em .6em .6em .1em; white-space:nowrap;
+    font-size:.34em; box-shadow:0 .25em .7em rgba(0,0,0,.45); opacity:0; transition:.3s; pointer-events:none; }
   .cat.say .bub{ opacity:1; transform:translateX(-50%) scale(1); }
 
-  /* calibration outlines */
-  .cal .screen{ outline:2px solid #ff3b6b; background:rgba(255,59,107,.12)!important; }
-  .cal .cat,.cal .zone{ outline:2px dashed #4fd0ff; }
-  .zone{ position:absolute; }
+  /* post-it corkboard */
+  .note{ position:absolute; width:26%; padding:5% 5% 6%; font-size:.5em; line-height:1.25; color:#2a2418; border-radius:1px;
+    box-shadow:.05em .1em .3em rgba(0,0,0,.4); transform:rotate(var(--r)); cursor:default; }
+  .note::before{ content:''; position:absolute; top:-4%; left:50%; transform:translateX(-50%); width:14%; aspect-ratio:1; border-radius:50%; background:radial-gradient(circle at 35% 30%,#f3a0b4,#cf7088); box-shadow:0 1px 2px rgba(0,0,0,.4); }
+  .noteAdd{ position:absolute; bottom:2%; left:50%; transform:translateX(-50%); font-size:.42em; padding:.3em .7em; border-radius:1em; background:rgba(20,28,40,.7); color:var(--soft); border:1px solid rgba(255,255,255,.14); }
 
-  /* expandable big panel */
-  #panel{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.94); z-index:20;
-    width:min(680px,86vw); max-height:84vh; background:linear-gradient(165deg,#15243a,#0e1827);
-    border:1px solid rgba(199,154,223,.32); border-radius:16px; padding:22px 24px; opacity:0; pointer-events:none;
-    transition:.45s; box-shadow:0 30px 80px rgba(0,0,0,.7); overflow:auto; }
+  /* calendar overlay */
+  .cal-ui{ width:100%; height:100%; padding:7% 6% 5%; background:rgba(244,240,231,.0); color:#4a3f30; font-size:.5em; }
+  .cal-ui .m{ font-weight:700; color:#8a5a4a; letter-spacing:.5px; text-align:center; margin-bottom:.4em; }
+  .cal-g{ display:grid; grid-template-columns:repeat(7,1fr); gap:1px; }
+  .cal-g div{ text-align:center; padding:.18em 0; color:#5b4f3a; border-radius:.2em; }
+  .cal-g .td{ background:#cf7088; color:#fff; font-weight:700; } .cal-g .dot{ box-shadow:inset 0 -.18em 0 -.08em var(--sage); }
+
+  .cal .screen, .cal .zone{ outline:2px solid #ff3b6b; background:rgba(255,59,107,.1); }
+
+  /* expandable panel */
+  #panel{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.94); z-index:20; width:min(700px,88vw); max-height:86vh;
+    background:linear-gradient(165deg,#14233a,#0d1726); border:1px solid rgba(199,154,223,.3); border-radius:18px; padding:24px 26px; opacity:0; pointer-events:none; transition:.45s; box-shadow:0 30px 80px rgba(0,0,0,.72); overflow:auto; }
   #panel.on{ opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
-  #panel .x{ position:absolute; top:14px; right:16px; color:var(--faint); cursor:pointer; font-size:18px; }
-  #panel h1{ font-size:21px; margin-bottom:2px; } #panel .sub{ color:var(--soft); font-size:13px; margin-bottom:16px; }
-  .ptabs{ display:flex; gap:7px; margin-bottom:14px; flex-wrap:wrap; }
-  .ptab{ font-size:12.5px; padding:7px 15px; border-radius:9px; cursor:pointer; background:rgba(225,236,238,.06); color:var(--faint); border:1px solid rgba(160,180,200,.16); }
+  #panel .x{ position:absolute; top:16px; right:18px; color:var(--faint); cursor:pointer; font-size:18px; }
+  #panel h1{ font-size:22px; margin-bottom:2px; } #panel .sub{ color:var(--soft); font-size:13px; margin-bottom:18px; }
+  .ptabs{ display:flex; gap:7px; margin-bottom:16px; flex-wrap:wrap; }
+  .ptab{ font-size:12.5px; padding:8px 16px; border-radius:10px; cursor:pointer; background:rgba(225,236,238,.06); color:var(--faint); border:1px solid rgba(160,180,200,.16); }
   .ptab.on{ background:var(--sakura); color:#2a1820; border-color:transparent; font-weight:600; }
-  .task{ display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid rgba(255,255,255,.06); }
-  .task .c{ width:18px; height:18px; border:1.6px solid var(--faint); border-radius:6px; flex:none; cursor:pointer; }
+  .task{ display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.06); }
+  .task .c{ width:18px; height:18px; border:1.6px solid var(--faint); border-radius:6px; flex:none; cursor:pointer; transition:.2s; }
   .task .c:hover{ border-color:var(--sakura); box-shadow:0 0 10px rgba(232,182,196,.5); }
   .task .tm{ font-size:12px; color:var(--faint); min-width:48px; } .task .tx{ font-size:15px; }
-  .task .tg{ margin-left:auto; font-size:11px; padding:3px 10px; border-radius:20px; background:rgba(225,236,238,.08); color:var(--soft); }
+  .task .tg2{ margin-left:auto; font-size:11px; padding:3px 10px; border-radius:20px; background:rgba(225,236,238,.08); color:var(--soft); }
   .pp2{ display:none; } .pp2.on{ display:block; } .pp1.off{ display:none; }
 
-  /* control dock */
-  #dock{ position:fixed; bottom:14px; left:50%; transform:translateX(-50%); z-index:15; display:flex; gap:6px; flex-wrap:wrap; justify-content:center;
-    background:rgba(12,18,30,.55); backdrop-filter:blur(10px); padding:7px 9px; border-radius:30px; border:1px solid rgba(160,180,200,.16); }
-  #dock button{ background:transparent; border:none; color:var(--soft); cursor:pointer; font-size:16px; padding:6px 9px; border-radius:18px; transition:.25s; line-height:1; }
+  #dock{ position:fixed; bottom:14px; left:50%; transform:translateX(-50%); z-index:15; display:flex; gap:5px; flex-wrap:wrap; justify-content:center;
+    background:rgba(12,18,30,.55); backdrop-filter:blur(12px); padding:7px 9px; border-radius:30px; border:1px solid rgba(160,180,200,.16); }
+  #dock button{ background:transparent; border:none; color:var(--soft); cursor:pointer; font-size:15px; padding:7px 9px; border-radius:18px; transition:.2s; line-height:1; }
   #dock button:hover{ background:rgba(255,255,255,.08); } #dock button.on{ background:var(--sakura); }
-  #dock .sep{ width:1px; background:rgba(255,255,255,.14); margin:3px 2px; }
-  .tip{ position:fixed; top:12px; left:50%; transform:translateX(-50%); z-index:15; font-size:11px; color:var(--faint);
-    background:rgba(12,18,30,.5); padding:5px 13px; border-radius:16px; opacity:.8; }
+  #dock .sep{ width:1px; background:rgba(255,255,255,.16); margin:4px 2px; }
+  .tip{ position:fixed; top:12px; left:50%; transform:translateX(-50%); z-index:15; font-size:11px; color:var(--faint); background:rgba(12,18,30,.5); padding:5px 13px; border-radius:16px; opacity:.85; transition:.4s; }
   #loading{ position:fixed; inset:0; z-index:40; display:grid; place-items:center; background:#05070c; color:var(--faint); font-size:13px; letter-spacing:1px; transition:opacity .6s; }
+  #brain{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.94); z-index:21; width:min(420px,86vw); background:linear-gradient(165deg,#1a2030,#11161f);
+    border:1px solid rgba(232,182,196,.3); border-radius:16px; padding:20px; opacity:0; pointer-events:none; transition:.35s; box-shadow:0 24px 70px rgba(0,0,0,.7); }
+  #brain.on{ opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
+  #brain h3{ font-size:15px; margin-bottom:4px; } #brain p{ font-size:11.5px; color:var(--faint); margin-bottom:12px; }
+  #brain input{ width:100%; background:rgba(8,12,20,.6); border:1px solid rgba(160,180,200,.2); border-radius:10px; padding:11px 13px; color:var(--text); font:inherit; font-size:13px; }
+  #brain .row{ display:flex; gap:8px; margin-top:10px; } #brain button{ flex:1; border:none; border-radius:10px; padding:10px; font:inherit; font-size:12px; cursor:pointer; }
+  #brain .add{ background:var(--sakura); color:#2a1820; font-weight:700; } #brain .cancel{ background:rgba(255,255,255,.07); color:var(--soft); }
 </style>
 </head>
 <body>
@@ -114,39 +124,40 @@
     <canvas id="sky"></canvas>
     <canvas id="room"></canvas>
     <div id="overlays"></div>
+    <div id="cool"></div>
     <div id="grade"></div>
     <div id="grain"></div>
     <div id="vig"></div>
   </div>
 
-  <div class="tip" id="tip">click the screen · drag to look · ✦ try the time / weather buttons below</div>
+  <div class="tip" id="tip">click the monitor · the 🍅 starts a pomodoro · drag to look · pin notes on the board ✦</div>
 
   <div id="panel">
     <span class="x" id="panelX">✕</span>
     <h1 id="pHi">good evening, antonio</h1>
     <div class="sub">the pond is calm. 5 things drifted up — no rush.</div>
-    <div class="ptabs">
-      <div class="ptab on" data-p="0">Today · TickTick</div>
-      <div class="ptab" data-p="1">Notion</div>
-      <div class="ptab" data-p="2">Inbox</div>
-    </div>
+    <div class="ptabs"><div class="ptab on" data-p="0">Today · TickTick</div><div class="ptab" data-p="1">Notion</div><div class="ptab" data-p="2">Inbox</div></div>
     <div class="pp1">
-      <div class="task"><span class="tm">9:30a</span><span class="c"></span><span class="tx">Pathophys reading — Ch. 12</span><span class="tg">school</span></div>
-      <div class="task"><span class="tm">1:00p</span><span class="c"></span><span class="tx">Email Dr. Reyes re: rotation</span><span class="tg">life</span></div>
-      <div class="task"><span class="tm">4:00p</span><span class="c"></span><span class="tx">Refill prescription</span><span class="tg">health</span></div>
-      <div class="task"><span class="tm">eve</span><span class="c"></span><span class="tx">Pomodoro — Symbiosis notes</span><span class="tg">school</span></div>
-      <div class="task"><span class="tm">eve</span><span class="c"></span><span class="tx">Water the lily + tidy desk</span><span class="tg">life</span></div>
+      <div class="task"><span class="tm">9:30a</span><span class="c"></span><span class="tx">Pathophys reading — Ch. 12</span><span class="tg2">school</span></div>
+      <div class="task"><span class="tm">1:00p</span><span class="c"></span><span class="tx">Email Dr. Reyes re: rotation</span><span class="tg2">life</span></div>
+      <div class="task"><span class="tm">4:00p</span><span class="c"></span><span class="tx">Refill prescription</span><span class="tg2">health</span></div>
+      <div class="task"><span class="tm">eve</span><span class="c"></span><span class="tx">Pomodoro — Symbiosis notes</span><span class="tg2">school</span></div>
+      <div class="task"><span class="tm">eve</span><span class="c"></span><span class="tx">Water the lily + tidy desk</span><span class="tg2">life</span></div>
     </div>
     <div class="pp2">
-      <div class="task"><span class="c"></span><span class="tx">Research project — outline draft</span><span class="tg">thesis</span></div>
-      <div class="task"><span class="c"></span><span class="tx">Reading log — log 3 articles</span><span class="tg">study</span></div>
-      <div class="task"><span class="c"></span><span class="tx">Budget review (June)</span><span class="tg">life</span></div>
+      <div class="task"><span class="c"></span><span class="tx">Research project — outline draft</span><span class="tg2">thesis</span></div>
+      <div class="task"><span class="c"></span><span class="tx">Reading log — log 3 articles</span><span class="tg2">study</span></div>
     </div>
     <div class="pp2">
-      <div class="task"><span class="c" style="border-radius:50%"></span><span class="tx">UNTHSC Registrar — enrollment Mon</span><span class="tg">school</span></div>
-      <div class="task"><span class="c" style="border-radius:50%"></span><span class="tx">Anatomy TA — reply by Fri</span><span class="tg">school</span></div>
-      <div class="task"><span class="c" style="border-radius:50%"></span><span class="tx">Jamie — re: weekend plans?</span><span class="tg">life</span></div>
+      <div class="task"><span class="c" style="border-radius:50%"></span><span class="tx">UNTHSC Registrar — enrollment Mon</span><span class="tg2">school</span></div>
+      <div class="task"><span class="c" style="border-radius:50%"></span><span class="tx">Anatomy TA — reply by Fri</span><span class="tg2">school</span></div>
     </div>
+  </div>
+
+  <div id="brain">
+    <h3>🗒️ brain dump</h3><p>pin a thought to the board — sort it later</p>
+    <input id="brainInput" placeholder="catch a thought…" maxlength="60">
+    <div class="row"><button class="add" id="brainAdd">pin it ✦</button><button class="cancel" id="brainCancel">close</button></div>
   </div>
 
   <div id="dock">
@@ -158,239 +169,221 @@
     <button data-wx="clear" title="clear" class="on">✨</button>
     <button data-wx="rain" title="rain">🌧️</button>
     <button data-wx="snow" title="snow">❄️</button>
+    <button id="soundBtn" title="ambient sound">🔇</button>
     <span class="sep"></span>
-    <button id="focusBtn" title="focus / pomodoro">🍅</button>
+    <button id="coolBtn" title="cool tone">🌊</button>
     <button id="autoBtn" title="follow real time" class="on">🕐</button>
   </div>
 
 <script>
-/* ============ CONFIG: where things sit on the image (% of stage) ============ */
+/* ====== measured layout (% of the image/stage) ====== */
 const IMG_W=1448, IMG_H=1086, ASPECT=IMG_W/IMG_H;
 const CFG = {
-  monitor: {x:38.4, y:32.5, w:28.8, h:28.5},
-  phone:   {x:70.4, y:41.0, w:5.6, h:14.5, rot:-3},
-  clock:   {x:80.0, y:41.5, w:9.6, h:9.5},
-  catSpot: {x:62.0, y:68.0, w:6.2, h:8.5},
-  lampGlow:{x:31, y:43, r:24},
-  coffee:  {x:30, y:60},
-  tank:    {x:11.5, y:45, w:19, h:16},
-  strings: [ {x:64,y:6},{x:69,y:4.5},{x:74,y:4},{x:79,y:4.5},{x:84,y:6},{x:89,y:8},{x:94,y:10} ],
+  monitor:  {x:41.2, y:34.0, w:22.0, h:22.5},
+  phone:    {x:69.8, y:45.0, w:5.2,  h:12.0, rot:-4},
+  clock:    {x:81.3, y:44.3, w:7.0,  h:6.8},
+  calendar: {x:78.0, y:18.5, w:17.0, h:21.5},
+  corkboard:{x:57.0, y:14.5, w:15.5, h:27.0},
+  tomato:   {x:73.5, y:62.5, w:6.5,  h:8.0},
+  catSpot:  {x:15.5, y:64.5, w:8.0,  h:10.5},
+  tank:     {x:14.0, y:47.0, w:15.5, h:10.5},   // fish swim box
+  coffee:   {x:32.0, y:58.0},
+  lampGlow: {x:32.0, y:49.0, r:20},
+  strings:  [ {x:62,y:7},{x:67,y:4.5},{x:72,y:3.5},{x:77,y:3.5},{x:82,y:4.5},{x:87,y:6.5},{x:92,y:9},{x:96,y:11.5} ],
 };
-/* =========================================================================== */
 
 const stage=document.getElementById('stage'), sky=document.getElementById('sky'), room=document.getElementById('room'),
-  overlays=document.getElementById('overlays'), grade=document.getElementById('grade'), sx=sky.getContext('2d');
-let SW=0, SH=0, roomCanvas=null;
+  overlays=document.getElementById('overlays'), grade=document.getElementById('grade'), cool=document.getElementById('cool'), sx=sky.getContext('2d');
+let SW=0,SH=0, roomCanvas=null;
+function fit(){ let w=innerWidth,h=innerHeight; if(w/h>ASPECT){ w=h*ASPECT; } else { h=w/ASPECT; }
+  SW=Math.round(w); SH=Math.round(h); stage.style.width=SW+'px'; stage.style.height=SH+'px';
+  for(const c of [sky,room]){ c.width=SW; c.height=SH; } if(roomCanvas) room.getContext('2d').drawImage(roomCanvas,0,0,SW,SH); layout(); }
 
-function fit(){
-  let w=innerWidth, h=innerHeight;
-  if(w/h > ASPECT){ h=Math.min(h, innerHeight); w=h*ASPECT; } else { w=Math.min(w, innerWidth); h=w/ASPECT; }
-  SW=Math.round(w); SH=Math.round(h);
-  stage.style.width=SW+'px'; stage.style.height=SH+'px';
-  for(const c of [sky,room]){ c.width=SW; c.height=SH; }
-  if(roomCanvas) room.getContext('2d').drawImage(roomCanvas,0,0,SW,SH);
-  layout();
-}
+/* chroma-key the green window (region-limited) */
+function keyGreen(img){ const W=img.naturalWidth,H=img.naturalHeight; const oc=document.createElement('canvas'); oc.width=W; oc.height=H;
+  const o=oc.getContext('2d'); o.drawImage(img,0,0); const d=o.getImageData(0,0,W,H),p=d.data;
+  const X0=0.02*W,X1=0.56*W,Y1=0.63*H;
+  for(let y=0;y<H&&y<=Y1;y++) for(let x=Math.floor(X0);x<X1;x++){ const i=(y*W+x)*4,r=p[i],g=p[i+1],b=p[i+2];
+    if(g>55&&g>r*1.18&&g>b*1.12){ const k=Math.min(1,(g-Math.max(r,b))/45); p[i+3]=Math.round(255*(1-k)); if(k>0){ p[i]=Math.min(255,r+k*22); p[i+2]=Math.min(255,b+k*22);} } }
+  o.putImageData(d,0,0); return oc; }
 
-/* ---- chroma-key the green window to transparent ---- */
-function keyGreen(img){
-  const W=img.naturalWidth, H=img.naturalHeight;
-  const oc=document.createElement('canvas'); oc.width=W; oc.height=H;
-  const o=oc.getContext('2d'); o.drawImage(img,0,0);
-  const d=o.getImageData(0,0,W,H), p=d.data;
-  // only touch the window's bounding region so we never punch holes in the
-  // green desk mat / plants elsewhere
-  const X0=0.02*W, X1=0.56*W, Y0=0, Y1=0.63*H;
-  for(let y=0;y<H;y++){ if(y>Y1) break;
-    for(let x=0;x<W;x++){ if(x<X0||x>X1) continue;
-      const i=(y*W+x)*4, r=p[i],g=p[i+1],b=p[i+2];
-      // saturated green = screen; catch bright AND shadowed green
-      if(g>55 && g>r*1.18 && g>b*1.12){
-        const key=Math.min(1,(g-Math.max(r,b))/45);
-        p[i+3]=Math.round(255*(1-key));
-        if(key>0){ p[i]=Math.min(255,r+key*22); p[i+2]=Math.min(255,b+key*22); }
-      }
-    }
-  }
-  o.putImageData(d,0,0); return oc;
-}
-
-/* ---- animated sky (shows through the keyed window) ---- */
+/* ===== sky ===== */
 const SKIES={
-  dawn:{ top:'#2b3566', mid:'#7d6f9e', low:'#e3a9a0', sun:'#ffe2c0', sunY:.42, star:0 },
-  day: { top:'#3f6ea8', mid:'#7fa8c8', low:'#cfe2e8', sun:'#fffdf0', sunY:.28, star:0 },
-  dusk:{ top:'#1f2c52', mid:'#5a4f86', low:'#c98fa0', sun:'#ffe6c4', sunY:.6, star:.25 },
-  night:{ top:'#0c1428', mid:'#1c2848', low:'#3a3360', sun:'#dfe6f5', sunY:.34, star:1 },
+  dawn:{ stops:['#2b3566','#7d6f9e','#e3a9a0'], sun:'#ffe2c0', sunX:.30, sunY:.42, star:0, city:.85 },
+  day: { stops:['#3f6ea8','#7fa8c8','#cfe2e8'], sun:'#fffdf0', sunX:.30, sunY:.26, star:0, city:.7 },
+  dusk:{ stops:['#1f2c52','#5a4f86','#c98fa0'], sun:'#ffe6c4', sunX:.30, sunY:.6, star:.3, city:.9 },
+  night:{ stops:['#070d1e','#141d3a','#26224a'], sun:'#cfe0ff', sunX:.72, sunY:.32, star:1, city:1 },
 };
-let skyMode='dusk', wx='clear', skyT=0, stars=[], drops=[], flakes=[];
-function initParticles(){ stars=Array.from({length:70},()=>({x:Math.random(),y:Math.random()*.7,r:Math.random()*1.3+.3,t:Math.random()*6}));
-  drops=Array.from({length:90},()=>({x:Math.random(),y:Math.random(),s:Math.random()*.4+.5}));
-  flakes=Array.from({length:70},()=>({x:Math.random(),y:Math.random(),s:Math.random()*.5+.3,d:Math.random()*6})); }
-initParticles();
-function drawSky(){
-  const S=SKIES[skyMode]; const g=sx.createLinearGradient(0,0,0,SH);
-  g.addColorStop(0,S.top); g.addColorStop(.5,S.mid); g.addColorStop(1,S.low);
-  sx.fillStyle=g; sx.fillRect(0,0,SW,SH);
+let skyMode='dusk', wx='clear', skyT=0, stars=[], drops=[], flakes=[], splashes=[];
+stars=Array.from({length:80},()=>({x:Math.random(),y:Math.random()*.62,r:Math.random()*1.3+.3,t:Math.random()*6}));
+drops=Array.from({length:170},()=>({x:Math.random(),y:Math.random(),s:Math.random()*.5+.6,len:Math.random()*10+10}));
+flakes=Array.from({length:90},()=>({x:Math.random(),y:Math.random(),s:Math.random()*.6+.3,d:Math.random()*6,r:Math.random()*2+1}));
+function drawSky(){ const S=SKIES[skyMode]; const g=sx.createLinearGradient(0,0,0,SH);
+  g.addColorStop(0,S.stops[0]); g.addColorStop(.5,S.stops[1]); g.addColorStop(1,S.stops[2]); sx.fillStyle=g; sx.fillRect(0,0,SW,SH);
+  // soft clouds
+  sx.save(); sx.globalAlpha=.12; sx.fillStyle=skyMode==='night'?'#9fb0d8':'#ffffff';
+  for(let i=0;i<5;i++){ const cx=((i*0.27+skyT*0.004)%1.2-.1)*SW, cy=SH*(0.12+i*0.05); sx.beginPath(); sx.ellipse(cx,cy,SW*0.18,SH*0.05,0,0,7); sx.fill(); } sx.restore();
   // sun/moon
-  const cxp=skyMode==='night'?.74:.30, cyp=S.sunY;
-  sx.save(); sx.globalAlpha=.95; const grd=sx.createRadialGradient(SW*cxp,SH*cyp,0,SW*cxp,SH*cyp,SW*.09);
-  grd.addColorStop(0,S.sun); grd.addColorStop(1,'rgba(255,255,255,0)'); sx.fillStyle=grd;
-  sx.beginPath(); sx.arc(SW*cxp,SH*cyp,SW*.085,0,7); sx.fill(); sx.restore();
+  sx.save(); const cx=SW*S.sunX, cy=SH*S.sunY; const gr=sx.createRadialGradient(cx,cy,0,cx,cy,SW*.11); gr.addColorStop(0,S.sun); gr.addColorStop(.5,S.sun+'aa'); gr.addColorStop(1,'rgba(255,255,255,0)');
+  sx.fillStyle=gr; sx.beginPath(); sx.arc(cx,cy,SW*.085,0,7); sx.fill(); sx.restore();
   // stars
-  if(S.star>0){ sx.fillStyle='#fff'; for(const s of stars){ sx.globalAlpha=S.star*(0.4+0.6*Math.abs(Math.sin(skyT*1.5+s.t)));
-    sx.beginPath(); sx.arc(s.x*SW, s.y*SH, s.r, 0, 7); sx.fill(); } sx.globalAlpha=1; }
-  // city silhouette (bottom band, simple)
-  sx.fillStyle='rgba(8,12,22,.92)'; const base=SH*.62; let bx=0;
-  for(let i=0;i<14;i++){ const bw=SW*(0.05+(i%3)*0.012); const bh=SH*(0.06+((i*37)%9)*0.012); sx.fillRect(bx, base-bh, bw, bh+SH); bx+=bw+SW*0.004; }
-  sx.fillStyle='rgba(255,214,150,.5)'; for(let i=0;i<60;i++){ sx.fillRect((i*53%SW), base-(i%5)*SH*.02-SH*.01, 2,2); }
+  if(S.star>0){ sx.fillStyle='#fff'; for(const s of stars){ sx.globalAlpha=S.star*(0.35+0.65*Math.abs(Math.sin(skyT*1.5+s.t))); sx.beginPath(); sx.arc(s.x*SW,s.y*SH,s.r,0,7); sx.fill(); } sx.globalAlpha=1; }
+  // city skyline
+  const base=SH*0.6; sx.fillStyle=`rgba(8,11,20,${S.city})`; let bx=0; const seed=[0.5,0.3,0.42,0.36,0.55,0.28,0.46,0.33,0.5,0.38,0.44,0.3,0.52,0.34];
+  for(let i=0;i<14;i++){ const bw=SW*(0.05+(i%3)*0.012), bh=SH*(0.07+seed[i]*0.28); sx.fillRect(bx,base-bh,bw,bh+SH);
+    sx.fillStyle=`rgba(255,210,150,${0.5*S.city})`; for(let wY=base-bh+6; wY<base; wY+=10) for(let wX=bx+4; wX<bx+bw-4; wX+=9){ if((wX*wY)%7<3) sx.fillRect(wX,wY,3,4); }
+    sx.fillStyle=`rgba(8,11,20,${S.city})`; bx+=bw+SW*0.004; }
   // weather
-  if(wx==='rain'){ sx.strokeStyle='rgba(180,205,225,.5)'; sx.lineWidth=1.4;
-    for(const d of drops){ const y=(d.y+skyT*0.5*d.s)%1; sx.beginPath(); sx.moveTo(d.x*SW, y*SH); sx.lineTo(d.x*SW-6, y*SH+14); sx.stroke(); } }
-  if(wx==='snow'){ sx.fillStyle='rgba(255,255,255,.85)';
-    for(const f of flakes){ const y=(f.y+skyT*0.08*f.s)%1, x=(f.x+Math.sin(skyT+f.d)*0.01); sx.beginPath(); sx.arc(x*SW, y*SH, f.s*2.4, 0, 7); sx.fill(); } }
+  if(wx==='rain'){ sx.strokeStyle='rgba(190,212,230,.45)'; sx.lineWidth=1.3;
+    for(const d of drops){ const y=(d.y+skyT*0.9*d.s)%1.1; const yy=y*SH, xx=d.x*SW; sx.globalAlpha=0.5*d.s; sx.beginPath(); sx.moveTo(xx,yy); sx.lineTo(xx-3,yy+d.len); sx.stroke(); } sx.globalAlpha=1; }
+  if(wx==='snow'){ for(const f of flakes){ const y=(f.y+skyT*0.07*f.s)%1.05, x=(f.x+Math.sin(skyT*0.6+f.d)*0.015); sx.fillStyle=`rgba(255,255,255,${0.55+0.3*f.s})`; sx.beginPath(); sx.arc(x*SW,y*SH,f.r,0,7); sx.fill(); } }
 }
 
-/* ---- layout overlays from CFG ---- */
+/* ===== overlay layout ===== */
 const ovEls={};
-function px(c){ return {l:c.x/100*SW, t:c.y/100*SH, w:(c.w||0)/100*SW, h:(c.h||0)/100*SH}; }
-function place(el,c){ const r=px(c); el.style.left=r.l+'px'; el.style.top=r.t+'px'; el.style.width=r.w+'px'; el.style.height=r.h+'px';
-  if(c.rot) el.style.transform=`rotate(${c.rot}deg)`; }
-function layout(){
-  if(!ovEls.monitor) return;
-  place(ovEls.monitor, CFG.monitor); ovEls.monitor.style.fontSize=(px(CFG.monitor).h*0.062)+'px';
-  place(ovEls.phone, CFG.phone); ovEls.phone.style.fontSize=(px(CFG.phone).h*0.072)+'px';
-  place(ovEls.clock, CFG.clock); const ch=px(CFG.clock).h; ovEls.clock.querySelector('.t').style.fontSize=(ch*0.42)+'px'; ovEls.clock.querySelector('.d').style.fontSize=(ch*0.15)+'px';
-  place(ovEls.cat, CFG.catSpot); ovEls.cat.style.fontSize=(px(CFG.catSpot).w)+'px';
-  // glows
-  const lg=ovEls.lampGlow, r=CFG.lampGlow; lg.style.left=(r.x/100*SW)+'px'; lg.style.top=(r.y/100*SH)+'px';
-  lg.style.width=lg.style.height=(r.r/100*SW)+'px'; lg.style.marginLeft=lg.style.marginTop=(-r.r/200*SW)+'px';
-  // bettas region
-  ovEls.bettaW.parentNode.style.left=(CFG.tank.x/100*SW)+'px'; ovEls.bettaW.parentNode.style.top=(CFG.tank.y/100*SH)+'px';
-  ovEls.bettaW.parentNode.style.width=(CFG.tank.w/100*SW)+'px'; ovEls.bettaW.parentNode.style.height=(CFG.tank.h/100*SH)+'px';
-  // steam at coffee
+function px(c){ return {l:c.x/100*SW,t:c.y/100*SH,w:(c.w||0)/100*SW,h:(c.h||0)/100*SH}; }
+function place(el,c){ const r=px(c); el.style.left=r.l+'px'; el.style.top=r.t+'px'; el.style.width=r.w+'px'; el.style.height=r.h+'px'; if(c.rot) el.style.transform=`rotate(${c.rot}deg)`; }
+function layout(){ if(!ovEls.monitor) return;
+  place(ovEls.monitor,CFG.monitor); ovEls.monitor.style.fontSize=(px(CFG.monitor).h*0.082)+'px';
+  place(ovEls.phone,CFG.phone); ovEls.phone.style.fontSize=(px(CFG.phone).h*0.12)+'px';
+  place(ovEls.clock,CFG.clock); const ch=px(CFG.clock).h; ovEls.clock.querySelector('.t').style.fontSize=(ch*0.4)+'px'; ovEls.clock.querySelector('.d').style.fontSize=(ch*0.16)+'px';
+  place(ovEls.calendar,CFG.calendar); ovEls.calendar.style.fontSize=(px(CFG.calendar).h*0.09)+'px';
+  place(ovEls.cork,CFG.corkboard); ovEls.cork.style.fontSize=(px(CFG.corkboard).w*0.3)+'px';
+  place(ovEls.tomato,CFG.tomato);
+  place(ovEls.cat,CFG.catSpot); ovEls.cat.style.fontSize=(px(CFG.catSpot).w)+'px';
+  const lg=ovEls.lampGlow,r=CFG.lampGlow; lg.style.left=(r.x/100*SW)+'px'; lg.style.top=(r.y/100*SH)+'px'; lg.style.width=lg.style.height=(r.r/100*SW)+'px'; lg.style.marginLeft=lg.style.marginTop=(-r.r/200*SW)+'px';
+  place(ovEls.tank,CFG.tank);
   ovEls.steamWrap.style.left=(CFG.coffee.x/100*SW)+'px'; ovEls.steamWrap.style.top=(CFG.coffee.y/100*SH)+'px'; ovEls.steamWrap.style.fontSize=(SH*0.04)+'px';
-  // string light glows
-  CFG.strings.forEach((s,i)=>{ const e=ovEls.strings[i]; const sz=SW*0.03; e.style.left=(s.x/100*SW-sz/2)+'px'; e.style.top=(s.y/100*SH-sz/2)+'px'; e.style.width=e.style.height=sz+'px'; });
+  CFG.strings.forEach((s,i)=>{ const e=ovEls.strings[i]; const sz=SW*0.028; e.style.left=(s.x/100*SW-sz/2)+'px'; e.style.top=(s.y/100*SH-sz/2)+'px'; e.style.width=e.style.height=sz+'px'; });
 }
 
-/* ---- build overlays ---- */
+function el(cls,html){ const d=document.createElement('div'); d.className=cls; if(html) d.innerHTML=html; overlays.appendChild(d); return d; }
 function buildOverlays(){
-  // monitor
-  const mon=document.createElement('div'); mon.className='ov screen'; mon.dataset.act='monitor';
-  mon.innerHTML=`<div class="monitor-ui"><div class="m-top"><span class="m-hi" id="mHi">good evening, antonio</span><span class="m-wm">aquamarine</span></div>
-    <div class="m-sub">5 things drifted up — no rush.</div>
-    <div class="m-task"><span class="tm">9:30a</span><span class="c"></span><span class="tx">Pathophys reading</span><span class="tg">school</span></div>
-    <div class="m-task"><span class="tm">1:00p</span><span class="c"></span><span class="tx">Email Dr. Reyes</span><span class="tg">life</span></div>
-    <div class="m-task"><span class="tm">4:00p</span><span class="c"></span><span class="tx">Refill prescription</span><span class="tg">health</span></div>
-    <div class="m-task"><span class="tm">eve</span><span class="c"></span><span class="tx">Pomodoro · Symbiosis</span><span class="tg">school</span></div>
-    <div class="m-foot"><span class="k">click to open ✦</span></div></div>`;
-  overlays.appendChild(mon); ovEls.monitor=mon;
-  // phone
-  const ph=document.createElement('div'); ph.className='ov screen'; ph.dataset.act='phone';
-  ph.innerHTML=`<div class="phone-ui"><div class="ph-h">🐦 feed</div>
-    <div class="tw">building a desk for my brain 🪴</div><div class="tw">bettas judging my to-do list</div><div class="tw">iced coffee #4 ✦</div></div>`;
-  overlays.appendChild(ph); ovEls.phone=ph;
-  // clock
-  const ck=document.createElement('div'); ck.className='ov screen'; ck.dataset.act='none';
-  ck.innerHTML=`<div class="clock-ui"><div class="t" id="ckT">—:—</div><div class="d" id="ckD">—</div></div>`;
-  overlays.appendChild(ck); ovEls.clock=ck;
-  // lamp glow
-  const lg=document.createElement('div'); lg.className='glow'; lg.style.setProperty('--gc','rgba(255,190,120,.55)'); lg.style.zIndex=1; overlays.appendChild(lg); ovEls.lampGlow=lg;
-  // bettas
-  const tank=document.createElement('div'); tank.className='ov'; tank.style.pointerEvents='none';
-  const bw=document.createElement('div'), bb=document.createElement('div');
-  bw.className='betta'; bb.className='betta';
-  bw.innerHTML=fishSVG('#f4f1ea','#d9d3c7'); bb.innerHTML=fishSVG('#2a2530','#171320');
-  bw.style.width=bb.style.width='26%'; tank.appendChild(bw); tank.appendChild(bb); overlays.appendChild(tank);
-  ovEls.bettaW=bw; ovEls.bettaB=bb;
-  // steam
-  const sw=document.createElement('div'); sw.className='ov'; sw.style.pointerEvents='none';
-  sw.innerHTML=`<span class="steam" style="left:0"></span><span class="steam" style="left:.6em; animation-delay:1.3s"></span><span class="steam" style="left:-.4em; animation-delay:2.4s"></span>`;
-  overlays.appendChild(sw); ovEls.steamWrap=sw;
-  // string light glows
-  ovEls.strings=CFG.strings.map(()=>{ const e=document.createElement('div'); e.className='glow'; e.style.setProperty('--gc','rgba(255,210,150,.7)'); e.style.zIndex=1; overlays.appendChild(e); return e; });
-  // dust motes
-  for(let i=0;i<7;i++){ const m=document.createElement('div'); m.className='mote'; overlays.appendChild(m);
-    m.animate([{transform:'translate(0,0)',opacity:.0},{opacity:.6,offset:.3},{transform:`translate(${(Math.random()*40-20)}px,${-30-Math.random()*40}px)`,opacity:0}],
-      {duration:9000+Math.random()*6000,iterations:Infinity,delay:-Math.random()*9000});
-    m.style.left=(20+Math.random()*60)+'%'; m.style.top=(45+Math.random()*30)+'%'; }
-  // kaomoji cat
-  const cat=document.createElement('div'); cat.className='ov cat'; cat.dataset.act='cat';
-  cat.innerHTML=`<div class="bub" id="catBub">hi, antonio ♡</div><div class="ball"><span class="ear l"></span><span class="ear r"></span><span class="face" id="catFace">(=^‥^=)</span></div>`;
-  cat.querySelector('.ball').style.height='100%'; cat.querySelector('.ball').style.aspectRatio='1.2';
-  overlays.appendChild(cat); ovEls.cat=cat;
+  ovEls.monitor=el('ov screen',`<div class="monitor-ui">
+    <div class="mu-head"><span class="mu-dot"></span><span class="mu-hi" id="mHi">good evening, antonio</span></div>
+    <div class="mu-card" style="flex:1; background:transparent; border:none; padding:.2em .1em">
+      <h3>today · ticktick</h3>
+      <div class="mu-task"><span class="tm">9:30a</span><span class="c"></span><span class="tx">Pathophys reading</span><span class="tg school"></span></div>
+      <div class="mu-task"><span class="tm">1:00p</span><span class="c"></span><span class="tx">Email Dr. Reyes</span><span class="tg life"></span></div>
+      <div class="mu-task"><span class="tm">4:00p</span><span class="c"></span><span class="tx">Refill prescription</span><span class="tg health"></span></div>
+      <div class="mu-task"><span class="tm">eve</span><span class="c"></span><span class="tx">Pomodoro · Symbiosis</span><span class="tg school"></span></div>
+    </div>
+    <div class="mu-foot"><span class="mu-pill">3 of 5 · open ✦</span></div></div>`);
+  ovEls.monitor.dataset.act='monitor';
+  ovEls.phone=el('ov screen',`<div class="phone-ui"><div class="ph-time" id="phT">—:—</div><div class="ph-h">🐦 feed</div>
+    <div class="ph-tw">building a desk for my brain 🪴</div><div class="ph-tw">bettas judging my list</div></div>`); ovEls.phone.dataset.act='phone';
+  ovEls.clock=el('ov screen',`<div class="clock-ui"><div class="t" id="ckT">—:—</div><div class="d" id="ckD">—</div></div>`); ovEls.clock.dataset.act='none';
+  ovEls.calendar=el('ov screen',`<div class="cal-ui"><div class="m">JUNE 2026</div><div class="cal-g" id="calG"></div></div>`); ovEls.calendar.dataset.act='none';
+  ovEls.cork=el('ov zone',`<span class="noteAdd">+ pin a thought</span>`); ovEls.cork.dataset.act='cork';
+  ovEls.tomato=el('ov zone',''); ovEls.tomato.dataset.act='tomato'; ovEls.tomato.title='start a pomodoro';
+  ovEls.lampGlow=el('glow',''); ovEls.lampGlow.style.setProperty('--gc','rgba(255,190,120,.5)'); ovEls.lampGlow.style.zIndex=1;
+  ovEls.tank=el('ov',''); ovEls.tank.style.pointerEvents='none';
+  ovEls.bW=document.createElement('div'); ovEls.bW.className='betta'; ovEls.bW.style.width='30%'; ovEls.bW.innerHTML=fishSVG('#f4f1ea','#ddd6ca');
+  ovEls.bB=document.createElement('div'); ovEls.bB.className='betta'; ovEls.bB.style.width='30%'; ovEls.bB.innerHTML=fishSVG('#2c2733','#15111c');
+  ovEls.tank.appendChild(ovEls.bW); ovEls.tank.appendChild(ovEls.bB);
+  ovEls.steamWrap=el('ov',`<span class="steam"></span><span class="steam" style="left:.55em; animation-delay:1.5s"></span><span class="steam" style="left:-.45em; animation-delay:2.8s"></span>`); ovEls.steamWrap.style.pointerEvents='none';
+  ovEls.strings=CFG.strings.map(()=>{ const e=el('glow',''); e.style.setProperty('--gc','rgba(255,208,150,.7)'); e.style.zIndex=1; return e; });
+  for(let i=0;i<8;i++){ const m=el('mote',''); m.animate([{transform:'translate(0,0)',opacity:0},{opacity:.55,offset:.3},{transform:`translate(${Math.random()*40-20}px,${-30-Math.random()*40}px)`,opacity:0}],{duration:9000+Math.random()*6000,iterations:Infinity,delay:-Math.random()*9000}); m.style.left=(20+Math.random()*55)+'%'; m.style.top=(45+Math.random()*28)+'%'; }
+  // cat
+  ovEls.cat=el('ov cat',`<div class="bub" id="catBub">hi, antonio ♡</div><div class="shadow"></div>
+    <svg class="ball" viewBox="0 0 100 100"><defs><radialGradient id="cg" cx="38%" cy="30%" r="75%"><stop offset="0" stop-color="#fcf9f2"/><stop offset="1" stop-color="#d8d2c4"/></radialGradient></defs>
+    <polygon points="22,18 34,2 40,22" fill="#e9e3d6"/><polygon points="78,18 66,2 60,22" fill="#e9e3d6"/>
+    <ellipse cx="50" cy="56" rx="42" ry="40" fill="url(#cg)"/></svg>
+    <span class="face" id="catFace">(=^‥^=)</span>`); ovEls.cat.dataset.act='cat';
 }
-function fishSVG(c1,c2){ return `<svg viewBox="0 0 120 50" style="width:100%;overflow:visible"><g><path d="M2 25 Q22 8 38 25 Q22 42 2 25Z" fill="${c1}" opacity=".9"/><ellipse cx="72" cy="25" rx="42" ry="13" fill="${c1}"/><ellipse cx="92" cy="25" rx="18" ry="10" fill="${c2}"/><circle cx="106" cy="22" r="2.2" fill="#111"/></svg>`; }
+function fishSVG(c1,c2){ return `<svg viewBox="0 0 120 60" style="width:100%;overflow:visible"><g><path d="M4 30 Q26 6 44 30 Q26 54 4 30Z" fill="${c1}" opacity=".92"/><path d="M44 30 Q30 20 30 8 Q44 22 52 28Z" fill="${c1}" opacity=".7"/><path d="M44 30 Q30 40 30 52 Q44 38 52 32Z" fill="${c1}" opacity=".7"/><ellipse cx="74" cy="30" rx="40" ry="15" fill="${c1}"/><ellipse cx="92" cy="30" rx="18" ry="11" fill="${c2}"/><circle cx="106" cy="27" r="2.4" fill="#111"/></svg>`; }
 
-/* ---- interactions ---- */
-let panelOn=false;
-function openPanel(){ panelOn=true; document.getElementById('panel').classList.add('on'); }
-function closePanel(){ panelOn=false; document.getElementById('panel').classList.remove('on'); }
-document.getElementById('panelX').onclick=closePanel;
-overlays.addEventListener('click',e=>{ const s=e.target.closest('[data-act]'); if(!s) return; const a=s.dataset.act;
-  if(a==='monitor') openPanel(); else if(a==='phone') openPanel(); else if(a==='cat') catSpeak(); });
-document.querySelectorAll('.ptab').forEach(t=>t.onclick=()=>{ document.querySelector('.ptab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p;
-  document.querySelector('.pp1').classList.toggle('off',i!==0); document.querySelectorAll('.pp2').forEach((p,j)=>p.classList.toggle('on',j===i-1)); });
+/* calendar fill */
+function buildCal(){ const g=document.getElementById('calG'); ['S','M','T','W','T','F','S'].forEach(d=>{ const e=document.createElement('div'); e.textContent=d; e.style.color='#9a8b78'; g.appendChild(e); });
+  const first=new Date(2026,5,1).getDay(); for(let i=0;i<first;i++) g.appendChild(document.createElement('div'));
+  const busy=[2,9,16,18,23]; for(let d=1;d<=30;d++){ const e=document.createElement('div'); e.textContent=d; if(d===26)e.className='td'; else if(busy.includes(d))e.className='dot'; g.appendChild(e); } }
 
-const CATLINES=['hi, antonio ♡','no rush, the desk is warm','sip of water? (=ↀωↀ=)','you’re doing okay','want to focus? i’ll sit with you'];
-const CATFACES=['(=^‥^=)','(=^ω^=)','(=˘ω˘=)','(=ↀωↀ=)','(=｀ω´=)']; let ci=0;
-function catSpeak(){ ci=(ci+1)%CATLINES.length; document.getElementById('catBub').textContent=CATLINES[ci]; document.getElementById('catFace').textContent=CATFACES[ci];
-  ovEls.cat.classList.add('say'); clearTimeout(catSpeak._t); catSpeak._t=setTimeout(()=>ovEls.cat.classList.remove('say'),3200); }
+/* ===== post-its (brain dump on corkboard) ===== */
+let notes=JSON.parse(localStorage.getItem('aq_notes')||'null')||[
+  {t:'save that song',c:'#f3dbe2',x:14,y:18,r:-4},{t:'study w/ friends?',c:'#dfeadb',x:52,y:14,r:3},{t:'koi tiktok 🐟',c:'#e2dff2',x:20,y:52,r:-2},{t:'drink water 🚰',c:'#f5ead3',x:56,y:50,r:4} ];
+const NCOL=['#f3dbe2','#dfeadb','#e2dff2','#f5ead3','#f7e0c4','#d9e8f0'];
+function renderNotes(){ ovEls.cork.querySelectorAll('.note').forEach(n=>n.remove());
+  notes.forEach(n=>{ const d=document.createElement('div'); d.className='note'; d.style.background=n.c; d.style.left=n.x+'%'; d.style.top=n.y+'%'; d.style.setProperty('--r',n.r+'deg'); d.textContent=n.t; ovEls.cork.appendChild(d); }); }
+function addNote(t){ if(!t) return; notes.push({t,c:NCOL[notes.length%NCOL.length],x:8+Math.random()*60,y:10+Math.random()*60,r:(Math.random()*10-5)}); if(notes.length>14)notes.shift(); localStorage.setItem('aq_notes',JSON.stringify(notes)); renderNotes(); }
 
-/* sky / weather / focus controls */
+/* ===== interactions ===== */
+function open(id){ document.getElementById(id).classList.add('on'); } function close(id){ document.getElementById(id).classList.remove('on'); }
+document.getElementById('panelX').onclick=()=>close('panel');
+document.getElementById('brainCancel').onclick=()=>close('brain');
+document.getElementById('brainAdd').onclick=()=>{ const v=document.getElementById('brainInput').value.trim(); if(v){addNote(v); document.getElementById('brainInput').value=''; close('brain'); catSay('caught it ✦');} };
+document.getElementById('brainInput').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('brainAdd').click(); });
+overlays.addEventListener('click',e=>{ const s=e.target.closest('[data-act]'); if(!s)return; const a=s.dataset.act;
+  if(a==='monitor'||a==='phone') open('panel'); else if(a==='cat') catSay(); else if(a==='cork'){ open('brain'); setTimeout(()=>document.getElementById('brainInput').focus(),200);} else if(a==='tomato') toggleFocus(); });
+document.querySelectorAll('.ptab').forEach(t=>t.onclick=()=>{ document.querySelector('.ptab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p; document.querySelector('.pp1').classList.toggle('off',i!==0); document.querySelectorAll('.pp2').forEach((p,j)=>p.classList.toggle('on',j===i-1)); });
+
+const CATLINES=['hi, antonio ♡','no rush, the desk is warm','sip of water? ✦','you’re doing okay','i’ll sit with you'];
+const CATFACES=['(=^‥^=)','(=^ω^=)','(=˘ω˘=)','(=ↀωↀ=)','(=｀ω´=)']; let ci=0,catT;
+function catSay(msg){ ci=(ci+1)%CATLINES.length; document.getElementById('catBub').textContent=msg||CATLINES[ci]; document.getElementById('catFace').textContent=CATFACES[ci]; ovEls.cat.classList.add('say'); clearTimeout(catT); catT=setTimeout(()=>ovEls.cat.classList.remove('say'),3000); }
+
+/* sky / weather / cool / focus / sound */
 function setSky(m){ skyMode=m; document.querySelectorAll('[data-sky]').forEach(b=>b.classList.toggle('on',b.dataset.sky===m)); applyGrade(); }
-function setWx(w){ wx=w; document.querySelectorAll('[data-wx]').forEach(b=>b.classList.toggle('on',b.dataset.wx===w)); }
+function setWx(w){ wx=w; document.querySelectorAll('[data-wx]').forEach(b=>b.classList.toggle('on',b.dataset.wx===w)); if(w==='rain'&&soundOn) startRain(); else stopRain(); }
 document.querySelectorAll('[data-sky]').forEach(b=>b.onclick=()=>{ auto=false; document.getElementById('autoBtn').classList.remove('on'); setSky(b.dataset.sky); });
 document.querySelectorAll('[data-wx]').forEach(b=>b.onclick=()=>setWx(b.dataset.wx));
-let focusOn=false;
-document.getElementById('focusBtn').onclick=function(){ focusOn=!focusOn; this.classList.toggle('on',focusOn); applyGrade();
-  document.getElementById('catFace').textContent=focusOn?'(=｀ω´=)':'(=^‥^=)'; document.getElementById('tip').textContent=focusOn?'focus mode · the room dims so it’s just you':'click the screen · drag to look'; };
-let auto=true;
-document.getElementById('autoBtn').onclick=function(){ auto=!auto; this.classList.toggle('on',auto); if(auto) tickAuto(); };
-function applyGrade(){
-  let col, op;
-  if(focusOn){ col='#1a1530'; op=.85; }
-  else if(skyMode==='dawn'){ col='#ffcaa0'; op=.4; }
-  else if(skyMode==='day'){ col='#bfe0ff'; op=.32; }
-  else if(skyMode==='dusk'){ col='#6a4a8a'; op=.34; }
-  else { col='#14204a'; op=.55; }
-  grade.style.background=col; grade.style.opacity=op;
-}
-function tickAuto(){ if(!auto) return; const h=new Date().getHours();
-  setSky(h<6?'night':h<9?'dawn':h<17?'day':h<20?'dusk':'night'); }
+let coolMode=false; document.getElementById('coolBtn').onclick=function(){ coolMode=!coolMode; this.classList.toggle('on',coolMode); cool.style.opacity=coolMode?0.55:0; applyGrade(); };
+let focusOn=false; function toggleFocus(){ focusOn=!focusOn; document.getElementById('tip').textContent=focusOn?'🍅 focus · the room dims so it’s just you — click 🍅 again to stop':'click the monitor · 🍅 pomodoro · pin notes on the board ✦'; applyGrade(); document.getElementById('catFace').textContent=focusOn?'(=｀ω´=)':'(=^‥^=)'; }
+let auto=true; document.getElementById('autoBtn').onclick=function(){ auto=!auto; this.classList.toggle('on',auto); if(auto)tickAuto(); };
+function applyGrade(){ let col,op;
+  if(focusOn){ col=coolMode?'#0d2436':'#1a1530'; op=.82; }
+  else if(coolMode){ col='#15324a'; op=.42; }
+  else if(skyMode==='dawn'){ col='#ffcaa0'; op=.36; }
+  else if(skyMode==='day'){ col='#bfe0ff'; op=.28; }
+  else if(skyMode==='dusk'){ col='#6a4a8a'; op=.32; }
+  else { col='#162a52'; op=.5; }
+  grade.style.background=col; grade.style.opacity=op; }
+function tickAuto(){ if(!auto)return; const h=new Date().getHours(); setSky(h<6?'night':h<9?'dawn':h<17?'day':h<20?'dusk':'night'); }
 
-/* live clock */
+/* ambient rain sound (synthesized) */
+let actx,rainSrc,rainGain,soundOn=false;
+function startRain(){ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(rainSrc)return;
+  const n=2*actx.sampleRate, buf=actx.createBuffer(1,n,actx.sampleRate), o=buf.getChannelData(0); for(let i=0;i<n;i++) o[i]=Math.random()*2-1;
+  rainSrc=actx.createBufferSource(); rainSrc.buffer=buf; rainSrc.loop=true;
+  const lp=actx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1100; const hp=actx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=350;
+  rainGain=actx.createGain(); rainGain.gain.value=0; rainSrc.connect(hp); hp.connect(lp); lp.connect(rainGain); rainGain.connect(actx.destination); rainSrc.start();
+  rainGain.gain.linearRampToValueAtTime(0.1, actx.currentTime+1.2); }
+function stopRain(){ if(rainGain&&actx){ rainGain.gain.linearRampToValueAtTime(0, actx.currentTime+0.5);} if(rainSrc){ try{rainSrc.stop(actx.currentTime+0.6);}catch(e){} rainSrc=null; } }
+document.getElementById('soundBtn').onclick=function(){ soundOn=!soundOn; this.textContent=soundOn?'🔊':'🔇'; this.classList.toggle('on',soundOn); if(soundOn&&wx==='rain') startRain(); else stopRain(); };
+
+/* clocks */
 function tickClock(){ const n=new Date(); let h=n.getHours(); const m=String(n.getMinutes()).padStart(2,'0'); const ap=h>=12?'PM':'AM'; const h12=((h+11)%12)+1;
-  const T=document.getElementById('ckT'), D=document.getElementById('ckD'); if(T){ T.textContent=`${h12}:${m}`; D.textContent=n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}); }
-  const g=['still up','good morning','good afternoon','good evening'][h<5?0:h<12?1:h<17?2:3];
-  const hi=document.getElementById('mHi'); if(hi) hi.textContent=`${g}, antonio`; const pHi=document.getElementById('pHi'); if(pHi) pHi.textContent=`${g}, antonio`; }
+  const set=(id,v)=>{ const e=document.getElementById(id); if(e)e.textContent=v; };
+  set('ckT',`${h12}:${m}`); set('ckD',n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})); set('phT',`${h12}:${m} ${ap}`);
+  const g=['still up','good morning','good afternoon','good evening'][h<5?0:h<12?1:h<17?2:3]; set('mHi',`${g}, antonio`); set('pHi',`${g}, antonio`); }
 
 /* parallax */
 let mx=0,my=0,tmx=0,tmy=0;
 addEventListener('pointermove',e=>{ tmx=(e.clientX/innerWidth-.5); tmy=(e.clientY/innerHeight-.5); });
-addEventListener('deviceorientation',e=>{ if(e.gamma!=null){ tmx=Math.max(-.5,Math.min(.5,e.gamma/45)); tmy=Math.max(-.5,Math.min(.5,e.beta/90)); }});
+addEventListener('deviceorientation',e=>{ if(e.gamma!=null){ tmx=Math.max(-.5,Math.min(.5,e.gamma/45)); tmy=Math.max(-.5,Math.min(.5,(e.beta-40)/60)); }});
 
-/* main loop */
-function loop(){ requestAnimationFrame(loop); skyT+=0.016;
-  drawSky();
+/* fish waypoint swim, clamped to tank */
+const fishState={ W:{x:.3,y:.4,tx:.3,ty:.4,dir:1}, B:{x:.6,y:.6,tx:.6,ty:.6,dir:-1} };
+function swim(f,sp){ const dx=f.tx-f.x, dy=f.ty-f.y; if(Math.hypot(dx,dy)<0.04){ f.tx=0.12+Math.random()*0.76; f.ty=0.2+Math.random()*0.62; }
+  f.x+=dx*sp; f.y+=dy*sp; if(Math.abs(dx)>0.01) f.dir=dx>0?1:-1; }
+
+function loop(){ requestAnimationFrame(loop); skyT+=0.016; drawSky();
   mx+=(tmx-mx)*0.06; my+=(tmy-my)*0.06;
-  sky.style.transform=`scale(1.08) translate(${-mx*22}px,${-my*14}px)`;
-  room.style.transform=`scale(1.04) translate(${-mx*7}px,${-my*5}px)`;
+  sky.style.transform=`scale(1.1) translate(${-mx*26}px,${-my*16}px)`;
+  room.style.transform=`scale(1.045) translate(${-mx*8}px,${-my*5}px)`;
   overlays.style.transform=`translate(${-mx*4}px,${-my*3}px)`;
-  // string twinkle
-  ovEls.strings && ovEls.strings.forEach((e,i)=>{ e.style.opacity=0.55+0.35*Math.abs(Math.sin(skyT*2+i)); });
-  if(ovEls.lampGlow) ovEls.lampGlow.style.opacity=0.8+Math.sin(skyT*7)*0.06;
-  // bettas
-  if(ovEls.bettaW){ const t=skyT; const W=ovEls.bettaW; const B=ovEls.bettaB;
-    W.style.left=(10+Math.sin(t*0.7)*55)+'%'; W.style.top=(30+Math.sin(t*1.1)*25)+'%'; W.style.transform=`scaleX(${Math.cos(t*0.7)>0?1:-1})`;
-    B.style.left=(50+Math.cos(t*0.6)*40)+'%'; B.style.top=(45+Math.cos(t*0.9)*22)+'%'; B.style.transform=`scaleX(${Math.sin(t*0.6)>0?-1:1})`; }
+  ovEls.strings&&ovEls.strings.forEach((e,i)=>{ e.style.opacity=0.5+0.4*Math.abs(Math.sin(skyT*2+i)); });
+  if(ovEls.lampGlow) ovEls.lampGlow.style.opacity=0.78+Math.sin(skyT*7)*0.05;
+  // fish within tank box
+  if(ovEls.bW){ swim(fishState.W,0.012); swim(fishState.B,0.009);
+    const pw=(f,el)=>{ el.style.left=(f.x*100-15)+'%'; el.style.top=(f.y*100-12)+'%'; el.style.transform=`scaleX(${f.dir})`; };
+    pw(fishState.W,ovEls.bW); pw(fishState.B,ovEls.bB); }
 }
 
-/* ---- boot ---- */
+/* boot */
 const img=new Image(); img.crossOrigin='anonymous'; img.src='room.png';
-img.onload=()=>{ roomCanvas=keyGreen(img); buildOverlays(); fit(); tickClock(); setInterval(tickClock,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000);
-  applyGrade(); loop(); const L=document.getElementById('loading'); L.style.opacity=0; setTimeout(()=>L.remove(),700);
-  if(location.hash==='#cal') document.body.classList.add('cal'); };
+img.onload=()=>{ roomCanvas=keyGreen(img); buildOverlays(); buildCal(); renderNotes(); fit(); tickClock(); setInterval(tickClock,5000);
+  tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loop();
+  const L=document.getElementById('loading'); L.style.opacity=0; setTimeout(()=>L.remove(),700);
+  if(location.hash.includes('cal')) document.body.classList.add('cal'); };
 img.onerror=()=>{ document.getElementById('loading').textContent='could not load room.png'; };
 addEventListener('resize',fit);
 </script>
