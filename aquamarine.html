@@ -202,8 +202,8 @@ const CFG = {
   phone:    {x:69.6, y:45.4, w:5.4,  h:12.2, rot:-4},
   clock:    {x:81.3, y:44.4, w:7.0,  h:6.6},
   calendar: {x:84.0, y:14.5, w:14.5, h:26.0},
-  corkboard:{x:57.2, y:13.5, w:15.3, h:27.5},
-  tomato:   {x:73.2, y:73.0, w:6.6,  h:9.0},
+  corkboard:{x:57.3, y:16.8, w:15.0, h:24.5},
+  tomato:   {x:75.2, y:65.0, w:5.8,  h:7.8},
   catSpot:  {x:13.5, y:65.5, w:10.5, h:12.5},
   tank:     {x:8.5,  y:54.0, w:15.5, h:11.5},
   coffee:   {x:32.0, y:73.0},
@@ -411,9 +411,10 @@ addEventListener('deviceorientation',e=>{ if(e.gamma!=null){ tmx=Math.max(-.5,Ma
 
 function loop(){ requestAnimationFrame(loop); skyT+=0.016; drawSky(); drawDust(); update3D();
   mx+=(tmx-mx)*0.06; my+=(tmy-my)*0.06;
-  sky.style.transform=`scale(1.1) translate(${-mx*26}px,${-my*16}px)`;
-  room.style.transform=fx.style.transform=`scale(1.045) translate(${-mx*8}px,${-my*5}px)`;
-  overlays.style.transform=dust.style.transform=`translate(${-mx*4}px,${-my*3}px)`;
+  // room + 3D + overlays + dust ALL share ONE transform so they stay locked together
+  const fg=`scale(1.045) translate(${-mx*8}px,${-my*5}px)`;
+  room.style.transform=fx.style.transform=overlays.style.transform=dust.style.transform=fg;
+  sky.style.transform=`scale(1.12) translate(${-mx*24}px,${-my*15}px)`;
   E.strings&&E.strings.forEach((e,i)=>{ e.style.opacity=0.45+0.45*Math.abs(Math.sin(skyT*2.2+i*0.7)); });
   if(E.lamp) E.lamp.style.opacity=0.78+Math.sin(skyT*7)*0.05;
 }
