@@ -5,48 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
 <title>Aquamarine</title>
 <style>
-  html,body{ margin:0; height:100%; background:#0a1018; overflow:hidden;
+  html,body{ margin:0; height:100%; background:#070a12; overflow:hidden;
     font-family:'Avenir Next','Segoe UI',system-ui,sans-serif; color:#eef4f5; }
   #gl{ position:fixed; inset:0; width:100%; height:100%; image-rendering:pixelated; }
-  .grain{ position:fixed; inset:0; pointer-events:none; z-index:3; mix-blend-mode:overlay; opacity:.07;
-    background-image:radial-gradient(rgba(255,255,255,.6) .5px, transparent .6px); background-size:3px 3px; }
+  .grain{ position:fixed; inset:0; pointer-events:none; z-index:3; mix-blend-mode:overlay; opacity:.06;
+    background-image:radial-gradient(rgba(255,255,255,.5) .5px, transparent .6px); background-size:3px 3px; }
   .vig{ position:fixed; inset:0; pointer-events:none; z-index:4;
-    background:radial-gradient(72% 72% at 50% 46%, transparent 52%, rgba(6,9,16,.66) 100%); }
+    background:radial-gradient(74% 74% at 50% 48%, transparent 50%, rgba(4,6,12,.74) 100%); }
   .tag{ position:fixed; top:11px; left:14px; z-index:9; font-size:10px; letter-spacing:2px; text-transform:uppercase;
-    color:#cdd; background:rgba(8,14,22,.4); padding:5px 11px; border-radius:16px; border:1px solid rgba(190,214,220,.16); }
-
-  /* mode buttons */
+    color:#9fb3c0; background:rgba(8,12,22,.4); padding:5px 11px; border-radius:16px; border:1px solid rgba(150,170,200,.14); }
   .modes{ position:fixed; bottom:16px; left:50%; transform:translateX(-50%); z-index:9; display:flex; gap:8px; }
-  .modes button{ background:rgba(16,24,36,.6); border:1px solid rgba(190,214,220,.2); color:#dfe9ea; backdrop-filter:blur(8px);
+  .modes button{ background:rgba(20,26,44,.6); border:1px solid rgba(160,180,220,.2); color:#dfe9ea; backdrop-filter:blur(8px);
     border-radius:22px; padding:9px 18px; font-size:12.5px; letter-spacing:.5px; cursor:pointer; font-family:inherit; transition:.3s; }
-  .modes button:hover{ background:rgba(232,182,196,.3); }
-  .modes button.on{ background:#e8b6c4; color:#2a1820; border-color:transparent; font-weight:600; }
+  .modes button:hover{ background:rgba(200,150,210,.3); }
+  .modes button.on{ background:#c79adf; color:#1a1226; border-color:transparent; font-weight:600; }
 
-  /* focus-mode HTML dashboard, sits over the monitor */
-  .screen-ui{ position:fixed; z-index:7; left:50%; top:46%; transform:translate(-50%,-50%) scale(.9);
-    width:min(620px,72vw); height:min(404px,64vh); opacity:0; pointer-events:none; transition:opacity .6s, transform .6s; }
+  /* focus dashboard — styled like the dusky koi-pond mockup, reads as the screen */
+  .screen-ui{ position:fixed; z-index:7; left:50%; top:45%; transform:translate(-50%,-50%) scale(.92);
+    width:min(640px,70vw); aspect-ratio:16/10; opacity:0; pointer-events:none; transition:opacity .55s, transform .55s; }
   .screen-ui.on{ opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
-  .panel{ width:100%; height:100%; background:linear-gradient(165deg, rgba(20,32,46,.93), rgba(14,22,34,.96));
-    border:1px solid rgba(232,182,196,.3); border-radius:14px; padding:18px 22px; box-shadow:0 20px 60px rgba(0,0,0,.6), 0 0 50px rgba(255,200,140,.1);
-    display:flex; flex-direction:column; backdrop-filter:blur(6px); }
-  .panel h1{ font-size:19px; font-weight:600; margin:0 0 2px; }
-  .panel .sub{ font-size:11px; color:#9fb3b8; margin-bottom:10px; }
-  .ptabs{ display:flex; gap:6px; margin-bottom:10px; }
-  .ptab{ font-size:11.5px; padding:6px 14px; border-radius:9px; cursor:pointer; background:rgba(225,236,238,.07);
-    color:#9fb3b8; border:1px solid rgba(190,214,220,.16); }
+  .panel{ width:100%; height:100%; border-radius:12px; padding:18px 20px; display:flex; flex-direction:column;
+    background:
+      radial-gradient(120% 80% at 80% -10%, rgba(120,120,180,.18), transparent 55%),
+      linear-gradient(165deg,#16233a,#0e1828 70%,#0b1320);
+    border:1px solid rgba(199,154,223,.34); box-shadow:0 24px 70px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.06); }
+  .panel .top{ display:flex; align-items:baseline; gap:10px; }
+  .panel h1{ font-size:18px; font-weight:600; margin:0; } .panel .wm{ margin-left:auto; font-size:9px; letter-spacing:4px; text-transform:uppercase; color:#6f8596; }
+  .panel .sub{ font-size:11px; color:#8aa0ac; margin:3px 0 12px; }
+  .cards{ display:grid; grid-template-columns:1.5fr 1fr; gap:12px; flex:1; min-height:0; }
+  .card{ background:rgba(225,236,238,.05); border:1px solid rgba(160,180,200,.14); border-radius:10px; padding:12px 14px; overflow:auto; }
+  .card h2{ font-size:9.5px; text-transform:uppercase; letter-spacing:1.6px; color:#7f96a4; margin:0 0 9px; display:flex; gap:6px; align-items:center; }
+  .card h2::before{ content:''; width:6px; height:6px; border-radius:50%; background:#e8b6c4; box-shadow:0 0 7px #e8b6c4; }
+  .ptabs{ display:flex; gap:5px; margin-bottom:9px; }
+  .ptab{ font-size:10.5px; padding:5px 11px; border-radius:8px; cursor:pointer; background:rgba(225,236,238,.06); color:#8aa0ac; border:1px solid rgba(160,180,200,.14); }
   .ptab.on{ background:#e8b6c4; color:#2a1820; border-color:transparent; font-weight:600; }
-  .plist{ flex:1; overflow:auto; }
-  .ptask{ display:flex; align-items:center; gap:11px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.06); }
-  .ptask .c{ width:16px; height:16px; border-radius:5px; border:1.5px solid #7f969c; flex:none; cursor:pointer; }
-  .ptask .c:hover{ border-color:#e8b6c4; }
-  .ptask .tm{ font-size:11px; color:#7f969c; min-width:42px; } .ptask .tx{ font-size:14px; }
-  .ptask .tg{ margin-left:auto; font-size:10px; padding:2px 9px; border-radius:20px; background:rgba(225,236,238,.1); color:#b8c8cc; }
+  .ptask{ display:flex; align-items:center; gap:9px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+  .ptask .c{ width:14px; height:14px; border-radius:4px; border:1.5px solid #7f969c; flex:none; cursor:pointer; }
+  .ptask .c:hover{ border-color:#e8b6c4; box-shadow:0 0 8px rgba(232,182,196,.5); }
+  .ptask .tm{ font-size:10px; color:#7f969c; min-width:36px; } .ptask .tx{ font-size:12.5px; }
+  .ptask .tg{ margin-left:auto; font-size:9px; padding:2px 7px; border-radius:14px; background:rgba(225,236,238,.08); color:#9fb3b8; }
   .pp2{ display:none; } .pp2.on{ display:block; } .pp1.off{ display:none; }
-  .pomo{ margin-top:10px; display:flex; align-items:center; gap:10px; }
-  .pomo button{ background:rgba(232,182,196,.16); border:1px solid rgba(232,182,196,.4); color:#e8b6c4; border-radius:20px;
-    padding:8px 16px; font-size:12px; cursor:pointer; font-family:inherit; }
-  .pomo button:hover{ background:#e8b6c4; color:#2a1820; } .pomo .note{ font-size:10.5px; color:#7f969c; }
-  .hintline{ position:fixed; bottom:54px; left:50%; transform:translateX(-50%); z-index:9; font-size:10.5px; color:#88a; opacity:.7; }
+  .mini{ font-size:11px; color:#b8c8cc; padding:5px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+  .mini b{ color:#e6eef0; } .mini .u{ color:#e8b6c4; }
+  .srow{ display:flex; gap:8px; margin-top:10px; }
+  .srow button{ flex:1; background:rgba(199,154,223,.14); border:1px solid rgba(199,154,223,.4); color:#d9b8ee; border-radius:9px; padding:8px; font-size:11px; cursor:pointer; font-family:inherit; }
+  .srow button:hover{ background:#c79adf; color:#1a1226; }
+  .hintline{ position:fixed; bottom:54px; left:50%; transform:translateX(-50%); z-index:9; font-size:10.5px; color:#7d8fb0; opacity:.7; transition:.4s; }
+
+  /* tweets popover */
+  .tweets{ position:fixed; right:24px; bottom:70px; width:260px; max-height:60vh; z-index:8; background:linear-gradient(165deg,#141d2e,#0e1726);
+    border:1px solid rgba(160,180,200,.2); border-radius:14px; padding:14px; opacity:0; pointer-events:none; transform:translateY(10px); transition:.35s; box-shadow:0 16px 50px rgba(0,0,0,.6); }
+  .tweets.on{ opacity:1; pointer-events:auto; transform:none; }
+  .tweets h3{ font-size:12px; margin:0 0 10px; color:#a8c4ab; } .tweets .x{ position:absolute; top:10px; right:13px; cursor:pointer; color:#7f969c; }
+  .twt{ font-size:11.5px; line-height:1.4; color:#b8c8cc; padding:7px 0; border-bottom:1px solid rgba(255,255,255,.05); } .twt b{ color:#e6eef0; }
+  .tweets textarea{ width:100%; height:46px; resize:none; margin-top:8px; background:rgba(8,12,22,.6); border:1px solid rgba(160,180,200,.18); border-radius:8px; color:#eef4f5; font:inherit; font-size:11px; padding:7px; }
+  .tweets .post{ width:100%; margin-top:6px; background:#a8c4ab; color:#16241a; border:none; border-radius:8px; padding:7px; font-size:11px; font-weight:700; cursor:pointer; }
 </style>
 </head>
 <body>
@@ -58,296 +71,284 @@
     <button id="mFocus" class="on">💻 focus</button>
     <button id="mRoom">🪟 step back</button>
   </div>
-  <div class="hintline" id="hintline">click the screen to focus · drag to look around when stepped back</div>
+  <div class="hintline" id="hintline">drag to look up &amp; around · click the monitor / phone / timer</div>
 
-  <!-- focus dashboard overlay -->
   <div class="screen-ui" id="screenUI">
     <div class="panel">
-      <h1 id="phello">good evening, antonio</h1>
-      <div class="sub">the desk is warm. 5 things waiting — no rush.</div>
-      <div class="ptabs">
-        <div class="ptab on" data-p="0">Today · TickTick</div>
-        <div class="ptab" data-p="1">Notion</div>
-        <div class="ptab" data-p="2">Inbox</div>
+      <div class="top"><h1 id="phello">good evening, antonio</h1><span class="wm">aquamarine</span></div>
+      <div class="sub">the pond is calm. 5 things drifted up — no rush.</div>
+      <div class="cards">
+        <div class="card">
+          <div class="ptabs"><div class="ptab on" data-p="0">TickTick</div><div class="ptab" data-p="1">Notion</div></div>
+          <div class="pp1">
+            <div class="ptask"><span class="tm">9:30a</span><span class="c"></span><span class="tx">Pathophys reading — Ch.12</span><span class="tg">school</span></div>
+            <div class="ptask"><span class="tm">1:00p</span><span class="c"></span><span class="tx">Email Dr. Reyes</span><span class="tg">life</span></div>
+            <div class="ptask"><span class="tm">4:00p</span><span class="c"></span><span class="tx">Refill prescription</span><span class="tg">health</span></div>
+            <div class="ptask"><span class="tm">eve</span><span class="c"></span><span class="tx">Pomodoro · Symbiosis</span><span class="tg">school</span></div>
+          </div>
+          <div class="pp2">
+            <div class="ptask"><span class="c"></span><span class="tx">Research — outline draft</span><span class="tg">thesis</span></div>
+            <div class="ptask"><span class="c"></span><span class="tx">Reading log — 3 articles</span><span class="tg">study</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <h2>inbox · needs you</h2>
+          <div class="mini"><b>UNTHSC Registrar</b><br>enrollment opens Mon <span class="u">●</span></div>
+          <div class="mini"><b>Anatomy TA</b><br>reply by Fri <span class="u">●</span></div>
+          <div class="mini"><b>Jamie</b><br>re: weekend plans?</div>
+        </div>
       </div>
-      <div class="plist">
-        <div class="pp1">
-          <div class="ptask"><span class="tm">9:30a</span><span class="c"></span><span class="tx">Pathophys reading — Ch. 12</span><span class="tg">school</span></div>
-          <div class="ptask"><span class="tm">1:00p</span><span class="c"></span><span class="tx">Email Dr. Reyes re: rotation</span><span class="tg">life</span></div>
-          <div class="ptask"><span class="tm">4:00p</span><span class="c"></span><span class="tx">Refill prescription</span><span class="tg">health</span></div>
-          <div class="ptask"><span class="tm">eve</span><span class="c"></span><span class="tx">Pomodoro — Symbiosis notes</span><span class="tg">school</span></div>
-        </div>
-        <div class="pp2">
-          <div class="ptask"><span class="c"></span><span class="tx">Research project — outline draft</span><span class="tg">thesis</span></div>
-          <div class="ptask"><span class="c"></span><span class="tx">Reading log — log 3 articles</span><span class="tg">study</span></div>
-        </div>
-        <div class="pp2">
-          <div class="ptask"><span class="c" style="border-radius:50%"></span><span class="tx">UNTHSC Registrar — enrollment Mon</span><span class="tg">school</span></div>
-          <div class="ptask"><span class="c" style="border-radius:50%"></span><span class="tx">Anatomy TA — reply by Fri</span><span class="tg">school</span></div>
-        </div>
-      </div>
-      <div class="pomo">
+      <div class="srow">
         <button id="pomoBtn">▶ start a pomodoro</button>
-        <span class="note">dims the room · syncs TickTick focus</span>
+        <button id="tweetBtn">📱 open phone</button>
       </div>
     </div>
   </div>
 
+  <div class="tweets" id="tweets">
+    <span class="x" id="tweetsX">✕</span><h3>🐦 my feed</h3>
+    <div id="feed">
+      <div class="twt"><b>me</b><br>building a little desk for my brain 🪴</div>
+      <div class="twt"><b>me</b><br>the bettas are judging my to-do list</div>
+      <div class="twt"><b>me</b><br>iced coffee #4 today, we move</div>
+    </div>
+    <textarea id="twtInput" placeholder="what's on your mind?"></textarea>
+    <button class="post" id="twtPost">post</button>
+  </div>
+
 <script src="three.min.js"></script>
 <script>
-const T = THREE;
-const cv = document.getElementById('gl');
-const renderer = new T.WebGLRenderer({ canvas:cv, antialias:false });
-const RES = 0.66;                                  // cleaner low-poly than before
-function size(){ const w=innerWidth,h=innerHeight; renderer.setPixelRatio(1);
-  renderer.setSize(Math.floor(w*RES), Math.floor(h*RES), false); cam.aspect=w/h; cam.updateProjectionMatrix(); }
-renderer.setClearColor(0x0c1622, 1);
-renderer.outputEncoding = T.sRGBEncoding;
-renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;
+const T=THREE, cv=document.getElementById('gl');
+const renderer=new T.WebGLRenderer({canvas:cv,antialias:false});
+const RES=0.7;
+function size(){ const w=innerWidth,h=innerHeight; renderer.setPixelRatio(1); renderer.setSize(Math.floor(w*RES),Math.floor(h*RES),false); cam.aspect=w/h; cam.updateProjectionMatrix(); }
+renderer.setClearColor(0x090e18,1);
+renderer.outputEncoding=T.sRGBEncoding;
+renderer.toneMapping=T.ACESFilmicToneMapping; renderer.toneMappingExposure=0.92;
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=T.PCFSoftShadowMap;
 
-const scene = new T.Scene();
-scene.fog = new T.Fog(0x16273a, 8, 22);
+const scene=new T.Scene(); scene.fog=new T.Fog(0x0e1828,7,24);
+const cam=new T.PerspectiveCamera(43,1,0.1,100);
 
-const cam = new T.PerspectiveCamera(42, 1, 0.1, 100);
+/* ---- textures (procedural, gives the 'image-wrapped' low-poly look) ---- */
+function tx(draw,rx,ry){ const c=document.createElement('canvas'); c.width=c.height=128; draw(c.getContext('2d')); const t=new T.CanvasTexture(c);
+  t.wrapS=t.wrapT=T.RepeatWrapping; if(rx)t.repeat.set(rx,ry||rx); return t; }
+const woodTex=tx(g=>{ g.fillStyle='#5b4636'; g.fillRect(0,0,128,128); for(let i=0;i<46;i++){ g.strokeStyle=`rgba(${40+Math.random()*40},${28+Math.random()*26},${18+Math.random()*16},.5)`; g.lineWidth=1+Math.random()*2; g.beginPath(); g.moveTo(0,i*3+Math.random()*2); g.bezierCurveTo(40,i*3+Math.sin(i)*3,90,i*3-2,128,i*3+Math.random()*2); g.stroke(); } },2,1);
+const fabricTex=tx(g=>{ g.fillStyle='#34405e'; g.fillRect(0,0,128,128); for(let x=0;x<128;x+=3){ g.strokeStyle=`rgba(${30+Math.random()*30},${40+Math.random()*30},${70+Math.random()*30},.4)`; g.beginPath(); g.moveTo(x,0); g.lineTo(x,128); g.stroke(); } g.fillStyle='rgba(0,0,0,.06)'; for(let i=0;i<400;i++) g.fillRect(Math.random()*128,Math.random()*128,1,1); },4,3);
+const paperTex=tx(g=>{ g.fillStyle='#efe7d6'; g.fillRect(0,0,128,128); g.fillStyle='rgba(150,130,90,.08)'; for(let i=0;i<300;i++) g.fillRect(Math.random()*128,Math.random()*128,1,1); });
+function posterTex(c1,c2,label){ return tx(g=>{ const grd=g.createLinearGradient(0,0,128,128); grd.addColorStop(0,c1); grd.addColorStop(1,c2); g.fillStyle=grd; g.fillRect(0,0,128,128); if(label){ g.fillStyle='rgba(255,255,255,.85)'; g.font='italic 13px Georgia'; g.fillText(label,10,118);} }); }
 
-/* PS1 vertex-snap (subtler now) */
-function ps1(mat){ mat.flatShading = true;
-  mat.onBeforeCompile = (sh)=>{ sh.vertexShader = sh.vertexShader.replace('#include <project_vertex>',
-    `#include <project_vertex>
-     vec4 _p=gl_Position; _p.xyz/=_p.w; _p.xy=floor(_p.xy*170.0)/170.0; _p.xyz*=_p.w; gl_Position=_p;`); };
-  return mat; }
-function lam(color,opts={}){ return ps1(new T.MeshStandardMaterial(Object.assign({color,roughness:.9,metalness:0},opts))); }
-function emis(color){ return new T.MeshBasicMaterial({color}); }
-function addBox(w,h,d,mat,x,y,z){ const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat); m.position.set(x,y,z); scene.add(m); return m; }
+function ps1(m){ m.flatShading=true; m.onBeforeCompile=sh=>{ sh.vertexShader=sh.vertexShader.replace('#include <project_vertex>',
+  `#include <project_vertex>
+   vec4 _p=gl_Position; _p.xyz/=_p.w; _p.xy=floor(_p.xy*200.0)/200.0; _p.xyz*=_p.w; gl_Position=_p;`); }; return m; }
+function lam(c,o={}){ return ps1(new T.MeshStandardMaterial(Object.assign({color:c,roughness:.92,metalness:0},o))); }
+function texMat(map,o={}){ return ps1(new T.MeshStandardMaterial(Object.assign({map,roughness:.9},o))); }
+function emis(c){ return new T.MeshBasicMaterial({color:c}); }
+function box(w,h,d,m,x,y,z){ const b=new T.Mesh(new T.BoxGeometry(w,h,d),m); b.position.set(x,y,z); scene.add(b); return b; }
 
-/* additive glow sprite for cozy bloom-ish halos */
-const glowTex=(()=>{ const c=document.createElement('canvas'); c.width=c.height=64; const g=c.getContext('2d');
-  const r=g.createRadialGradient(32,32,0,32,32,32); r.addColorStop(0,'rgba(255,255,255,1)'); r.addColorStop(1,'rgba(255,255,255,0)');
-  g.fillStyle=r; g.fillRect(0,0,64,64); return new T.CanvasTexture(c); })();
-function glow(color,sz,x,y,z){ const s=new T.Sprite(new T.SpriteMaterial({map:glowTex,color,blending:T.AdditiveBlending,transparent:true,depthWrite:false}));
-  s.scale.set(sz,sz,1); s.position.set(x,y,z); scene.add(s); return s; }
+/* dim cozy glow sprite */
+const glowTex=(()=>{ const c=document.createElement('canvas'); c.width=c.height=64; const g=c.getContext('2d'); const r=g.createRadialGradient(32,32,0,32,32,32); r.addColorStop(0,'rgba(255,255,255,.8)'); r.addColorStop(1,'rgba(255,255,255,0)'); g.fillStyle=r; g.fillRect(0,0,64,64); return new T.CanvasTexture(c); })();
+function glow(c,sz,x,y,z){ const s=new T.Sprite(new T.SpriteMaterial({map:glowTex,color:c,blending:T.AdditiveBlending,transparent:true,depthWrite:false,opacity:.6})); s.scale.set(sz,sz,1); s.position.set(x,y,z); scene.add(s); return s; }
 
-/* ---- lighting: dusky cool + warm lamp pool ---- */
-scene.add(new T.HemisphereLight(0x4a6a8f, 0x241d28, 0.6));
-scene.add(new T.AmbientLight(0x2a3450, 0.45));
-const lampLight=new T.PointLight(0xffba74, 2.6, 8, 2.0); lampLight.position.set(-1.9,2.5,0.2); scene.add(lampLight);
-const warmFill=new T.PointLight(0xffd0a0, 0.5, 14, 1.5); warmFill.position.set(0,3.2,2.0); scene.add(warmFill);
-const winLight=new T.PointLight(0x9ab6e0, 0.7, 14, 1.6); winLight.position.set(3.4,2.6,-2.2); scene.add(winLight);
+/* ---- moody dusk lighting (low!) ---- */
+scene.add(new T.HemisphereLight(0x3a4a6e,0x15101c,0.32));
+scene.add(new T.AmbientLight(0x1a2238,0.28));
+const lampLight=new T.PointLight(0xffb066,1.15,6.5,2.2); lampLight.position.set(-2.0,2.45,0.4); lampLight.castShadow=true; scene.add(lampLight);
+const winLight=new T.PointLight(0x6f7fc8,0.45,16,1.6); winLight.position.set(0,4.2,-3.0); scene.add(winLight);
+const magenta=new T.PointLight(0xc060b0,0.35,8,2.0); magenta.position.set(2.6,3.2,-2.6); scene.add(magenta);
 
-/* ---- cubicle shell ---- */
-addBox(16,9,0.4, lam(0x33405e), 0,3.5,-3.4);     // back wall (dusky blue)
-addBox(0.4,9,14, lam(0x2c3a54), -6,3.5,1);
-addBox(0.4,9,14, lam(0x2c3a54),  6,3.5,1);
-addBox(16,0.4,14, lam(0x14202e), 0,-0.2,1);
-/* low cubicle divider behind desk (cork-ish), holds pinned things */
-addBox(7.6,2.4,0.18, lam(0x6f5c44,{roughness:1}), 0,2.4,-2.25);
+/* ---- room shell (textured) ---- */
+box(18,10,0.4, texMat(fabricTex,{color:0x36436a}), 0,4,-3.6);
+box(0.4,10,16, texMat(fabricTex,{color:0x2e3a5a}), -7,4,1);
+box(0.4,10,16, texMat(fabricTex,{color:0x2e3a5a}),  7,4,1);
+box(18,0.4,16, lam(0x10182a), 0,-0.3,1);
+box(9,2.6,0.18, texMat(fabricTex,{color:0x4a3f5a}), 0,2.5,-2.4);   // divider cork-fabric
 
-/* ---- window (right-back) with dusk sky + sci-fi weather HUD ---- */
-let wxHud;
+/* ---- WIDE panoramic window across the wall ---- */
+let drawHud,htex;
 (function(){
-  const c=document.createElement('canvas'); c.width=160; c.height=200; const g=c.getContext('2d');
-  const grd=g.createLinearGradient(0,0,0,200); grd.addColorStop(0,'#2b3a63'); grd.addColorStop(.45,'#5a5388');
-  grd.addColorStop(.74,'#b97f99'); grd.addColorStop(1,'#e8b6c4'); g.fillStyle=grd; g.fillRect(0,0,160,200);
-  g.fillStyle='#fff2dd'; g.beginPath(); g.arc(116,128,11,0,7); g.fill();
-  g.fillStyle='rgba(16,22,38,.92)'; for(let i=0;i<9;i++){ g.fillRect(i*18,150-(i%3)*16-12,16,70); }
-  // city window dots
-  g.fillStyle='rgba(255,220,150,.5)'; for(let i=0;i<40;i++){ g.fillRect(Math.random()*160, 150+Math.random()*40, 2,2); }
+  const c=document.createElement('canvas'); c.width=512; c.height=128; const g=c.getContext('2d');
+  const grd=g.createLinearGradient(0,0,0,128); grd.addColorStop(0,'#1f2c52'); grd.addColorStop(.45,'#46406f'); grd.addColorStop(.72,'#9c6a8e'); grd.addColorStop(1,'#d59bb0'); g.fillStyle=grd; g.fillRect(0,0,512,128);
+  g.fillStyle='#fff2dd'; g.beginPath(); g.arc(430,46,10,0,7); g.fill();
+  g.fillStyle='rgba(12,16,30,.94)'; for(let i=0;i<26;i++){ const bh=30+(i*7%50); g.fillRect(i*20, 128-bh, 17, bh); }
+  g.fillStyle='rgba(255,214,150,.55)'; for(let i=0;i<120;i++) g.fillRect(Math.random()*512,90+Math.random()*36,2,2);
   const tex=new T.CanvasTexture(c); tex.magFilter=T.NearestFilter;
-  const win=new T.Mesh(new T.PlaneGeometry(3.0,3.6), new T.MeshBasicMaterial({map:tex}));
-  win.position.set(3.0,3.0,-3.18); scene.add(win);
-  addBox(3.3,3.9,0.16, lam(0x202c3e), 3.0,3.0,-3.26);
-  // sci-fi weather HUD overlay (glowing cyan corner display)
-  const hc=document.createElement('canvas'); hc.width=128; hc.height=64; wxHud=hc.getContext('2d');
-  function drawHud(temp){ const g=wxHud; g.clearRect(0,0,128,64);
-    g.shadowColor='#7fe3ff'; g.shadowBlur=8; g.fillStyle='#aef0ff'; g.font='bold 22px Menlo,monospace'; g.fillText(temp,8,30);
-    g.font='10px Menlo,monospace'; g.fillStyle='#8fd6e8'; g.fillText('ARLINGTON 76018',8,46); g.fillText('▘ dusk · clear',8,58); }
+  const win=new T.Mesh(new T.PlaneGeometry(11,2.8), new T.MeshBasicMaterial({map:tex})); win.position.set(0,4.6,-3.4); scene.add(win);
+  box(11.4,3.1,0.16, lam(0x1c2740), 0,4.6,-3.5);
+  // mullions
+  for(let x=-4.5;x<=4.5;x+=1.5) box(0.09,2.8,0.06, lam(0x1c2740), x,4.6,-3.32);
+  box(11,0.09,0.06, lam(0x1c2740), 0,4.6,-3.32);
+  glow(0x6a6aa0,8,0,4.6,-3.2);
+  // sci-fi weather HUD in corner of window
+  const hc=document.createElement('canvas'); hc.width=160; hc.height=72; const hg=hc.getContext('2d'); htex=new T.CanvasTexture(hc); htex.magFilter=T.NearestFilter;
+  drawHud=(temp)=>{ hg.clearRect(0,0,160,72); hg.strokeStyle='rgba(120,230,255,.5)'; hg.strokeRect(2,2,156,68);
+    hg.shadowColor='#7fe3ff'; hg.shadowBlur=8; hg.fillStyle='#aef0ff'; hg.font='bold 26px Menlo,monospace'; hg.fillText(temp,12,34);
+    hg.font='10px Menlo,monospace'; hg.fillStyle='#8fd6e8'; hg.fillText('ARLINGTON · 76018',12,52); hg.fillText('dusk · clear ▘',12,64); htex.needsUpdate=true; };
   drawHud('—°F');
-  const htex=new T.CanvasTexture(hc); htex.magFilter=T.NearestFilter; window._htex=htex; window._drawHud=drawHud;
-  const hud=new T.Mesh(new T.PlaneGeometry(1.3,0.65), new T.MeshBasicMaterial({map:htex,transparent:true}));
-  hud.position.set(1.95,1.7,-3.12); scene.add(hud); glow(0x4fd0ff,1.4,1.95,1.7,-3.05);
+  const hud=new T.Mesh(new T.PlaneGeometry(1.5,0.68), new T.MeshBasicMaterial({map:htex,transparent:true})); hud.position.set(-4.4,3.7,-3.28); scene.add(hud); glow(0x4fd0ff,1.3,-4.4,3.7,-3.18);
 })();
 
-/* ---- string lights along the divider top ---- */
-for(let i=0;i<13;i++){ const col=i%3===0?0xffd9a0:(i%3===1?0xe8b6c4:0xb7b3e0);
-  const b=new T.Mesh(new T.SphereGeometry(0.07,8,8), emis(col));
-  const x=-3.4+i*0.57, y=3.5+Math.sin(i*1.3)*0.1, z=-2.18; b.position.set(x,y,z); scene.add(b); glow(col,0.7,x,y,z+0.05); }
+/* string lights (fewer, dimmer) */
+for(let i=0;i<11;i++){ const col=i%3===0?0xffcf9a:(i%3===1?0xe8b6c4:0xb7b3e0); const x=-3.6+i*0.72, y=3.6+Math.sin(i*1.3)*0.08, z=-2.32;
+  const b=new T.Mesh(new T.SphereGeometry(0.055,8,8),emis(col)); b.position.set(x,y,z); scene.add(b); glow(col,0.42,x,y,z+0.04); }
 
-/* ---- neon sign ---- */
-(function(){ const c=document.createElement('canvas'); c.width=256; c.height=64; const g=c.getContext('2d');
-  g.font='bold 28px Segoe UI'; g.textAlign='center'; g.shadowColor='#e8b6c4'; g.shadowBlur=16; g.fillStyle='#ffd9ec'; g.fillText('aquamarine ♡',128,42);
-  const tex=new T.CanvasTexture(c); const s=new T.Mesh(new T.PlaneGeometry(2.4,0.6), new T.MeshBasicMaterial({map:tex,transparent:true}));
-  s.position.set(-1.9,4.4,-3.15); scene.add(s); glow(0xe8b6c4,2.2,-1.9,4.4,-3.0); })();
+/* neon sign */
+(function(){ const c=document.createElement('canvas'); c.width=256; c.height=64; const g=c.getContext('2d'); g.font='bold 26px Segoe UI'; g.textAlign='center'; g.shadowColor='#e8b6c4'; g.shadowBlur=14; g.fillStyle='#ffd9ec'; g.fillText('aquamarine ♡',128,42);
+  const s=new T.Mesh(new T.PlaneGeometry(2.2,0.55), new T.MeshBasicMaterial({map:new T.CanvasTexture(c),transparent:true})); s.position.set(-3.6,3.1,-2.31); scene.add(s); glow(0xe8b6c4,1.5,-3.6,3.1,-2.2); })();
 
-/* ---- tiered desk: lower surface + raised back shelf ---- */
-const desk=lam(0x6a5440,{roughness:.95});
-addBox(7.6,0.3,3.0, desk, 0,1.0,0.0);            // lower surface
-addBox(7.6,0.3,1.4, desk, 0,1.7,-1.7);            // raised back shelf
-addBox(7.6,0.7,0.18, lam(0x56432f), 0,1.35,-1.0); // riser between tiers
-addBox(0.3,2.0,2.6, lam(0x4a3a2c), -3.5,0,0.2); addBox(0.3,2.0,2.6, lam(0x4a3a2c), 3.5,0,0.2);
-/* drawer cabinet right */
-addBox(1.7,2.0,2.2, lam(0x7a6047), 4.6,0.8,0.3); addBox(1.5,0.5,0.05, lam(0xf3dbe2), 4.6,1.2,1.42);
+/* posters/photos on divider (textured, bigger, visible) */
+function pin(x,y,map,w,h,rot){ const p=box(w+0.06,h+0.06,0.03, lam(0xf2ecdd), x,y,-2.3); const ph=new T.Mesh(new T.PlaneGeometry(w,h), texMat(map)); ph.position.set(x,y,-2.28); ph.rotation.z=rot||0; scene.add(ph); return ph; }
+pin(-2.0,2.7, posterTex('#5a8ca0','#cdeaf0','koi pond'),0.8,0.95,-.05);
+pin(2.0,2.85, posterTex('#c98fa0','#f3dbe2','sakura'),0.8,0.95,.05);
+/* mini calendar on divider */
+(function(){ const c=document.createElement('canvas'); c.width=128; c.height=120; const g=c.getContext('2d'); g.fillStyle='#f1ece0'; g.fillRect(0,0,128,120); g.fillStyle='#8a5a4a'; g.font='bold 13px Segoe UI'; g.fillText('JUNE 2026',8,17); g.font='9px Segoe UI';
+  for(let r=0;r<5;r++)for(let d=0;d<7;d++){ const day=r*7+d-1; if(day>0&&day<=30){ if(day===26){ g.fillStyle='#cf7088'; g.fillRect(5+d*17,24+r*16,15,12); g.fillStyle='#fff'; } else g.fillStyle='#5b4f3a'; g.fillText(day,7+d*17,34+r*16); } }
+  const cal=new T.Mesh(new T.PlaneGeometry(1.1,1.05), new T.MeshBasicMaterial({map:new T.CanvasTexture(c)})); cal.position.set(2.9,2.7,-2.29); scene.add(cal); box(1.18,1.13,0.03,lam(0xcfc4ad),2.9,2.7,-2.31); })();
 
-/* ---- BIG MONITOR on raised shelf (the hero) ---- */
-let scrTex, scrCtx;
-(function(){
-  const G=new T.Group();
-  const stand=new T.Mesh(new T.CylinderGeometry(0.1,0.18,0.5,10), lam(0xbabfc6)); stand.position.set(0,2.1,-1.7); G.add(stand);
-  const foot=new T.Mesh(new T.BoxGeometry(0.9,0.06,0.5), lam(0xbabfc6)); foot.position.set(0,1.86,-1.7); G.add(foot);
-  const bezel=new T.Mesh(new T.BoxGeometry(3.0,1.9,0.12), lam(0x1a2230)); bezel.position.set(0,2.95,-1.8); G.add(bezel);
-  const c=document.createElement('canvas'); c.width=420; c.height=264; scrCtx=c.getContext('2d');
-  scrTex=new T.CanvasTexture(c); scrTex.magFilter=T.NearestFilter;
-  const scr=new T.Mesh(new T.PlaneGeometry(2.8,1.74), new T.MeshBasicMaterial({map:scrTex}));
-  scr.position.set(0,2.95,-1.73); G.add(scr); scene.add(G);
-  glow(0x2a4a66,2.4,0,2.95,-1.6);
-  G.userData.isMonitor=true; window._monitor=scr;
-})();
-function drawScreen(){ const g=scrCtx; const bg=g.createLinearGradient(0,0,0,264);
-  bg.addColorStop(0,'#16263a'); bg.addColorStop(1,'#22384e'); g.fillStyle=bg; g.fillRect(0,0,420,264);
-  g.fillStyle='#eaf1f2'; g.font='bold 24px Segoe UI'; g.fillText('good evening, antonio',24,42);
-  g.fillStyle='#e8b6c4'; g.font='13px Segoe UI'; g.fillText('TODAY · TICKTICK',24,68);
-  const tasks=[['9:30','Pathophys reading — Ch.12'],['1:00','Email Dr. Reyes'],['4:00','Refill prescription'],['eve','Pomodoro · Symbiosis']];
-  g.font='15px Segoe UI'; tasks.forEach((t,i)=>{ const y=104+i*32; g.strokeStyle='#7f969c'; g.lineWidth=1.5; g.strokeRect(26,y-13,15,15);
-    g.fillStyle='#7f969c'; g.fillText(t[0],52,y); g.fillStyle='#dfe9ea'; g.fillText(t[1],100,y); });
-  g.fillStyle='#7f969c'; g.font='11px Segoe UI'; g.fillText('click to focus →',300,250); scrTex.needsUpdate=true; }
+/* ---- tiered desk (textured wood) ---- */
+box(8,0.3,3.2, texMat(woodTex), 0,1.0,0.1);          // lower surface
+box(8,0.3,1.5, texMat(woodTex), 0,1.7,-1.75);        // raised shelf
+box(8,0.72,0.18, texMat(woodTex,{color:0x4a3a2c}), 0,1.35,-1.02);
+box(0.32,2,2.8, lam(0x3e3020), -3.7,0,0.3); box(0.32,2,2.8, lam(0x3e3020), 3.7,0,0.3);
+box(1.8,2,2.4, texMat(woodTex,{color:0x6a5440}), 4.9,0.8,0.4); // drawer cabinet
+box(1.5,0.04,0.04, lam(0xe2dff2), 4.9,1.3,1.62);
+
+/* ---- BIG MONITOR (hero) ---- */
+let scrTex,scrCtx,monitorMesh;
+(function(){ const G=new T.Group();
+  box(0.9,0.06,0.5, lam(0xb6bcc4), 0,1.88,-1.7); const st=new T.Mesh(new T.CylinderGeometry(0.09,0.16,0.45,10),lam(0xb6bcc4)); st.position.set(0,2.1,-1.7); G.add(st);
+  const bezel=new T.Mesh(new T.BoxGeometry(3.1,1.95,0.12),lam(0x141a26)); bezel.position.set(0,2.95,-1.82); G.add(bezel);
+  const c=document.createElement('canvas'); c.width=440; c.height=270; scrCtx=c.getContext('2d'); scrTex=new T.CanvasTexture(c); scrTex.magFilter=T.NearestFilter;
+  const scr=new T.Mesh(new T.PlaneGeometry(2.86,1.78), new T.MeshBasicMaterial({map:scrTex})); scr.position.set(0,2.95,-1.75); scr.userData.action='focus'; monitorMesh=scr; G.add(scr); scene.add(G);
+  glow(0x35506e,1.6,0,2.95,-1.6); })();
+function drawScreen(){ const g=scrCtx; const bg=g.createLinearGradient(0,0,0,270); bg.addColorStop(0,'#101b2c'); bg.addColorStop(1,'#16263a'); g.fillStyle=bg; g.fillRect(0,0,440,270);
+  g.fillStyle='#dfe9ea'; g.font='bold 22px Segoe UI'; g.fillText('good evening, antonio',22,40); g.fillStyle='#e8b6c4'; g.font='12px Segoe UI'; g.fillText('TODAY · TICKTICK',22,64);
+  [['9:30','Pathophys reading'],['1:00','Email Dr. Reyes'],['4:00','Refill prescription'],['eve','Pomodoro · Symbiosis']].forEach((t,i)=>{ const y=98+i*30; g.strokeStyle='#6f8596'; g.lineWidth=1.4; g.strokeRect(24,y-12,13,13); g.fillStyle='#7f969c'; g.font='13px Segoe UI'; g.fillText(t[0],46,y); g.fillStyle='#cfdadc'; g.fillText(t[1],90,y); });
+  g.fillStyle='#6f8596'; g.font='11px Segoe UI'; g.fillText('click to focus →',322,256); scrTex.needsUpdate=true; }
 drawScreen();
 
-/* ---- desk lamp (connected) ---- */
+/* ---- desk lamp ---- */
 (function(){ const G=new T.Group();
-  const base=new T.Mesh(new T.CylinderGeometry(0.32,0.4,0.12,12),lam(0x2c2c34)); base.position.y=1.22; G.add(base);
-  const pole=new T.Mesh(new T.CylinderGeometry(0.05,0.05,1.0,8),lam(0x33333c)); pole.position.set(0.02,1.74,0); pole.rotation.z=0.12; G.add(pole);
-  const arm=new T.Mesh(new T.CylinderGeometry(0.05,0.05,0.9,8),lam(0x33333c)); arm.position.set(0.4,2.22,0); arm.rotation.z=-0.95; G.add(arm);
-  const shade=new T.Mesh(new T.ConeGeometry(0.32,0.48,14,1,true), ps1(new T.MeshStandardMaterial({color:0x3a3a44,side:T.DoubleSide,emissive:0x2a1808})));
-  shade.position.set(0.74,2.3,0); shade.rotation.z=-1.15; G.add(shade);
-  const bulb=new T.Mesh(new T.SphereGeometry(0.13,10,10),emis(0xffe6bd)); bulb.position.set(0.82,2.2,0); G.add(bulb);
-  G.position.set(-2.0,0,0.2); scene.add(G); glow(0xffba74,2.6,-1.7,2.15,0.1); })();
+  const base=new T.Mesh(new T.CylinderGeometry(0.3,0.38,0.12,12),lam(0x26262e)); base.position.set(0,1.22,0); G.add(base);
+  const pole=new T.Mesh(new T.CylinderGeometry(0.045,0.045,1.0,8),lam(0x2e2e36)); pole.position.set(0.02,1.74,0); pole.rotation.z=0.12; G.add(pole);
+  const arm=new T.Mesh(new T.CylinderGeometry(0.045,0.045,0.88,8),lam(0x2e2e36)); arm.position.set(0.4,2.2,0); arm.rotation.z=-0.95; G.add(arm);
+  const shade=new T.Mesh(new T.ConeGeometry(0.3,0.46,14,1,true),ps1(new T.MeshStandardMaterial({color:0x32323c,side:T.DoubleSide,emissive:0x281604}))); shade.position.set(0.72,2.28,0); shade.rotation.z=-1.15; G.add(shade);
+  const bulb=new T.Mesh(new T.SphereGeometry(0.12,10,10),emis(0xffdcab)); bulb.position.set(0.8,2.18,0); G.add(bulb);
+  G.position.set(-2.1,0,0.5); scene.add(G); glow(0xffb066,1.5,-1.8,2.1,0.4); })();
 
-/* ---- squishy kaomoji cat-ball mascot ---- */
-let mascot, mascotFaceTex, mascotFaceCtx;
+/* ---- kaomoji cat-ball (smaller wider ears, bigger face) ---- */
+let mascot,mFaceTex,mFaceCtx;
 (function(){ const G=new T.Group();
-  const body=new T.Mesh(new T.SphereGeometry(0.34,16,16), lam(0xf1ede3,{roughness:1})); body.scale.set(1.1,0.86,1.05); G.add(body);
-  [[-0.16,'L'],[0.16,'R']].forEach(([x])=>{ const ear=new T.Mesh(new T.ConeGeometry(0.12,0.22,5), lam(0xf1ede3)); ear.position.set(x,0.34,0); G.add(ear); });
-  const fc=document.createElement('canvas'); fc.width=128; fc.height=96; mascotFaceCtx=fc.getContext('2d');
-  mascotFaceTex=new T.CanvasTexture(fc); mascotFaceTex.magFilter=T.NearestFilter;
-  const face=new T.Mesh(new T.PlaneGeometry(0.5,0.38), new T.MeshBasicMaterial({map:mascotFaceTex,transparent:true}));
-  face.position.set(0,0.02,0.34); G.add(face);
-  G.position.set(-1.0,1.35,0.7); G.scale.set(1.15,1.15,1.15); scene.add(G); mascot=G; })();
-function drawFace(expr){ const g=mascotFaceCtx; g.clearRect(0,0,128,96); g.fillStyle='#3a3026'; g.font='bold 40px monospace'; g.textAlign='center';
-  g.fillText(expr,64,58); mascotFaceTex.needsUpdate=true; }
-const FACES=['(= ^ω^ =)','(=^‥^=)','(=｀ω´=)','(=˘ω˘=)','(=ↀωↀ=)']; drawFace(FACES[0]);
+  const body=new T.Mesh(new T.SphereGeometry(0.36,16,16),lam(0xf1ede3,{roughness:1})); body.scale.set(1.12,0.84,1.06); G.add(body);
+  [[-0.26],[0.26]].forEach(([x])=>{ const ear=new T.Mesh(new T.ConeGeometry(0.085,0.16,5),lam(0xf1ede3)); ear.position.set(x,0.32,0.02); G.add(ear); });
+  const fc=document.createElement('canvas'); fc.width=160; fc.height=110; mFaceCtx=fc.getContext('2d'); mFaceTex=new T.CanvasTexture(fc); mFaceTex.magFilter=T.NearestFilter;
+  const face=new T.Mesh(new T.PlaneGeometry(0.64,0.46),new T.MeshBasicMaterial({map:mFaceTex,transparent:true})); face.position.set(0,0.0,0.345); G.add(face);
+  G.position.set(-1.5,1.35,0.9); G.scale.setScalar(1.2); G.userData.action='cat'; scene.add(G); mascot=G; })();
+function drawFace(e){ const g=mFaceCtx; g.clearRect(0,0,160,110); g.fillStyle='#3a3026'; g.font='bold 44px monospace'; g.textAlign='center'; g.fillText(e,80,66); mFaceTex.needsUpdate=true; }
+const FACES=['(=^‥^=)','(=｀ω´=)','(=˘ω˘=)','(=ↀωↀ=)','(=^ω^=)']; drawFace(FACES[0]);
 
-/* ---- lily of the valley pot ---- */
-(function(){ const G=new T.Group();
-  const pot=new T.Mesh(new T.CylinderGeometry(0.2,0.16,0.3,10), lam(0xcfe0e2)); pot.position.y=1.32; G.add(pot);
-  for(let i=0;i<4;i++){ const stem=new T.Mesh(new T.CylinderGeometry(0.012,0.012,0.5,5), lam(0x3f7a4a));
-    const sx=(Math.random()-.5)*0.18; stem.position.set(sx,1.65,(Math.random()-.5)*0.12); stem.rotation.z=(Math.random()-.5)*0.4; G.add(stem);
-    for(let j=0;j<4;j++){ const bell=new T.Mesh(new T.SphereGeometry(0.035,8,8), lam(0xfdfdfb,{emissive:0x222222}));
-      bell.position.set(sx+(Math.random()-.5)*0.1,1.55+j*0.08,(Math.random()-.5)*0.1); G.add(bell); } }
-  // a couple broad leaves
-  [[-0.12,-0.5],[0.13,0.4]].forEach(([x,rot])=>{ const leaf=new T.Mesh(new T.ConeGeometry(0.1,0.55,4), lam(0x356b40)); leaf.position.set(x,1.62,0); leaf.rotation.z=rot; leaf.scale.set(0.5,1,0.2); G.add(leaf); });
-  G.position.set(2.0,0,-1.6); scene.add(G); })();
+/* ---- mug (moved away from cat) ---- */
+(function(){ const mug=new T.Mesh(new T.CylinderGeometry(0.15,0.13,0.26,12),lam(0xe8b6c4)); mug.position.set(2.2,1.28,1.2); scene.add(mug);
+  const h=new T.Mesh(new T.TorusGeometry(0.08,0.028,6,10),lam(0xe8b6c4)); h.position.set(2.36,1.28,1.2); h.rotation.y=Math.PI/2; scene.add(h);
+  const cof=new T.Mesh(new T.CylinderGeometry(0.13,0.13,0.02,12),lam(0x3a2418)); cof.position.set(2.2,1.42,1.2); scene.add(cof); })();
 
-/* ---- betta tank: white + black ---- */
-let bettaW, bettaB;
+/* ---- lily of the valley (front-left, bigger, clear) ---- */
 (function(){ const G=new T.Group();
-  const glass=new T.Mesh(new T.BoxGeometry(1.0,0.7,0.62), new T.MeshStandardMaterial({color:0x9fcde0,transparent:true,opacity:0.26,roughness:0.05}));
-  glass.position.y=1.55; G.add(glass);
-  const water=new T.Mesh(new T.BoxGeometry(0.92,0.54,0.54), new T.MeshStandardMaterial({color:0x3f86ad,transparent:true,opacity:0.4})); water.position.y=1.5; G.add(water);
-  bettaW=new T.Mesh(new T.SphereGeometry(0.1,8,8), lam(0xf3f0ea,{emissive:0x223040})); bettaW.scale.set(1.5,1,0.55); bettaW.position.set(-0.2,1.5,0); G.add(bettaW);
-  bettaB=new T.Mesh(new T.SphereGeometry(0.1,8,8), lam(0x2a2630,{emissive:0x1a1422})); bettaB.scale.set(1.5,1,0.55); bettaB.position.set(0.2,1.55,0); G.add(bettaB);
-  const sand=new T.Mesh(new T.BoxGeometry(0.92,0.08,0.54), lam(0xcaa97a)); sand.position.y=1.27; G.add(sand);
-  G.position.set(2.7,0,0.6); scene.add(G); })();
+  const pot=new T.Mesh(new T.CylinderGeometry(0.26,0.2,0.36,12),lam(0xd6e4e6)); pot.position.y=1.36; G.add(pot);
+  for(let i=0;i<3;i++){ const leaf=new T.Mesh(new T.ConeGeometry(0.13,0.8,4),lam(0x2f6b3c)); leaf.position.set((i-1)*0.12,1.78,0); leaf.rotation.z=(i-1)*0.4; leaf.scale.set(0.55,1,0.18); G.add(leaf); }
+  for(let i=0;i<4;i++){ const stem=new T.Mesh(new T.CylinderGeometry(0.015,0.015,0.6,5),lam(0x3f8a4a)); const sx=(i-1.5)*0.1; stem.position.set(sx,1.78,0.05); stem.rotation.z=sx*1.2; G.add(stem);
+    for(let j=0;j<5;j++){ const bell=new T.Mesh(new T.SphereGeometry(0.045,8,8),lam(0xffffff,{emissive:0x333333})); bell.position.set(sx-j*0.012,1.62+j*0.085,0.05); G.add(bell); } }
+  G.position.set(-2.7,0,1.0); G.scale.setScalar(1.15); scene.add(G); })();
+
+/* ---- white + black bettas ---- */
+let bW,bB;
+(function(){ const G=new T.Group();
+  G.add(new T.Mesh(new T.BoxGeometry(1.05,0.72,0.64),new T.MeshStandardMaterial({color:0x9fcde0,transparent:true,opacity:0.22,roughness:0.05})));
+  G.children[0].position.y=1.55;
+  const water=new T.Mesh(new T.BoxGeometry(0.96,0.56,0.56),new T.MeshStandardMaterial({color:0x3a7ba0,transparent:true,opacity:0.36})); water.position.y=1.5; G.add(water);
+  bW=new T.Mesh(new T.SphereGeometry(0.1,8,8),lam(0xf4f1ea,{emissive:0x2a3a4a})); bW.scale.set(1.6,1,0.5); G.add(bW);
+  bB=new T.Mesh(new T.SphereGeometry(0.1,8,8),lam(0x241f2a,{emissive:0x140e1a})); bB.scale.set(1.6,1,0.5); G.add(bB);
+  const sand=new T.Mesh(new T.BoxGeometry(0.96,0.08,0.56),lam(0xc9a878)); sand.position.y=1.27; G.add(sand);
+  G.position.set(3.0,0,0.9); scene.add(G); })();
 
 /* ---- digital clock ---- */
-let clkTex, clkCtx;
-(function(){ const body=addBox(0.78,0.34,0.16, lam(0x1a1a22), 1.2,1.87,-1.55);
-  const c=document.createElement('canvas'); c.width=156; c.height=68; clkCtx=c.getContext('2d'); clkTex=new T.CanvasTexture(c); clkTex.magFilter=T.NearestFilter;
-  const face=new T.Mesh(new T.PlaneGeometry(0.7,0.28), new T.MeshBasicMaterial({map:clkTex,transparent:true})); face.position.set(1.2,1.87,-1.46); scene.add(face); })();
+let clkCtx,clkTex;
+(function(){ box(0.8,0.36,0.18,lam(0x16161e),1.3,1.9,-1.5);
+  const c=document.createElement('canvas'); c.width=160; c.height=72; clkCtx=c.getContext('2d'); clkTex=new T.CanvasTexture(c); clkTex.magFilter=T.NearestFilter;
+  const f=new T.Mesh(new T.PlaneGeometry(0.72,0.3),new T.MeshBasicMaterial({map:clkTex,transparent:true})); f.position.set(1.3,1.9,-1.4); scene.add(f); })();
 function drawClock(){ const n=new Date(); let h=n.getHours(); const m=String(n.getMinutes()).padStart(2,'0'); const ap=h>=12?'PM':'AM'; const h12=((h+11)%12)+1;
-  const g=clkCtx; g.clearRect(0,0,156,68); g.shadowColor='#ff8a8a'; g.shadowBlur=7; g.fillStyle='#ff9a9a'; g.font='bold 34px Menlo,monospace'; g.textAlign='left'; g.fillText(`${h12}:${m}`,8,40);
-  g.font='11px Menlo,monospace'; g.fillStyle='#ffb0b0'; g.fillText(ap,120,26); g.fillStyle='#8fd6e8'; g.fillText(n.toLocaleDateString('en-US',{month:'short',day:'numeric'}),8,58); clkTex.needsUpdate=true; }
+  const g=clkCtx; g.clearRect(0,0,160,72); g.shadowColor='#ff8a8a'; g.shadowBlur=7; g.fillStyle='#ff9a9a'; g.font='bold 34px Menlo,monospace'; g.fillText(`${h12}:${m}`,8,40);
+  g.font='11px Menlo,monospace'; g.fillStyle='#ffb0b0'; g.fillText(ap,124,26); g.fillStyle='#8fd6e8'; g.fillText(n.toLocaleDateString('en-US',{month:'short',day:'numeric'}),8,60); clkTex.needsUpdate=true; }
 drawClock(); setInterval(drawClock,10000);
 
-/* ---- mug + post-it stack ---- */
-(function(){ const mug=new T.Mesh(new T.CylinderGeometry(0.15,0.13,0.26,12), lam(0xe8b6c4)); mug.position.set(-1.0,1.28,1.0); scene.add(mug);
-  const h=new T.Mesh(new T.TorusGeometry(0.08,0.028,6,10), lam(0xe8b6c4)); h.position.set(-0.84,1.28,1.0); h.rotation.y=Math.PI/2; scene.add(h); })();
-let postStack;
-(function(){ const G=new T.Group(); for(let i=0;i<6;i++){ const p=new T.Mesh(new T.BoxGeometry(0.34,0.02,0.34), lam([0xf3dbe2,0xdfeadb,0xe2dff2,0xf5ead3][i%4])); p.position.y=1.16+i*0.022; p.rotation.y=(Math.random()-.5)*0.1; G.add(p); }
-  G.position.set(1.1,0,1.0); scene.add(G); postStack=G; })();
-/* a few post-its already on the divider wall */
-[[-1.4,0xf3dbe2,-0.1],[-0.7,0xdfeadb,0.08],[0.0,0xe2dff2,-0.05],[0.7,0xf5ead3,0.1]].forEach(([x,col,rot])=>{
-  const n=addBox(0.46,0.46,0.03, lam(col), x,2.6,-2.14); n.rotation.z=rot; });
+/* ---- post-it stack NEXT to wall posts, random colors ---- */
+const POST=[0xf3dbe2,0xdfeadb,0xe2dff2,0xf5ead3,0xf7e0c4,0xd9e8f0];
+(function(){ const G=new T.Group(); for(let i=0;i<6;i++){ const p=new T.Mesh(new T.BoxGeometry(0.32,0.02,0.32),lam(POST[i%POST.length])); p.position.y=1.86+i*0.022; p.position.z=-1.45; p.rotation.y=(i*0.9)%0.4-0.2; G.add(p); }
+  G.position.set(-2.6,0,-1.4); G.userData.action='post'; scene.add(G); })();
+/* posted notes on divider near the stack */
+[[-2.6,0],[ -2.0,1],[-3.2,2],[-2.3,3]].forEach(([x,i])=>{ const n=box(0.42,0.42,0.03,lam(POST[i%POST.length]),x,2.0+(i%2)*0.5,-2.29); n.rotation.z=(i-1.5)*0.07; });
 
-/* mini calendar + polaroids on the divider (background, low detail) */
-(function(){ const c=document.createElement('canvas'); c.width=120; c.height=120; const g=c.getContext('2d'); g.fillStyle='#f3efe6'; g.fillRect(0,0,120,120);
-  g.fillStyle='#8a5a4a'; g.font='bold 12px Segoe UI'; g.fillText('JUNE 2026',8,16); g.fillStyle='#5b4f3a'; g.font='9px Segoe UI';
-  for(let r=0;r<5;r++)for(let d=0;d<7;d++){ const day=r*7+d-1; if(day>0&&day<=30){ if(day===26){ g.fillStyle='#cf7088'; g.fillRect(6+d*16,24+r*16,14,12); g.fillStyle='#fff'; } else g.fillStyle='#5b4f3a'; g.fillText(day,8+d*16,34+r*16); } }
-  const tex=new T.CanvasTexture(c); const cal=new T.Mesh(new T.PlaneGeometry(0.9,0.9), new T.MeshBasicMaterial({map:tex})); cal.position.set(2.0,2.5,-2.13); scene.add(cal); })();
-[[ -2.6,0x5a8ca0],[-2.6,0xc98fa0]].forEach(([x,col],i)=>{ const p=addBox(0.5,0.6,0.03, lam(0xf7f3ea), x,2.7-i*0.66,-2.13); p.rotation.z=(i?-.08:.07);
-  addBox(0.4,0.36,0.01, lam(col), x,2.78-i*0.66,-2.11); });
-
-/* phone on stand w/ tweets */
+/* ---- pomodoro: interactive 3D tomato timer ---- */
+let pomoMesh;
 (function(){ const G=new T.Group();
-  const stand=new T.Mesh(new T.BoxGeometry(0.4,0.1,0.24), lam(0x2a2a32)); stand.position.y=1.18; G.add(stand);
-  const body=new T.Mesh(new T.BoxGeometry(0.34,0.66,0.04), lam(0x12161c)); body.position.set(0,1.5,0.02); body.rotation.x=-0.18; G.add(body);
-  const c=document.createElement('canvas'); c.width=120; c.height=230; const g=c.getContext('2d'); g.fillStyle='#0f141a'; g.fillRect(0,0,120,230);
-  g.fillStyle='#a8c4ab'; g.font='bold 11px Segoe UI'; g.fillText('🐦 my feed',8,18);
-  const tw=['building a desk for','my brain 🪴','the betta judges my','to-do list','iced coffee #4 today']; g.font='9px Segoe UI'; g.fillStyle='#b8c8cc';
-  tw.forEach((l,i)=>g.fillText(l,8,42+i*18));
-  const tex=new T.CanvasTexture(c); tex.magFilter=T.NearestFilter; const scr=new T.Mesh(new T.PlaneGeometry(0.3,0.58), new T.MeshBasicMaterial({map:tex})); scr.position.set(0,1.5,0.045); scr.rotation.x=-0.18; G.add(scr);
-  G.position.set(0.0,0,1.05); scene.add(G); })();
+  const body=new T.Mesh(new T.SphereGeometry(0.24,14,12),lam(0xd6453f,{roughness:.7})); body.scale.set(1,0.8,1); body.position.y=1.34; G.add(body);
+  const dial=new T.Mesh(new T.CircleGeometry(0.15,16),lam(0xf6efe0)); dial.position.set(0,1.36,0.21); G.add(dial);
+  const hand=new T.Mesh(new T.BoxGeometry(0.015,0.12,0.01),lam(0x333)); hand.position.set(0,1.4,0.22); G.add(hand);
+  const stem=new T.Mesh(new T.ConeGeometry(0.05,0.1,5),lam(0x4f8a4a)); stem.position.set(0,1.56,0); G.add(stem);
+  G.position.set(1.5,0,1.1); G.userData.action='pomo'; scene.add(G); pomoMesh=G; })();
 
-/* ---- camera modes ---- */
-const views = {
-  focus:{ pos:new T.Vector3(0,2.95,1.4), look:new T.Vector3(0,2.95,-1.7) },
-  room: { pos:new T.Vector3(0,3.5,6.6),  look:new T.Vector3(0,1.9,-1.0) }
-};
-let mode='focus';
-const curPos=views.focus.pos.clone(), curLook=views.focus.look.clone();
-let dragYaw=0, dragPitch=0, down=false, lx=0, ly=0;
-function rotY(v,c,a){ const dx=v.x-c.x, dz=v.z-c.z; return new T.Vector3(c.x+dx*Math.cos(a)-dz*Math.sin(a), v.y, c.z+dx*Math.sin(a)+dz*Math.cos(a)); }
+/* ---- phone on stand ---- */
+(function(){ const G=new T.Group();
+  const stand=new T.Mesh(new T.BoxGeometry(0.4,0.1,0.24),lam(0x26262e)); stand.position.set(0,1.18,0); G.add(stand);
+  const body=new T.Mesh(new T.BoxGeometry(0.36,0.7,0.04),lam(0x10141a)); body.position.set(0,1.52,0.02); body.rotation.x=-0.2; G.add(body);
+  const c=document.createElement('canvas'); c.width=120; c.height=240; const g=c.getContext('2d'); g.fillStyle='#0e1420'; g.fillRect(0,0,120,240); g.fillStyle='#a8c4ab'; g.font='bold 12px Segoe UI'; g.fillText('🐦 feed',8,20);
+  ['building a desk','for my brain 🪴','bettas judging','my to-do list'].forEach((l,i)=>{ g.fillStyle='#b8c8cc'; g.font='9px Segoe UI'; g.fillText(l,8,44+i*18); });
+  const tex=new T.CanvasTexture(c); tex.magFilter=T.NearestFilter; const scr=new T.Mesh(new T.PlaneGeometry(0.32,0.62),new T.MeshBasicMaterial({map:tex})); scr.position.set(0,1.52,0.045); scr.rotation.x=-0.2; G.add(scr);
+  G.position.set(1.0,0,1.25); G.userData.action='phone'; scene.add(G); glow(0x2a3a4a,0.5,1.0,1.5,1.3); })();
 
-cv.addEventListener('pointerdown',e=>{ down=true; lx=e.clientX; ly=e.clientY;
-  // click monitor → focus
-  if(mode==='room'){ /* simple: clicking upper-center focuses */ } });
+/* ---- interaction: raycast clicks + camera modes ---- */
+const ray=new T.Raycaster(), mouse=new T.Vector2();
+function hit(e){ mouse.x=(e.clientX/innerWidth)*2-1; mouse.y=-(e.clientY/innerHeight)*2+1; ray.setFromCamera(mouse,cam);
+  const hits=ray.intersectObjects(scene.children,true); for(const h of hits){ let o=h.object; while(o){ if(o.userData.action) return o.userData.action; o=o.parent; } } return null; }
+
+const views={ focus:{pos:new T.Vector3(0,2.95,1.3),look:new T.Vector3(0,2.95,-1.8)},
+              room:{pos:new T.Vector3(0,3.0,7.8),look:new T.Vector3(0,3.0,-2.6)} };
+let mode='focus'; const curPos=views.focus.pos.clone(),curLook=views.focus.look.clone();
+let yaw=0,pitch=0,down=false,lx=0,ly=0,moved=0;
+function rotY(v,c,a){ const dx=v.x-c.x,dz=v.z-c.z; return new T.Vector3(c.x+dx*Math.cos(a)-dz*Math.sin(a),v.y,c.z+dx*Math.sin(a)+dz*Math.cos(a)); }
+cv.addEventListener('pointerdown',e=>{down=true;lx=e.clientX;ly=e.clientY;moved=0;});
 addEventListener('pointerup',()=>down=false);
-addEventListener('pointermove',e=>{ if(down&&mode==='room'){ dragYaw=Math.max(-0.7,Math.min(0.7,dragYaw+(e.clientX-lx)*0.004)); dragPitch=Math.max(-0.15,Math.min(0.25,dragPitch+(e.clientY-ly)*0.002)); lx=e.clientX; ly=e.clientY; } });
+addEventListener('pointermove',e=>{ if(down){ moved+=Math.abs(e.clientX-lx)+Math.abs(e.clientY-ly); if(mode==='room'){ yaw=Math.max(-0.6,Math.min(0.6,yaw+(e.clientX-lx)*0.004)); pitch=Math.max(-0.4,Math.min(0.5,pitch+(e.clientY-ly)*0.003)); } lx=e.clientX;ly=e.clientY; } });
+function setMode(m){ mode=m; mFocusBtn.classList.toggle('on',m==='focus'); mRoomBtn.classList.toggle('on',m==='room'); screenUI.classList.toggle('on',m==='focus'); hintline.style.opacity=m==='room'?'.7':'0'; if(m!=='focus') tweets.classList.remove('on'); }
+const mFocusBtn=document.getElementById('mFocus'),mRoomBtn=document.getElementById('mRoom'),screenUI=document.getElementById('screenUI'),hintline=document.getElementById('hintline'),tweets=document.getElementById('tweets');
+mFocusBtn.onclick=()=>setMode('focus'); mRoomBtn.onclick=()=>setMode('room');
+setMode('focus');   // show the dashboard panel on load
+let pomodoro=false; function togglePomo(){ pomodoro=!pomodoro; pomoBtn.textContent=pomodoro?'■ end focus block':'▶ start a pomodoro'; drawFace(pomodoro?'(=｀ω´=)':FACES[0]); }
+const pomoBtn=document.getElementById('pomoBtn');
+cv.addEventListener('click',e=>{ if(moved>6) return; const a=hit(e);
+  if(a==='focus'){ setMode('focus'); } else if(a==='pomo'){ togglePomo(); if(mode!=='focus')setMode('focus'); }
+  else if(a==='phone'){ tweets.classList.add('on'); } else if(a==='cat'){ drawFace(FACES[(Math.floor(performance.now()/300))%FACES.length]); } });
+pomoBtn.onclick=togglePomo;
+document.getElementById('tweetBtn').onclick=()=>tweets.classList.toggle('on');
+document.getElementById('tweetsX').onclick=()=>tweets.classList.remove('on');
+document.getElementById('twtPost').onclick=()=>{ const ta=document.getElementById('twtInput'),v=ta.value.trim(); if(!v)return; const d=document.createElement('div'); d.className='twt'; d.innerHTML='<b>me</b><br>'+v.replace(/</g,'&lt;'); document.getElementById('feed').prepend(d); ta.value=''; };
+document.querySelectorAll('.ptab').forEach(t=>t.onclick=()=>{ document.querySelector('.ptab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p; document.querySelector('.pp1').classList.toggle('off',i!==0); document.querySelectorAll('.pp2')[0].classList.toggle('on',i===1); });
 
-function setMode(m){ mode=m; document.getElementById('mFocus').classList.toggle('on',m==='focus'); document.getElementById('mRoom').classList.toggle('on',m==='room');
-  document.getElementById('screenUI').classList.toggle('on',m==='focus');
-  document.getElementById('hintline').style.opacity = m==='room'?'.7':'0'; }
-document.getElementById('mFocus').onclick=()=>setMode('focus');
-document.getElementById('mRoom').onclick=()=>setMode('room');
-cv.addEventListener('click',e=>{ if(mode==='room'){ const cx=e.clientX/innerWidth, cy=e.clientY/innerHeight; if(cx>0.32&&cx<0.68&&cy<0.55) setMode('focus'); } });
-
-/* tabs + pomodoro */
-const pps=[document.querySelector('.pp1'),...document.querySelectorAll('.pp2')];
-document.querySelectorAll('.ptab').forEach(t=>t.onclick=()=>{ document.querySelector('.ptab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p;
-  pps.forEach((p,j)=>{ p.classList.toggle('off',j===0&&i!==0); p.classList.toggle('on',j>0&&j===i); }); });
-let pomodoro=false;
-document.getElementById('pomoBtn').onclick=function(){ pomodoro=!pomodoro; this.textContent=pomodoro?'■ end focus block':'▶ start a pomodoro'; drawFace(pomodoro?'(=｀ω´=)':FACES[0]); };
-
-/* weather */
-(async()=>{ try{ const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.66&longitude=-97.12&current=temperature_2m&temperature_unit=fahrenheit',{cache:'no-store'});
-  const j=await r.json(); window._drawHud(Math.round(j.current.temperature_2m)+'°F'); window._htex.needsUpdate=true; }catch(e){} })();
+(async()=>{ try{ const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.66&longitude=-97.12&current=temperature_2m&temperature_unit=fahrenheit',{cache:'no-store'}); const j=await r.json(); drawHud(Math.round(j.current.temperature_2m)+'°F'); }catch(e){} })();
 
 let t=0;
 function loop(){ requestAnimationFrame(loop); t+=0.016;
-  const v=views[mode]; let targetPos=v.pos.clone();
-  if(mode==='room'){ targetPos=rotY(targetPos, v.look, dragYaw); targetPos.y += dragPitch*3; }
-  curPos.lerp(targetPos,0.07); curLook.lerp(v.look,0.07);
-  curPos.x += Math.sin(t*0.4)*0.02;
+  const v=views[mode]; let tp=v.pos.clone(); let tl=v.look.clone();
+  if(mode==='room'){ tp=rotY(tp,v.look,yaw); tp.y+=pitch*3.2; tl.y+=pitch*2.4; tl.x+=Math.sin(yaw)*1.2; }
+  curPos.lerp(tp,0.07); curLook.lerp(tl,0.07); curPos.x+=Math.sin(t*0.4)*0.015;
   cam.position.copy(curPos); cam.lookAt(curLook);
-  // life
-  if(bettaW){ bettaW.position.x=2.7+Math.sin(t*1.0)*0.0; } // tank-local handled below
-  if(mascot){ mascot.scale.y=1.15+Math.sin(t*2.2)*0.04; mascot.scale.x=1.15-Math.sin(t*2.2)*0.03; mascot.rotation.y=Math.sin(t*0.5)*0.2; }
-  lampLight.intensity=2.6+Math.sin(t*9)*0.05;
-  // betta drift (local)
-  bettaW.position.set(-0.2+Math.sin(t*0.9)*0.22, 1.5+Math.sin(t*1.3)*0.05, Math.cos(t*0.7)*0.12);
-  bettaB.position.set(0.22+Math.cos(t*0.8)*0.2, 1.56+Math.cos(t*1.1)*0.05, Math.sin(t*0.6)*0.12);
-  // pomodoro vibe: dim cool, warm lamp
-  const target = pomodoro?0.18:0.45; scene.children;
-  renderer.toneMappingExposure += (((pomodoro?0.85:1.15)) - renderer.toneMappingExposure)*0.05;
-  winLight.intensity += ((pomodoro?0.15:0.7)-winLight.intensity)*0.05;
+  if(mascot){ mascot.scale.y=1.2+Math.sin(t*2.2)*0.04; mascot.scale.x=1.2-Math.sin(t*2.2)*0.03; mascot.rotation.y=Math.sin(t*0.5)*0.18; }
+  if(pomoMesh) pomoMesh.children[2].rotation.z=-t*0.8;
+  bW.position.set(-0.22+Math.sin(t*0.9)*0.22,1.5+Math.sin(t*1.3)*0.05,Math.cos(t*0.7)*0.12); bW.rotation.y=Math.cos(t*0.9)*0.4;
+  bB.position.set(0.22+Math.cos(t*0.8)*0.2,1.56+Math.cos(t*1.1)*0.05,Math.sin(t*0.6)*0.12); bB.rotation.y=Math.sin(t*0.8)*0.4;
+  lampLight.intensity=1.15+Math.sin(t*9)*0.04;
+  renderer.toneMappingExposure+=((pomodoro?0.62:0.92)-renderer.toneMappingExposure)*0.05;
+  winLight.intensity+=((pomodoro?0.12:0.45)-winLight.intensity)*0.05;
   renderer.render(scene,cam);
 }
 addEventListener('resize',size); size(); loop();
