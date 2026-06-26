@@ -66,15 +66,27 @@
   @keyframes bob{ 0%,100%{ transform:translateY(0) scaleY(1); } 50%{ transform:translateY(-6%) scaleY(.96); } }
   .catpx{ position:absolute; inset:0; width:100%; height:100%; image-rendering:pixelated; }
   .kao{ position:absolute; inset:0; display:grid; place-items:center; font-size:14cqmin; color:#5a4f42; font-weight:600; white-space:nowrap; letter-spacing:-.5px; }
-  /* pixel-art post-its on the corkboard */
-  .note{ position:absolute; width:26cqw; aspect-ratio:1; transform:rotate(var(--r,0deg)); pointer-events:none; padding:3.5cqw 2.6cqw; font-size:5.4cqw; line-height:1.05;
-    color:#3a3327; box-shadow:.7cqw 1cqw 0 rgba(0,0,0,.28), inset 0 0 0 .4cqw rgba(0,0,0,.06); display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden; }
-  .note b{ position:absolute; top:-2.6cqw; left:50%; transform:translateX(-50%); width:6cqw; height:6cqw; background:radial-gradient(circle at 35% 30%,#f3a0b4,#cf7088); box-shadow:.3cqw .4cqw 0 rgba(0,0,0,.35); }
-  .note span{ display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; word-break:break-word; }
+  /* pixel-art post-its on the corkboard — draggable by the pin */
+  .note{ position:absolute; width:26cqw; aspect-ratio:1; transform:rotate(var(--r,0deg)); pointer-events:auto; cursor:pointer; padding:3.5cqw 2.6cqw; font-size:5.4cqw; line-height:1.05;
+    color:#3a3327; box-shadow:.7cqw 1cqw 0 rgba(0,0,0,.28), inset 0 0 0 .4cqw rgba(0,0,0,.06); display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden; transition:box-shadow .15s; }
+  .note.grab{ transition:none; box-shadow:1.4cqw 2cqw 0 rgba(0,0,0,.34), inset 0 0 0 .4cqw rgba(0,0,0,.06); }
+  .note b{ position:absolute; top:-2.6cqw; left:50%; transform:translateX(-50%); width:7cqw; height:7cqw; background:radial-gradient(circle at 35% 30%,#f3a0b4,#cf7088); box-shadow:.3cqw .4cqw 0 rgba(0,0,0,.35); cursor:grab; }
+  .note b:active{ cursor:grabbing; }
+  .note span{ display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; word-break:break-word; pointer-events:none; }
+  /* clickable sticky-note stack on the shelf */
+  .stackpx{ width:100%; height:100%; image-rendering:pixelated; filter:drop-shadow(0 .4cqmin .8cqmin rgba(0,0,0,.4)); }
+  .el.clk.pulse:hover .stackpx{ filter:drop-shadow(0 0 2cqmin rgba(243,160,180,.8)); }
+  /* pixel speech bubble above the mascot */
+  #catBubble{ position:absolute; z-index:30; pointer-events:none; max-width:200px; padding:9px 12px; font-size:12.5px; line-height:1.25; color:#3a2f3a; text-align:center;
+    background:#fbf3ea; border:3px solid #3a2f3a; image-rendering:pixelated; opacity:0; transform:translate(-50%,6px); transition:opacity .18s, transform .18s;
+    box-shadow:5px 5px 0 rgba(58,47,58,.25); border-radius:3px; }
+  #catBubble.on{ opacity:1; transform:translate(-50%,0); }
+  #catBubble:after{ content:''; position:absolute; left:50%; bottom:-12px; margin-left:-7px; width:0; height:0; border:7px solid transparent; border-top-color:#3a2f3a; }
+  #catBubble:before{ content:''; position:absolute; left:50%; bottom:-7px; margin-left:-4px; width:0; height:0; border:4px solid transparent; border-top-color:#fbf3ea; z-index:1; }
 
   /* calibrate */
   body.cal .el{ outline:2px dashed rgba(255,90,130,.9); background:rgba(255,90,130,.08); cursor:move; }
-  body.cal .el .scr,body.cal .el .wx,body.cal .el .clkui,body.cal .el .px{ pointer-events:none; }
+  body.cal .el .scr,body.cal .el .wx,body.cal .el .clkui,body.cal .el .px,body.cal .el .note,body.cal .el .note b,body.cal .el .stackpx{ pointer-events:none; }
   .el .tag{ display:none; } body.cal .el .tag{ display:block; position:absolute; top:2px; left:4px; font-size:11px; color:#fff; background:rgba(255,59,107,.85); padding:1px 6px; border-radius:6px; z-index:3; pointer-events:none; }
   .el .hd{ display:none; } body.cal .el .hd{ display:block; position:absolute; z-index:6; box-shadow:0 1px 4px rgba(0,0,0,.5); }
   body.cal .el .hres{ right:-8px; bottom:-8px; width:16px; height:16px; background:#ff3b6b; border:2px solid #fff; border-radius:4px; cursor:nwse-resize; }
@@ -122,6 +134,14 @@
   #brainP input{ width:100%; background:rgba(8,12,20,.6); border:1px solid rgba(160,180,200,.2); border-radius:13px; padding:13px 15px; color:var(--text); font:inherit; font-size:14px; }
   #brainPile{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; max-height:150px; overflow:auto; } .pn{ font-size:12px; padding:9px 12px; border-radius:9px; color:#2a2418; }
   #brainP .row{ display:flex; gap:9px; margin-top:14px; } #brainP button{ flex:1; border:none; border-radius:13px; padding:12px; font:inherit; font-size:13px; cursor:pointer; } #brainP .a{ background:var(--sakura); color:#2a1820; font-weight:700; } #brainP .c{ background:rgba(255,255,255,.07); color:var(--soft); }
+  /* expanded corkboard */
+  #boardP .pc{ width:min(680px,92vw); padding:22px 22px 18px; }
+  #boardP .bhd{ display:flex; align-items:center; gap:10px; margin-bottom:14px; } #boardP h3{ font-size:18px; } #boardP .bhd .sp{ margin-left:auto; font-size:12px; color:var(--faint); }
+  .bigboard{ position:relative; width:100%; aspect-ratio:1.32; border-radius:14px; container-type:size; overflow:hidden;
+    background:#a9824e; background-image:radial-gradient(rgba(0,0,0,.16) 1px,transparent 1.5px); background-size:7px 7px; box-shadow:inset 0 0 0 10px #6f4d2c, inset 0 0 40px rgba(0,0,0,.35); }
+  .bigboard .note{ width:17cqw; font-size:3.6cqw; padding:2.4cqw 1.8cqw; }
+  .bigboard .note b{ width:4.6cqw; height:4.6cqw; top:-1.8cqw; }
+  #boardP .mkbtn{ background:var(--sakura); color:#2a1820; border:none; border-radius:11px; padding:9px 15px; font:inherit; font-weight:700; font-size:13px; cursor:pointer; }
   #calP .pc{ width:min(520px,92vw); padding:24px; } #calP h3{ font-size:19px; margin-bottom:14px; } .cg{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; } .cg .dw{ text-align:center; font-size:11px; color:var(--faint); } .cg .dy{ aspect-ratio:1; display:grid; place-items:center; border-radius:11px; font-size:14px; color:var(--soft); background:rgba(255,255,255,.03); } .cg .dy.td{ background:var(--sakura); color:#2a1820; font-weight:700; } .cg .dy.dim{ opacity:.25; }
   #focusP .pc{ width:min(400px,88vw); padding:30px; text-align:center; } #focusP .ring{ position:relative; width:190px; height:190px; margin:6px auto 16px; } #focusP .ring svg{ transform:rotate(-90deg); } #focusP .num{ position:absolute; inset:0; display:grid; place-items:center; font-size:50px; font-weight:200; } #focusP .l{ color:var(--soft); font-size:14px; margin-bottom:16px; } #focusP .ct{ display:flex; gap:10px; justify-content:center; } #focusP button{ border:none; border-radius:24px; padding:12px 24px; font:inherit; font-size:14px; cursor:pointer; } #focusP .b1{ background:var(--sakura); color:#2a1820; font-weight:700; } #focusP .b2{ background:rgba(255,255,255,.08); color:var(--soft); }
   #soon .pc{ width:min(380px,86vw); padding:30px; text-align:center; } #soon h3{ font-size:20px; margin-bottom:8px; } #soon p{ color:var(--soft); font-size:13.5px; line-height:1.5; }
@@ -149,6 +169,7 @@
         <canvas id="room"></canvas>
         <div id="els"></div>
         <div id="cool"></div><div id="grade"></div><div id="vig"></div>
+        <div id="catBubble"></div>
       </div>
     </div>
 
@@ -183,6 +204,9 @@
   <div class="pop" id="brainP"><div class="pc"><span class="px2" data-close>✕</span><h3>🗒️ brain dump</h3><p>catch a thought — it lands on your board</p>
     <input id="brainIn" placeholder="type anything…" maxlength="60"><div id="brainPile"></div>
     <div class="row"><button class="a" id="brainAdd">pin it ✦</button><button class="c" data-close>close</button></div></div></div>
+  <div class="pop" id="boardP"><div class="pc"><span class="px2" data-close>✕</span>
+    <div class="bhd"><h3>📌 the board</h3><button class="mkbtn" id="boardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div>
+    <div class="bigboard" id="bigBoard"></div></div></div>
   <div class="pop" id="calP"><div class="pc"><span class="px2" data-close>✕</span><h3>📅 June 2026</h3><div class="cg" id="calGrid"></div></div></div>
   <div class="pop" id="focusP"><div class="pc"><span class="px2" data-close>✕</span>
     <div class="ring"><svg width="190" height="190"><circle cx="95" cy="95" r="84" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="6"/><circle id="fRing" cx="95" cy="95" r="84" fill="none" stroke="var(--sakura)" stroke-width="6" stroke-linecap="round" stroke-dasharray="528" stroke-dashoffset="0"/></svg><div class="num" id="fNum">25:00</div></div>
@@ -194,7 +218,8 @@ const IMG_W=1448,IMG_H=1086,ASPECT=IMG_W/IMG_H;
 /* default boxes (% of stage) — user calibrates these */
 const DEF={ monitor:{x:41,y:33.5,w:22.5,h:23,rz:0,rx:0,ry:0,z:5}, phone:{x:69.5,y:45,w:5.6,h:12.5,rz:0,rx:0,ry:0,z:5}, clock:{x:81,y:44,w:7.4,h:7,rz:0,rx:0,ry:0,z:5},
   weather:{x:5,y:6,w:22,h:13,rz:0,rx:0,ry:0,z:2}, corkboard:{x:57,y:16.5,w:15.5,h:25,rz:0,rx:0,ry:0,z:3}, calendar:{x:84,y:14.5,w:14.5,h:26,rz:0,rx:0,ry:0,z:3},
-  tomato:{x:75,y:65,w:6,h:8,rz:0,rx:0,ry:0,z:4}, cat:{x:12,y:64,w:12,h:15,rz:0,rx:0,ry:0,z:8}, tank:{x:8.5,y:46,w:16,h:14,rz:0,rx:0,ry:0,z:6} };
+  tomato:{x:75,y:65,w:6,h:8,rz:0,rx:0,ry:0,z:4}, cat:{x:12,y:64,w:12,h:15,rz:0,rx:0,ry:0,z:8}, tank:{x:8.5,y:46,w:16,h:14,rz:0,rx:0,ry:0,z:6},
+  notestack:{x:78,y:50,w:6.5,h:6,rz:0,rx:0,ry:0,z:4} };
 let BOX=Object.assign({},DEF); try{ const s=JSON.parse(localStorage.getItem('aq_box')); if(s) for(const k in DEF) if(s[k]) BOX[k]=s[k]; }catch(e){}
 
 const stage=document.getElementById('stage'),sky=document.getElementById('sky'),room=document.getElementById('room'),
@@ -262,6 +287,7 @@ function buildEls(){
   makeEl('corkboard','clk','',true); makeEl('calendar','clk','',true); makeEl('tomato','clk','',true);
   const cat=makeEl('cat',''); cat.classList.add('clk'); cat.innerHTML+=`<div class="catwrap"><canvas class="catpx" id="catPx" width="22" height="21"></canvas><span class="kao" id="catKao">(=^･ω･^=)</span></div>`;
   const tank=makeEl('tank',''); tank.innerHTML+=`<canvas class="px" id="tankPx" width="64" height="44"></canvas>`;
+  const stk=makeEl('notestack',''); stk.classList.add('clk','pulse'); stk.title='new note'; stk.innerHTML+=`<canvas class="stackpx" id="stackPx" width="26" height="22"></canvas>`;
   renderMon(); renderSideTasks();
 }
 function renderMon(){ const done=TASKS.filter(t=>t[3]).length; E.monitor.querySelector('#monUI').innerHTML=
@@ -283,11 +309,15 @@ function drawCatBlob(){ const cv=document.getElementById('catPx'); if(!cv)return
   // chunky pixel ball — stepped rows so the silhouette reads as pixel art (like the fish)
   for(let y=1;y<20;y++){ const dy=y-cy, hw=Math.floor(Math.sqrt(Math.max(0,R*R-dy*dy))); if(hw<=0)continue;
     c.fillStyle='#ece4d4'; c.fillRect(cx-hw,y,hw*2+1,1); }
-  for(let y=2;y<9;y++){ const dy=y-cy, hw=Math.floor(Math.sqrt(Math.max(0,R*R-dy*dy))); if(hw<=0)continue;
-    c.fillStyle='#faf4ea'; c.fillRect(cx-hw,y,Math.max(2,hw),1); }                      // top-left highlight
   for(let y=14;y<20;y++){ const dy=y-cy, hw=Math.floor(Math.sqrt(Math.max(0,R*R-dy*dy))); if(hw<=0)continue;
     c.fillStyle='#d7cdb7'; c.fillRect(cx-hw,y,hw*2+1,1); }                              // bottom shade
+  c.fillStyle='#f7f2e8'; c.fillRect(cx-5,3,3,1); c.fillRect(cx-6,4,4,1); c.fillRect(cx-6,5,2,1); // small top glint (no hard block)
   c.fillStyle='#f3c3d0'; c.fillRect(cx-7,11,2,1); c.fillRect(cx+5,11,2,1); }            // pixel blush
+function drawNoteStack(){ const cv=document.getElementById('stackPx'); if(!cv)return; const c=cv.getContext('2d'); c.clearRect(0,0,26,22); c.imageSmoothingEnabled=false;
+  const sheets=[['#d9e8f0',16],['#e2dff2',13],['#f5ead3',10],['#f3dbe2',7]]; // back-to-front pastel sheets
+  sheets.forEach(([col,y],i)=>{ const x=3+i; c.fillStyle='rgba(0,0,0,.18)'; c.fillRect(x+1,y+1,18,7);
+    c.fillStyle=col; c.fillRect(x,y,18,7); c.fillStyle='rgba(255,255,255,.5)'; c.fillRect(x,y,18,1); });
+  c.fillStyle='#cf7088'; c.fillRect(11,5,4,4); c.fillStyle='#f3a0b4'; c.fillRect(11,5,2,2); } // little pin on top
 function drawFishSprite(c,x,y,dir,col,col2,wig){ c.save(); c.translate(x,y); if(dir<0) c.scale(-1,1);
   pxRect(c,-3,-1,4,4,col); // tail
   pxRect(c,-4,wig?-2:0,3,3,col); // tail tip wiggle
@@ -334,7 +364,7 @@ function openP(id){ if(openId)document.getElementById(openId).classList.remove('
 function closeP(){ if(openId)document.getElementById(openId).classList.remove('on'); openId=null; scrim.classList.remove('on'); }
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeP); scrim.onclick=closeP;
 els.addEventListener('click',e=>{ if(calOn)return; const el=e.target.closest('.el.clk'); if(!el)return; const k=el.dataset.key;
-  if(k==='monitor') openP('dashP'); else if(k==='phone') openP('phoneP'); else if(k==='corkboard'){ openP('brainP'); renderPile(); setTimeout(()=>brainIn.focus(),200);} else if(k==='calendar') openP('calP'); else if(k==='tomato') openP('focusP'); else if(k==='cat') catSpeak(); });
+  if(k==='monitor') openP('dashP'); else if(k==='phone') openP('phoneP'); else if(k==='corkboard'){ renderBigBoard(); openP('boardP'); } else if(k==='notestack') newNote(); else if(k==='calendar') openP('calP'); else if(k==='tomato') openP('focusP'); else if(k==='cat') catSpeak(); });
 document.querySelectorAll('.dtab').forEach(t=>t.onclick=()=>{ document.querySelector('.dtab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p; document.querySelector('.pp1').classList.toggle('off',i!==0); document.querySelectorAll('.pp2').forEach((p,j)=>p.classList.toggle('on',j===i-1)); });
 const CKS=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16241a" stroke-width="3.5"><path d="M5 13l4 4L19 7"/></svg>`;
 function renderBig(){ document.getElementById('dBig').innerHTML=TASKS.map((t,i)=>`<div class="bt ${t[3]?'dn':''}" data-i="${i}"><span class="tm">${t[0]}</span><span class="ck">${t[3]?CKS:''}</span><span class="tx">${t[1]}</span><span class="lb">${({k:'school',l:'life',h:'health'})[t[2]]}</span></div>`).join('')+`<div class="bt"><span class="tm">eve</span><span class="ck"></span><span class="tx">Water the lily + tidy desk</span><span class="lb">life</span></div>`;
@@ -346,17 +376,33 @@ function renderFeed(){ const f=document.getElementById('phoneFeed'); if(f) f.inn
 document.getElementById('twPost').onclick=()=>{ const v=twIn.value.trim(); if(v){ feed.unshift(v); if(feed.length>20)feed.pop(); localStorage.setItem('aq_feed',JSON.stringify(feed)); renderFeed(); twIn.value=''; } };
 const twIn=document.getElementById('twIn');
 const NCOL=['#f3dbe2','#dfeadb','#e2dff2','#f5ead3','#f7e0c4','#d9e8f0']; const brainIn=document.getElementById('brainIn'); const MAXNOTES=11;
-function mkNote(t){ return {t, c:NCOL[(Math.random()*NCOL.length)|0], x:6+Math.random()*66, y:8+Math.random()*60, r:(Math.random()*18-9)|0}; }
-let notes=(()=>{ const raw=JSON.parse(localStorage.getItem('aq_notes')||'null'); if(raw) return raw.map(n=> typeof n==='string'?mkNote(n):n);
-  return ['drink water 🚰','study w/ friends?','koi tiktok 🐟','save that song'].map(mkNote); })();
-function renderPile(){ document.getElementById('brainPile').innerHTML=notes.map((n,i)=>`<span class="pn" style="background:${n.c}">${n.t.replace(/</g,'&lt;')}</span>`).join(''); }
-// tuned scatter slots across the cork — natural spread, minimal overlap; extras paste over older
+// tuned scatter slots across the cork — natural spread, minimal overlap; new notes take the next open slot
 const NOTEPOS=[[10,8],[40,6],[62,13],[11,31],[38,29],[61,33],[20,53],[46,51],[12,65],[40,63],[62,57]];
-function renderBoard(){ const b=E.corkboard; if(!b)return; b.querySelectorAll('.note').forEach(n=>n.remove());
-  notes.slice(0,MAXNOTES).forEach((n,i)=>{ const p=NOTEPOS[i%NOTEPOS.length]; const d=document.createElement('div'); d.className='note';
-    d.style.cssText=`left:${p[0]}%;top:${p[1]}%;background:${n.c};z-index:${50-i};--r:${n.r}deg`;
-    d.innerHTML=`<b></b><span>${n.t.replace(/</g,'&lt;')}</span>`; b.appendChild(d); }); }
-document.getElementById('brainAdd').onclick=()=>{ const v=brainIn.value.trim(); if(v){ notes.unshift(mkNote(v)); if(notes.length>16)notes.pop(); localStorage.setItem('aq_notes',JSON.stringify(notes)); brainIn.value=''; renderPile(); renderBoard(); } };
+let noteSlot=0; const jit=()=>(Math.random()*6-3);
+function mkNote(t){ const p=NOTEPOS[noteSlot++ % NOTEPOS.length]; return {t, c:NCOL[(Math.random()*NCOL.length)|0], x:p[0]+jit(), y:p[1]+jit(), r:(Math.random()*18-9)|0}; }
+let notes=(()=>{ const raw=JSON.parse(localStorage.getItem('aq_notes')||'null'); if(raw) return raw.map(n=> typeof n==='string'?mkNote(n):(n.x==null?mkNote(n.t):n));
+  return ['drink water 🚰','study w/ friends?','koi tiktok 🐟','save that song'].map(mkNote); })();
+function saveNotes(){ localStorage.setItem('aq_notes',JSON.stringify(notes)); }
+function renderPile(){ document.getElementById('brainPile').innerHTML=notes.map((n,i)=>`<span class="pn" style="background:${n.c}">${n.t.replace(/</g,'&lt;')}</span>`).join(''); }
+function bringFront(n){ const i=notes.indexOf(n); if(i>0){ notes.splice(i,1); notes.unshift(n); } }
+// one draggable sticky — pin = move handle, click anywhere = bring to forefront; positions are % of host
+function makeNoteEl(n,i,host){ const d=document.createElement('div'); d.className='note';
+  d.style.cssText=`left:${n.x}%;top:${n.y}%;background:${n.c};z-index:${50-i};--r:${n.r}deg`;
+  d.innerHTML=`<b></b><span>${n.t.replace(/</g,'&lt;')}</span>`;
+  d.addEventListener('click',ev=>ev.stopPropagation());
+  d.addEventListener('pointerdown',ev=>{ ev.stopPropagation(); bringFront(n); d.style.zIndex=999; saveNotes(); });
+  const pin=d.querySelector('b');
+  pin.addEventListener('pointerdown',ev=>{ ev.preventDefault(); const r=host.getBoundingClientRect(), sx=ev.clientX, sy=ev.clientY, ox=n.x, oy=n.y; d.classList.add('grab'); pin.setPointerCapture(ev.pointerId);
+    const mv=e2=>{ n.x=Math.max(0,Math.min(80, ox+(e2.clientX-sx)/r.width*100)); n.y=Math.max(0,Math.min(82, oy+(e2.clientY-sy)/r.height*100)); d.style.left=n.x+'%'; d.style.top=n.y+'%'; };
+    const up=()=>{ pin.removeEventListener('pointermove',mv); pin.removeEventListener('pointerup',up); d.classList.remove('grab'); saveNotes(); reRenderBoards(); };
+    pin.addEventListener('pointermove',mv); pin.addEventListener('pointerup',up); });
+  host.appendChild(d); }
+function renderBoard(){ const b=E.corkboard; if(!b)return; b.querySelectorAll('.note').forEach(n=>n.remove()); notes.slice(0,MAXNOTES).forEach((n,i)=>makeNoteEl(n,i,b)); }
+function renderBigBoard(){ const b=document.getElementById('bigBoard'); if(!b)return; b.querySelectorAll('.note').forEach(n=>n.remove()); notes.slice(0,MAXNOTES).forEach((n,i)=>makeNoteEl(n,i,b)); }
+function reRenderBoards(){ renderBoard(); if(openId==='boardP') renderBigBoard(); }
+function newNote(){ openP('brainP'); renderPile(); setTimeout(()=>brainIn.focus(),200); }
+document.getElementById('boardNew').onclick=newNote;
+document.getElementById('brainAdd').onclick=()=>{ const v=brainIn.value.trim(); if(v){ notes.unshift(mkNote(v)); if(notes.length>16)notes.pop(); saveNotes(); brainIn.value=''; renderPile(); reRenderBoards(); } };
 brainIn.addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('brainAdd').click(); });
 document.querySelectorAll('.qb').forEach(b=>b.onclick=()=>{ if(b.dataset.q==='brain'){ openP('brainP'); renderPile(); setTimeout(()=>brainIn.focus(),200);} else openP('focusP'); });
 
@@ -369,10 +415,16 @@ function fFmt(){ const m=String(Math.floor(fLeft/60)).padStart(2,'0'),s=String(f
 document.getElementById('fStart').onclick=function(){ if(fTimer){ clearInterval(fTimer); fTimer=null; this.textContent='begin ✦'; setFocus(false); return; } this.textContent='pause'; setFocus(true); fTimer=setInterval(()=>{ fLeft--; if(fLeft<=0){ clearInterval(fTimer); fTimer=null; fLeft=1500; this.textContent='begin ✦'; setFocus(false);} fFmt(); },1000); };
 let focusMode=false; function setFocus(on){ focusMode=on; applyGrade(); catExpr=on?'focus':'idle'; }
 
-/* cat speak */
+/* cat speak — pixel speech bubble above the mascot + a random roblox blurt */
 const CL=['hi, antonio ♡','no rush, the desk is warm','sip of water? ✦','you’re doing okay','i’ll sit with you']; let ci=0;
 const CEXP=['happy','love','surprise','idle','happy'];
-function catSpeak(){ ci=(ci+1)%CL.length; catExpr=CEXP[ci]; document.getElementById('tip').textContent=CL[ci]; clearTimeout(catSpeak._t); catSpeak._t=setTimeout(()=>{ document.getElementById('tip').textContent='click the monitor, phone, board, calendar, or 🍅 ✦'; if(!focusMode)catExpr='idle'; },2800); }
+const SFX=['sfx-hmm','sfx-huh','sfx-yay','sfx-hi'].map(n=>{ const a=new Audio(n+'.mp3'); a.preload='auto'; return a; });
+function playSfx(){ const a=SFX[(Math.random()*SFX.length)|0]; if(!a)return; try{ a.currentTime=0; a.volume=.75; a.play().catch(()=>{}); }catch(e){} }
+const bubble=document.getElementById('catBubble');
+function showBubble(txt){ const cat=E.cat, stage=document.getElementById('stage'); if(!cat||!stage)return; const r=cat.getBoundingClientRect(), s=stage.getBoundingClientRect();
+  bubble.textContent=txt; bubble.style.left=(r.left-s.left+r.width/2)+'px'; bubble.style.top='auto'; bubble.style.bottom=(s.height-(r.top-s.top)+12)+'px'; bubble.classList.add('on'); }
+function catSpeak(){ ci=(ci+1)%CL.length; catExpr=CEXP[ci]; setKao(); showBubble(CL[ci]); playSfx();
+  clearTimeout(catSpeak._t); catSpeak._t=setTimeout(()=>{ bubble.classList.remove('on'); if(!focusMode){catExpr='idle';setKao();} },2800); }
 
 /* sky/weather/cool */
 function setSky(m){ skyMode=m; document.querySelectorAll('[data-sky]').forEach(b=>b.classList.toggle('on',b.dataset.sky===m)); applyGrade(); }
@@ -414,7 +466,7 @@ function loop(){ requestAnimationFrame(loop); T+=0.016; drawSky();
 
 /* boot */
 const img=new Image(); img.crossOrigin='anonymous'; img.src='room.png';
-img.onload=()=>{ roomCanvas=keyGreen(img); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); loop();
+img.onload=()=>{ roomCanvas=keyGreen(img); buildEls(); drawCatBlob(); drawNoteStack(); renderBig(); renderFeed(); renderBoard(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); loop();
   const L=document.getElementById('loading'); L.style.opacity=0; setTimeout(()=>L.remove(),700); };
 img.onerror=()=>{ document.getElementById('loading').textContent='could not load room.png'; };
 addEventListener('resize',fit);
