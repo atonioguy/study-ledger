@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<title>Aquamarine</title>
+<!-- Aquamarine · home-base mock v0.1 · static visual only, no live data yet -->
+<style>
+  :root{
+    /* base palette — dusk water */
+    --ink:        #0c1622;   /* deepest water */
+    --deep:       #122436;   /* deep teal-blue */
+    --mid:        #1b3a4b;   /* pond mid */
+    --moss:       #2f5d52;   /* muted sage-green */
+    --surface:    rgba(225,236,238,0.07);
+    --surface-2:  rgba(225,236,238,0.12);
+    --line:       rgba(190,214,220,0.16);
+    /* accents */
+    --sakura:     #e8b6c4;   /* cherry blossom pink */
+    --sakura-dim: #c98fa0;
+    --lav:        #b7b3e0;   /* lavender */
+    --sage:       #a8c4ab;   /* soft green */
+    --koi:        #e89a6c;   /* koi orange */
+    --koi-deep:   #cf7048;
+    --cream:      #efe9dc;   /* warm paper neutral */
+    --text:       #eaf1f2;
+    --text-soft:  #b8c8cc;
+    --text-faint: #7f969c;
+    --glow:       0 0 40px rgba(160,200,210,0.10);
+    --room-tint:  #1b3a4b;   /* changes per room */
+    --room-accent:#e8b6c4;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    font-family:'Avenir Next','Segoe UI',-apple-system,system-ui,sans-serif;
+    color:var(--text);
+    background:var(--ink);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- the pond (animated background) ---------- */
+  .scene{
+    position:fixed; inset:0;
+    background:
+      radial-gradient(120% 90% at 70% -10%, rgba(120,150,170,0.18), transparent 55%),
+      radial-gradient(140% 120% at 20% 110%, var(--moss) 0%, transparent 45%),
+      linear-gradient(160deg, var(--room-tint) 0%, var(--deep) 45%, var(--ink) 100%);
+    transition:background 1.4s ease;
+    z-index:0;
+  }
+  /* moonlight ripple rings */
+  .ripples{ position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.5; }
+  .ripples span{
+    position:absolute; border-radius:50%;
+    border:1px solid rgba(183,179,224,0.20);
+    animation:ripple 9s ease-out infinite;
+  }
+  @keyframes ripple{
+    0%{ transform:scale(.2); opacity:0; }
+    20%{ opacity:.55; }
+    100%{ transform:scale(2.4); opacity:0; }
+  }
+  /* drifting koi */
+  .koi-layer{ position:fixed; inset:0; z-index:1; pointer-events:none; }
+  .koi{ position:absolute; width:120px; opacity:.55; filter:blur(.3px) drop-shadow(0 4px 12px rgba(0,0,0,.4)); }
+  .koi.a{ animation:swimA 38s linear infinite; }
+  .koi.b{ animation:swimB 52s linear infinite; width:84px; opacity:.4; }
+  .koi.c{ animation:swimC 46s linear infinite; width:100px; opacity:.32; }
+  @keyframes swimA{ 0%{ transform:translate(-15vw,18vh) rotate(8deg);} 50%{ transform:translate(60vw,42vh) rotate(-6deg);} 100%{ transform:translate(115vw,20vh) rotate(8deg);} }
+  @keyframes swimB{ 0%{ transform:translate(110vw,68vh) rotate(178deg);} 50%{ transform:translate(40vw,80vh) rotate(192deg);} 100%{ transform:translate(-20vw,66vh) rotate(178deg);} }
+  @keyframes swimC{ 0%{ transform:translate(-12vw,82vh) rotate(-4deg);} 100%{ transform:translate(116vw,60vh) rotate(6deg);} }
+  .koi .tail{ animation:wag 2.4s ease-in-out infinite; transform-origin:left center; }
+  @keyframes wag{ 0%,100%{ transform:rotate(-6deg);} 50%{ transform:rotate(6deg);} }
+
+  /* falling sakura petals */
+  .petal{ position:fixed; top:-5vh; z-index:2; pointer-events:none; opacity:.0;
+    color:var(--sakura); animation:fall linear infinite; }
+  @keyframes fall{
+    0%{ transform:translateY(-5vh) translateX(0) rotate(0deg); opacity:0; }
+    10%{ opacity:.85; }
+    100%{ transform:translateY(108vh) translateX(8vw) rotate(320deg); opacity:0; }
+  }
+
+  /* ---------- layout ---------- */
+  .app{ position:relative; z-index:5; height:100%; display:grid;
+    grid-template-columns:84px 1fr; }
+
+  /* room switcher rail */
+  .rail{
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    padding:18px 0; backdrop-filter:blur(14px);
+    background:linear-gradient(180deg, rgba(8,16,24,.55), rgba(8,16,24,.25));
+    border-right:1px solid var(--line);
+  }
+  .crest{ width:42px; height:42px; margin-bottom:14px; border-radius:13px;
+    background:radial-gradient(circle at 35% 30%, var(--lav), var(--mid));
+    box-shadow:var(--glow); display:grid; place-items:center; font-size:20px; }
+  .room-btn{
+    width:58px; padding:10px 4px 8px; border:none; background:transparent;
+    color:var(--text-faint); cursor:pointer; border-radius:14px;
+    display:flex; flex-direction:column; align-items:center; gap:5px;
+    font-size:10.5px; letter-spacing:.3px; transition:.35s; position:relative;
+  }
+  .room-btn .ic{ font-size:21px; line-height:1; filter:grayscale(.3); transition:.35s; }
+  .room-btn:hover{ color:var(--text-soft); background:var(--surface); }
+  .room-btn.active{ color:var(--text); background:var(--surface-2); }
+  .room-btn.active .ic{ filter:none; transform:scale(1.12); }
+  .room-btn.active::before{ content:''; position:absolute; left:-1px; top:18%; bottom:18%;
+    width:3px; border-radius:3px; background:var(--room-accent);
+    box-shadow:0 0 12px var(--room-accent); }
+
+  /* main column */
+  .main{ overflow:auto; padding:34px 40px 60px; }
+  .main::-webkit-scrollbar{ width:8px; }
+  .main::-webkit-scrollbar-thumb{ background:var(--surface-2); border-radius:8px; }
+
+  .topbar{ display:flex; align-items:flex-end; justify-content:space-between;
+    margin-bottom:30px; flex-wrap:wrap; gap:16px; }
+  .greet h1{ font-size:30px; font-weight:600; letter-spacing:.3px;
+    display:flex; align-items:baseline; gap:12px; }
+  .greet .wordmark{ font-weight:300; color:var(--text-soft); font-size:15px;
+    letter-spacing:6px; text-transform:uppercase; }
+  .greet p{ color:var(--text-soft); margin-top:7px; font-size:14px; }
+  .greet .accent{ color:var(--room-accent); }
+  .clock{ text-align:right; }
+  .clock .t{ font-size:26px; font-weight:300; letter-spacing:1px; }
+  .clock .d{ font-size:12.5px; color:var(--text-faint); margin-top:3px; letter-spacing:.5px; }
+
+  /* card grid */
+  .grid{ display:grid; gap:18px;
+    grid-template-columns:repeat(12,1fr); grid-auto-rows:minmax(10px,auto); }
+  .card{
+    background:linear-gradient(165deg, var(--surface-2), var(--surface));
+    border:1px solid var(--line); border-radius:20px; padding:20px 22px;
+    backdrop-filter:blur(16px); box-shadow:var(--glow);
+    position:relative; overflow:hidden; transition:transform .5s, border-color .4s;
+  }
+  .card:hover{ transform:translateY(-3px); border-color:rgba(183,179,224,0.32); }
+  .card::after{ /* soft top sheen */
+    content:''; position:absolute; inset:0 0 auto 0; height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent); }
+  .card h2{ font-size:12px; text-transform:uppercase; letter-spacing:2px;
+    color:var(--text-faint); font-weight:600; display:flex; align-items:center; gap:8px;
+    margin-bottom:14px; }
+  .card h2 .dot{ width:7px; height:7px; border-radius:50%;
+    background:var(--room-accent); box-shadow:0 0 8px var(--room-accent); }
+
+  .col-3{ grid-column:span 3; } .col-4{ grid-column:span 4; }
+  .col-5{ grid-column:span 5; } .col-6{ grid-column:span 6; }
+  .col-7{ grid-column:span 7; } .col-8{ grid-column:span 8; }
+
+  /* task list items (koi surfacing) */
+  .task{ display:flex; align-items:center; gap:11px; padding:9px 0;
+    border-bottom:1px solid rgba(190,214,220,0.08); }
+  .task:last-child{ border-bottom:none; }
+  .chk{ width:17px; height:17px; border-radius:6px; border:1.5px solid var(--text-faint);
+    flex:none; cursor:pointer; transition:.25s; }
+  .chk:hover{ border-color:var(--sakura); box-shadow:0 0 10px rgba(232,182,196,.4); }
+  .task .tt{ font-size:14px; }
+  .task .tag{ margin-left:auto; font-size:10.5px; padding:3px 9px; border-radius:20px;
+    background:var(--surface-2); color:var(--text-soft); letter-spacing:.4px; }
+  .tag.koi{ color:var(--koi); background:rgba(232,154,108,.12); }
+  .tag.lav{ color:var(--lav); background:rgba(183,179,224,.14); }
+  .tag.sage{ color:var(--sage); background:rgba(168,196,171,.13); }
+  .time-chip{ font-size:11px; color:var(--text-faint); min-width:54px; }
+
+  /* email glance */
+  .mail{ display:flex; gap:11px; padding:10px 0; border-bottom:1px solid rgba(190,214,220,0.08); }
+  .mail:last-child{ border-bottom:none; }
+  .mail .av{ width:30px; height:30px; border-radius:9px; flex:none; display:grid; place-items:center;
+    font-size:13px; font-weight:700; color:var(--ink); }
+  .mail .who{ font-size:13px; font-weight:600; }
+  .mail .sub{ font-size:12.5px; color:var(--text-soft); margin-top:2px; }
+  .mail .unread{ width:7px; height:7px; border-radius:50%; background:var(--sakura);
+    margin-left:auto; align-self:center; box-shadow:0 0 8px var(--sakura); }
+
+  /* brain dump (collage corkboard) */
+  .dump{ background:
+      repeating-linear-gradient(45deg, rgba(239,233,220,.025) 0 12px, transparent 12px 24px),
+      linear-gradient(165deg, rgba(47,93,82,.18), var(--surface)); }
+  .dump-in{ display:flex; gap:9px; margin-bottom:14px; }
+  .dump-in input{ flex:1; background:rgba(8,16,24,.4); border:1px solid var(--line);
+    border-radius:12px; padding:11px 14px; color:var(--text); font-size:13.5px; font-family:inherit; }
+  .dump-in input::placeholder{ color:var(--text-faint); }
+  .dump-in input:focus{ outline:none; border-color:var(--sakura); box-shadow:0 0 14px rgba(232,182,196,.25); }
+  .dump-in button{ background:var(--sakura); color:var(--ink); border:none; border-radius:12px;
+    padding:0 16px; font-weight:700; cursor:pointer; font-size:18px; transition:.25s; }
+  .dump-in button:hover{ background:var(--lav); transform:rotate(-90deg); }
+  .notes{ display:flex; flex-wrap:wrap; gap:10px; }
+  .note{ font-size:12.5px; padding:11px 13px; border-radius:4px; max-width:160px;
+    color:#2a2418; box-shadow:2px 4px 12px rgba(0,0,0,.35); line-height:1.4;
+    transform:rotate(var(--r)); transition:transform .3s; position:relative; }
+  .note:hover{ transform:rotate(0) scale(1.04); z-index:3; }
+  .note::before{ content:''; position:absolute; top:-6px; left:50%; transform:translateX(-50%);
+    width:12px; height:12px; border-radius:50%; background:var(--lav);
+    box-shadow:0 1px 3px rgba(0,0,0,.4); }
+  .note.p1{ background:#f3dbe2; --r:-3deg; }
+  .note.p2{ background:#dfeadb; --r:2.5deg; }
+  .note.p3{ background:#e2dff2; --r:-1.5deg; }
+  .note.p4{ background:#f5ead3; --r:3deg; }
+
+  /* focus / pomodoro */
+  .focus{ text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .timer-ring{ position:relative; width:128px; height:128px; margin:6px auto 14px; }
+  .timer-ring svg{ transform:rotate(-90deg); }
+  .timer-ring .num{ position:absolute; inset:0; display:grid; place-items:center;
+    font-size:30px; font-weight:300; letter-spacing:1px; }
+  .focus-cta{ background:var(--surface-2); border:1px solid var(--line); color:var(--text);
+    border-radius:30px; padding:10px 22px; font-size:13px; cursor:pointer; letter-spacing:.5px;
+    transition:.3s; font-family:inherit; }
+  .focus-cta:hover{ background:var(--sakura); color:var(--ink); border-color:var(--sakura); }
+  .focus .sub{ font-size:12px; color:var(--text-faint); margin-top:10px; }
+
+  /* mood / mental-health teaser */
+  .mood-row{ display:flex; gap:9px; margin-top:6px; }
+  .mood{ flex:1; text-align:center; padding:12px 6px; border-radius:14px;
+    background:var(--surface); border:1px solid var(--line); cursor:pointer; transition:.3s; font-size:22px; }
+  .mood:hover{ background:var(--surface-2); transform:translateY(-3px); }
+  .affirm{ font-style:italic; color:var(--text-soft); font-size:13.5px; line-height:1.6;
+    margin-top:4px; padding-left:14px; border-left:2px solid var(--lav); }
+
+  /* mascot companion */
+  .mascot{ position:fixed; right:26px; bottom:22px; z-index:20; cursor:pointer;
+    display:flex; align-items:flex-end; gap:10px; }
+  .mascot .bubble{ background:rgba(239,233,220,.92); color:#2a2418; font-size:12.5px;
+    padding:9px 13px; border-radius:14px 14px 3px 14px; max-width:180px; line-height:1.45;
+    box-shadow:0 6px 20px rgba(0,0,0,.35); opacity:0; transform:translateY(8px) scale(.9);
+    transition:.4s; transform-origin:bottom right; }
+  .mascot:hover .bubble{ opacity:1; transform:translateY(0) scale(1); }
+  .mascot .body{ width:62px; height:62px; border-radius:50% 50% 46% 46%;
+    background:linear-gradient(160deg,#f0ece2,#d7d3c6); position:relative;
+    box-shadow:0 8px 24px rgba(0,0,0,.4); animation:bob 4s ease-in-out infinite; }
+  @keyframes bob{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-6px);} }
+  .mascot .ear{ position:absolute; top:-13px; width:15px; height:24px; border-radius:50%;
+    background:linear-gradient(160deg,#f0ece2,#d7d3c6); }
+  .mascot .ear.l{ left:9px; transform:rotate(-12deg);} .mascot .ear.r{ right:9px; transform:rotate(12deg);}
+  .mascot .phones{ position:absolute; top:18px; left:-5px; right:-5px; height:22px;
+    border:5px solid var(--mid); border-bottom:none; border-radius:30px 30px 0 0; }
+  .mascot .eye{ position:absolute; top:30px; width:6px; height:6px; border-radius:50%; background:#2a2418; }
+  .mascot .eye.l{ left:20px;} .mascot .eye.r{ right:20px;}
+  .mascot .blush{ position:absolute; top:38px; width:9px; height:5px; border-radius:50%; background:var(--sakura); opacity:.7; }
+  .mascot .blush.l{ left:13px;} .mascot .blush.r{ right:13px;}
+
+  .mock-tag{ position:fixed; top:12px; right:16px; z-index:30; font-size:10px; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--text-faint); background:rgba(8,16,24,.5);
+    padding:5px 11px; border-radius:20px; border:1px solid var(--line); }
+
+  @media(max-width:760px){
+    .app{ grid-template-columns:1fr; }
+    .rail{ flex-direction:row; overflow-x:auto; border-right:none; border-bottom:1px solid var(--line);
+      padding:10px; gap:2px; }
+    .crest{ margin:0 8px 0 0; }
+    .room-btn{ flex:none; }
+    .main{ padding:22px 18px 80px; }
+    .col-3,.col-4,.col-5,.col-6,.col-7,.col-8{ grid-column:span 12; }
+    .greet h1{ font-size:24px; }
+  }
+</style>
+</head>
+<body>
+  <div class="scene"></div>
+  <div class="ripples" id="ripples"></div>
+  <div class="koi-layer" id="koiLayer"></div>
+  <div class="mock-tag">mock · v0.1</div>
+
+  <div class="app">
+    <!-- ROOM SWITCHER -->
+    <nav class="rail">
+      <div class="crest">🌙</div>
+      <button class="room-btn active" data-tint="#1b3a4b" data-accent="#e8b6c4" data-room="home">
+        <span class="ic">🏯</span>Home</button>
+      <button class="room-btn" data-tint="#1d3326" data-accent="#a8c4ab" data-room="school">
+        <span class="ic">📚</span>School</button>
+      <button class="room-btn" data-tint="#2a2440" data-accent="#b7b3e0" data-room="life">
+        <span class="ic">🌿</span>Life</button>
+      <button class="room-btn" data-tint="#14202e" data-accent="#9fb8d6" data-room="mind">
+        <span class="ic">🫧</span>Mind</button>
+      <button class="room-btn" data-tint="#33283a" data-accent="#e8b6c4" data-room="dump">
+        <span class="ic">🗒️</span>Dump</button>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div class="greet">
+          <h1>good evening, Diana <span class="wordmark">· aquamarine</span></h1>
+          <p>the pond is calm. <span class="accent" id="surfaceCount">4 things</span> drifted up for you today.</p>
+        </div>
+        <div class="clock">
+          <div class="t" id="clockT">—:—</div>
+          <div class="d" id="clockD">—</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- TODAY / TICKTICK -->
+        <section class="card col-5">
+          <h2><span class="dot"></span>Today · TickTick</h2>
+          <div class="task"><span class="time-chip">9:30a</span><span class="chk"></span><span class="tt">Pathophys reading — Ch. 12</span><span class="tag koi">school</span></div>
+          <div class="task"><span class="time-chip">1:00p</span><span class="chk"></span><span class="tt">Email Dr. Reyes re: rotation</span><span class="tag lav">life</span></div>
+          <div class="task"><span class="time-chip">4:00p</span><span class="chk"></span><span class="tt">Refill prescription</span><span class="tag sage">health</span></div>
+          <div class="task"><span class="time-chip">eve</span><span class="chk"></span><span class="tt">Pomodoro block — Symbiosis notes</span><span class="tag koi">school</span></div>
+        </section>
+
+        <!-- EMAIL GLANCE -->
+        <section class="card col-4">
+          <h2><span class="dot"></span>Inbox · needs you</h2>
+          <div class="mail"><div class="av" style="background:var(--sakura)">U</div><div><div class="who">UNTHSC Registrar</div><div class="sub">Fall enrollment opens Mon</div></div><span class="unread"></span></div>
+          <div class="mail"><div class="av" style="background:var(--sage)">A</div><div><div class="who">Anatomy TA</div><div class="sub">Lab makeup — reply by Fri</div></div><span class="unread"></span></div>
+          <div class="mail"><div class="av" style="background:var(--lav)">J</div><div><div class="who">Jamie</div><div class="sub">re: weekend plans?</div></div></div>
+        </section>
+
+        <!-- FOCUS -->
+        <section class="card col-3 focus">
+          <h2 style="align-self:flex-start"><span class="dot"></span>Focus</h2>
+          <div class="timer-ring">
+            <svg width="128" height="128">
+              <circle cx="64" cy="64" r="56" fill="none" stroke="rgba(190,214,220,.12)" stroke-width="6"/>
+              <circle cx="64" cy="64" r="56" fill="none" stroke="var(--room-accent)" stroke-width="6"
+                stroke-linecap="round" stroke-dasharray="352" stroke-dashoffset="105"/>
+            </svg>
+            <div class="num">25:00</div>
+          </div>
+          <button class="focus-cta">begin a pomodoro →</button>
+          <div class="sub">syncs with TickTick focus</div>
+        </section>
+
+        <!-- NOTION -->
+        <section class="card col-7">
+          <h2><span class="dot"></span>Notion · task DBs</h2>
+          <div class="task"><span class="chk"></span><span class="tt">Research project — outline draft</span><span class="tag lav">thesis</span></div>
+          <div class="task"><span class="chk"></span><span class="tt">Reading log — log 3 articles</span><span class="tag sage">study</span></div>
+          <div class="task"><span class="chk"></span><span class="tt">Budget review (June)</span><span class="tag">life</span></div>
+        </section>
+
+        <!-- MIND / MENTAL HEALTH TEASER -->
+        <section class="card col-5">
+          <h2><span class="dot"></span>A moment for you</h2>
+          <div class="affirm">you are allowed to take up space, and to do things at your own pace.</div>
+          <div class="mood-row">
+            <div class="mood" title="great">🌤️</div>
+            <div class="mood" title="okay">🌙</div>
+            <div class="mood" title="low">🌧️</div>
+            <div class="mood" title="anxious">🌫️</div>
+            <div class="mood" title="numb">🫧</div>
+          </div>
+        </section>
+
+        <!-- BRAIN DUMP -->
+        <section class="card col-8 dump">
+          <h2><span class="dot"></span>Brain dump · pin a thought</h2>
+          <div class="dump-in">
+            <input id="dumpInput" placeholder="drop anything — a thought, a link, a worry…">
+            <button id="dumpBtn">+</button>
+          </div>
+          <div class="notes" id="notes">
+            <div class="note p1">that song I keep forgetting to save</div>
+            <div class="note p2">idea: study w/ friends this wknd?</div>
+            <div class="note p3">tiktok abt the koi pond build 🐟</div>
+            <div class="note p4">remember to drink water 🚰</div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- MASCOT -->
+  <div class="mascot" id="mascot">
+    <div class="bubble" id="bubble">hey — you’ve checked in 3 days in a row. proud of you 🌸</div>
+    <div class="body">
+      <span class="ear l"></span><span class="ear r"></span>
+      <span class="phones"></span>
+      <span class="eye l"></span><span class="eye r"></span>
+      <span class="blush l"></span><span class="blush r"></span>
+    </div>
+  </div>
+
+<script>
+  /* ---- clock + greeting ---- */
+  function tick(){
+    const n=new Date();
+    let h=n.getHours(); const m=String(n.getMinutes()).padStart(2,'0');
+    const ap=h>=12?'pm':'am'; const h12=((h+11)%12)+1;
+    document.getElementById('clockT').textContent=`${h12}:${m} ${ap}`;
+    document.getElementById('clockD').textContent=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+    const g=h<5?'late night':h<12?'good morning':h<17?'good afternoon':h<21?'good evening':'good night';
+    document.querySelector('.greet h1').firstChild.textContent=`${g}, Diana `;
+  }
+  tick(); setInterval(tick,15000);
+
+  /* ---- room switching (retint the world) ---- */
+  document.querySelectorAll('.room-btn').forEach(b=>{
+    b.addEventListener('click',()=>{
+      document.querySelector('.room-btn.active')?.classList.remove('active');
+      b.classList.add('active');
+      document.documentElement.style.setProperty('--room-tint', b.dataset.tint);
+      document.documentElement.style.setProperty('--room-accent', b.dataset.accent);
+    });
+  });
+
+  /* ---- ripples ---- */
+  const rip=document.getElementById('ripples');
+  for(let i=0;i<6;i++){
+    const s=document.createElement('span');
+    const sz=80+i*40;
+    s.style.width=s.style.height=sz+'px';
+    s.style.left=(10+i*15)+'%'; s.style.top=(20+(i*11)%60)+'%';
+    s.style.animationDelay=(i*1.5)+'s';
+    rip.appendChild(s);
+  }
+
+  /* ---- koi ---- */
+  const koiSVG=(c1,c2)=>`<svg class="koi __CLS__" viewBox="0 0 120 50">
+    <g class="tail"><path d="M2 25 Q22 8 38 25 Q22 42 2 25Z" fill="${c1}" opacity=".85"/></g>
+    <ellipse cx="72" cy="25" rx="44" ry="15" fill="${c1}"/>
+    <ellipse cx="92" cy="25" rx="20" ry="12" fill="${c2}"/>
+    <circle cx="108" cy="22" r="2.4" fill="#1c1c1c"/>
+    <path d="M60 14 Q72 6 86 13" stroke="#fff" stroke-width="2" fill="none" opacity=".4"/>
+  </svg>`;
+  const kl=document.getElementById('koiLayer');
+  kl.innerHTML =
+    koiSVG('#e89a6c','#f3c9a8').replace('__CLS__','a') +
+    koiSVG('#efe9dc','#e8b6c4').replace('__CLS__','b') +
+    koiSVG('#cf7048','#e89a6c').replace('__CLS__','c');
+
+  /* ---- petals ---- */
+  for(let i=0;i<14;i++){
+    const p=document.createElement('div'); p.className='petal';
+    p.textContent='❀';
+    p.style.left=Math.random()*100+'vw';
+    p.style.fontSize=(8+Math.random()*12)+'px';
+    p.style.animationDuration=(9+Math.random()*10)+'s';
+    p.style.animationDelay=(-Math.random()*12)+'s';
+    p.style.color=Math.random()>.5?'var(--sakura)':'var(--lav)';
+    document.body.appendChild(p);
+  }
+
+  /* ---- brain dump add ---- */
+  const inp=document.getElementById('dumpInput'), notes=document.getElementById('notes');
+  const palettes=['p1','p2','p3','p4'];
+  let pc=0;
+  function addNote(){
+    const v=inp.value.trim(); if(!v) return;
+    const n=document.createElement('div');
+    n.className='note '+palettes[pc++%4];
+    n.textContent=v;
+    notes.prepend(n);
+    inp.value='';
+    // tiny reinforcement
+    bubble.textContent='caught it ✦ one less thing to hold onto.';
+  }
+  document.getElementById('dumpBtn').onclick=addNote;
+  inp.addEventListener('keydown',e=>{ if(e.key==='Enter') addNote(); });
+
+  /* ---- mascot lines ---- */
+  const bubble=document.getElementById('bubble');
+  const lines=[
+    'hey — you’ve checked in 3 days in a row. proud of you 🌸',
+    'no rush. the pond isn’t going anywhere.',
+    'want to start a focus block? I’ll sit with you.',
+    'drink some water? 🚰 just a gentle nudge.',
+    'you don’t have to do all of it today.'
+  ];
+  let li=0;
+  document.getElementById('mascot').addEventListener('click',()=>{
+    li=(li+1)%lines.length; bubble.textContent=lines[li];
+    bubble.style.opacity=1; bubble.style.transform='translateY(0) scale(1)';
+  });
+</script>
+</body>
+</html>
