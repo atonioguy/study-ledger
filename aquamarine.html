@@ -8,12 +8,18 @@
   :root{ --sakura:#e8b6c4; --lav:#b7b3e0; --sage:#a8c4ab; --koi:#e89a6c; --cyan:#9fe6ff; --text:#eef4f5; --soft:#c2d0d4; --faint:#8aa0ac; }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ height:100%; background:#05070c; overflow:hidden; font-family:'Avenir Next','Segoe UI',system-ui,sans-serif; color:var(--text); -webkit-font-smoothing:antialiased; user-select:none; }
-  #stage{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); overflow:hidden; box-shadow:0 30px 90px rgba(0,0,0,.7); }
+  #bg{ position:fixed; inset:0; z-index:0; background:radial-gradient(120% 90% at 50% 30%, #1a2336, #0c1019 70%, #070a12); }
+  #stage{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); overflow:hidden; z-index:1; box-shadow:0 30px 90px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.04); border-radius:6px; }
   #stage canvas, #hot{ position:absolute; inset:0; width:100%; height:100%; }
-  #sky{ z-index:1; } #screenui{ z-index:2; } #room{ z-index:3; } #fx{ z-index:4; pointer-events:none; } #hot{ z-index:5; }
-  #cool{ position:absolute; inset:0; z-index:4; pointer-events:none; mix-blend-mode:color; opacity:0; transition:opacity 1.2s; background:linear-gradient(160deg,#1d4a6e,#2a3f7a 55%,#3a2f6e); }
-  #grade{ position:absolute; inset:0; z-index:5; pointer-events:none; mix-blend-mode:soft-light; opacity:0; transition:opacity 1.4s, background 1.4s; }
-  #vig{ position:absolute; inset:0; z-index:6; pointer-events:none; background:radial-gradient(84% 84% at 50% 46%, transparent 60%, rgba(3,5,10,.42) 100%); }
+  #sky{ z-index:1; } #room{ z-index:2; } #screenui{ z-index:3; pointer-events:none; } #fx{ z-index:4; pointer-events:none; } #hot{ z-index:5; }
+  #cool{ position:absolute; inset:0; z-index:6; pointer-events:none; mix-blend-mode:color; opacity:0; transition:opacity 1.2s; background:linear-gradient(160deg,#1d4a6e,#2a3f7a 55%,#3a2f6e); }
+  #grade{ position:absolute; inset:0; z-index:7; pointer-events:none; mix-blend-mode:soft-light; opacity:0; transition:opacity 1.4s, background 1.4s; }
+  #vig{ position:absolute; inset:0; z-index:8; pointer-events:none; background:radial-gradient(84% 84% at 50% 46%, transparent 60%, rgba(3,5,10,.42) 100%); }
+  #alignbar{ position:fixed; top:50px; left:50%; transform:translateX(-50%); z-index:40; display:none; gap:8px; align-items:center;
+    background:rgba(12,18,30,.85); backdrop-filter:blur(12px); padding:10px 14px; border-radius:16px; border:1px solid rgba(232,182,196,.4); font-size:12.5px; color:var(--soft); }
+  #alignbar.on{ display:flex; } #alignbar button{ background:rgba(255,255,255,.08); border:none; color:var(--text); border-radius:10px; padding:7px 11px; cursor:pointer; font:inherit; font-size:13px; }
+  #alignbar button.done{ background:var(--sakura); color:#2a1820; font-weight:700; } #alignbar .lbl{ margin-right:4px; }
+  body.aligning #hot{ pointer-events:auto; cursor:move; } body.aligning #hot .hz{ pointer-events:none; }
 
   /* clickable hotspots */
   .hz{ position:absolute; cursor:pointer; border-radius:8px; transition:box-shadow .25s, background .25s; }
@@ -95,6 +101,7 @@
 </head>
 <body>
   <div id="loading">opening aquamarine…</div>
+  <div id="bg"></div>
   <div id="stage">
     <canvas id="sky"></canvas>
     <canvas id="screenui"></canvas>
@@ -148,7 +155,14 @@
     <div class="ctrl"><button class="start" id="fStart">begin ✦</button><button class="stop" id="fStop">close</button></div>
   </div></div>
 
+  <div id="alignbar">
+    <span class="lbl">⊹ drag the screens onto your desk · then save</span>
+    <button id="alScaleDown">－ size</button><button id="alScaleUp">＋ size</button><button id="alReset">reset</button><button class="done" id="alDone">save ✓</button>
+  </div>
+
   <div id="dock">
+    <button id="alignBtn" title="align screens to your display">⊹</button>
+    <span class="sep"></span>
     <button data-sky="dawn" title="dawn">🌅</button><button data-sky="day" title="day">☀️</button><button data-sky="dusk" title="dusk" class="on">🌆</button><button data-sky="night" title="night">🌙</button>
     <span class="sep"></span>
     <button data-wx="clear" title="clear" class="on">✨</button><button data-wx="rain" title="rain">🌧️</button><button data-wx="snow" title="snow">❄️</button><button id="soundBtn" title="sound">🔇</button>
@@ -175,10 +189,15 @@ const stage=document.getElementById('stage'), sky=document.getElementById('sky')
   grade=document.getElementById('grade'), cool=document.getElementById('cool'),
   sx=sky.getContext('2d'), uc=screenui.getContext('2d');
 let SW=0,SH=0, roomCanvas=null;
+const DPR=Math.max(1,Math.min(window.devicePixelRatio||1,2.5));
+const roomCtx=room.getContext('2d');
 function fit(){ let w=innerWidth,h=innerHeight; if(w/h>ASPECT){ w=h*ASPECT; } else { h=w/ASPECT; }
   SW=Math.round(w); SH=Math.round(h); stage.style.width=SW+'px'; stage.style.height=SH+'px';
-  for(const c of [sky,room,screenui]){ c.width=SW; c.height=SH; }
-  if(roomCanvas) room.getContext('2d').drawImage(roomCanvas,0,0,SW,SH); resize3D(); layoutHot(); }
+  for(const c of [sky,room,screenui]){ c.width=Math.round(SW*DPR); c.height=Math.round(SH*DPR); c.style.width=SW+'px'; c.style.height=SH+'px'; }
+  // draw in CSS-pixel coords; buffer is DPR× bigger so it stays sharp AND aligned at any scaling
+  sx.setTransform(DPR,0,0,DPR,0,0); uc.setTransform(DPR,0,0,DPR,0,0); roomCtx.setTransform(DPR,0,0,DPR,0,0);
+  if(roomCanvas){ roomCtx.clearRect(0,0,SW,SH); roomCtx.drawImage(roomCanvas,0,0,SW,SH); }
+  resize3D(); layoutHot(); }
 function R(c){ return {l:c.x/100*SW,t:c.y/100*SH,w:c.w/100*SW,h:c.h/100*SH}; }
 function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
 
@@ -187,9 +206,7 @@ function processImage(img){ const W=img.naturalWidth,H=img.naturalHeight; const 
   const d=o.getImageData(0,0,W,H),p=d.data; const X0=0.02*W,X1=0.56*W,Y1=0.63*H;
   for(let y=0;y<H&&y<=Y1;y++) for(let x=Math.floor(X0);x<X1;x++){ const i=(y*W+x)*4,r=p[i],g=p[i+1],b=p[i+2]; if(g>55&&g>r*1.18&&g>b*1.12){ const k=Math.min(1,(g-Math.max(r,b))/45); p[i+3]=Math.round(255*(1-k)); if(k>0){ p[i]=Math.min(255,r+k*22); p[i+2]=Math.min(255,b+k*22);} } }
   o.putImageData(d,0,0);
-  o.globalCompositeOperation='destination-out'; // punch holes for screens
-  [SCR.monitor,SCR.clock,SCR.phone].forEach(s=>{ const x=s.x/100*W, y=s.y/100*H, w=s.w/100*W, h=s.h/100*H; roundRect(o,x,y,w,h,Math.min(w,h)*0.06); o.fill(); });
-  o.globalCompositeOperation='source-over'; return oc; }
+  return oc; }  // screens are drawn ON TOP now (alignable), so no holes
 
 /* ===== sky ===== */
 const SKIES={ dawn:{stops:['#2b3566','#7d6f9e','#e3a9a0'],sun:'#ffe2c0',sunX:.3,sunY:.42,star:0,city:.85},
@@ -244,6 +261,7 @@ function drawScreens(){ uc.clearRect(0,0,SW,SH);
   uc.fillStyle='#bfe2f2'; uc.font=`${ws*0.58}px 'Segoe UI'`; uc.fillText(`H ${WX.hi}°  L ${WX.lo}°`,wx0+ws*0.1,wy0+ws*2.2);
   uc.fillText(`feels ${WX.feels}°`,wx0+ws*0.1,wy0+ws*2.95);
   uc.fillStyle='#8fbed4'; uc.font=`600 ${ws*0.48}px 'Segoe UI'`; uc.fillText('ARLINGTON · 76018',wx0+ws*0.1,wy0+ws*3.8); uc.restore();
+  if(document.body.classList.contains('aligning')){ uc.save(); uc.strokeStyle='#ff3b6b'; uc.lineWidth=2.5; uc.setLineDash([9,6]); [SCR.monitor,SCR.clock,SCR.phone].forEach(s=>{ const r=R(s); uc.strokeRect(r.l,r.t,r.w,r.h); }); uc.restore(); }
 }
 function greet(){ const h=new Date().getHours(); return (h<5?'still up':h<12?'good morning':h<17?'good afternoon':'good evening')+', antonio'; }
 
@@ -348,14 +366,32 @@ function tickHdr(){ const n=new Date(); document.getElementById('dHi').textConte
 let mx=0,my=0,tmx=0,tmy=0;
 addEventListener('pointermove',e=>{ tmx=(e.clientX/innerWidth-.5); tmy=(e.clientY/innerHeight-.5); });
 addEventListener('deviceorientation',e=>{ if(e.gamma!=null){ tmx=Math.max(-.5,Math.min(.5,e.gamma/45)); tmy=Math.max(-.5,Math.min(.5,(e.beta-40)/60)); }});
+/* one-time per-device alignment nudge (fixes display-scaling offset) */
+const NUDGE=JSON.parse(localStorage.getItem('aq_nudge')||'null')||{dx:0,dy:0,s:1};
+function seedNudge(){ if(localStorage.getItem('aq_nudge')) return; if(DPR>1.05){ const f=(DPR-1)/0.5; NUDGE.dx=Math.round(SW*0.066*f); NUDGE.dy=Math.round(SH*0.112*f); NUDGE.s=+(1-0.045*f).toFixed(3); } }
 function loop(){ requestAnimationFrame(loop); skyT+=0.016; drawSky(); drawScreens(); update3D();
   mx+=(tmx-mx)*.06; my+=(tmy-my)*.06; const fg=`scale(1.045) translate(${-mx*8}px,${-my*5}px)`;
-  room.style.transform=fx.style.transform=screenui.style.transform=hot.style.transform=fg; sky.style.transform=`scale(1.12) translate(${-mx*24}px,${-my*15}px)`;
+  room.style.transform=fx.style.transform=fg; sky.style.transform=`scale(1.12) translate(${-mx*24}px,${-my*15}px)`;
+  const nudge=`translate(${NUDGE.dx}px,${NUDGE.dy}px) scale(${NUDGE.s})`;   // only the 2D screen UIs need per-display correction
+  screenui.style.transform=hot.style.transform=`${nudge} ${fg}`;
 }
+
+/* align mode */
+let aligning=false,adrag=false,alx=0,aly=0;
+function setAlign(on){ aligning=on; document.body.classList.toggle('aligning',on); document.getElementById('alignbar').classList.toggle('on',on); document.getElementById('alignBtn').classList.toggle('on',on); document.getElementById('tip').style.opacity=on?0:.85; }
+document.getElementById('alignBtn').onclick=()=>setAlign(!aligning);
+document.getElementById('alDone').onclick=()=>{ localStorage.setItem('aq_nudge',JSON.stringify(NUDGE)); setAlign(false); };
+document.getElementById('alReset').onclick=()=>{ NUDGE.dx=0; NUDGE.dy=0; NUDGE.s=1; };
+document.getElementById('alScaleUp').onclick=()=>{ NUDGE.s=Math.min(1.4,NUDGE.s+0.01); };
+document.getElementById('alScaleDown').onclick=()=>{ NUDGE.s=Math.max(0.7,NUDGE.s-0.01); };
+hot.addEventListener('pointerdown',e=>{ if(!aligning)return; adrag=true; alx=e.clientX; aly=e.clientY; });
+addEventListener('pointermove',e=>{ if(adrag){ NUDGE.dx+=(e.clientX-alx); NUDGE.dy+=(e.clientY-aly); alx=e.clientX; aly=e.clientY; } });
+addEventListener('pointerup',()=>adrag=false);
+hot.addEventListener('wheel',e=>{ if(!aligning)return; e.preventDefault(); NUDGE.s=Math.max(0.7,Math.min(1.4,NUDGE.s-Math.sign(e.deltaY)*0.01)); },{passive:false});
 
 /* boot */
 const img=new Image(); img.crossOrigin='anonymous'; img.src='room.png';
-img.onload=()=>{ roomCanvas=processImage(img); init3D(); renderToday(); updateProg(); renderFeed(); fit(); tickHdr(); setInterval(tickHdr,30000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); loop();
+img.onload=()=>{ roomCanvas=processImage(img); init3D(); renderToday(); updateProg(); renderFeed(); fit(); seedNudge(); tickHdr(); setInterval(tickHdr,30000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); loop();
   const L=document.getElementById('loading'); L.style.opacity=0; setTimeout(()=>L.remove(),700); };
 img.onerror=()=>{ document.getElementById('loading').textContent='could not load room.png'; };
 addEventListener('resize',fit);
