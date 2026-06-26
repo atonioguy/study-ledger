@@ -3,201 +3,354 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-<title>Aquamarine · 3D</title>
+<title>Aquamarine</title>
 <style>
-  html,body{ margin:0; height:100%; background:#0a0f17; overflow:hidden;
+  html,body{ margin:0; height:100%; background:#0a1018; overflow:hidden;
     font-family:'Avenir Next','Segoe UI',system-ui,sans-serif; color:#eef4f5; }
-  /* low-res canvas upscaled chunky for the PS1 look */
-  #gl{ position:fixed; inset:0; width:100%; height:100%; image-rendering:pixelated; image-rendering:crisp-edges; }
-  /* dither + vignette + scanline mood overlay */
-  .grain{ position:fixed; inset:0; pointer-events:none; z-index:3; mix-blend-mode:overlay; opacity:.10;
+  #gl{ position:fixed; inset:0; width:100%; height:100%; image-rendering:pixelated; }
+  .grain{ position:fixed; inset:0; pointer-events:none; z-index:3; mix-blend-mode:overlay; opacity:.07;
     background-image:radial-gradient(rgba(255,255,255,.6) .5px, transparent .6px); background-size:3px 3px; }
   .vig{ position:fixed; inset:0; pointer-events:none; z-index:4;
-    background:radial-gradient(70% 70% at 50% 48%, transparent 55%, rgba(4,7,12,.72) 100%); }
-  .scan{ position:fixed; inset:0; pointer-events:none; z-index:5; opacity:.05;
-    background:repeating-linear-gradient(0deg, #000 0 1px, transparent 1px 3px); }
+    background:radial-gradient(72% 72% at 50% 46%, transparent 52%, rgba(6,9,16,.66) 100%); }
   .tag{ position:fixed; top:11px; left:14px; z-index:9; font-size:10px; letter-spacing:2px; text-transform:uppercase;
-    color:#cdd; background:rgba(8,14,22,.45); padding:5px 11px; border-radius:16px; border:1px solid rgba(190,214,220,.18); }
-  .hint{ position:fixed; bottom:12px; left:50%; transform:translateX(-50%); z-index:9; font-size:11px; color:#9fb3b8;
-    background:rgba(8,14,22,.4); padding:6px 14px; border-radius:16px; letter-spacing:.4px; }
+    color:#cdd; background:rgba(8,14,22,.4); padding:5px 11px; border-radius:16px; border:1px solid rgba(190,214,220,.16); }
+
+  /* mode buttons */
+  .modes{ position:fixed; bottom:16px; left:50%; transform:translateX(-50%); z-index:9; display:flex; gap:8px; }
+  .modes button{ background:rgba(16,24,36,.6); border:1px solid rgba(190,214,220,.2); color:#dfe9ea; backdrop-filter:blur(8px);
+    border-radius:22px; padding:9px 18px; font-size:12.5px; letter-spacing:.5px; cursor:pointer; font-family:inherit; transition:.3s; }
+  .modes button:hover{ background:rgba(232,182,196,.3); }
+  .modes button.on{ background:#e8b6c4; color:#2a1820; border-color:transparent; font-weight:600; }
+
+  /* focus-mode HTML dashboard, sits over the monitor */
+  .screen-ui{ position:fixed; z-index:7; left:50%; top:46%; transform:translate(-50%,-50%) scale(.9);
+    width:min(620px,72vw); height:min(404px,64vh); opacity:0; pointer-events:none; transition:opacity .6s, transform .6s; }
+  .screen-ui.on{ opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
+  .panel{ width:100%; height:100%; background:linear-gradient(165deg, rgba(20,32,46,.93), rgba(14,22,34,.96));
+    border:1px solid rgba(232,182,196,.3); border-radius:14px; padding:18px 22px; box-shadow:0 20px 60px rgba(0,0,0,.6), 0 0 50px rgba(255,200,140,.1);
+    display:flex; flex-direction:column; backdrop-filter:blur(6px); }
+  .panel h1{ font-size:19px; font-weight:600; margin:0 0 2px; }
+  .panel .sub{ font-size:11px; color:#9fb3b8; margin-bottom:10px; }
+  .ptabs{ display:flex; gap:6px; margin-bottom:10px; }
+  .ptab{ font-size:11.5px; padding:6px 14px; border-radius:9px; cursor:pointer; background:rgba(225,236,238,.07);
+    color:#9fb3b8; border:1px solid rgba(190,214,220,.16); }
+  .ptab.on{ background:#e8b6c4; color:#2a1820; border-color:transparent; font-weight:600; }
+  .plist{ flex:1; overflow:auto; }
+  .ptask{ display:flex; align-items:center; gap:11px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.06); }
+  .ptask .c{ width:16px; height:16px; border-radius:5px; border:1.5px solid #7f969c; flex:none; cursor:pointer; }
+  .ptask .c:hover{ border-color:#e8b6c4; }
+  .ptask .tm{ font-size:11px; color:#7f969c; min-width:42px; } .ptask .tx{ font-size:14px; }
+  .ptask .tg{ margin-left:auto; font-size:10px; padding:2px 9px; border-radius:20px; background:rgba(225,236,238,.1); color:#b8c8cc; }
+  .pp2{ display:none; } .pp2.on{ display:block; } .pp1.off{ display:none; }
+  .pomo{ margin-top:10px; display:flex; align-items:center; gap:10px; }
+  .pomo button{ background:rgba(232,182,196,.16); border:1px solid rgba(232,182,196,.4); color:#e8b6c4; border-radius:20px;
+    padding:8px 16px; font-size:12px; cursor:pointer; font-family:inherit; }
+  .pomo button:hover{ background:#e8b6c4; color:#2a1820; } .pomo .note{ font-size:10.5px; color:#7f969c; }
+  .hintline{ position:fixed; bottom:54px; left:50%; transform:translateX(-50%); z-index:9; font-size:10.5px; color:#88a; opacity:.7; }
 </style>
 </head>
 <body>
   <canvas id="gl"></canvas>
-  <div class="grain"></div><div class="vig"></div><div class="scan"></div>
-  <div class="tag">aquamarine · low-poly desk · proof</div>
-  <div class="hint">drag to look around · the lamp lights your work</div>
+  <div class="grain"></div><div class="vig"></div>
+  <div class="tag">aquamarine · the desk</div>
+
+  <div class="modes">
+    <button id="mFocus" class="on">💻 focus</button>
+    <button id="mRoom">🪟 step back</button>
+  </div>
+  <div class="hintline" id="hintline">click the screen to focus · drag to look around when stepped back</div>
+
+  <!-- focus dashboard overlay -->
+  <div class="screen-ui" id="screenUI">
+    <div class="panel">
+      <h1 id="phello">good evening, antonio</h1>
+      <div class="sub">the desk is warm. 5 things waiting — no rush.</div>
+      <div class="ptabs">
+        <div class="ptab on" data-p="0">Today · TickTick</div>
+        <div class="ptab" data-p="1">Notion</div>
+        <div class="ptab" data-p="2">Inbox</div>
+      </div>
+      <div class="plist">
+        <div class="pp1">
+          <div class="ptask"><span class="tm">9:30a</span><span class="c"></span><span class="tx">Pathophys reading — Ch. 12</span><span class="tg">school</span></div>
+          <div class="ptask"><span class="tm">1:00p</span><span class="c"></span><span class="tx">Email Dr. Reyes re: rotation</span><span class="tg">life</span></div>
+          <div class="ptask"><span class="tm">4:00p</span><span class="c"></span><span class="tx">Refill prescription</span><span class="tg">health</span></div>
+          <div class="ptask"><span class="tm">eve</span><span class="c"></span><span class="tx">Pomodoro — Symbiosis notes</span><span class="tg">school</span></div>
+        </div>
+        <div class="pp2">
+          <div class="ptask"><span class="c"></span><span class="tx">Research project — outline draft</span><span class="tg">thesis</span></div>
+          <div class="ptask"><span class="c"></span><span class="tx">Reading log — log 3 articles</span><span class="tg">study</span></div>
+        </div>
+        <div class="pp2">
+          <div class="ptask"><span class="c" style="border-radius:50%"></span><span class="tx">UNTHSC Registrar — enrollment Mon</span><span class="tg">school</span></div>
+          <div class="ptask"><span class="c" style="border-radius:50%"></span><span class="tx">Anatomy TA — reply by Fri</span><span class="tg">school</span></div>
+        </div>
+      </div>
+      <div class="pomo">
+        <button id="pomoBtn">▶ start a pomodoro</button>
+        <span class="note">dims the room · syncs TickTick focus</span>
+      </div>
+    </div>
+  </div>
 
 <script src="three.min.js"></script>
 <script>
 const T = THREE;
 const cv = document.getElementById('gl');
 const renderer = new T.WebGLRenderer({ canvas:cv, antialias:false });
-const RES = 0.42;                              // low internal res → chunky PS1 pixels
+const RES = 0.66;                                  // cleaner low-poly than before
 function size(){ const w=innerWidth,h=innerHeight; renderer.setPixelRatio(1);
   renderer.setSize(Math.floor(w*RES), Math.floor(h*RES), false); cam.aspect=w/h; cam.updateProjectionMatrix(); }
 renderer.setClearColor(0x0c1622, 1);
 renderer.outputEncoding = T.sRGBEncoding;
-renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.18;
+renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;
 
 const scene = new T.Scene();
-scene.fog = new T.Fog(0x121d2b, 7, 17);        // dusky depth fade
+scene.fog = new T.Fog(0x16273a, 8, 22);
 
 const cam = new T.PerspectiveCamera(42, 1, 0.1, 100);
-const RAD = 6.4;                               // camera distance from desk
-cam.position.set(0, 3.3, RAD); cam.lookAt(0, 1.5, -0.6);
 
-/* ---- PS1 vertex-snap: wobble verts onto a low-res grid ---- */
-function ps1(mat){
-  mat.flatShading = true;
-  mat.onBeforeCompile = (sh)=>{ sh.vertexShader = sh.vertexShader.replace(
-    '#include <project_vertex>',
+/* PS1 vertex-snap (subtler now) */
+function ps1(mat){ mat.flatShading = true;
+  mat.onBeforeCompile = (sh)=>{ sh.vertexShader = sh.vertexShader.replace('#include <project_vertex>',
     `#include <project_vertex>
-     vec4 _p = gl_Position; _p.xyz /= _p.w;
-     _p.xy = floor(_p.xy * 96.0) / 96.0;        // snap to grid
-     _p.xyz *= _p.w; gl_Position = _p;`); };
-  return mat;
-}
-function lam(color, opts={}){ return ps1(new T.MeshStandardMaterial(Object.assign({color, roughness:.85, metalness:.0}, opts))); }
+     vec4 _p=gl_Position; _p.xyz/=_p.w; _p.xy=floor(_p.xy*170.0)/170.0; _p.xyz*=_p.w; gl_Position=_p;`); };
+  return mat; }
+function lam(color,opts={}){ return ps1(new T.MeshStandardMaterial(Object.assign({color,roughness:.9,metalness:0},opts))); }
+function emis(color){ return new T.MeshBasicMaterial({color}); }
+function addBox(w,h,d,mat,x,y,z){ const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat); m.position.set(x,y,z); scene.add(m); return m; }
 
-/* ---- lighting: cozy warm lamp + cool dusk ambient ---- */
-scene.add(new T.HemisphereLight(0x3b5a7a, 0x241c18, 0.55));
-scene.add(new T.AmbientLight(0x223247, 0.4));
-const lampLight = new T.PointLight(0xffb066, 2.2, 9, 2.0); lampLight.position.set(-1.5, 2.35, -0.3); scene.add(lampLight);
-const winLight = new T.PointLight(0x8fb6d6, 0.7, 10, 2.0); winLight.position.set(2.6, 2.4, -2.2); scene.add(winLight);
+/* additive glow sprite for cozy bloom-ish halos */
+const glowTex=(()=>{ const c=document.createElement('canvas'); c.width=c.height=64; const g=c.getContext('2d');
+  const r=g.createRadialGradient(32,32,0,32,32,32); r.addColorStop(0,'rgba(255,255,255,1)'); r.addColorStop(1,'rgba(255,255,255,0)');
+  g.fillStyle=r; g.fillRect(0,0,64,64); return new T.CanvasTexture(c); })();
+function glow(color,sz,x,y,z){ const s=new T.Sprite(new T.SpriteMaterial({map:glowTex,color,blending:T.AdditiveBlending,transparent:true,depthWrite:false}));
+  s.scale.set(sz,sz,1); s.position.set(x,y,z); scene.add(s); return s; }
 
-/* ---- room ---- */
-function addBox(w,h,d, mat, x,y,z){ const m=new T.Mesh(new T.BoxGeometry(w,h,d), mat); m.position.set(x,y,z); scene.add(m); return m; }
-addBox(14,8,0.4, lam(0x2a3a4d), 0, 3, -3.2);   // back wall
-addBox(0.4,8,12, lam(0x243343), -5.2, 3, 1);    // left wall
-addBox(14,0.4,12, lam(0x161f2b), 0, -0.2, 1);   // floor
+/* ---- lighting: dusky cool + warm lamp pool ---- */
+scene.add(new T.HemisphereLight(0x4a6a8f, 0x241d28, 0.6));
+scene.add(new T.AmbientLight(0x2a3450, 0.45));
+const lampLight=new T.PointLight(0xffba74, 2.6, 8, 2.0); lampLight.position.set(-1.9,2.5,0.2); scene.add(lampLight);
+const warmFill=new T.PointLight(0xffd0a0, 0.5, 14, 1.5); warmFill.position.set(0,3.2,2.0); scene.add(warmFill);
+const winLight=new T.PointLight(0x9ab6e0, 0.7, 14, 1.6); winLight.position.set(3.4,2.6,-2.2); scene.add(winLight);
 
-/* window with dusk sky (emissive canvas) */
+/* ---- cubicle shell ---- */
+addBox(16,9,0.4, lam(0x33405e), 0,3.5,-3.4);     // back wall (dusky blue)
+addBox(0.4,9,14, lam(0x2c3a54), -6,3.5,1);
+addBox(0.4,9,14, lam(0x2c3a54),  6,3.5,1);
+addBox(16,0.4,14, lam(0x14202e), 0,-0.2,1);
+/* low cubicle divider behind desk (cork-ish), holds pinned things */
+addBox(7.6,2.4,0.18, lam(0x6f5c44,{roughness:1}), 0,2.4,-2.25);
+
+/* ---- window (right-back) with dusk sky + sci-fi weather HUD ---- */
+let wxHud;
 (function(){
-  const c=document.createElement('canvas'); c.width=128; c.height=160; const g=c.getContext('2d');
-  const grd=g.createLinearGradient(0,0,0,160); grd.addColorStop(0,'#33426b'); grd.addColorStop(.5,'#6a5a86');
-  grd.addColorStop(.78,'#c98fa0'); grd.addColorStop(1,'#e8b6c4'); g.fillStyle=grd; g.fillRect(0,0,128,160);
-  g.fillStyle='#fff2dd'; g.beginPath(); g.arc(92,108,12,0,7); g.fill();           // moon/sun
-  g.fillStyle='rgba(20,26,40,.9)';                                                // city silhouette
-  for(let i=0;i<8;i++){ g.fillRect(i*16, 120-(i%3)*18-20, 14, 60); }
-  const tex=new T.CanvasTexture(c); tex.magFilter=T.NearestFilter; tex.minFilter=T.NearestFilter;
-  const win=new T.Mesh(new T.PlaneGeometry(2.6,3.2), new T.MeshBasicMaterial({map:tex}));
-  win.position.set(2.7,2.6,-3.0); scene.add(win);
-  const frame=addBox(2.9,3.5,0.18, lam(0x1c2836), 2.7,2.6,-3.07);
+  const c=document.createElement('canvas'); c.width=160; c.height=200; const g=c.getContext('2d');
+  const grd=g.createLinearGradient(0,0,0,200); grd.addColorStop(0,'#2b3a63'); grd.addColorStop(.45,'#5a5388');
+  grd.addColorStop(.74,'#b97f99'); grd.addColorStop(1,'#e8b6c4'); g.fillStyle=grd; g.fillRect(0,0,160,200);
+  g.fillStyle='#fff2dd'; g.beginPath(); g.arc(116,128,11,0,7); g.fill();
+  g.fillStyle='rgba(16,22,38,.92)'; for(let i=0;i<9;i++){ g.fillRect(i*18,150-(i%3)*16-12,16,70); }
+  // city window dots
+  g.fillStyle='rgba(255,220,150,.5)'; for(let i=0;i<40;i++){ g.fillRect(Math.random()*160, 150+Math.random()*40, 2,2); }
+  const tex=new T.CanvasTexture(c); tex.magFilter=T.NearestFilter;
+  const win=new T.Mesh(new T.PlaneGeometry(3.0,3.6), new T.MeshBasicMaterial({map:tex}));
+  win.position.set(3.0,3.0,-3.18); scene.add(win);
+  addBox(3.3,3.9,0.16, lam(0x202c3e), 3.0,3.0,-3.26);
+  // sci-fi weather HUD overlay (glowing cyan corner display)
+  const hc=document.createElement('canvas'); hc.width=128; hc.height=64; wxHud=hc.getContext('2d');
+  function drawHud(temp){ const g=wxHud; g.clearRect(0,0,128,64);
+    g.shadowColor='#7fe3ff'; g.shadowBlur=8; g.fillStyle='#aef0ff'; g.font='bold 22px Menlo,monospace'; g.fillText(temp,8,30);
+    g.font='10px Menlo,monospace'; g.fillStyle='#8fd6e8'; g.fillText('ARLINGTON 76018',8,46); g.fillText('▘ dusk · clear',8,58); }
+  drawHud('—°F');
+  const htex=new T.CanvasTexture(hc); htex.magFilter=T.NearestFilter; window._htex=htex; window._drawHud=drawHud;
+  const hud=new T.Mesh(new T.PlaneGeometry(1.3,0.65), new T.MeshBasicMaterial({map:htex,transparent:true}));
+  hud.position.set(1.95,1.7,-3.12); scene.add(hud); glow(0x4fd0ff,1.4,1.95,1.7,-3.05);
 })();
 
-/* desk slab */
-const deskTop = addBox(7.2,0.32,3.0, lam(0x6a5240,{roughness:.9}), 0,1.0,-0.4);
-addBox(0.3,2.0,2.6, lam(0x4a3a2c), -3.3,0.0,-0.4); addBox(0.3,2.0,2.6, lam(0x4a3a2c), 3.3,0.0,-0.4);
+/* ---- string lights along the divider top ---- */
+for(let i=0;i<13;i++){ const col=i%3===0?0xffd9a0:(i%3===1?0xe8b6c4:0xb7b3e0);
+  const b=new T.Mesh(new T.SphereGeometry(0.07,8,8), emis(col));
+  const x=-3.4+i*0.57, y=3.5+Math.sin(i*1.3)*0.1, z=-2.18; b.position.set(x,y,z); scene.add(b); glow(col,0.7,x,y,z+0.05); }
 
-/* ---- desk lamp (one connected group) ---- */
+/* ---- neon sign ---- */
+(function(){ const c=document.createElement('canvas'); c.width=256; c.height=64; const g=c.getContext('2d');
+  g.font='bold 28px Segoe UI'; g.textAlign='center'; g.shadowColor='#e8b6c4'; g.shadowBlur=16; g.fillStyle='#ffd9ec'; g.fillText('aquamarine ♡',128,42);
+  const tex=new T.CanvasTexture(c); const s=new T.Mesh(new T.PlaneGeometry(2.4,0.6), new T.MeshBasicMaterial({map:tex,transparent:true}));
+  s.position.set(-1.9,4.4,-3.15); scene.add(s); glow(0xe8b6c4,2.2,-1.9,4.4,-3.0); })();
+
+/* ---- tiered desk: lower surface + raised back shelf ---- */
+const desk=lam(0x6a5440,{roughness:.95});
+addBox(7.6,0.3,3.0, desk, 0,1.0,0.0);            // lower surface
+addBox(7.6,0.3,1.4, desk, 0,1.7,-1.7);            // raised back shelf
+addBox(7.6,0.7,0.18, lam(0x56432f), 0,1.35,-1.0); // riser between tiers
+addBox(0.3,2.0,2.6, lam(0x4a3a2c), -3.5,0,0.2); addBox(0.3,2.0,2.6, lam(0x4a3a2c), 3.5,0,0.2);
+/* drawer cabinet right */
+addBox(1.7,2.0,2.2, lam(0x7a6047), 4.6,0.8,0.3); addBox(1.5,0.5,0.05, lam(0xf3dbe2), 4.6,1.2,1.42);
+
+/* ---- BIG MONITOR on raised shelf (the hero) ---- */
+let scrTex, scrCtx;
 (function(){
   const G=new T.Group();
-  const base=new T.Mesh(new T.CylinderGeometry(0.34,0.4,0.12,12), lam(0x2c2c34)); base.position.y=1.22; G.add(base);
-  const pole=new T.Mesh(new T.CylinderGeometry(0.05,0.05,1.05,8), lam(0x33333c)); pole.position.set(0.02,1.78,0); pole.rotation.z=0.12; G.add(pole);
-  const arm=new T.Mesh(new T.CylinderGeometry(0.05,0.05,0.95,8), lam(0x33333c)); arm.position.set(0.42,2.28,0); arm.rotation.z=-0.95; G.add(arm);
-  const shade=new T.Mesh(new T.ConeGeometry(0.34,0.5,14,1,true), ps1(new T.MeshStandardMaterial({color:0x3a3a44, side:T.DoubleSide, emissive:0x140d05})));
-  shade.position.set(0.78,2.34,0); shade.rotation.z=-1.15; G.add(shade);
-  const bulb=new T.Mesh(new T.SphereGeometry(0.14,10,10), new T.MeshBasicMaterial({color:0xfff0d2})); bulb.position.set(0.86,2.24,0); G.add(bulb);
-  G.position.set(-1.55,0,-0.5); scene.add(G);
+  const stand=new T.Mesh(new T.CylinderGeometry(0.1,0.18,0.5,10), lam(0xbabfc6)); stand.position.set(0,2.1,-1.7); G.add(stand);
+  const foot=new T.Mesh(new T.BoxGeometry(0.9,0.06,0.5), lam(0xbabfc6)); foot.position.set(0,1.86,-1.7); G.add(foot);
+  const bezel=new T.Mesh(new T.BoxGeometry(3.0,1.9,0.12), lam(0x1a2230)); bezel.position.set(0,2.95,-1.8); G.add(bezel);
+  const c=document.createElement('canvas'); c.width=420; c.height=264; scrCtx=c.getContext('2d');
+  scrTex=new T.CanvasTexture(c); scrTex.magFilter=T.NearestFilter;
+  const scr=new T.Mesh(new T.PlaneGeometry(2.8,1.74), new T.MeshBasicMaterial({map:scrTex}));
+  scr.position.set(0,2.95,-1.73); G.add(scr); scene.add(G);
+  glow(0x2a4a66,2.4,0,2.95,-1.6);
+  G.userData.isMonitor=true; window._monitor=scr;
 })();
-
-/* ---- laptop (the hero, glowing screen) ---- */
-(function(){
-  const G=new T.Group();
-  const base=new T.Mesh(new T.BoxGeometry(1.7,0.08,1.1), lam(0xb9bfc6,{metalness:.3,roughness:.5})); base.position.y=1.2; G.add(base);
-  // screen canvas
-  const c=document.createElement('canvas'); c.width=320; c.height=200; const g=c.getContext('2d');
-  const bg=g.createLinearGradient(0,0,0,200); bg.addColorStop(0,'#16263a'); bg.addColorStop(1,'#24384e'); g.fillStyle=bg; g.fillRect(0,0,320,200);
-  g.fillStyle='#eaf1f2'; g.font='bold 22px Segoe UI, sans-serif'; g.fillText('good evening, antonio', 18, 38);
-  g.fillStyle='#e8b6c4'; g.font='12px Segoe UI'; g.fillText('— TODAY · TICKTICK —', 18, 62);
+function drawScreen(){ const g=scrCtx; const bg=g.createLinearGradient(0,0,0,264);
+  bg.addColorStop(0,'#16263a'); bg.addColorStop(1,'#22384e'); g.fillStyle=bg; g.fillRect(0,0,420,264);
+  g.fillStyle='#eaf1f2'; g.font='bold 24px Segoe UI'; g.fillText('good evening, antonio',24,42);
+  g.fillStyle='#e8b6c4'; g.font='13px Segoe UI'; g.fillText('TODAY · TICKTICK',24,68);
   const tasks=[['9:30','Pathophys reading — Ch.12'],['1:00','Email Dr. Reyes'],['4:00','Refill prescription'],['eve','Pomodoro · Symbiosis']];
-  g.font='14px Segoe UI'; tasks.forEach((t,i)=>{ const y=92+i*26;
-    g.strokeStyle='#7f969c'; g.lineWidth=1.5; g.strokeRect(20,y-12,14,14);
-    g.fillStyle='#7f969c'; g.fillText(t[0], 44, y); g.fillStyle='#dfe9ea'; g.fillText(t[1], 86, y); });
-  const tex=new T.CanvasTexture(c); tex.magFilter=T.NearestFilter; tex.minFilter=T.LinearFilter;
-  const scr=new T.Mesh(new T.PlaneGeometry(1.55,0.97), new T.MeshBasicMaterial({map:tex}));
-  const lid=new T.Mesh(new T.BoxGeometry(1.7,1.06,0.06), lam(0x9aa0a8));
-  lid.position.set(0,1.74,-0.52); lid.rotation.x=-0.32; scr.position.set(0,1.76,-0.49); scr.rotation.x=-0.32;
-  G.add(lid); G.add(scr);
-  G.position.set(0,0,-0.2); G.rotation.y=0.04; scene.add(G);
-})();
+  g.font='15px Segoe UI'; tasks.forEach((t,i)=>{ const y=104+i*32; g.strokeStyle='#7f969c'; g.lineWidth=1.5; g.strokeRect(26,y-13,15,15);
+    g.fillStyle='#7f969c'; g.fillText(t[0],52,y); g.fillStyle='#dfe9ea'; g.fillText(t[1],100,y); });
+  g.fillStyle='#7f969c'; g.font='11px Segoe UI'; g.fillText('click to focus →',300,250); scrTex.needsUpdate=true; }
+drawScreen();
 
-/* ---- plant (pot + low-poly foliage) ---- */
-(function(){
-  const G=new T.Group();
-  const pot=new T.Mesh(new T.CylinderGeometry(0.26,0.2,0.4,10), lam(0xcdd6cf)); pot.position.y=1.36; G.add(pot);
-  for(let i=0;i<5;i++){ const leaf=new T.Mesh(new T.IcosahedronGeometry(0.26,0), lam(0x4f7d56));
-    leaf.position.set((Math.random()-.5)*0.3,1.7+Math.random()*0.32,(Math.random()-.5)*0.3); leaf.scale.set(1,1.5,1); G.add(leaf); }
-  G.position.set(2.5,0,-0.8); scene.add(G);
-})();
+/* ---- desk lamp (connected) ---- */
+(function(){ const G=new T.Group();
+  const base=new T.Mesh(new T.CylinderGeometry(0.32,0.4,0.12,12),lam(0x2c2c34)); base.position.y=1.22; G.add(base);
+  const pole=new T.Mesh(new T.CylinderGeometry(0.05,0.05,1.0,8),lam(0x33333c)); pole.position.set(0.02,1.74,0); pole.rotation.z=0.12; G.add(pole);
+  const arm=new T.Mesh(new T.CylinderGeometry(0.05,0.05,0.9,8),lam(0x33333c)); arm.position.set(0.4,2.22,0); arm.rotation.z=-0.95; G.add(arm);
+  const shade=new T.Mesh(new T.ConeGeometry(0.32,0.48,14,1,true), ps1(new T.MeshStandardMaterial({color:0x3a3a44,side:T.DoubleSide,emissive:0x2a1808})));
+  shade.position.set(0.74,2.3,0); shade.rotation.z=-1.15; G.add(shade);
+  const bulb=new T.Mesh(new T.SphereGeometry(0.13,10,10),emis(0xffe6bd)); bulb.position.set(0.82,2.2,0); G.add(bulb);
+  G.position.set(-2.0,0,0.2); scene.add(G); glow(0xffba74,2.6,-1.7,2.15,0.1); })();
 
-/* ---- bunny plushie (miffy-ish) ---- */
-(function(){
-  const G=new T.Group(); const white=lam(0xf0ece2,{roughness:1});
-  const body=new T.Mesh(new T.SphereGeometry(0.34,12,12), white); body.position.y=1.42; body.scale.set(1,0.9,1); G.add(body);
-  const head=new T.Mesh(new T.SphereGeometry(0.27,12,12), white); head.position.y=1.78; G.add(head);
-  [-0.1,0.1].forEach(x=>{ const ear=new T.Mesh(new T.CapsuleGeometry?new T.CapsuleGeometry(0.06,0.34,4,8):new T.CylinderGeometry(0.06,0.06,0.42,8), white);
-    ear.position.set(x,2.12,0); G.add(ear); });
-  G.position.set(-2.5,0,0.1); G.rotation.y=0.5; scene.add(G);
-})();
+/* ---- squishy kaomoji cat-ball mascot ---- */
+let mascot, mascotFaceTex, mascotFaceCtx;
+(function(){ const G=new T.Group();
+  const body=new T.Mesh(new T.SphereGeometry(0.34,16,16), lam(0xf1ede3,{roughness:1})); body.scale.set(1.1,0.86,1.05); G.add(body);
+  [[-0.16,'L'],[0.16,'R']].forEach(([x])=>{ const ear=new T.Mesh(new T.ConeGeometry(0.12,0.22,5), lam(0xf1ede3)); ear.position.set(x,0.34,0); G.add(ear); });
+  const fc=document.createElement('canvas'); fc.width=128; fc.height=96; mascotFaceCtx=fc.getContext('2d');
+  mascotFaceTex=new T.CanvasTexture(fc); mascotFaceTex.magFilter=T.NearestFilter;
+  const face=new T.Mesh(new T.PlaneGeometry(0.5,0.38), new T.MeshBasicMaterial({map:mascotFaceTex,transparent:true}));
+  face.position.set(0,0.02,0.34); G.add(face);
+  G.position.set(-1.0,1.35,0.7); G.scale.set(1.15,1.15,1.15); scene.add(G); mascot=G; })();
+function drawFace(expr){ const g=mascotFaceCtx; g.clearRect(0,0,128,96); g.fillStyle='#3a3026'; g.font='bold 40px monospace'; g.textAlign='center';
+  g.fillText(expr,64,58); mascotFaceTex.needsUpdate=true; }
+const FACES=['(= ^ω^ =)','(=^‥^=)','(=｀ω´=)','(=˘ω˘=)','(=ↀωↀ=)']; drawFace(FACES[0]);
 
-/* ---- mug ---- */
-(function(){
-  const G=new T.Group(); const mug=new T.Mesh(new T.CylinderGeometry(0.16,0.14,0.28,12), lam(0xe8b6c4)); mug.position.y=1.3; G.add(mug);
-  const h=new T.Mesh(new T.TorusGeometry(0.09,0.03,6,10), lam(0xe8b6c4)); h.position.set(0.18,1.3,0); h.rotation.y=Math.PI/2; G.add(h);
-  const cof=new T.Mesh(new T.CylinderGeometry(0.14,0.14,0.02,12), new T.MeshBasicMaterial({color:0x4a3326})); cof.position.y=1.45; G.add(cof);
-  G.position.set(-1.0,0,0.55); scene.add(G);
-})();
+/* ---- lily of the valley pot ---- */
+(function(){ const G=new T.Group();
+  const pot=new T.Mesh(new T.CylinderGeometry(0.2,0.16,0.3,10), lam(0xcfe0e2)); pot.position.y=1.32; G.add(pot);
+  for(let i=0;i<4;i++){ const stem=new T.Mesh(new T.CylinderGeometry(0.012,0.012,0.5,5), lam(0x3f7a4a));
+    const sx=(Math.random()-.5)*0.18; stem.position.set(sx,1.65,(Math.random()-.5)*0.12); stem.rotation.z=(Math.random()-.5)*0.4; G.add(stem);
+    for(let j=0;j<4;j++){ const bell=new T.Mesh(new T.SphereGeometry(0.035,8,8), lam(0xfdfdfb,{emissive:0x222222}));
+      bell.position.set(sx+(Math.random()-.5)*0.1,1.55+j*0.08,(Math.random()-.5)*0.1); G.add(bell); } }
+  // a couple broad leaves
+  [[-0.12,-0.5],[0.13,0.4]].forEach(([x,rot])=>{ const leaf=new T.Mesh(new T.ConeGeometry(0.1,0.55,4), lam(0x356b40)); leaf.position.set(x,1.62,0); leaf.rotation.z=rot; leaf.scale.set(0.5,1,0.2); G.add(leaf); });
+  G.position.set(2.0,0,-1.6); scene.add(G); })();
 
-/* ---- betta tank ---- */
-let betta;
-(function(){
-  const G=new T.Group();
-  const glass=new T.Mesh(new T.BoxGeometry(0.9,0.66,0.6), new T.MeshStandardMaterial({color:0x7fb4c8, transparent:true, opacity:0.32, roughness:0.1}));
-  glass.position.y=1.52; G.add(glass);
-  const water=new T.Mesh(new T.BoxGeometry(0.82,0.5,0.52), new T.MeshStandardMaterial({color:0x3f7fa0, transparent:true, opacity:0.45})); water.position.y=1.48; G.add(water);
-  betta=new T.Mesh(new T.SphereGeometry(0.1,8,8), lam(0xb24d8a,{emissive:0x3a0f2a})); betta.scale.set(1.4,1,0.6); betta.position.set(0,1.5,0); G.add(betta);
-  G.position.set(2.4,0,0.5); scene.add(G);
-})();
+/* ---- betta tank: white + black ---- */
+let bettaW, bettaB;
+(function(){ const G=new T.Group();
+  const glass=new T.Mesh(new T.BoxGeometry(1.0,0.7,0.62), new T.MeshStandardMaterial({color:0x9fcde0,transparent:true,opacity:0.26,roughness:0.05}));
+  glass.position.y=1.55; G.add(glass);
+  const water=new T.Mesh(new T.BoxGeometry(0.92,0.54,0.54), new T.MeshStandardMaterial({color:0x3f86ad,transparent:true,opacity:0.4})); water.position.y=1.5; G.add(water);
+  bettaW=new T.Mesh(new T.SphereGeometry(0.1,8,8), lam(0xf3f0ea,{emissive:0x223040})); bettaW.scale.set(1.5,1,0.55); bettaW.position.set(-0.2,1.5,0); G.add(bettaW);
+  bettaB=new T.Mesh(new T.SphereGeometry(0.1,8,8), lam(0x2a2630,{emissive:0x1a1422})); bettaB.scale.set(1.5,1,0.55); bettaB.position.set(0.2,1.55,0); G.add(bettaB);
+  const sand=new T.Mesh(new T.BoxGeometry(0.92,0.08,0.54), lam(0xcaa97a)); sand.position.y=1.27; G.add(sand);
+  G.position.set(2.7,0,0.6); scene.add(G); })();
 
-/* ---- string lights along back wall ---- */
-for(let i=0;i<11;i++){ const b=new T.Mesh(new T.SphereGeometry(0.06,8,8),
-  new T.MeshBasicMaterial({color:i%3===0?0xffd9a0:(i%3===1?0xe8b6c4:0xb7b3e0)}));
-  b.position.set(-4.6+i*0.92, 3.1+Math.sin(i)*0.12, -2.95); scene.add(b); }
+/* ---- digital clock ---- */
+let clkTex, clkCtx;
+(function(){ const body=addBox(0.78,0.34,0.16, lam(0x1a1a22), 1.2,1.87,-1.55);
+  const c=document.createElement('canvas'); c.width=156; c.height=68; clkCtx=c.getContext('2d'); clkTex=new T.CanvasTexture(c); clkTex.magFilter=T.NearestFilter;
+  const face=new T.Mesh(new T.PlaneGeometry(0.7,0.28), new T.MeshBasicMaterial({map:clkTex,transparent:true})); face.position.set(1.2,1.87,-1.46); scene.add(face); })();
+function drawClock(){ const n=new Date(); let h=n.getHours(); const m=String(n.getMinutes()).padStart(2,'0'); const ap=h>=12?'PM':'AM'; const h12=((h+11)%12)+1;
+  const g=clkCtx; g.clearRect(0,0,156,68); g.shadowColor='#ff8a8a'; g.shadowBlur=7; g.fillStyle='#ff9a9a'; g.font='bold 34px Menlo,monospace'; g.textAlign='left'; g.fillText(`${h12}:${m}`,8,40);
+  g.font='11px Menlo,monospace'; g.fillStyle='#ffb0b0'; g.fillText(ap,120,26); g.fillStyle='#8fd6e8'; g.fillText(n.toLocaleDateString('en-US',{month:'short',day:'numeric'}),8,58); clkTex.needsUpdate=true; }
+drawClock(); setInterval(drawClock,10000);
 
-/* ---- neon 'aquamarine' sign ---- */
-(function(){
-  const c=document.createElement('canvas'); c.width=256; c.height=64; const g=c.getContext('2d');
-  g.clearRect(0,0,256,64); g.font='bold 30px Segoe UI'; g.textAlign='center';
-  g.shadowColor='#e8b6c4'; g.shadowBlur=14; g.fillStyle='#ffd9ec'; g.fillText('aquamarine ♡',128,42);
-  const tex=new T.CanvasTexture(c);
-  const sign=new T.Mesh(new T.PlaneGeometry(2.2,0.55), new T.MeshBasicMaterial({map:tex, transparent:true}));
-  sign.position.set(-1.4,4.0,-2.9); scene.add(sign);
-})();
+/* ---- mug + post-it stack ---- */
+(function(){ const mug=new T.Mesh(new T.CylinderGeometry(0.15,0.13,0.26,12), lam(0xe8b6c4)); mug.position.set(-1.0,1.28,1.0); scene.add(mug);
+  const h=new T.Mesh(new T.TorusGeometry(0.08,0.028,6,10), lam(0xe8b6c4)); h.position.set(-0.84,1.28,1.0); h.rotation.y=Math.PI/2; scene.add(h); })();
+let postStack;
+(function(){ const G=new T.Group(); for(let i=0;i<6;i++){ const p=new T.Mesh(new T.BoxGeometry(0.34,0.02,0.34), lam([0xf3dbe2,0xdfeadb,0xe2dff2,0xf5ead3][i%4])); p.position.y=1.16+i*0.022; p.rotation.y=(Math.random()-.5)*0.1; G.add(p); }
+  G.position.set(1.1,0,1.0); scene.add(G); postStack=G; })();
+/* a few post-its already on the divider wall */
+[[-1.4,0xf3dbe2,-0.1],[-0.7,0xdfeadb,0.08],[0.0,0xe2dff2,-0.05],[0.7,0xf5ead3,0.1]].forEach(([x,col,rot])=>{
+  const n=addBox(0.46,0.46,0.03, lam(col), x,2.6,-2.14); n.rotation.z=rot; });
 
-/* ---- sticky notes on the wall ---- */
-[[ -0.2,0xf3dbe2],[0.5,0xdfeadb],[1.2,0xe2dff2]].forEach(([x,col],i)=>{
-  const n=addBox(0.5,0.5,0.03, ps1(new T.MeshStandardMaterial({color:col,roughness:1})), x,3.0,-2.95); n.rotation.z=(i-1)*0.08; });
+/* mini calendar + polaroids on the divider (background, low detail) */
+(function(){ const c=document.createElement('canvas'); c.width=120; c.height=120; const g=c.getContext('2d'); g.fillStyle='#f3efe6'; g.fillRect(0,0,120,120);
+  g.fillStyle='#8a5a4a'; g.font='bold 12px Segoe UI'; g.fillText('JUNE 2026',8,16); g.fillStyle='#5b4f3a'; g.font='9px Segoe UI';
+  for(let r=0;r<5;r++)for(let d=0;d<7;d++){ const day=r*7+d-1; if(day>0&&day<=30){ if(day===26){ g.fillStyle='#cf7088'; g.fillRect(6+d*16,24+r*16,14,12); g.fillStyle='#fff'; } else g.fillStyle='#5b4f3a'; g.fillText(day,8+d*16,34+r*16); } }
+  const tex=new T.CanvasTexture(c); const cal=new T.Mesh(new T.PlaneGeometry(0.9,0.9), new T.MeshBasicMaterial({map:tex})); cal.position.set(2.0,2.5,-2.13); scene.add(cal); })();
+[[ -2.6,0x5a8ca0],[-2.6,0xc98fa0]].forEach(([x,col],i)=>{ const p=addBox(0.5,0.6,0.03, lam(0xf7f3ea), x,2.7-i*0.66,-2.13); p.rotation.z=(i?-.08:.07);
+  addBox(0.4,0.36,0.01, lam(col), x,2.78-i*0.66,-2.11); });
 
-/* ---- interaction: drag to look ---- */
-let dragX=0, targetYaw=0, yaw=0, down=false, lastX=0;
-cv.addEventListener('pointerdown',e=>{ down=true; lastX=e.clientX; });
+/* phone on stand w/ tweets */
+(function(){ const G=new T.Group();
+  const stand=new T.Mesh(new T.BoxGeometry(0.4,0.1,0.24), lam(0x2a2a32)); stand.position.y=1.18; G.add(stand);
+  const body=new T.Mesh(new T.BoxGeometry(0.34,0.66,0.04), lam(0x12161c)); body.position.set(0,1.5,0.02); body.rotation.x=-0.18; G.add(body);
+  const c=document.createElement('canvas'); c.width=120; c.height=230; const g=c.getContext('2d'); g.fillStyle='#0f141a'; g.fillRect(0,0,120,230);
+  g.fillStyle='#a8c4ab'; g.font='bold 11px Segoe UI'; g.fillText('🐦 my feed',8,18);
+  const tw=['building a desk for','my brain 🪴','the betta judges my','to-do list','iced coffee #4 today']; g.font='9px Segoe UI'; g.fillStyle='#b8c8cc';
+  tw.forEach((l,i)=>g.fillText(l,8,42+i*18));
+  const tex=new T.CanvasTexture(c); tex.magFilter=T.NearestFilter; const scr=new T.Mesh(new T.PlaneGeometry(0.3,0.58), new T.MeshBasicMaterial({map:tex})); scr.position.set(0,1.5,0.045); scr.rotation.x=-0.18; G.add(scr);
+  G.position.set(0.0,0,1.05); scene.add(G); })();
+
+/* ---- camera modes ---- */
+const views = {
+  focus:{ pos:new T.Vector3(0,2.95,1.4), look:new T.Vector3(0,2.95,-1.7) },
+  room: { pos:new T.Vector3(0,3.5,6.6),  look:new T.Vector3(0,1.9,-1.0) }
+};
+let mode='focus';
+const curPos=views.focus.pos.clone(), curLook=views.focus.look.clone();
+let dragYaw=0, dragPitch=0, down=false, lx=0, ly=0;
+function rotY(v,c,a){ const dx=v.x-c.x, dz=v.z-c.z; return new T.Vector3(c.x+dx*Math.cos(a)-dz*Math.sin(a), v.y, c.z+dx*Math.sin(a)+dz*Math.cos(a)); }
+
+cv.addEventListener('pointerdown',e=>{ down=true; lx=e.clientX; ly=e.clientY;
+  // click monitor → focus
+  if(mode==='room'){ /* simple: clicking upper-center focuses */ } });
 addEventListener('pointerup',()=>down=false);
-addEventListener('pointermove',e=>{ if(down){ targetYaw += (e.clientX-lastX)*0.003; lastX=e.clientX; targetYaw=Math.max(-0.5,Math.min(0.5,targetYaw)); } });
+addEventListener('pointermove',e=>{ if(down&&mode==='room'){ dragYaw=Math.max(-0.7,Math.min(0.7,dragYaw+(e.clientX-lx)*0.004)); dragPitch=Math.max(-0.15,Math.min(0.25,dragPitch+(e.clientY-ly)*0.002)); lx=e.clientX; ly=e.clientY; } });
+
+function setMode(m){ mode=m; document.getElementById('mFocus').classList.toggle('on',m==='focus'); document.getElementById('mRoom').classList.toggle('on',m==='room');
+  document.getElementById('screenUI').classList.toggle('on',m==='focus');
+  document.getElementById('hintline').style.opacity = m==='room'?'.7':'0'; }
+document.getElementById('mFocus').onclick=()=>setMode('focus');
+document.getElementById('mRoom').onclick=()=>setMode('room');
+cv.addEventListener('click',e=>{ if(mode==='room'){ const cx=e.clientX/innerWidth, cy=e.clientY/innerHeight; if(cx>0.32&&cx<0.68&&cy<0.55) setMode('focus'); } });
+
+/* tabs + pomodoro */
+const pps=[document.querySelector('.pp1'),...document.querySelectorAll('.pp2')];
+document.querySelectorAll('.ptab').forEach(t=>t.onclick=()=>{ document.querySelector('.ptab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p;
+  pps.forEach((p,j)=>{ p.classList.toggle('off',j===0&&i!==0); p.classList.toggle('on',j>0&&j===i); }); });
+let pomodoro=false;
+document.getElementById('pomoBtn').onclick=function(){ pomodoro=!pomodoro; this.textContent=pomodoro?'■ end focus block':'▶ start a pomodoro'; drawFace(pomodoro?'(=｀ω´=)':FACES[0]); };
+
+/* weather */
+(async()=>{ try{ const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.66&longitude=-97.12&current=temperature_2m&temperature_unit=fahrenheit',{cache:'no-store'});
+  const j=await r.json(); window._drawHud(Math.round(j.current.temperature_2m)+'°F'); window._htex.needsUpdate=true; }catch(e){} })();
 
 let t=0;
-function loop(){
-  requestAnimationFrame(loop); t+=0.016;
-  yaw += (targetYaw - yaw)*0.06;
-  const sway = Math.sin(t*0.4)*0.03;
-  cam.position.x = Math.sin(yaw)*RAD + sway; cam.position.z = Math.cos(yaw)*RAD;
-  cam.position.y = 3.3 + Math.sin(t*0.5)*0.05; cam.lookAt(0,1.5,-0.6);
-  if(betta){ betta.position.x = Math.sin(t*1.1)*0.28; betta.position.z = Math.cos(t*0.8)*0.15; betta.rotation.y = Math.cos(t*1.1)*0.4; }
-  lampLight.intensity = 2.2 + Math.sin(t*9)*0.06;  // gentle flicker
-  renderer.render(scene, cam);
+function loop(){ requestAnimationFrame(loop); t+=0.016;
+  const v=views[mode]; let targetPos=v.pos.clone();
+  if(mode==='room'){ targetPos=rotY(targetPos, v.look, dragYaw); targetPos.y += dragPitch*3; }
+  curPos.lerp(targetPos,0.07); curLook.lerp(v.look,0.07);
+  curPos.x += Math.sin(t*0.4)*0.02;
+  cam.position.copy(curPos); cam.lookAt(curLook);
+  // life
+  if(bettaW){ bettaW.position.x=2.7+Math.sin(t*1.0)*0.0; } // tank-local handled below
+  if(mascot){ mascot.scale.y=1.15+Math.sin(t*2.2)*0.04; mascot.scale.x=1.15-Math.sin(t*2.2)*0.03; mascot.rotation.y=Math.sin(t*0.5)*0.2; }
+  lampLight.intensity=2.6+Math.sin(t*9)*0.05;
+  // betta drift (local)
+  bettaW.position.set(-0.2+Math.sin(t*0.9)*0.22, 1.5+Math.sin(t*1.3)*0.05, Math.cos(t*0.7)*0.12);
+  bettaB.position.set(0.22+Math.cos(t*0.8)*0.2, 1.56+Math.cos(t*1.1)*0.05, Math.sin(t*0.6)*0.12);
+  // pomodoro vibe: dim cool, warm lamp
+  const target = pomodoro?0.18:0.45; scene.children;
+  renderer.toneMappingExposure += (((pomodoro?0.85:1.15)) - renderer.toneMappingExposure)*0.05;
+  winLight.intensity += ((pomodoro?0.15:0.7)-winLight.intensity)*0.05;
+  renderer.render(scene,cam);
 }
-addEventListener('resize', size); size(); loop();
+addEventListener('resize',size); size(); loop();
 </script>
 </body>
 </html>
