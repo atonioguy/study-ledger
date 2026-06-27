@@ -81,8 +81,9 @@
   .wx{ width:100%; height:100%; box-sizing:border-box; padding:7cqh 6cqw; color:#eaf6ff; text-shadow:0 1px 2px rgba(0,0,0,.45); font-family:var(--pixfont2);
     background:linear-gradient(150deg,rgba(70,96,134,.30),rgba(40,58,92,.24)); backdrop-filter:blur(7px); border:2px solid rgba(185,218,248,.34); border-radius:5cqmin;
     box-shadow:0 0 5cqmin rgba(150,200,255,.34), inset 0 0 2.4cqmin rgba(190,225,255,.16); display:flex; flex-direction:column; justify-content:center; }
-  .wx .r1{ display:flex; align-items:center; gap:2cqw; } .wx .tp{ font-size:26cqh; font-weight:600; text-shadow:0 0 2cqh rgba(160,210,255,.5),0 1px 2px rgba(0,0,0,.4); }
-  .wx .hl{ font-size:8cqh; color:#cdeaf6; margin-top:1.2cqh; } .wx .loc{ font-size:6.5cqh; letter-spacing:.14em; text-transform:uppercase; color:#a3cee0; margin-top:1.8cqh; }
+  .wx{ justify-content:space-evenly; gap:1cqh; }
+  .wx .r1{ display:flex; align-items:center; gap:3cqw; } .wx .wic{ font-size:20cqh; line-height:1; } .wx .tp{ font-size:34cqh; font-weight:600; line-height:1; text-shadow:0 0 2cqh rgba(160,210,255,.5),0 1px 2px rgba(0,0,0,.4); }
+  .wx .cond{ font-size:11cqh; color:#e3f2ff; text-transform:capitalize; } .wx .hl{ font-size:9.5cqh; color:#cdeaf6; } .wx .loc{ font-size:8cqh; letter-spacing:.1em; text-transform:uppercase; color:#a3cee0; }
 
   /* pixel sprites */
   .px{ width:100%; height:100%; image-rendering:pixelated; }
@@ -112,7 +113,7 @@
 
   /* calibrate */
   body.cal .el{ outline:2px dashed rgba(255,90,130,.9); background:rgba(255,90,130,.08); cursor:move; }
-  body.cal .el .scr,body.cal .el .wx,body.cal .el .clkui,body.cal .el .px,body.cal .el .note,body.cal .el .note b,body.cal .el .calmini{ pointer-events:none; }
+  body.cal .el .scr,body.cal .el .wx,body.cal .el .clkui,body.cal .el .px,body.cal .el .note,body.cal .el .note b,body.cal .el .calmini,body.cal .el .pm-in{ pointer-events:none; }
   .el .tag{ display:none; } body.cal .el .tag{ display:block; position:absolute; top:2px; left:4px; font-size:11px; color:#fff; background:rgba(255,59,107,.85); padding:1px 6px; border-radius:6px; z-index:3; pointer-events:none; }
   .el .hd{ display:none; } body.cal .el .hd{ display:block; position:absolute; z-index:6; box-shadow:0 1px 4px rgba(0,0,0,.5); }
   body.cal .el .hres{ right:-8px; bottom:-8px; width:16px; height:16px; background:#ff3b6b; border:2px solid #fff; border-radius:4px; cursor:nwse-resize; }
@@ -368,11 +369,13 @@
   #focusP .ct{ display:flex; gap:9px; justify-content:center; } #focusP .ct button{ border-radius:0; border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:10px 20px; font-family:var(--pixfont); font-size:11px; cursor:pointer; }
   #focusP .b1{ background:var(--bar); color:var(--bartx); } #focusP .b2{ background:var(--frame); color:var(--cardtx); } #focusP .ct button:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
   /* ===== pomodoro smart-mirror overlay over the window ===== */
-  #pomoOverlay{ position:absolute; left:3%; top:4%; width:51%; height:42%; z-index:8; display:none; align-items:center; justify-content:center; pointer-events:none; }
-  #pomoOverlay.on{ display:flex; }
+  #pomoOverlay{ display:none; align-items:center; justify-content:center; pointer-events:none; overflow:visible; }
+  #pomoOverlay.on{ display:flex; } body.cal #pomoOverlay{ display:flex !important; pointer-events:auto; }
   #pomoOverlay .pm-in{ text-align:center; padding:3% 6%; border-radius:8px; background:rgba(22,30,48,.16); backdrop-filter:blur(1.5px); border:1px solid rgba(190,215,245,.22);
     box-shadow:0 0 46px rgba(150,200,255,.32), inset 0 0 26px rgba(150,200,255,.12); animation:pmglow 4s ease-in-out infinite; }
   @keyframes pmglow{ 0%,100%{ box-shadow:0 0 40px rgba(150,200,255,.26), inset 0 0 24px rgba(150,200,255,.1); } 50%{ box-shadow:0 0 56px rgba(160,210,255,.4), inset 0 0 30px rgba(160,210,255,.16); } }
+  #pomoOverlay .pm-tomato{ display:block; width:9vmin; height:8vmin; margin:0 auto 1.4vmin; transition:transform .14s ease; filter:drop-shadow(0 0 6px rgba(160,210,255,.55)); }
+  #pomoOverlay .pm-tomato.f2{ transform:translateY(-1vmin) scale(1.04,.92); }
   #pomoOverlay .pm-time{ font-family:var(--pixfont2); font-size:7vmin; line-height:1; color:#eef7ff; letter-spacing:2px; text-shadow:0 0 10px rgba(160,210,255,.8); }
   #pomoOverlay .pm-lbl{ font-family:var(--pixfont2); font-size:2.2vmin; color:#cfe7f4; letter-spacing:4px; margin-top:1.4vmin; text-shadow:0 0 6px rgba(160,210,255,.6); }
 </style>
@@ -394,7 +397,6 @@
         <canvas id="room"></canvas>
         <div id="els"></div>
         <div id="cool"></div><div id="grade"></div><canvas id="fx"></canvas><div id="vig"></div>
-        <div id="pomoOverlay"><div class="pm-in"><div class="pm-time" id="pomoTime">25:00</div><div class="pm-lbl">◍ focus</div></div></div>
         <div id="catBubble"></div>
       </div>
     </div>
@@ -480,7 +482,7 @@ const IMG_W=1448,IMG_H=1086,ASPECT=IMG_W/IMG_H;
 const DEF={ monitor:{x:41,y:33.5,w:22.5,h:23,rz:0,rx:0,ry:0,z:5}, phone:{x:69.5,y:45,w:5.6,h:12.5,rz:0,rx:0,ry:0,z:5}, clock:{x:81,y:44,w:7.4,h:7,rz:0,rx:0,ry:0,z:5},
   weather:{x:5,y:6,w:22,h:13,rz:0,rx:0,ry:0,z:2}, corkboard:{x:57,y:16.5,w:15.5,h:25,rz:0,rx:0,ry:0,z:3}, calendar:{x:84,y:14.5,w:14.5,h:26,rz:0,rx:0,ry:0,z:3},
   tomato:{x:75,y:65,w:6,h:8,rz:0,rx:0,ry:0,z:4}, cat:{x:12,y:64,w:12,h:15,rz:0,rx:0,ry:0,z:8}, tank:{x:8.5,y:46,w:16,h:14,rz:0,rx:0,ry:0,z:6},
-  notestack:{x:78,y:50,w:6.5,h:6,rz:0,rx:0,ry:0,z:4} };
+  notestack:{x:78,y:50,w:6.5,h:6,rz:0,rx:0,ry:0,z:4}, focus:{x:3,y:4,w:51,h:42,rz:0,rx:0,ry:0,z:9} };
 let BOX=Object.assign({},DEF); try{ const s=JSON.parse(localStorage.getItem('aq_box')); if(s) for(const k in DEF) if(s[k]) BOX[k]=s[k]; }catch(e){}
 
 const stage=document.getElementById('stage'),sky=document.getElementById('sky'),room=document.getElementById('room'),fx=document.getElementById('fx'),
@@ -569,7 +571,7 @@ const TASKS=[['9:30a','Pathophys reading','k',1],['1:00p','Email Dr. Reyes','l',
 function makeEl(key,cls,inner,clickable){ const d=document.createElement('div'); d.className='el '+(cls||''); d.dataset.key=key;
   d.innerHTML=(inner||'')+`<span class="tag">${key}</span><span class="hd hrot"></span><span class="hd htilt"></span><span class="hd hres"></span>`; if(clickable) d.classList.add('clk'); els.appendChild(d); E[key]=d; return d; }
 function buildEls(){
-  makeEl('weather','', `<div class="wx"><div class="r1"><span class="tp" id="wTp">—°</span></div><div class="hl" id="wHl">H —° L —°</div><div class="loc">arlington · 76018</div></div>`);
+  makeEl('weather','', `<div class="wx"><div class="r1"><span class="wic" id="wIc">☀️</span><span class="tp" id="wTp">—°</span></div><div class="cond" id="wCond">—</div><div class="hl" id="wHl">H —° L —°</div><div class="loc">arlington, tx</div></div>`);
   makeEl('monitor','clk',`<div class="scr pxmini"><div class="pxminibar"><span>🖥 tasks</span><span class="dots"><i></i><i></i><i></i></span></div><div class="mon" id="monUI"></div></div>`,true);
   makeEl('phone','clk',`<div class="scr"><div class="phn"><div class="fh"><i class="slimeic"></i>antfarm</div><div class="phlist" id="phMini"></div></div></div>`,true);
   makeEl('clock','',`<div class="scr"><div class="clkui"><canvas class="clkpx" id="clkPx" width="40" height="7"></canvas><canvas class="clkdate" id="clkDate" width="40" height="5"></canvas></div></div>`);
@@ -577,6 +579,7 @@ function buildEls(){
   const cat=makeEl('cat',''); cat.classList.add('clk'); cat.innerHTML+=`<div class="catwrap"><canvas class="catpx" id="catPx" width="21" height="16"></canvas><span class="kao" id="catKao">(=^･ω･^=)</span></div>`;
   const tank=makeEl('tank',''); tank.innerHTML+=`<canvas class="px" id="tankPx" width="64" height="44"></canvas>`;
   const stk=makeEl('notestack','clk','',true); stk.title='new note';   // invisible click zone over the painted sticky stack
+  const fo=makeEl('focus','',`<div class="pm-in"><span class="pm-tomato tomatoic" id="pomoTomato"></span><div class="pm-time" id="pomoTime">25:00</div><div class="pm-lbl">◍ focus</div></div>`); fo.id='pomoOverlay';   // pomodoro smart-mirror (drag-calibratable)
   renderMon(); renderSideTasks();
 }
 const esc=s=>String(s).replace(/</g,'&lt;');
@@ -1010,7 +1013,8 @@ function openDash(){ const tab=(monSource!=='ticktick')?1:0; const dt=document.q
 let fTimer=null,fTotal=1500,fLeft=1500;
 function fFmt(){ const m=String(Math.floor(fLeft/60)).padStart(2,'0'),s=String(fLeft%60).padStart(2,'0'),t=`${m}:${s}`;
   const n=document.getElementById('fNum'); if(n)n.textContent=t; const r=document.getElementById('fRing'); if(r)r.style.strokeDashoffset=528*(1-fLeft/fTotal);
-  const ov=document.getElementById('pomoTime'); if(ov)ov.textContent=t; }
+  const ov=document.getElementById('pomoTime'); if(ov)ov.textContent=t;
+  const tm=document.getElementById('pomoTomato'); if(tm)tm.classList.toggle('f2',fLeft%2===0); }   // 2-frame bob, one step per second
 function fSetDur(min){ fTotal=min*60; fLeft=fTotal; fFmt(); document.querySelectorAll('#focusP .fdur button').forEach(b=>b.classList.toggle('on',+b.dataset.min===min)); }
 document.querySelectorAll('#focusP .fdur button').forEach(b=>b.onclick=()=>{ if(fTimer){ clearInterval(fTimer); fTimer=null; document.getElementById('fStart').textContent='begin ✦'; setFocus(false); } fSetDur(+b.dataset.min); });
 document.getElementById('fStart').onclick=function(){ if(fTimer){ clearInterval(fTimer); fTimer=null; this.textContent='resume'; setFocus(false); return; } this.textContent='pause'; setFocus(true); fTimer=setInterval(()=>{ fLeft--; if(fLeft<=0){ clearInterval(fTimer); fTimer=null; fLeft=fTotal; this.textContent='begin ✦'; setFocus(false); playSfx(); } fFmt(); },1000); };
@@ -1063,10 +1067,13 @@ function wxIcon(code,h){ const night=(h>=19||h<6);
   if(code>=45) return '🌫️';                 // fog
   if(code>=1)  return night?'☁️':'⛅';        // 1-3 partly/cloudy
   return night?'🌙':'☀️'; }                  // 0 clear
+// brief friendly weather phrase from the WMO code
+function wxLabel(code){ if(code>=95)return 'thunderstorms'; if(code>=80)return code>=85?'snow showers':'rain showers'; if(code>=71)return 'snowy';
+  if(code>=61)return 'rainy'; if(code>=51)return 'might rain'; if(code>=45)return 'foggy'; if(code===3)return 'cloudy'; if(code>=1)return 'partly cloudy'; return 'clear skies'; }
 async function loadWx(){ try{ const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.66&longitude=-97.12&current=temperature_2m,apparent_temperature,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto',{cache:'no-store'}); const j=await r.json(),c=j.current,code=c.weather_code,h=new Date().getHours();
   const t=Math.round(c.temperature_2m),hi=Math.round(j.daily.temperature_2m_max[0]),lo=Math.round(j.daily.temperature_2m_min[0]),fl=Math.round(c.apparent_temperature),ic=wxIcon(code,h);
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  set('wTp',t+'°'); set('wHl',`H ${hi}° L ${lo}°`); set('sWtp',t+'°'); const m=document.getElementById('sWm'); if(m)m.innerHTML=`H ${hi}° L ${lo}°<br>feels ${fl}°`; }catch(e){} }
+  set('wTp',t+'°'); set('wIc',ic); set('wCond',wxLabel(code)); set('wHl',`H ${hi}° L ${lo}°`); set('sWtp',t+'°'); const m=document.getElementById('sWm'); if(m)m.innerHTML=`H ${hi}° L ${lo}°<br>feels ${fl}°`; }catch(e){} }
 
 /* clocks — 7-segment LED time + 3x5 pixel-font date */
 const SEG={a:[1,0,2,1],f:[0,1,1,2],b:[3,1,1,2],g:[1,3,2,1],e:[0,4,1,2],c:[3,4,1,2],d:[1,6,2,1]};
