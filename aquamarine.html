@@ -271,7 +271,6 @@
   .pxwin.matte .pxbtns b[data-close]:hover{ background:#c77f86; color:#2a1416; }
   /* ===== monitor (tasks) — koi palette + readable pixel font ===== */
   .monbody{ font-family:var(--pixfont2); padding:18px 20px; color:var(--tx); }
-  #dashP .pxbody{ background-image:none; }   /* solid screen — dither was hard to read text over */
   #dashP h1{ color:var(--tx); font-family:var(--pixfont2); font-weight:600; } #dashP .s{ color:#b8b1a2; }
   #dashP .dtab{ font-family:var(--pixfont2); background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; }
   #dashP .dtab.on{ background:var(--bar); color:var(--bartx); border-color:var(--hi) var(--lo) var(--lo) var(--hi); font-weight:600; }
@@ -295,6 +294,27 @@
   .mon .hd b{ color:#e8e1d2; } .mon .hd .wm{ color:#a39d8d; } .mon .sub{ color:#a8a293; } .mon .odh{ color:var(--koi); }
   .mon .t .tm{ color:#a8a293; } .mon .t .tx{ color:#e3dece; } .mon .t .ck{ border-color:#a39d8d; } .mon .t.dn .ck{ background:#8fae8f; border-color:#8fae8f; }
   .mon .ft .o{ color:#a39d8d; } .mon .ft .p{ color:#bcd0bc; } .mon .nm-chip{ color:#c9c2b3; }
+  /* monitor header: greeting left, buddy card top-right (fills the empty corner) */
+  .monhd{ display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-bottom:14px; }
+  .monbuddy{ flex:none; display:flex; align-items:center; gap:8px; background:var(--card); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:7px 11px 7px 9px; }
+  .monbuddy .slimeic{ width:26px; height:19px; flex:none; } .monbuddy .bd{ display:flex; flex-direction:column; line-height:1.3; } .monbuddy .bd b{ font-size:12px; font-weight:600; } .monbuddy .bd .st{ font-size:10px; color:#5a8a5e; }
+  /* dither stays on the window interior (base .pxbody); dense content sits on solid panels for readability */
+  #dashP #dBig, #dashP #dNotion{ background:var(--body); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:6px 9px; }
+  #dashP .ntbl-wrap{ background:var(--body); }
+  /* keep select chips inside their column (no overlap into the next) */
+  #dashP .ntbl td{ overflow:hidden; } #dashP .nchip{ max-width:100%; } #dashP .nchip>span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+  /* mini desk monitor — a tiny pixel window with a title bar */
+  .scr.pxmini{ display:flex; flex-direction:column; }
+  .pxminibar{ flex:none; display:flex; align-items:center; gap:2cqw; background:#8a97a5; color:#1b2530; font-family:var(--pixfont2); font-size:4.2cqh; padding:1.4cqh 3cqw; border-bottom:0.5cqh solid #5a5650; }
+  .pxminibar .dots{ margin-left:auto; display:flex; gap:1cqw; } .pxminibar .dots i{ width:2.6cqh; height:2cqh; background:#c8c2af; border:0.3cqh solid #5a5650; }
+  .scr.pxmini .mon{ flex:1; min-height:0; border-radius:0; }
+  /* tint + sheen + recessed shadow over the mini phone/monitor screens (softer, 3D, less glare) */
+  .el[data-key="monitor"] .scr, .el[data-key="phone"] .scr{ position:relative; }
+  .el[data-key="monitor"] .scr::after, .el[data-key="phone"] .scr::after{ content:''; position:absolute; inset:0; pointer-events:none; z-index:9; border-radius:inherit;
+    background:linear-gradient(133deg, rgba(255,255,255,.14) 0%, rgba(255,255,255,.03) 20%, rgba(255,255,255,0) 44%), linear-gradient(0deg, rgba(24,26,36,.34), rgba(24,26,36,.06) 38%, rgba(24,26,36,0) 60%), repeating-linear-gradient(0deg, rgba(0,0,0,.05) 0 1px, transparent 1px 3px);
+    box-shadow:inset 0 0 6cqmin rgba(0,0,0,.5), inset 0 0.5cqh 0 rgba(255,255,255,.08); mix-blend-mode:normal; }
+  /* 🔗 image-url button in the phone composer */
+  .phcompose #twLink{ border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; font-family:var(--pixfont); cursor:pointer; padding:0 9px; background:var(--frame); color:var(--cardtx); font-size:13px; } .phcompose #twLink:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
 </style>
 </head>
 <body>
@@ -335,10 +355,11 @@
   <div class="tip" id="tip">click the monitor, phone, board, calendar, or 🍅 ✦ · ⊹ to align</div>
 
   <div class="scrim" id="scrim"></div>
-  <div class="pop" id="dashP"><div class="pc pxwin koi matte" style="width:min(700px,92vw);max-height:86vh;padding:0;display:flex;flex-direction:column;overflow:hidden">
+  <div class="pop" id="dashP"><div class="pc pxwin koi matte" style="width:min(900px,94vw);max-height:86vh;padding:0;display:flex;flex-direction:column;overflow:hidden">
     <div class="pxbar"><span class="pxico">🖥</span><span class="pxtitle">tasks</span><span class="pxbtns"><b>⤢</b><b>▭</b><b data-close>✕</b></span></div>
     <div class="pxbody monbody">
-      <h1 id="dHi">good evening, antonio</h1><div class="s" id="dDate2"></div>
+      <div class="monhd"><div class="monhl"><h1 id="dHi">good evening, antonio</h1><div class="s" id="dDate2"></div></div>
+        <div class="monbuddy"><span class="slimeic"></span><div class="bd"><b>aquamarine</b><span class="st">◍ online</span></div></div></div>
       <div class="dtabs"><div class="dtab on" data-p="0">Today</div><div class="dtab" data-p="1">Notion</div><div class="dtab" data-p="2">Inbox</div></div>
       <div class="dgrp" id="dGroupBar"><span class="gl">group</span><button data-g="class" class="on">by class</button><button data-g="time">by time</button></div>
       <div class="pp1" id="dBig"></div>
@@ -347,12 +368,12 @@
     </div>
   </div></div>
   <div class="pop" id="phoneP"><div class="pc pxwin" style="width:min(340px,86vw);height:min(620px,86vh);padding:0;display:flex;flex-direction:column;overflow:hidden">
-    <div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">frogchat</span><span class="pxbtns"><b>_</b><b>▢</b><b data-close>✕</b></span></div>
+    <div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><span class="pxbtns"><b>_</b><b>▢</b><b data-close>✕</b></span></div>
     <div class="pxbody phbody">
       <div class="phfeed-hd">♥ my feed</div>
       <div id="phoneFeed" style="flex:1;overflow:auto"></div>
       <div id="twPreview" style="display:none;position:relative;margin-top:8px"><img id="twPreviewImg" style="max-width:100%;max-height:120px;display:block"><span id="twPreviewX">✕</span></div>
-      <div class="phcompose"><textarea id="twIn" placeholder="say something..."></textarea><button id="twAttach" title="attach image">📎</button><button id="twPost">post</button><input id="twFile" type="file" accept="image/*" hidden></div>
+      <div class="phcompose"><textarea id="twIn" placeholder="say something..."></textarea><button id="twAttach" title="attach image file">📎</button><button id="twLink" title="image url">🔗</button><button id="twPost">post</button><input id="twFile" type="file" accept="image/*" hidden></div>
     </div>
   </div></div>
   <div class="pop" id="brainP"><div class="pc"><span class="px2" data-close>✕</span><h3>🗒️ brain dump</h3><p>catch a thought — it lands on your board</p>
@@ -478,8 +499,8 @@ function makeEl(key,cls,inner,clickable){ const d=document.createElement('div');
   d.innerHTML=(inner||'')+`<span class="tag">${key}</span><span class="hd hrot"></span><span class="hd htilt"></span><span class="hd hres"></span>`; if(clickable) d.classList.add('clk'); els.appendChild(d); E[key]=d; return d; }
 function buildEls(){
   makeEl('weather','', `<div class="wx"><div class="r1"><span class="tp" id="wTp">—°</span></div><div class="hl" id="wHl">H —° L —°</div><div class="loc">arlington · 76018</div></div>`);
-  makeEl('monitor','clk',`<div class="scr"><div class="mon" id="monUI"></div></div>`,true);
-  makeEl('phone','clk',`<div class="scr"><div class="phn"><div class="fh"><i class="slimeic"></i>frogchat</div><div class="phlist" id="phMini"></div></div></div>`,true);
+  makeEl('monitor','clk',`<div class="scr pxmini"><div class="pxminibar"><span>🖥 tasks</span><span class="dots"><i></i><i></i><i></i></span></div><div class="mon" id="monUI"></div></div>`,true);
+  makeEl('phone','clk',`<div class="scr"><div class="phn"><div class="fh"><i class="slimeic"></i>antfarm</div><div class="phlist" id="phMini"></div></div></div>`,true);
   makeEl('clock','',`<div class="scr"><div class="clkui"><canvas class="clkpx" id="clkPx" width="40" height="7"></canvas><canvas class="clkdate" id="clkDate" width="40" height="5"></canvas></div></div>`);
   makeEl('corkboard','clk','',true); makeEl('calendar','clk',`<div class="calmini" id="calMini"></div>`,true); makeEl('tomato','clk','',true);
   const cat=makeEl('cat',''); cat.classList.add('clk'); cat.innerHTML+=`<div class="catwrap"><canvas class="catpx" id="catPx" width="21" height="16"></canvas><span class="kao" id="catKao">(=^･ω･^=)</span></div>`;
@@ -648,6 +669,10 @@ document.getElementById('twAttach').onclick=()=>twFile&&twFile.click();
 if(twFile) twFile.onchange=()=>{ const file=twFile.files&&twFile.files[0]; twFile.value=''; if(!file)return;
   resizeImage(file,640,0.72).then(d=>{ pendingImg=d; const pv=document.getElementById('twPreview'); document.getElementById('twPreviewImg').src=d; pv.style.display='block'; }).catch(()=>toast('couldn’t read that image')); };
 function clearPending(){ pendingImg=null; const pv=document.getElementById('twPreview'); if(pv)pv.style.display='none'; }
+function setPending(src){ pendingImg=src; const pv=document.getElementById('twPreview'); document.getElementById('twPreviewImg').src=src; pv.style.display='block'; }
+const twLink=document.getElementById('twLink');
+if(twLink) twLink.onclick=()=>{ const u=(prompt('paste an image URL')||'').trim(); if(!u)return;
+  const im=new Image(); im.onload=()=>setPending(u); im.onerror=()=>toast('couldn’t load that image url'); im.src=u; };
 document.getElementById('twPreviewX').onclick=clearPending;
 document.getElementById('twPost').onclick=()=>{ const v=twIn.value.trim(); if(!v&&!pendingImg)return;
   feed.unshift(pendingImg?{t:v,img:pendingImg}:{t:v}); if(feed.length>20)feed.pop(); saveFeed(); renderFeed(); twIn.value=''; clearPending(); };
@@ -821,13 +846,13 @@ function renderMonNotion(id){ const d=notionCache[id], meta=NOTION.pages.find(p=
   return `<div class="hd"><b>${esc(ttl)}</b><span class="wm">notion</span></div><div class="sub">${d.rows.length} rows</div>`+rows+`<div class="ft"><span class="o">click to open ✦</span></div>`; }
 // full table (expanded view)
 function cellHTML(cell,col){ if(!cell)return ''; const t=cell.t,v=cell.v;
-  if(t==='select') return v?`<span class="nchip"><i style="background:${ncol(v.color)}"></i>${esc(v.name)}</span>`:'';
-  if(t==='multi') return (v||[]).map(o=>`<span class="nchip"><i style="background:${ncol(o.color)}"></i>${esc(o.name)}</span>`).join(' ');
+  if(t==='select') return v?`<span class="nchip"><i style="background:${ncol(v.color)}"></i><span>${esc(v.name)}</span></span>`:'';
+  if(t==='multi') return (v||[]).map(o=>`<span class="nchip"><i style="background:${ncol(o.color)}"></i><span>${esc(o.name)}</span></span>`).join(' ');
   if(t==='check') return `<span class="ncheck${v?' on':''}" data-prop="${esc(col.name)}">${v?'✓':''}</span>`;
   if(t==='date') return v&&v.start?`<div class="ndate">${esc(nDate(v,true))}<em>(${esc(nRel(v))})</em></div>`:'';
   return `<span>${esc(String(v==null?'':v))}</span>`; }
 // fixed column widths so a long cell (notes/title) can't widen the whole table
-function colWidth(c){ if(c.type==='title')return 200; if(isNoteCol(c))return 210; if(c.type==='date')return 100; if(c.type==='checkbox')return 58; if(c.type==='select'||c.type==='status'||c.type==='multi_select')return 132; if(c.type==='number')return 84; return 124; }
+function colWidth(c){ if(c.type==='title')return 210; if(isNoteCol(c))return 210; if(c.type==='date')return 104; if(c.type==='checkbox')return 58; if(c.type==='select'||c.type==='status'||c.type==='multi_select')return 162; if(c.type==='number')return 84; return 124; }
 function renderNotionTable(d){ const v=viewOf(d.id); const cols=orderedCols(d);
   const doCol=findCol(d,/do\s*date|^do$/), dueCol=findCol(d,/due|deadline/);
   const colg=`<colgroup>${cols.map(c=>`<col style="width:${colWidth(c)}px">`).join('')}</colgroup>`;
