@@ -169,9 +169,9 @@
   .nchip-pick{ font-size:12px; padding:7px 13px; border-radius:10px; cursor:pointer; background:rgba(255,255,255,.05); color:var(--soft); border:1px solid rgba(255,255,255,.08); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .nchip-pick.on{ background:var(--sakura); color:#2a1820; border-color:transparent; font-weight:600; }
   .ntbl-wrap{ overflow:auto; max-height:60vh; border:1px solid rgba(255,255,255,.08); border-radius:12px; }
-  .ntbl{ border-collapse:collapse; width:100%; font-size:12.5px; }
+  .ntbl{ border-collapse:collapse; width:100%; font-size:12.5px; table-layout:fixed; }
   .ntbl th{ position:sticky; top:0; background:#16223a; text-align:left; font-weight:600; color:var(--faint); font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; padding:8px 11px; white-space:nowrap; border-bottom:1px solid rgba(255,255,255,.1); }
-  .ntbl td{ padding:8px 11px; border-bottom:1px solid rgba(255,255,255,.05); color:var(--soft); vertical-align:top; max-width:240px; }
+  .ntbl td{ padding:8px 11px; border-bottom:1px solid rgba(255,255,255,.05); color:var(--soft); vertical-align:top; overflow-wrap:anywhere; }
   .ntbl td.title{ color:var(--text); font-weight:500; } .ntbl tr:hover td{ background:rgba(255,255,255,.025); }
   .nchip{ display:inline-flex; align-items:center; gap:5px; font-size:11px; padding:2px 9px; border-radius:20px; background:rgba(255,255,255,.07); white-space:nowrap; }
   .nchip i{ width:7px; height:7px; border-radius:50%; flex:none; }
@@ -188,7 +188,7 @@
   .nfopt.on{ background:var(--sakura); color:#2a1820; border-color:transparent; font-weight:600; } .nfclear{ font-size:11.5px; color:var(--faint); background:none; border:none; cursor:pointer; padding:2px 0; text-decoration:underline; }
   .ntbl th.sortable{ cursor:pointer; user-select:none; } .ntbl th.sortable:hover{ color:var(--soft); }
   .ndate em{ display:block; font-style:normal; font-size:10px; color:var(--faint); margin-top:1px; }
-  .ntbl td.note{ cursor:pointer; } .ntbl td.note span{ display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; max-width:230px; } .ntbl td.note.open span{ -webkit-line-clamp:999; }
+  .ntbl td.nnote{ cursor:pointer; } .ntbl td.nnote span{ display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; } .ntbl td.nnote.open span{ -webkit-line-clamp:999; }
   .ntbl .ncheck{ cursor:pointer; }
   .ntbl tr.do-today td{ background:rgba(143,180,230,.14); } .ntbl tr.do-today td.title{ box-shadow:inset 3px 0 0 #8fb4e6; } .ntbl tr.do-today:hover td{ background:rgba(143,180,230,.2); }
   .ntbl tr.due-today td{ background:rgba(232,154,108,.16); } .ntbl tr.due-today td.title{ box-shadow:inset 3px 0 0 var(--koi); } .ntbl tr.due-today:hover td{ background:rgba(232,154,108,.22); }
@@ -711,19 +711,23 @@ function cellHTML(cell,col){ if(!cell)return ''; const t=cell.t,v=cell.v;
   if(t==='check') return `<span class="ncheck${v?' on':''}" data-prop="${esc(col.name)}">${v?'✓':''}</span>`;
   if(t==='date') return v&&v.start?`<div class="ndate">${esc(nDate(v,true))}<em>(${esc(nRel(v))})</em></div>`:'';
   return `<span>${esc(String(v==null?'':v))}</span>`; }
+// fixed column widths so a long cell (notes/title) can't widen the whole table
+function colWidth(c){ if(c.type==='title')return 200; if(isNoteCol(c))return 210; if(c.type==='date')return 100; if(c.type==='checkbox')return 58; if(c.type==='select'||c.type==='status'||c.type==='multi_select')return 132; if(c.type==='number')return 84; return 124; }
 function renderNotionTable(d){ const v=viewOf(d.id); const cols=orderedCols(d);
   const doCol=findCol(d,/do\s*date|^do$/), dueCol=findCol(d,/due|deadline/);
+  const colg=`<colgroup>${cols.map(c=>`<col style="width:${colWidth(c)}px">`).join('')}</colgroup>`;
+  const totalW=cols.reduce((a,c)=>a+colWidth(c),0);
   const head=cols.map(c=>{ const s=c.type==='date'; const ar=v.sort===c.name?(v.dir>0?' ▲':' ▼'):''; return `<th class="${s?'sortable':''}"${s?` data-sort="${esc(c.name)}"`:''}>${esc(c.name)}${ar}</th>`; }).join('');
   const rows=visibleRows(d);
   const body=rows.map(r=>{ const doT=doCol&&nIsToday(r.cells[doCol.name]&&r.cells[doCol.name].v), dueT=dueCol&&nIsToday(r.cells[dueCol.name]&&r.cells[dueCol.name].v);
     const rc=dueT?'due-today':doT?'do-today':'';
-    return `<tr class="${rc}" data-pid="${esc(r.id)}"${doT?' data-dotoday="1"':''}>`+cols.map(c=>`<td class="${c.type==='title'?'title':''}${isNoteCol(c)?' note':''}">${cellHTML(r.cells[c.name],c)}</td>`).join('')+'</tr>'; }).join('');
+    return `<tr class="${rc}" data-pid="${esc(r.id)}"${doT?' data-dotoday="1"':''}>`+cols.map(c=>`<td class="${c.type==='title'?'title':''}${isNoteCol(c)?' nnote':''}">${cellHTML(r.cells[c.name],c)}</td>`).join('')+'</tr>'; }).join('');
   const filtCols=cols.filter(c=>(c.type==='select'||c.type==='status')&&/course|class|categor|type|tag/.test((c.name||'').toLowerCase()));
   const nFilt=Object.values(v.filt).reduce((a,arr)=>a+((arr&&arr.length)||0),0);
   const menu=filtCols.map(c=>{ const sel=v.filt[c.name]||[]; return `<div class="nfsec"><div class="nfh">${esc(c.name)}</div><div class="nfopts">`+
       distinctVals(d,c.name).map(o=>`<button class="nfopt${sel.includes(o)?' on':''}" data-col="${esc(c.name)}" data-val="${esc(o)}">${esc(o)}</button>`).join('')+`</div></div>`; }).join('')+`<button class="nfclear" id="nFiltClear">clear all</button>`;
   const tools=`<div class="ntools">${filtCols.length?`<button class="ntool" id="nFilterBtn">⚲ filter${nFilt?` · ${nFilt}`:''}</button>`:''}${doCol?`<button class="ntool" id="nJump">↓ today</button>`:''}<div class="nfilter" id="nFilter" style="display:${nFilterOpen?'block':'none'}">${menu}</div></div>`;
-  return tools+`<div class="ntbl-wrap" id="ntblWrap"><table class="ntbl"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div><div class="nfoot">${rows.length}${rows.length!==d.rows.length?' of '+d.rows.length:''} rows · ${esc(d.title)}</div>`; }
+  return tools+`<div class="ntbl-wrap" id="ntblWrap"><table class="ntbl" style="width:${totalW}px">${colg}<thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div><div class="nfoot">${rows.length}${rows.length!==d.rows.length?' of '+d.rows.length:''} rows · ${esc(d.title)}</div>`; }
 function renderNotionTab(){ const host=document.getElementById('dNotion'); if(!host)return;
   if(!API.url||!API.key){ host.innerHTML=`<div class="nempty">connect your worker first — tap 🔗 connect data</div>`; return; }
   if(!NOTION.pages.length){ host.innerHTML=`<div class="nempty">no databases yet — add them in 🔗 connect data</div>`; return; }
@@ -739,7 +743,7 @@ function renderNotionTab(){ const host=document.getElementById('dNotion'); if(!h
 function attachTableHandlers(host,d,active){ const v=viewOf(d.id);
   host.querySelectorAll('.ntbl th.sortable').forEach(th=>th.onclick=()=>{ const col=th.dataset.sort;   // 3-click cycle: ascending → descending → off
     if(v.sort!==col){ v.sort=col; v.dir=1; } else if(v.dir===1){ v.dir=-1; } else { v.sort=null; v.dir=1; } saveView(); renderNotionTab(); });
-  host.querySelectorAll('.ntbl td.note').forEach(td=>td.onclick=()=>td.classList.toggle('open'));
+  host.querySelectorAll('.ntbl td.nnote').forEach(td=>td.onclick=()=>td.classList.toggle('open'));
   host.querySelectorAll('.ntbl .ncheck[data-prop]').forEach(ck=>ck.onclick=async e=>{ e.stopPropagation(); const tr=ck.closest('tr'); const pid=tr.dataset.pid,prop=ck.dataset.prop; const cur=ck.classList.contains('on'),nv=!cur;
     ck.classList.toggle('on',nv); ck.textContent=nv?'✓':''; const row=d.rows.find(r=>r.id===pid); if(row&&row.cells[prop])row.cells[prop].v=nv;
     try{ await postTick('/notion/check',{pageId:pid,prop,value:nv}); renderMon(); }
