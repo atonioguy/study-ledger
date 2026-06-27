@@ -42,5 +42,11 @@ public page shows the cozy room to everyone, but your tasks only to you.
   (e.g. `https://atonioguy.github.io`) and `wrangler deploy` again.
 - For full login-gating, put the worker behind **Cloudflare Access** (free).
 
-## Endpoint
-`GET /ticktick`  (header `x-aq-key: <AQ_KEY>`) → `{ tasks: [{title, due, allDay, priority, project}], ts }`
+## Endpoints
+All require the header `x-aq-key: <AQ_KEY>`.
+
+- `GET  /ticktick` → `{ tasks: [{id, title, due, allDay, priority, project, projectId}], ts }`
+- `POST /ticktick/complete` — body `{ id, projectId }` → marks the task done in TickTick.
+- `POST /ticktick/reopen` — body `{ id, projectId, title }` → undoes a completion (sets status back to open).
+
+The dashboard's Today view uses these to check tasks off (grouped by class) with an undo toast.

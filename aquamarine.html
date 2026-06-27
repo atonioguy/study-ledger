@@ -144,6 +144,22 @@
   .bt{ display:flex; align-items:center; gap:13px; padding:13px 6px; border-radius:12px; cursor:pointer; } .bt:hover{ background:rgba(255,255,255,.04); }
   .bt .ck{ width:20px; height:20px; border:1.8px solid var(--faint); border-radius:7px; flex:none; } .bt.dn .ck{ background:var(--sage); border-color:var(--sage); }
   .bt .tm{ font-size:12px; color:var(--faint); min-width:50px; } .bt .tx{ font-size:15px; flex:1; } .bt.dn .tx{ color:var(--faint); text-decoration:line-through; } .bt .lb{ font-size:11px; padding:3px 10px; border-radius:20px; background:rgba(255,255,255,.07); color:var(--soft); }
+  .bt .ck{ cursor:pointer; transition:.15s; } .bt .ck:hover{ border-color:var(--sage); background:rgba(168,196,171,.18); }
+  /* grouped task view */
+  .dgrp{ display:flex; align-items:center; gap:7px; margin-bottom:14px; } .dgrp .gl{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); }
+  .dgrp button{ font-size:11.5px; padding:6px 12px; border-radius:9px; cursor:pointer; background:rgba(255,255,255,.05); color:var(--faint); border:1px solid rgba(255,255,255,.08); }
+  .dgrp button.on{ background:rgba(199,170,223,.22); color:var(--text); border-color:transparent; font-weight:600; }
+  #dBig .grph{ display:flex; align-items:center; gap:8px; font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin:17px 0 5px; }
+  #dBig .grph:first-child{ margin-top:2px; } #dBig .grph.ov{ color:var(--koi); }
+  #dBig .grph .gc{ background:rgba(255,255,255,.07); color:var(--soft); border-radius:20px; padding:1px 8px; font-size:10.5px; letter-spacing:0; }
+  #dBig .empty{ color:var(--faint); font-size:13.5px; padding:10px 4px; }
+  /* toast (check-off confirmation + undo) */
+  #toast{ position:fixed; left:50%; bottom:64px; transform:translate(-50%,12px); z-index:70; display:flex; align-items:center; gap:13px;
+    background:rgba(14,22,38,.96); border:1px solid rgba(199,170,223,.3); color:var(--text); font-size:13px; padding:11px 16px; border-radius:14px;
+    box-shadow:0 16px 40px rgba(0,0,0,.5); opacity:0; pointer-events:none; transition:.3s cubic-bezier(.2,.8,.2,1); max-width:84vw; }
+  #toast.on{ opacity:1; pointer-events:auto; transform:translate(-50%,0); }
+  #toast span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:60vw; }
+  #toast button{ background:var(--sakura); color:#2a1820; border:none; border-radius:9px; padding:6px 13px; font:inherit; font-weight:700; font-size:12px; cursor:pointer; flex:none; }
   .pp2{ display:none; } .pp2.on{ display:block; } .pp1.off{ display:none; }
   #brainP .pc{ width:min(440px,90vw); padding:24px; } #brainP h3{ font-size:18px; margin-bottom:5px; } #brainP p{ font-size:12px; color:var(--faint); margin-bottom:14px; }
   #brainP input{ width:100%; background:rgba(8,12,20,.6); border:1px solid rgba(160,180,200,.2); border-radius:13px; padding:13px 15px; color:var(--text); font:inherit; font-size:14px; }
@@ -206,6 +222,7 @@
   <div class="pop" id="dashP"><div class="pc"><span class="px2" data-close>✕</span>
     <h1 id="dHi">good evening, antonio</h1><div class="s" id="dDate2"></div>
     <div class="dtabs"><div class="dtab on" data-p="0">Today</div><div class="dtab" data-p="1">Notion</div><div class="dtab" data-p="2">Inbox</div></div>
+    <div class="dgrp" id="dGroupBar"><span class="gl">group</span><button data-g="class" class="on">by class</button><button data-g="time">by time</button></div>
     <div class="pp1" id="dBig"></div>
     <div class="pp2"><div class="bt"><span class="ck"></span><span class="tx">Research project — outline draft</span><span class="lb">thesis</span></div><div class="bt"><span class="ck"></span><span class="tx">Reading log — 3 articles</span><span class="lb">study</span></div></div>
     <div class="pp2"><div class="bt"><span class="ck" style="border-radius:50%"></span><span class="tx">UNTHSC Registrar — enrollment Mon</span></div><div class="bt"><span class="ck" style="border-radius:50%"></span><span class="tx">Anatomy TA — reply by Fri</span></div></div>
@@ -423,21 +440,47 @@ function closeP(){ if(openId)document.getElementById(openId).classList.remove('o
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeP); scrim.onclick=closeP;
 els.addEventListener('click',e=>{ if(calOn)return; const el=e.target.closest('.el.clk'); if(!el)return; const k=el.dataset.key;
   if(k==='monitor') openP('dashP'); else if(k==='phone') openP('phoneP'); else if(k==='corkboard'){ renderBigBoard(); openP('boardP'); } else if(k==='notestack') newNote(); else if(k==='calendar') openP('calP'); else if(k==='tomato') openP('focusP'); else if(k==='cat') catSpeak(); });
-document.querySelectorAll('.dtab').forEach(t=>t.onclick=()=>{ document.querySelector('.dtab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p; document.querySelector('.pp1').classList.toggle('off',i!==0); document.querySelectorAll('.pp2').forEach((p,j)=>p.classList.toggle('on',j===i-1)); });
+document.querySelectorAll('.dtab').forEach(t=>t.onclick=()=>{ document.querySelector('.dtab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p; document.querySelector('.pp1').classList.toggle('off',i!==0); document.querySelectorAll('.pp2').forEach((p,j)=>p.classList.toggle('on',j===i-1)); syncGroupBar(); });
 const CKS=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16241a" stroke-width="3.5"><path d="M5 13l4 4L19 7"/></svg>`;
 function fmtDueShort(iso,allDay){ const d=new Date(iso); if(isNaN(d))return '—'; const now=new Date(),tmr=new Date(now); tmr.setDate(now.getDate()+1);
   const sd=(a,b)=>a.toDateString()===b.toDateString();
   const day=sd(d,now)?'today':sd(d,tmr)?'tmrw':d.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toLowerCase();
   if(allDay)return day; let h=d.getHours(); const m=String(d.getMinutes()).padStart(2,'0'),ap=h<12?'a':'p'; h=((h+11)%12)+1; return `${day} ${h}:${m}${ap}`; }
-function renderBig(){ const el=document.getElementById('dBig'); if(!el)return;
+let dGroup=localStorage.getItem('aq_dgroup')||'class';
+const dueOrd=t=>t.due||'9999';
+// bucket live tasks into ordered [label, tasks[]] groups — by project ("class") or by due window ("time")
+function groupLive(tasks){
+  if(dGroup==='time'){
+    const n=new Date(),sT=new Date(n);sT.setHours(0,0,0,0); const eT=new Date(sT);eT.setDate(eT.getDate()+1);
+    const eTom=new Date(eT);eTom.setDate(eTom.getDate()+1); const eWk=new Date(sT);eWk.setDate(eWk.getDate()+7);
+    const B={over:[],today:[],tmrw:[],week:[],later:[],none:[]};
+    tasks.forEach(t=>{ if(!t.due){B.none.push(t);return;} const d=new Date(t.due); if(isNaN(d)){B.none.push(t);return;}
+      if(d<sT)B.over.push(t); else if(d<eT)B.today.push(t); else if(d<eTom)B.tmrw.push(t); else if(d<eWk)B.week.push(t); else B.later.push(t); });
+    return [['⚠ overdue',B.over,true],['today',B.today],['tomorrow',B.tmrw],['this week',B.week],['later',B.later],['no date',B.none]]
+      .filter(g=>g[1].length).map(g=>{ g[1].sort((a,b)=>dueOrd(a)<dueOrd(b)?-1:1); return g; });
+  }
+  const m=new Map();
+  tasks.forEach(t=>{ const k=t.project||'inbox'; if(!m.has(k))m.set(k,[]); m.get(k).push(t); });
+  return [...m.entries()].map(([k,arr])=>{ arr.sort((a,b)=>dueOrd(a)<dueOrd(b)?-1:1); return [k,arr]; })
+    .sort((a,b)=>dueOrd(a[1][0])<dueOrd(b[1][0])?-1:1);   // classes with the soonest task float up
+}
+function renderBig(){ const el=document.getElementById('dBig'); if(!el)return; syncGroupBar();
   if(liveTasks){
-    const sorted=[...liveTasks].sort((a,b)=>(a.due||'9999')<(b.due||'9999')?-1:1);
-    el.innerHTML=sorted.length? sorted.slice(0,40).map(t=>`<div class="bt"><span class="tm">${t.due?fmtDueShort(t.due,t.allDay):'—'}</span><span class="ck"></span><span class="tx">${esc(t.title)}</span><span class="lb">${esc(t.project||'')}</span></div>`).join('')
-      : `<div class="bt"><span class="tx" style="color:var(--faint)">no open tasks ♡</span></div>`;
+    if(!liveTasks.length){ el.innerHTML=`<div class="empty">no open tasks ♡</div>`; return; }
+    const row=t=>`<div class="bt" data-id="${esc(String(t.id))}"><span class="tm">${t.due?fmtDueShort(t.due,t.allDay):'—'}</span><span class="ck"></span><span class="tx">${esc(t.title)}</span><span class="dot dot${prioCat(t.priority)}" style="width:8px;height:8px;border-radius:50%"></span></div>`;
+    el.innerHTML=groupLive(liveTasks).map(([label,arr,over])=>
+      `<div class="grph${over?' ov':''}">${esc(label)}<span class="gc">${arr.length}</span></div>`+arr.map(row).join('')).join('');
+    el.querySelectorAll('.bt .ck').forEach(ck=>ck.onclick=ev=>{ ev.stopPropagation(); const r=ck.closest('.bt'); const t=liveTasks.find(x=>String(x.id)===r.dataset.id); if(t)checkOff(t,r); });
     return;
   }
   el.innerHTML=TASKS.map((t,i)=>`<div class="bt ${t[3]?'dn':''}" data-i="${i}"><span class="tm">${t[0]}</span><span class="ck">${t[3]?CKS:''}</span><span class="tx">${t[1]}</span><span class="lb">${({k:'school',l:'life',h:'health'})[t[2]]}</span></div>`).join('')+`<div class="bt"><span class="tm">eve</span><span class="ck"></span><span class="tx">Water the lily + tidy desk</span><span class="lb">life</span></div>`;
   document.querySelectorAll('#dBig .bt[data-i]').forEach(r=>r.onclick=()=>{ const i=+r.dataset.i; TASKS[i][3]=TASKS[i][3]?0:1; renderBig(); renderMon(); renderSideTasks(); }); }
+// group toggle is only meaningful for live tasks on the Today tab
+function syncGroupBar(){ const gb=document.getElementById('dGroupBar'); if(!gb)return;
+  const todayOn=document.querySelector('.dtab.on')&&document.querySelector('.dtab.on').dataset.p==='0';
+  gb.style.display=(liveTasks&&todayOn)?'flex':'none'; }
+document.querySelectorAll('#dGroupBar button').forEach(b=>{ b.classList.toggle('on',b.dataset.g===dGroup);
+  b.onclick=()=>{ dGroup=b.dataset.g; localStorage.setItem('aq_dgroup',dGroup); document.querySelectorAll('#dGroupBar button').forEach(x=>x.classList.toggle('on',x===b)); renderBig(); }; })
 
 /* feed + brain */
 let feed=JSON.parse(localStorage.getItem('aq_feed')||'null')||['building a desk for my brain 🪴','the bettas judge my list','iced coffee #4 ✦'];
@@ -498,6 +541,25 @@ async function loadTickTick(){ if(!API.url||!API.key) return false;
   if(!r.ok) throw new Error('http '+r.status); const j=await r.json(); if(!Array.isArray(j.tasks)) throw new Error(j.error||'bad response');
   liveTasks=j.tasks; renderMon(); renderBig(); calFromTasks(); return true; }
 function tickTickTick(){ loadTickTick().catch(e=>console.warn('ticktick:',e&&e.message||e)); }
+async function postTick(path,body){ if(!API.url||!API.key) throw new Error('not connected');
+  const r=await fetch(API.url.replace(/\/+$/,'')+path,{method:'POST',headers:{'x-aq-key':API.key,'content-type':'application/json'},body:JSON.stringify(body)});
+  if(!r.ok){ let m='http '+r.status; try{const j=await r.json(); if(j&&j.error)m=j.error;}catch(e){} throw new Error(m); } return r.json(); }
+// check a task off in TickTick — optimistic strike, drop on success, restore on failure, undo via toast
+async function checkOff(t,row){ if(!t.projectId){ toast('can’t complete — missing project id'); return; }
+  if(row){ row.classList.add('dn'); const ck=row.querySelector('.ck'); if(ck)ck.innerHTML=CKS; }
+  try{ await postTick('/ticktick/complete',{id:t.id,projectId:t.projectId});
+    liveTasks=liveTasks.filter(x=>x!==t); renderBig(); renderMon(); calFromTasks();
+    toast('done ✓ · '+t.title, ()=>undoCheck(t)); }
+  catch(e){ if(row){ row.classList.remove('dn'); const ck=row.querySelector('.ck'); if(ck)ck.innerHTML=''; } toast('couldn’t complete — '+(e&&e.message||e)); } }
+async function undoCheck(t){ try{ await postTick('/ticktick/reopen',{id:t.id,projectId:t.projectId,title:t.title});
+    liveTasks.push(t); liveTasks.sort((a,b)=>((a.due||'9999')<(b.due||'9999')?-1:1));
+    renderBig(); renderMon(); calFromTasks(); toast('restored ♡'); }
+  catch(e){ toast('undo failed — refresh to re-sync'); } }
+let toastT=null;
+function toast(msg,undoFn){ let el=document.getElementById('toast'); if(!el){ el=document.createElement('div'); el.id='toast'; document.body.appendChild(el); }
+  el.innerHTML=`<span>${esc(msg)}</span>`+(undoFn?`<button>undo</button>`:''); el.classList.add('on');
+  if(undoFn) el.querySelector('button').onclick=()=>{ el.classList.remove('on'); undoFn(); };
+  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'), undoFn?6000:3200); }
 const dataBtn=document.getElementById('dataBtn');
 if(dataBtn) dataBtn.onclick=()=>{ document.getElementById('apiUrl').value=API.url; document.getElementById('apiKey').value=API.key; document.getElementById('apiStatus').textContent=''; openP('dataP'); };
 const apiSave=document.getElementById('apiSave');
