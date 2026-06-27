@@ -379,6 +379,51 @@
   #pomoOverlay .pm-tomato.f2{ transform:translateY(-1vmin) scale(1.04,.92); }
   #pomoOverlay .pm-time{ font-family:var(--pixfont2); font-size:7vmin; line-height:1; color:#eef7ff; letter-spacing:2px; text-shadow:0 0 10px rgba(160,210,255,.8); }
   #pomoOverlay .pm-lbl{ font-family:var(--pixfont2); font-size:2.2vmin; color:#cfe7f4; letter-spacing:4px; margin-top:1.4vmin; text-shadow:0 0 6px rgba(160,210,255,.6); }
+
+  /* ===== clean 2D dashboard view ===== */
+  #viewToggle{ position:fixed; top:15px; right:17px; z-index:60; display:flex; align-items:center; gap:7px; padding:9px 15px; border-radius:22px; cursor:pointer;
+    background:rgba(18,28,46,.82); color:var(--soft); font:inherit; font-size:12.5px; font-weight:600; letter-spacing:.02em; backdrop-filter:blur(6px); box-shadow:0 6px 20px rgba(0,0,0,.4); border:1px solid rgba(160,180,200,.16); transition:.2s; }
+  #viewToggle:hover{ color:var(--text); background:rgba(26,38,60,.92); }
+  #viewToggle .ic{ font-size:15px; }
+
+  #clean{ position:fixed; inset:0; z-index:50; display:none; overflow-y:auto; overflow-x:hidden;
+    background:radial-gradient(150% 100% at 50% 0%,#15203a,#0c121f 70%,#080c15); color:var(--text); font-family:'Avenir Next','Segoe UI',system-ui,sans-serif; }
+  body.clean2d #clean{ display:block; }
+  body.clean2d #app, body.clean2d #calbar, body.clean2d #tip{ display:none; }
+  .cl-wrap{ max-width:1160px; margin:0 auto; padding:24px 26px 64px; }
+  .cl-head{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; padding:6px 2px 22px; border-bottom:1px solid rgba(160,180,200,.12); margin-bottom:24px; }
+  .cl-head .moon{ font-size:30px; filter:drop-shadow(0 0 12px rgba(160,200,210,.4)); }
+  .cl-head .ht{ flex:1; min-width:200px; } .cl-head h1{ font-size:25px; font-weight:600; letter-spacing:.01em; } .cl-head .hsub{ font-size:13.5px; color:var(--faint); margin-top:3px; }
+  .cl-wx{ display:flex; align-items:center; gap:11px; padding:9px 16px; border-radius:16px; background:rgba(255,255,255,.04); border:1px solid rgba(160,180,200,.12); }
+  .cl-wx .wxi{ font-size:25px; } .cl-wx .col .wxt{ font-size:21px; font-weight:600; line-height:1.1; } .cl-wx .col .wxs{ font-size:12px; color:var(--faint); text-transform:capitalize; } .cl-wx .wxhl{ font-size:11.5px; color:var(--soft); border-left:1px solid rgba(160,180,200,.2); padding-left:11px; }
+
+  .cl-grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:18px; align-items:start; }
+  .ccard{ background:rgba(255,255,255,.035); border:1px solid rgba(160,180,200,.12); border-radius:18px; padding:17px 20px; min-width:0; }
+  .ccard.col4{ grid-column:span 4; } .ccard.col6{ grid-column:span 6; } .ccard.col8{ grid-column:span 8; } .ccard.col12{ grid-column:span 12; }
+  @media(max-width:880px){ .ccard.col4,.ccard.col6,.ccard.col8{ grid-column:span 12; } }
+  .ccard>h2{ font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--faint); margin-bottom:13px; display:flex; align-items:center; gap:8px; }
+  .ccard>h2 .n{ margin-left:auto; font-size:11px; font-weight:600; color:var(--soft); background:rgba(255,255,255,.07); border-radius:12px; padding:2px 9px; }
+  .cl-empty{ color:var(--faint); font-size:13px; padding:7px 2px; }
+
+  .cl-grp{ font-size:11px; text-transform:uppercase; letter-spacing:.13em; color:var(--faint); margin:15px 0 4px; display:flex; gap:8px; align-items:center; }
+  .cl-grp:first-child{ margin-top:0; } .cl-grp.ov{ color:var(--koi); } .cl-grp .gc{ background:rgba(255,255,255,.07); border-radius:12px; padding:1px 8px; font-size:10px; letter-spacing:0; }
+  .cl-task{ display:flex; align-items:center; gap:11px; padding:7px 2px; border-bottom:1px solid rgba(255,255,255,.045); }
+  .cl-task:last-child{ border-bottom:none; } .cl-task .tm{ font-size:12px; color:var(--faint); min-width:60px; flex:none; } .cl-task .tx{ flex:1; font-size:14.5px; min-width:0; } .cl-task .lb{ font-size:11px; color:var(--soft); background:rgba(255,255,255,.06); border-radius:20px; padding:2px 10px; white-space:nowrap; } .cl-task .pdot{ width:8px; height:8px; border-radius:50%; flex:none; }
+
+  .cl-notes{ display:flex; flex-wrap:wrap; gap:10px; }
+  .cl-notes .nn{ font-size:13px; color:#2a2436; padding:9px 12px; border-radius:10px; max-width:180px; box-shadow:0 3px 9px rgba(0,0,0,.28); line-height:1.35; word-break:break-word; }
+
+  .cl-feed .fp{ padding:9px 0; border-bottom:1px solid rgba(255,255,255,.05); } .cl-feed .fp:last-child{ border-bottom:none; }
+  .cl-feed .fp .fh{ font-size:11px; color:var(--faint); margin-bottom:3px; } .cl-feed .fp .fb{ font-size:13.5px; line-height:1.4; } .cl-feed .fp img{ max-width:100%; max-height:200px; border-radius:9px; margin-top:7px; display:block; }
+
+  .cl-cal .ch{ font-size:14px; font-weight:600; text-align:center; margin-bottom:9px; }
+  .cl-cal .cw,.cl-cal .cd{ display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+  .cl-cal .cw i{ font-size:10px; color:var(--faint); text-align:center; font-style:normal; padding-bottom:3px; }
+  .cl-cal .cd i{ position:relative; font-style:normal; aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:12.5px; color:var(--soft); border-radius:8px; }
+  .cl-cal .cd i.td{ background:var(--sakura); color:#2a1820; font-weight:700; }
+  .cl-cal .cd i em{ position:absolute; bottom:4px; display:flex; gap:2px; } .cl-cal .cd i u{ width:4px; height:4px; border-radius:50%; } .cl-cal .cd i .evd{ background:var(--lav); }
+  /* the reused Notion table sits in a clean card — let it scroll if wide */
+  #clCard-notion .ntbl-wrap{ max-height:none; }
 </style>
 </head>
 <body>
@@ -408,6 +453,24 @@
       <div class="cgrp"><div class="cl">weather</div><div class="crow"><button data-wx="clear" class="on">✨</button><button data-wx="rain">🌧️</button><button data-wx="snow">❄️</button><button id="soundBtn">🔇</button></div></div>
       <div class="cgrp"><div class="cl">tone</div><div class="crow"><button id="coolBtn">🌊 cool</button><button id="autoBtn" class="on">🕐 auto</button></div></div>
     </aside>
+  </div>
+
+  <button id="viewToggle"><span class="ic">▦</span><span class="lbl">clean view</span></button>
+  <div id="clean">
+    <div class="cl-wrap">
+      <div class="cl-head">
+        <span class="moon">🌙</span>
+        <div class="ht"><h1 id="clGreet">good evening, antonio</h1><div class="hsub" id="clDate">—</div></div>
+        <div class="cl-wx"><span class="wxi" id="clWxIc">·</span><div class="col"><div class="wxt" id="clWxTp">—</div><div class="wxs" id="clWxCond">—</div></div><div class="wxhl" id="clWxHl"></div></div>
+      </div>
+      <div class="cl-grid">
+        <div class="ccard col8"><h2>✓ today<span class="n" id="clTaskN"></span></h2><div id="clTasks"></div></div>
+        <div class="ccard col4"><h2>📅 calendar</h2><div class="cl-cal" id="clCal"></div></div>
+        <div class="ccard col12" id="clCard-notion" style="display:none"><h2>📓 <span id="clNotionTtl">notion</span></h2><div id="clNotion"></div></div>
+        <div class="ccard col6"><h2>📌 board<span class="n" id="clNoteN"></span></h2><div class="cl-notes" id="clNotes"></div></div>
+        <div class="ccard col6"><h2>♥ antfarm<span class="n" id="clFeedN"></span></h2><div class="cl-feed" id="clFeed"></div></div>
+      </div>
+    </div>
   </div>
 
   <div id="calbar">
@@ -692,6 +755,7 @@ const scrim=document.getElementById('scrim'); let openId=null;
 function openP(id){ if(openId)document.getElementById(openId).classList.remove('on'); openId=id; document.getElementById(id).classList.add('on'); scrim.classList.add('on'); }
 function closeP(){ if(openId)document.getElementById(openId).classList.remove('on'); openId=null; scrim.classList.remove('on'); }
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeP); scrim.onclick=closeP;
+document.getElementById('viewToggle').onclick=()=>setView2d(!view2d);
 els.addEventListener('click',e=>{ if(calOn)return; const el=e.target.closest('.el.clk'); if(!el)return; const k=el.dataset.key;
   if(k==='monitor') openDash(); else if(k==='phone') openP('phoneP'); else if(k==='corkboard'){ renderBigBoard(); openP('boardP'); } else if(k==='notestack') newNote(); else if(k==='calendar'){ renderCalPopup(); openP('calP'); } else if(k==='tomato') openP('focusP'); else if(k==='cat') catSpeak(); });
 document.querySelectorAll('.dtab').forEach(t=>t.onclick=()=>{ document.querySelector('.dtab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p; document.querySelector('.pp1').classList.toggle('off',i!==0); document.querySelectorAll('.pp2').forEach((p,j)=>p.classList.toggle('on',j===i-1)); syncGroupBar();
@@ -756,7 +820,8 @@ function renderFeed(){ const f=document.getElementById('phoneFeed'); const pages
       const pv=document.getElementById('phPrev'); if(pv)pv.onclick=()=>go(feedPage-1);
       const nx=document.getElementById('phNext'); if(nx)nx.onclick=()=>go(feedPage+1);
       const inp=document.getElementById('phPageIn'); if(inp)inp.onchange=()=>{ const n=parseInt(inp.value,10); isNaN(n)?inp.value=feedPage+1:go(n-1); }; } }
-  const m=document.getElementById('phMini'); if(m) m.innerHTML=feed.slice(0,6).map(p=>{ const t=ptext(p),im=pimg(p); return `<div class="pm">${im?'📷 ':''}${esc(t)||'photo'}</div>`; }).join(''); }
+  const m=document.getElementById('phMini'); if(m) m.innerHTML=feed.slice(0,6).map(p=>{ const t=ptext(p),im=pimg(p); return `<div class="pm">${im?'📷 ':''}${esc(t)||'photo'}</div>`; }).join('');
+  cleanSync(); }
 const twIn=document.getElementById('twIn');
 let pendingImg=null;
 // downscale + JPEG-compress so images stay small in localStorage
@@ -806,7 +871,47 @@ function makeNoteEl(n,i,host){ const d=document.createElement('div'); d.classNam
   host.appendChild(d); }
 function renderBoard(){ const b=E.corkboard; if(!b)return; b.querySelectorAll('.note').forEach(n=>n.remove()); notes.slice(0,MAXNOTES).forEach((n,i)=>makeNoteEl(n,i,b)); }
 function renderBigBoard(){ const b=document.getElementById('bigBoard'); if(!b)return; const cb=BOX.corkboard; if(cb&&SW&&SH) b.style.aspectRatio=((cb.w*SW)/(cb.h*SH)).toFixed(3); b.querySelectorAll('.note').forEach(n=>n.remove()); notes.slice(0,MAXNOTES).forEach((n,i)=>makeNoteEl(n,i,b)); }
-function reRenderBoards(){ renderBoard(); if(openId==='boardP') renderBigBoard(); }
+function reRenderBoards(){ renderBoard(); if(openId==='boardP') renderBigBoard(); cleanSync(); }
+
+/* ===== clean 2D dashboard view — flat, glanceable, reuses the same live data ===== */
+let lastWx=null;
+let view2d=localStorage.getItem('aq_view')==='clean';
+function setView2d(on){ view2d=on; document.body.classList.toggle('clean2d',on); localStorage.setItem('aq_view',on?'clean':'room');
+  const b=document.getElementById('viewToggle'); if(b){ b.querySelector('.ic').textContent=on?'🪟':'▦'; b.querySelector('.lbl').textContent=on?'room view':'clean view'; }
+  if(on) renderClean(); else fit(); }
+function cleanSync(){ if(document.body.classList.contains('clean2d')) renderClean(); }
+function renderClean(){ clHeader(); clRenderTasks(); clRenderCal(); clRenderNotes(); clRenderFeed(); clRenderNotion(); }
+function clHeader(){ const g=document.getElementById('clGreet'),dt=document.getElementById('clDate'),dHi=document.getElementById('dHi');
+  if(g&&dHi&&dHi.textContent) g.textContent=dHi.textContent;
+  if(dt) dt.textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const wx=document.querySelector('.cl-wx'); if(wx) wx.style.display=lastWx?'flex':'none';
+  if(lastWx){ const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;}; s('clWxIc',lastWx.ic); s('clWxTp',lastWx.tp); s('clWxCond',lastWx.cond); s('clWxHl',lastWx.hl); } }
+function clTaskRow(t){ return `<div class="cl-task"><span class="tm">${t.due?fmtDueShort(t.due,t.allDay):'—'}</span><span class="tx">${esc(t.title)}</span>${t.project?`<span class="lb">${esc(t.project)}</span>`:''}<span class="pdot dot${prioCat(t.priority)}"></span></div>`; }
+function clRenderTasks(){ const el=document.getElementById('clTasks'),n=document.getElementById('clTaskN'); if(!el)return;
+  if(!liveTasks){ el.innerHTML=`<div class="cl-empty">connect TickTick to see your tasks ♡</div>`; if(n)n.textContent=''; return; }
+  if(!liveTasks.length){ el.innerHTML=`<div class="cl-empty">no open tasks — all clear ♡</div>`; if(n)n.textContent='0'; return; }
+  if(n)n.textContent=liveTasks.length;
+  el.innerHTML=groupLive(liveTasks).map(([label,arr,over])=>`<div class="cl-grp${over?' ov':''}">${esc(label)}<span class="gc">${arr.length}</span></div>`+arr.map(clTaskRow).join('')).join(''); }
+function clRenderCal(){ const el=document.getElementById('clCal'); if(!el)return; const n=new Date(),y=n.getFullYear(),mo=n.getMonth(),today=n.getDate();
+  const first=new Date(y,mo,1).getDay(),dim=new Date(y,mo+1,0).getDate(),mn=n.toLocaleDateString('en-US',{month:'long'});
+  const by=liveTasks?liveByDay(y,mo):null;
+  let cells=''; for(let i=0;i<first;i++)cells+='<i></i>';
+  for(let d=1;d<=dim;d++){ let dots=''; if(by){ const ts=by[d]||[]; dots=ts.slice(0,3).map(t=>`<u class="dot${prioCat(t.priority)}"></u>`).join(''); } else if(typeof EVDAYS!=='undefined'&&EVDAYS.has(d)) dots='<u class="evd"></u>';
+    cells+=`<i class="${d===today?'td':''}">${d}${dots?`<em>${dots}</em>`:''}</i>`; }
+  el.innerHTML=`<div class="ch">${mn} ${y}</div><div class="cw"><i>S</i><i>M</i><i>T</i><i>W</i><i>T</i><i>F</i><i>S</i></div><div class="cd">${cells}</div>`; }
+function clRenderNotes(){ const el=document.getElementById('clNotes'),n=document.getElementById('clNoteN'); if(!el)return;
+  if(n)n.textContent=notes.length;
+  el.innerHTML=notes.length?notes.map(nt=>`<span class="nn" style="background:${nt.c}">${esc(nt.t)}</span>`).join(''):`<div class="cl-empty">no notes pinned yet ♡</div>`; }
+function clRenderFeed(){ const el=document.getElementById('clFeed'),n=document.getElementById('clFeedN'); if(!el)return;
+  if(n)n.textContent=feed.length;
+  el.innerHTML=feed.length?feed.slice(0,8).map(p=>{ const t=esc(ptext(p)),im=pimg(p),ago=fmtAgo(ptime(p)); return `<div class="fp"><div class="fh">me${ago?` · ${ago}`:''}</div>${t?`<div class="fb">${t}</div>`:''}${im?`<img src="${im}">`:''}</div>`; }).join(''):`<div class="cl-empty">no posts yet ♡</div>`; }
+function clRenderNotion(){ const card=document.getElementById('clCard-notion'),el=document.getElementById('clNotion'),ttl=document.getElementById('clNotionTtl'); if(!card||!el)return;
+  if(monSource==='ticktick'||!NOTION.pages.length){ card.style.display='none'; return; }
+  card.style.display='';
+  const d=notionCache[monSource],meta=NOTION.pages.find(p=>p.id===monSource);
+  if(ttl)ttl.textContent=(d&&d.title)||(meta&&meta.title)||'notion';
+  if(!d){ el.innerHTML=`<div class="cl-empty">loading…</div>`; loadNotionDB(monSource).then(()=>{ if(document.body.classList.contains('clean2d'))clRenderNotion(); }).catch(()=>{ el.innerHTML=`<div class="cl-empty">couldn't load this database</div>`; }); return; }
+  el.innerHTML=renderNotionTable(d); const tb=el.querySelector('.ntools'); if(tb)tb.remove(); }   // read-only at a glance: drop the filter/sort tools
 function newNote(){ openP('brainP'); renderPile(); setTimeout(()=>brainIn.focus(),200); }
 document.getElementById('boardNew').onclick=newNote;
 document.getElementById('brainAdd').onclick=()=>{ const v=brainIn.value.trim(); if(v){ notes.unshift(mkNote(v)); if(notes.length>16)notes.pop(); saveNotes(); brainIn.value=''; renderPile(); reRenderBoards(); } };
@@ -863,7 +968,7 @@ function calFromTasks(){ refreshCal(); }
 async function loadTickTick(){ if(!API.url||!API.key) return false;
   const r=await fetch(API.url.replace(/\/+$/,'')+'/ticktick',{headers:{'x-aq-key':API.key}});
   if(!r.ok) throw new Error('http '+r.status); const j=await r.json(); if(!Array.isArray(j.tasks)) throw new Error(j.error||'bad response');
-  liveTasks=j.tasks; renderMon(); renderBig(); calFromTasks(); return true; }
+  liveTasks=j.tasks; renderMon(); renderBig(); calFromTasks(); cleanSync(); return true; }
 function tickTickTick(){ loadTickTick().catch(e=>console.warn('ticktick:',e&&e.message||e)); }
 async function postTick(path,body){ if(!API.url||!API.key) throw new Error('not connected');
   const r=await fetch(API.url.replace(/\/+$/,'')+path,{method:'POST',headers:{'x-aq-key':API.key,'content-type':'application/json'},body:JSON.stringify(body)});
@@ -903,8 +1008,8 @@ const ncol=c=>NCOLOR[c]||NCOLOR.default;
 async function apiGet(path){ if(!API.url||!API.key) throw new Error('not connected'); const r=await fetch(API.url.replace(/\/+$/,'')+path,{headers:{'x-aq-key':API.key}});
   if(!r.ok){ let m='http '+r.status; try{const j=await r.json(); if(j&&j.error)m=j.error;}catch(e){} throw new Error(m); } return r.json(); }
 async function loadNotionDB(id){ const j=await apiGet('/notion?id='+encodeURIComponent(id)); notionCache[id]=j; return j; }
-function setMonSource(s){ monSource=s; localStorage.setItem('aq_mon_source',s); renderMon();
-  if(s!=='ticktick'&&!notionCache[s]) loadNotionDB(s).then(()=>renderMon()).catch(e=>console.warn('notion:',e&&e.message||e)); }
+function setMonSource(s){ monSource=s; localStorage.setItem('aq_mon_source',s); renderMon(); cleanSync();
+  if(s!=='ticktick'&&!notionCache[s]) loadNotionDB(s).then(()=>{renderMon();cleanSync();}).catch(e=>console.warn('notion:',e&&e.message||e)); }
 function parseND(s){ if(!s)return null; if(/^\d{4}-\d{2}-\d{2}$/.test(s)){ const p=s.split('-').map(Number); return new Date(p[0],p[1]-1,p[2]); } const d=new Date(s); return isNaN(d)?null:d; }
 function nDate(v,full){ if(!v||!v.start)return ''; const f=s=>{ const d=parseND(s); if(!d)return s; const t=s.length>10;
   return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toLowerCase()+(full&&t?' '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}).toLowerCase().replace(' ',''):''); };
@@ -1006,7 +1111,7 @@ const notionLoadBtn=document.getElementById('notionLoad');
 if(notionLoadBtn) notionLoadBtn.onclick=async()=>{ const host=document.getElementById('notionPick'); if(host)host.textContent='loading…';
   try{ const j=await apiGet('/notion/list'); renderNotionPick(j.databases||[]); }catch(e){ if(host)host.textContent='✕ '+(e&&e.message||e); } };
 function refreshNotionActive(){ if(monSource==='ticktick')return; loadNotionDB(monSource).then(()=>{ renderMon();
-  if(openId==='dashP'&&document.querySelector('.dtab.on')&&document.querySelector('.dtab.on').dataset.p==='1') renderNotionTab(); }).catch(()=>{}); }
+  if(openId==='dashP'&&document.querySelector('.dtab.on')&&document.querySelector('.dtab.on').dataset.p==='1') renderNotionTab(); cleanSync(); }).catch(()=>{}); }
 // open the expanded monitor on the tab that matches the active source (where you left off)
 function openDash(){ const tab=(monSource!=='ticktick')?1:0; const dt=document.querySelector(`.dtab[data-p="${tab}"]`); if(dt) dt.click(); openP('dashP'); }
 
@@ -1074,7 +1179,8 @@ function wxLabel(code){ if(code>=95)return 'thunderstorms'; if(code>=80)return c
 async function loadWx(){ try{ const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.66&longitude=-97.12&current=temperature_2m,apparent_temperature,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto',{cache:'no-store'}); const j=await r.json(),c=j.current,code=c.weather_code,h=new Date().getHours();
   const t=Math.round(c.temperature_2m),hi=Math.round(j.daily.temperature_2m_max[0]),lo=Math.round(j.daily.temperature_2m_min[0]),fl=Math.round(c.apparent_temperature),ic=wxIcon(code,h);
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  set('wTp',t+'°'); set('wIc',ic); set('wCond',wxLabel(code)); set('wHl',`H ${hi}° L ${lo}°`); set('sWtp',t+'°'); const m=document.getElementById('sWm'); if(m)m.innerHTML=`H ${hi}° L ${lo}°<br>feels ${fl}°`; }catch(e){} }
+  set('wTp',t+'°'); set('wIc',ic); set('wCond',wxLabel(code)); set('wHl',`H ${hi}° L ${lo}°`); set('sWtp',t+'°'); const m=document.getElementById('sWm'); if(m)m.innerHTML=`H ${hi}° L ${lo}°<br>feels ${fl}°`;
+  lastWx={tp:t+'°',ic,cond:wxLabel(code),hl:`H ${hi}° L ${lo}°`}; cleanSync(); }catch(e){} }
 
 /* clocks — 7-segment LED time + 3x5 pixel-font date */
 const SEG={a:[1,0,2,1],f:[0,1,1,2],b:[3,1,1,2],g:[1,3,2,1],e:[0,4,1,2],c:[3,4,1,2],d:[1,6,2,1]};
@@ -1104,7 +1210,7 @@ function loop(){ requestAnimationFrame(loop); T+=0.016; drawSky(); drawFx();
 
 /* boot */
 const img=new Image(); img.crossOrigin='anonymous'; img.src='room.png';
-img.onload=()=>{ roomCanvas=keyGreen(img); const rs=document.documentElement.style; rs.setProperty('--slime',`url("${drawSlime()}")`); rs.setProperty('--tomato',`url("${drawTomato()}")`); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); tickTickTick(); setInterval(tickTickTick,300000); if(monSource!=='ticktick') refreshNotionActive(); setInterval(refreshNotionActive,300000); loop();
+img.onload=()=>{ roomCanvas=keyGreen(img); const rs=document.documentElement.style; rs.setProperty('--slime',`url("${drawSlime()}")`); rs.setProperty('--tomato',`url("${drawTomato()}")`); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); tickTickTick(); setInterval(tickTickTick,300000); if(monSource!=='ticktick') refreshNotionActive(); setInterval(refreshNotionActive,300000); loop(); if(view2d) setView2d(true);
   const L=document.getElementById('loading'); L.style.opacity=0; setTimeout(()=>L.remove(),700); };
 img.onerror=()=>{ document.getElementById('loading').textContent='could not load room.png'; };
 addEventListener('resize',fit);
