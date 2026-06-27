@@ -422,7 +422,18 @@ els.addEventListener('click',e=>{ if(calOn)return; const el=e.target.closest('.e
   if(k==='monitor') openP('dashP'); else if(k==='phone') openP('phoneP'); else if(k==='corkboard'){ renderBigBoard(); openP('boardP'); } else if(k==='notestack') newNote(); else if(k==='calendar') openP('calP'); else if(k==='tomato') openP('focusP'); else if(k==='cat') catSpeak(); });
 document.querySelectorAll('.dtab').forEach(t=>t.onclick=()=>{ document.querySelector('.dtab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p; document.querySelector('.pp1').classList.toggle('off',i!==0); document.querySelectorAll('.pp2').forEach((p,j)=>p.classList.toggle('on',j===i-1)); });
 const CKS=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16241a" stroke-width="3.5"><path d="M5 13l4 4L19 7"/></svg>`;
-function renderBig(){ document.getElementById('dBig').innerHTML=TASKS.map((t,i)=>`<div class="bt ${t[3]?'dn':''}" data-i="${i}"><span class="tm">${t[0]}</span><span class="ck">${t[3]?CKS:''}</span><span class="tx">${t[1]}</span><span class="lb">${({k:'school',l:'life',h:'health'})[t[2]]}</span></div>`).join('')+`<div class="bt"><span class="tm">eve</span><span class="ck"></span><span class="tx">Water the lily + tidy desk</span><span class="lb">life</span></div>`;
+function fmtDueShort(iso,allDay){ const d=new Date(iso); if(isNaN(d))return '—'; const now=new Date(),tmr=new Date(now); tmr.setDate(now.getDate()+1);
+  const sd=(a,b)=>a.toDateString()===b.toDateString();
+  const day=sd(d,now)?'today':sd(d,tmr)?'tmrw':d.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toLowerCase();
+  if(allDay)return day; let h=d.getHours(); const m=String(d.getMinutes()).padStart(2,'0'),ap=h<12?'a':'p'; h=((h+11)%12)+1; return `${day} ${h}:${m}${ap}`; }
+function renderBig(){ const el=document.getElementById('dBig'); if(!el)return;
+  if(liveTasks){
+    const sorted=[...liveTasks].sort((a,b)=>(a.due||'9999')<(b.due||'9999')?-1:1);
+    el.innerHTML=sorted.length? sorted.slice(0,40).map(t=>`<div class="bt"><span class="tm">${t.due?fmtDueShort(t.due,t.allDay):'—'}</span><span class="ck"></span><span class="tx">${esc(t.title)}</span><span class="lb">${esc(t.project||'')}</span></div>`).join('')
+      : `<div class="bt"><span class="tx" style="color:var(--faint)">no open tasks ♡</span></div>`;
+    return;
+  }
+  el.innerHTML=TASKS.map((t,i)=>`<div class="bt ${t[3]?'dn':''}" data-i="${i}"><span class="tm">${t[0]}</span><span class="ck">${t[3]?CKS:''}</span><span class="tx">${t[1]}</span><span class="lb">${({k:'school',l:'life',h:'health'})[t[2]]}</span></div>`).join('')+`<div class="bt"><span class="tm">eve</span><span class="ck"></span><span class="tx">Water the lily + tidy desk</span><span class="lb">life</span></div>`;
   document.querySelectorAll('#dBig .bt[data-i]').forEach(r=>r.onclick=()=>{ const i=+r.dataset.i; TASKS[i][3]=TASKS[i][3]?0:1; renderBig(); renderMon(); renderSideTasks(); }); }
 
 /* feed + brain */
@@ -482,7 +493,7 @@ function calFromTasks(){ if(!liveTasks)return; const n=new Date(),mo=n.getMonth(
 async function loadTickTick(){ if(!API.url||!API.key) return false;
   const r=await fetch(API.url.replace(/\/+$/,'')+'/ticktick',{headers:{'x-aq-key':API.key}});
   if(!r.ok) throw new Error('http '+r.status); const j=await r.json(); if(!Array.isArray(j.tasks)) throw new Error(j.error||'bad response');
-  liveTasks=j.tasks; renderMon(); calFromTasks(); return true; }
+  liveTasks=j.tasks; renderMon(); renderBig(); calFromTasks(); return true; }
 function tickTickTick(){ loadTickTick().catch(e=>console.warn('ticktick:',e&&e.message||e)); }
 const dataBtn=document.getElementById('dataBtn');
 if(dataBtn) dataBtn.onclick=()=>{ document.getElementById('apiUrl').value=API.url; document.getElementById('apiKey').value=API.key; document.getElementById('apiStatus').textContent=''; openP('dataP'); };
