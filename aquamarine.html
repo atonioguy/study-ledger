@@ -46,26 +46,11 @@
   .mon .ft{ margin-top:auto; display:flex; font-size:4.6cqh; } .mon .ft .o{ margin-left:auto; color:var(--faint); } .mon .ft .p{ color:var(--sage); }
   .dotk{background:var(--koi)} .dotl{background:var(--lav)} .doth{background:var(--sage)}
 
-  /* phone */
-  .phn{ position:relative; width:100%; height:100%; background:linear-gradient(180deg,#101a2a,#0a121f); overflow:hidden; }
-  .phfeed{ width:100%; height:100%; padding:9cqh 8cqw; box-sizing:border-box; display:flex; flex-direction:column; gap:1cqh; }
-  .phn .t{ font-size:16cqh; font-weight:200; text-align:center; line-height:1; } .phn .d{ font-size:5.5cqh; text-align:center; color:var(--faint); margin-bottom:1cqh; }
-  .phn .fh{ font-size:5cqh; color:var(--sage); font-weight:700; } .phn .tw{ font-size:5cqh; color:var(--soft); line-height:1.2; border-top:1px solid rgba(255,255,255,.06); padding-top:1cqh; margin-top:.6cqh; }
-  /* X (twitter) timeline embedded in the phone */
-  .phtwmini{ position:absolute; inset:0; overflow:hidden; pointer-events:none; background:#0a121f; display:none; }
-  .phtwmini.on{ display:block; } #phnTwMiniIn{ width:220px; transform-origin:0 0; }
-  .twfb{ display:block; padding:14px; font-size:12px; color:var(--soft); text-align:center; }
-  a.twfb{ color:var(--cyan); text-decoration:none; }
-  a.twitter-timeline{ position:absolute; left:-9999px; opacity:0; height:0; overflow:hidden; }  /* hide raw anchor; widgets.js still processes it */
-  .twcard{ padding:26px 18px; text-align:center; color:var(--soft); }
-  .twcard .av{ width:48px; height:48px; border-radius:50%; background:#11161d; display:grid; place-items:center; margin:6px auto 12px; font-size:23px; color:#eaf6ff; border:1px solid rgba(255,255,255,.1); }
-  .twcard .h{ font-size:15px; font-weight:700; color:var(--text); } .twcard .u{ font-size:12.5px; color:var(--faint); margin-top:2px; }
-  .twcard .ob{ display:inline-block; margin-top:15px; background:#eaf6ff; color:#0b1320; font-weight:700; font-size:13px; padding:9px 17px; border-radius:11px; text-decoration:none; }
-  .twcard .nt{ font-size:11px; color:var(--faint); margin-top:13px; line-height:1.45; max-width:230px; margin-left:auto; margin-right:auto; }
-  .phtabs{ display:flex; gap:6px; margin:2px 4px 12px; }
-  .phtab{ flex:1; border:none; border-radius:11px; padding:9px; font:inherit; font-size:12.5px; cursor:pointer; background:rgba(255,255,255,.06); color:var(--soft); }
-  .phtab.on{ background:var(--sage); color:#16241a; font-weight:700; }
-  #paneX{ flex:1; min-height:0; overflow:auto; }
+  /* phone — custom feed, multiple posts visible */
+  .phn{ position:relative; width:100%; height:100%; padding:6cqh 7cqw; box-sizing:border-box; display:flex; flex-direction:column; gap:2cqh; background:linear-gradient(180deg,#101a2a,#0a121f); overflow:hidden; }
+  .phn .fh{ font-size:5.4cqh; color:var(--sage); font-weight:700; flex:none; }
+  .phlist{ flex:1; min-height:0; overflow:hidden; display:flex; flex-direction:column; gap:1.6cqh; }
+  .phlist .pm{ font-size:4.7cqh; color:var(--soft); line-height:1.22; background:rgba(255,255,255,.05); border-radius:2.4cqh; padding:1.8cqh 2.4cqw; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
 
   /* clock */
   .clkui{ width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#080b12; gap:1cqh; }
@@ -223,13 +208,10 @@
     <div class="pp2"><div class="bt"><span class="ck"></span><span class="tx">Research project — outline draft</span><span class="lb">thesis</span></div><div class="bt"><span class="ck"></span><span class="tx">Reading log — 3 articles</span><span class="lb">study</span></div></div>
     <div class="pp2"><div class="bt"><span class="ck" style="border-radius:50%"></span><span class="tx">UNTHSC Registrar — enrollment Mon</span></div><div class="bt"><span class="ck" style="border-radius:50%"></span><span class="tx">Anatomy TA — reply by Fri</span></div></div>
   </div></div>
-  <div class="pop" id="phoneP"><div class="pc" style="width:min(320px,82vw);height:min(620px,86vh);border-radius:34px;padding:20px 16px;display:flex;flex-direction:column"><span class="px2" data-close>✕</span>
-    <div class="phtabs"><button class="phtab on" data-pm="feed">🐦 feed</button><button class="phtab" data-pm="x">𝕏 timeline</button></div>
-    <div class="phpane" id="paneFeed" style="flex:1;display:flex;flex-direction:column;min-height:0">
-      <div id="phoneFeed" style="flex:1;overflow:auto"></div>
-      <div style="display:flex;gap:7px;margin-top:8px"><textarea id="twIn" placeholder="what's on your mind?" style="flex:1;height:42px;resize:none;background:rgba(8,12,20,.6);border:1px solid rgba(160,180,200,.2);border-radius:12px;color:var(--text);font:inherit;font-size:13px;padding:10px"></textarea><button id="twPost" style="background:var(--sage);color:#16241a;border:none;border-radius:12px;padding:0 15px;font-weight:700;cursor:pointer">post</button></div>
-    </div>
-    <div class="phpane" id="paneX" style="display:none"><div id="phoneTw"></div></div>
+  <div class="pop" id="phoneP"><div class="pc" style="width:min(320px,82vw);height:min(620px,86vh);border-radius:34px;padding:24px 18px;display:flex;flex-direction:column"><span class="px2" data-close>✕</span>
+    <h3 style="color:var(--sage);margin:4px 4px 12px">🐦 my feed</h3>
+    <div id="phoneFeed" style="flex:1;overflow:auto"></div>
+    <div style="display:flex;gap:7px;margin-top:8px"><textarea id="twIn" placeholder="what's on your mind?" style="flex:1;height:42px;resize:none;background:rgba(8,12,20,.6);border:1px solid rgba(160,180,200,.2);border-radius:12px;color:var(--text);font:inherit;font-size:13px;padding:10px"></textarea><button id="twPost" style="background:var(--sage);color:#16241a;border:none;border-radius:12px;padding:0 15px;font-weight:700;cursor:pointer">post</button></div>
   </div></div>
   <div class="pop" id="brainP"><div class="pc"><span class="px2" data-close>✕</span><h3>🗒️ brain dump</h3><p>catch a thought — it lands on your board</p>
     <input id="brainIn" placeholder="type anything…" maxlength="60"><div id="brainPile"></div>
@@ -262,7 +244,7 @@ function fit(){ const cw=center.clientWidth,ch=center.clientHeight; let w=cw,h=c
   for(const c of [sky,room,fx]){ c.width=Math.round(SW*DPR); c.height=Math.round(SH*DPR); c.style.width=SW+'px'; c.style.height=SH+'px'; }
   sx.setTransform(DPR,0,0,DPR,0,0); roomCtx.setTransform(DPR,0,0,DPR,0,0); fxc.setTransform(DPR,0,0,DPR,0,0);
   if(roomCanvas){ roomCtx.clearRect(0,0,SW,SH); roomCtx.drawImage(roomCanvas,0,0,SW,SH); }
-  layoutEls(); if(typeof scaleTwMini==='function') scaleTwMini(); }
+  layoutEls(); }
 
 function keyGreen(img){ const W=img.naturalWidth,H=img.naturalHeight; const oc=document.createElement('canvas'); oc.width=W; oc.height=H; const o=oc.getContext('2d'); o.drawImage(img,0,0);
   const d=o.getImageData(0,0,W,H),p=d.data,X0=0.02*W,X1=0.56*W,Y1=0.63*H;
@@ -340,7 +322,7 @@ function makeEl(key,cls,inner,clickable){ const d=document.createElement('div');
 function buildEls(){
   makeEl('weather','', `<div class="wx"><div class="r1"><span class="tp" id="wTp">—°</span></div><div class="hl" id="wHl">H —° L —°</div><div class="loc">arlington · 76018</div></div>`);
   makeEl('monitor','clk',`<div class="scr"><div class="mon" id="monUI"></div></div>`,true);
-  makeEl('phone','clk',`<div class="scr"><div class="phn"><div class="phfeed" id="phnFeedMini"><div class="t" id="pT">—:—</div><div class="d" id="pD"></div><div class="fh">🐦 feed</div><div class="tw" id="pTw"></div></div><div class="phtwmini" id="phnTwMini"><div id="phnTwMiniIn"></div></div></div></div>`,true);
+  makeEl('phone','clk',`<div class="scr"><div class="phn"><div class="fh">🐦 feed</div><div class="phlist" id="phMini"></div></div></div>`,true);
   makeEl('clock','',`<div class="scr"><div class="clkui"><canvas class="clkpx" id="clkPx" width="40" height="7"></canvas><canvas class="clkdate" id="clkDate" width="40" height="5"></canvas></div></div>`);
   makeEl('corkboard','clk','',true); makeEl('calendar','clk',`<div class="calmini" id="calMini"></div>`,true); makeEl('tomato','clk','',true);
   const cat=makeEl('cat',''); cat.classList.add('clk'); cat.innerHTML+=`<div class="catwrap"><canvas class="catpx" id="catPx" width="21" height="16"></canvas><span class="kao" id="catKao">(=^･ω･^=)</span></div>`;
@@ -424,36 +406,10 @@ function renderBig(){ document.getElementById('dBig').innerHTML=TASKS.map((t,i)=
 
 /* feed + brain */
 let feed=JSON.parse(localStorage.getItem('aq_feed')||'null')||['building a desk for my brain 🪴','the bettas judge my list','iced coffee #4 ✦'];
-function renderFeed(){ const f=document.getElementById('phoneFeed'); if(f) f.innerHTML=feed.map(t=>`<div style="background:rgba(255,255,255,.05);border-radius:12px;padding:11px 13px;margin-bottom:9px;font-size:13px;color:var(--soft);line-height:1.35"><b style="color:var(--text)">me</b><br>${t.replace(/</g,'&lt;')}</div>`).join(''); document.getElementById('pTw').textContent=feed[0]||''; }
+function renderFeed(){ const f=document.getElementById('phoneFeed'); if(f) f.innerHTML=feed.map(t=>`<div style="background:rgba(255,255,255,.05);border-radius:12px;padding:11px 13px;margin-bottom:9px;font-size:13px;color:var(--soft);line-height:1.35"><b style="color:var(--text)">me</b><br>${t.replace(/</g,'&lt;')}</div>`).join('');
+  const m=document.getElementById('phMini'); if(m) m.innerHTML=feed.slice(0,6).map(t=>`<div class="pm">${t.replace(/</g,'&lt;')}</div>`).join(''); }
 document.getElementById('twPost').onclick=()=>{ const v=twIn.value.trim(); if(v){ feed.unshift(v); if(feed.length>20)feed.pop(); localStorage.setItem('aq_feed',JSON.stringify(feed)); renderFeed(); twIn.value=''; } };
 const twIn=document.getElementById('twIn');
-
-/* ===== X (twitter) timeline embed — toggles with the custom feed, shows on the desk phone + popup ===== */
-const TW_USER='bro1752413';
-let twP=null;
-function loadTw(){ if(twP)return twP; twP=new Promise((res,rej)=>{ if(window.twttr&&twttr.widgets)return res();
-  const s=document.createElement('script'); s.src='https://platform.twitter.com/widgets.js'; s.async=true; s.charSet='utf-8';
-  s.onload=()=>res(); s.onerror=()=>rej(); document.head.appendChild(s);
-  setTimeout(()=>{ (window.twttr&&twttr.widgets)?res():rej(new Error('tw timeout')); },9000); }); return twP; }
-function twCard(){ return `<div class="twcard" data-fb><div class="av">𝕏</div><div class="h">@${TW_USER}</div><div class="u">on X</div>`+
-  `<a class="ob" href="https://x.com/${TW_USER}" target="_blank" rel="noopener">open on X ↗</a>`+
-  `<div class="nt">the live timeline shows here when you're signed into X in this browser ♡</div></div>`; }
-function twAnchor(opts){ const w=opts.width?` data-width="${opts.width}"`:'',h=opts.height?` data-height="${opts.height}"`:'';
-  return `<a class="twitter-timeline" data-theme="dark" data-chrome="nofooter noborders transparent" data-dnt="true"${w}${h} href="https://twitter.com/${TW_USER}?ref_src=twsrc%5Etfw">Posts by @${TW_USER}</a>`; }
-function renderTwInto(el,opts){ if(!el||el.dataset.tw==='1')return; el.dataset.tw='1';
-  el.innerHTML=twCard()+twAnchor(opts);
-  loadTw().then(()=>twttr.ready(()=>twttr.widgets.load(el))).catch(()=>{});
-  let tries=0; const iv=setInterval(()=>{ if(el.querySelector('iframe')){ const fb=el.querySelector('[data-fb]'); if(fb)fb.remove(); clearInterval(iv); } else if(++tries>14) clearInterval(iv); },700); }
-function scaleTwMini(){ const ph=E.phone, inn=document.getElementById('phnTwMiniIn'); if(!ph||!inn)return; const s=Math.max(.1,ph.clientWidth/220); inn.style.transform=`scale(${s})`; }
-let phoneMode=localStorage.getItem('aq_phmode')||'feed';
-function applyPhoneTabs(){ document.querySelectorAll('.phtab').forEach(b=>b.classList.toggle('on',b.dataset.pm===phoneMode)); }
-function setPhoneMode(m){ phoneMode=m; localStorage.setItem('aq_phmode',m); applyPhoneTabs();
-  const fm=document.getElementById('phnFeedMini'),tm=document.getElementById('phnTwMini');
-  if(fm&&tm){ fm.style.display=(m==='x')?'none':'flex'; tm.classList.toggle('on',m==='x'); if(m==='x'){ renderTwInto(document.getElementById('phnTwMiniIn'),{width:220,height:600}); scaleTwMini(); } }
-  document.getElementById('paneFeed').style.display=(m==='x')?'none':'flex';
-  const px=document.getElementById('paneX'); px.style.display=(m==='x')?'block':'none';
-  if(m==='x'){ const h=Math.max(320,px.clientHeight||520); renderTwInto(document.getElementById('phoneTw'),{height:h}); } }
-document.querySelectorAll('.phtab').forEach(b=>b.onclick=()=>setPhoneMode(b.dataset.pm));
 const NCOL=['#f3dbe2','#dfeadb','#e2dff2','#f5ead3','#f7e0c4','#d9e8f0']; const brainIn=document.getElementById('brainIn'); const MAXNOTES=11;
 // tuned scatter slots across the cork — natural spread, minimal overlap; new notes take the next open slot
 const NOTEPOS=[[10,8],[40,6],[62,13],[11,31],[38,29],[61,33],[20,53],[46,51],[12,65],[40,63],[62,57]];
@@ -581,7 +537,7 @@ function loop(){ requestAnimationFrame(loop); T+=0.016; drawSky(); drawFx();
 
 /* boot */
 const img=new Image(); img.crossOrigin='anonymous'; img.src='room.png';
-img.onload=()=>{ roomCanvas=keyGreen(img); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); setPhoneMode(phoneMode); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); loop();
+img.onload=()=>{ roomCanvas=keyGreen(img); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); loop();
   const L=document.getElementById('loading'); L.style.opacity=0; setTimeout(()=>L.remove(),700); };
 img.onerror=()=>{ document.getElementById('loading').textContent='could not load room.png'; };
 addEventListener('resize',fit);
