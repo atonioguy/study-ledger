@@ -253,7 +253,11 @@ const drops=Array.from({length:420},()=>({x:Math.random(),y:Math.random(),s:Math
 const flakes=Array.from({length:200},()=>({x:Math.random(),y:Math.random(),s:Math.random()*.6+.3,d:Math.random()*6,r:Math.random()<.4?2:3}));
 // floating dust motes + soft light flares (dreamy foreground atmosphere)
 const dust=Array.from({length:70},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.6+.5,sp:Math.random()*.5+.2,ph:Math.random()*6.28,dr:Math.random()*.4+.1}));
-const FLARES=[{x:.485,y:.55,r:.2,c:'255,214,150'},{x:.82,y:.71,r:.07,c:'255,196,120'},{x:.40,y:.62,r:.05,c:'255,210,150'}];
+// glow points anchored to the room's actual light sources (lamp, tank, monitor strip, phone, lantern, string lights, under-desk LEDs)
+const FLARES=[{x:.345,y:.485,r:.14,c:'255,206,140',i:1.1},{x:.205,y:.55,r:.06,c:'205,232,175',i:.55},{x:.50,y:.655,r:.11,c:'255,214,150',i:.85},
+  {x:.72,y:.625,r:.045,c:'200,220,255',i:.5},{x:.915,y:.70,r:.07,c:'255,196,120',i:.9},
+  {x:.655,y:.10,r:.05,c:'255,214,150',i:.7},{x:.78,y:.075,r:.045,c:'255,214,150',i:.7},{x:.90,y:.105,r:.045,c:'255,214,150',i:.7},
+  {x:.18,y:.95,r:.08,c:'255,206,140',i:.55},{x:.80,y:.95,r:.08,c:'255,206,140',i:.55}];
 // window scene images (per time of day) — fall back to the drawn pixel city if absent
 const WSRC={night:'window-night.png',dusk:'window-dusk.png',day:'window-day.png',dawn:'window-dawn.png'}; const WIMG={},wReady={};
 for(const k in WSRC){ const im=new Image(); im.onload=()=>wReady[k]=true; im.onerror=()=>wReady[k]=false; im.src=WSRC[k]; WIMG[k]=im; }
@@ -286,8 +290,8 @@ function drawSky(){ sx.imageSmoothingEnabled=false; sx.clearRect(0,0,SW,SH);
 }
 function drawFx(){ fxc.clearRect(0,0,SW,SH);
   // soft light flares with a gentle flicker
-  for(const f of FLARES){ const fl=0.72+0.18*Math.sin(T*5.5+f.x*30)+0.1*Math.sin(T*13+f.y*20); const R=f.r*SW, gx=f.x*SW, gy=f.y*SH;
-    const rg=fxc.createRadialGradient(gx,gy,0,gx,gy,R); rg.addColorStop(0,`rgba(${f.c},${0.16*fl})`); rg.addColorStop(.5,`rgba(${f.c},${0.06*fl})`); rg.addColorStop(1,`rgba(${f.c},0)`);
+  for(const f of FLARES){ const fl=(0.72+0.18*Math.sin(T*5.5+f.x*30)+0.1*Math.sin(T*13+f.y*20))*(f.i||1); const R=f.r*SW, gx=f.x*SW, gy=f.y*SH;
+    const rg=fxc.createRadialGradient(gx,gy,0,gx,gy,R); rg.addColorStop(0,`rgba(${f.c},${0.15*fl})`); rg.addColorStop(.5,`rgba(${f.c},${0.05*fl})`); rg.addColorStop(1,`rgba(${f.c},0)`);
     fxc.fillStyle=rg; fxc.fillRect(gx-R,gy-R,R*2,R*2); }
   // floating dust motes
   for(const m of dust){ const y=(m.y-T*0.012*m.sp); const yy=((y%1)+1)%1; const x=m.x+Math.sin(T*m.dr+m.ph)*0.02; const a=0.18+0.16*Math.sin(T*1.6+m.ph);
