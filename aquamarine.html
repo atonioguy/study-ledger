@@ -54,7 +54,8 @@
 
   /* phone — frogchat mini feed on the desk */
   .phn{ position:relative; width:100%; height:100%; box-sizing:border-box; display:flex; flex-direction:column; gap:1.4cqh; background:#4d5156; overflow:hidden; font-family:var(--pixfont); padding:0 4cqw 4cqh; }
-  .phn .fh{ font-size:4.6cqh; color:#ece5d7; font-weight:400; flex:none; background:#61768a; margin:0 -4cqw 1.4cqh; padding:2.2cqh 4cqw; letter-spacing:.5px; }
+  .phn .fh{ font-size:4.6cqh; color:#ece5d7; font-weight:400; flex:none; background:#61768a; margin:0 -4cqw 1.4cqh; padding:2.2cqh 4cqw; letter-spacing:.5px; display:flex; align-items:center; gap:2cqw; }
+  .phn .fh .slimeic{ width:7cqh; height:5cqh; flex:none; }
   .phlist{ flex:1; min-height:0; overflow:hidden; display:flex; flex-direction:column; gap:1.4cqh; }
   .phlist .pm{ font-size:3.9cqh; color:#3c3548; line-height:1.3; background:#c8bcae; border:0.5cqh solid; border-color:#d9cfc0 #a0908d #a0908d #d9cfc0; padding:1.6cqh 2.4cqw; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
 
@@ -90,10 +91,10 @@
   .catpx{ position:absolute; left:50%; top:52%; transform:translate(-50%,-50%); width:104%; height:auto; image-rendering:pixelated; }
   .kao{ position:absolute; inset:0; top:6%; display:grid; place-items:center; font-size:13cqmin; color:#5a4f42; font-weight:600; white-space:nowrap; letter-spacing:-.5px; }
   /* pixel-art post-its on the corkboard — draggable by the pin */
-  .note{ position:absolute; width:26cqw; aspect-ratio:1; transform:rotate(var(--r,0deg)); pointer-events:auto; cursor:pointer; padding:3.5cqw 2.6cqw; font-size:5.4cqw; line-height:1.05;
-    color:#3a3327; box-shadow:.7cqw 1cqw 0 rgba(0,0,0,.28), inset 0 0 0 .4cqw rgba(0,0,0,.06); display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden; transition:box-shadow .15s; }
-  .note.grab{ transition:none; box-shadow:1.4cqw 2cqw 0 rgba(0,0,0,.34), inset 0 0 0 .4cqw rgba(0,0,0,.06); }
-  .note b{ position:absolute; top:-2.6cqw; left:50%; transform:translateX(-50%); width:7cqw; height:7cqw; background:radial-gradient(circle at 35% 30%,#f3a0b4,#cf7088); box-shadow:.3cqw .4cqw 0 rgba(0,0,0,.35); cursor:grab; }
+  .note{ position:absolute; width:26cqw; aspect-ratio:1; transform:rotate(var(--r,0deg)); pointer-events:auto; cursor:pointer; padding:3.4cqw 2.6cqw; font-family:var(--pixfont); font-size:3.9cqw; line-height:1.5;
+    color:#403747; box-shadow:.9cqw 1.2cqw 0 rgba(40,35,55,.32), inset 0 0 0 .6cqw rgba(60,53,72,.22); display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden; transition:box-shadow .15s; }
+  .note.grab{ transition:none; box-shadow:1.6cqw 2.2cqw 0 rgba(40,35,55,.38), inset 0 0 0 .6cqw rgba(60,53,72,.22); }
+  .note b{ position:absolute; top:-2.6cqw; left:50%; transform:translateX(-50%); width:6.4cqw; height:6.4cqw; background:radial-gradient(circle at 35% 30%,#c79aa2,#8c5d68); box-shadow:.3cqw .4cqw 0 rgba(40,35,55,.4); cursor:grab; }
   .note b:active{ cursor:grabbing; }
   .note span{ display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; word-break:break-word; pointer-events:none; }
   /* trash a post-it (shown on the expanded board) */
@@ -252,7 +253,8 @@
   .phbody{ display:flex; flex-direction:column; padding:9px; }
   .phfeed-hd{ font-size:10px; color:var(--tx); margin-bottom:8px; letter-spacing:.5px; flex:none; }
   .pxwin .tw{ background:var(--card); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; margin-bottom:7px; padding:7px 8px; color:var(--cardtx); font-family:var(--pixfont); font-size:10px; line-height:1.5; }
-  .pxwin .tw .twh{ display:flex; align-items:center; gap:5px; } .pxwin .tw .twh:before{ content:'🐸'; font-size:12px; } .pxwin .tw .twh b{ color:var(--cardtx); font-weight:400; }
+  .pxwin .tw .twh{ display:flex; align-items:center; gap:5px; } .pxwin .tw .twh:before{ content:''; width:16px; height:12px; flex:none; background:var(--slime) center/contain no-repeat; image-rendering:pixelated; } .pxwin .tw .twh b{ color:var(--cardtx); font-weight:400; }
+  .slimeic{ display:inline-block; background:var(--slime) center/contain no-repeat; image-rendering:pixelated; } .pxbar .slimeic{ width:17px; height:12px; }
   .pxwin .tw .twx{ margin-left:auto; cursor:pointer; color:#7a5b5e; padding:0 4px; } .pxwin .tw .twx:hover{ background:#c77f86; color:#2a1416; }
   .pxwin .tw .twt{ margin-top:3px; white-space:pre-wrap; word-break:break-word; } .pxwin .tw .twimg{ margin-top:6px; max-width:100%; border:2px solid var(--lo); border-radius:0; display:block; image-rendering:pixelated; }
   .phcompose{ display:flex; gap:5px; margin-top:7px; align-items:stretch; flex:none; }
@@ -311,7 +313,7 @@
     <div class="pp2"><div class="bt"><span class="ck" style="border-radius:50%"></span><span class="tx">UNTHSC Registrar — enrollment Mon</span></div><div class="bt"><span class="ck" style="border-radius:50%"></span><span class="tx">Anatomy TA — reply by Fri</span></div></div>
   </div></div>
   <div class="pop" id="phoneP"><div class="pc pxwin" style="width:min(340px,86vw);height:min(620px,86vh);padding:0;display:flex;flex-direction:column;overflow:hidden">
-    <div class="pxbar"><span class="pxico">🐸</span><span class="pxtitle">frogchat</span><span class="pxbtns"><b>_</b><b>▢</b><b data-close>✕</b></span></div>
+    <div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">frogchat</span><span class="pxbtns"><b>_</b><b>▢</b><b data-close>✕</b></span></div>
     <div class="pxbody phbody">
       <div class="phfeed-hd">♥ my feed</div>
       <div id="phoneFeed" style="flex:1;overflow:auto"></div>
@@ -443,7 +445,7 @@ function makeEl(key,cls,inner,clickable){ const d=document.createElement('div');
 function buildEls(){
   makeEl('weather','', `<div class="wx"><div class="r1"><span class="tp" id="wTp">—°</span></div><div class="hl" id="wHl">H —° L —°</div><div class="loc">arlington · 76018</div></div>`);
   makeEl('monitor','clk',`<div class="scr"><div class="mon" id="monUI"></div></div>`,true);
-  makeEl('phone','clk',`<div class="scr"><div class="phn"><div class="fh">🐸 frogchat</div><div class="phlist" id="phMini"></div></div></div>`,true);
+  makeEl('phone','clk',`<div class="scr"><div class="phn"><div class="fh"><i class="slimeic"></i>frogchat</div><div class="phlist" id="phMini"></div></div></div>`,true);
   makeEl('clock','',`<div class="scr"><div class="clkui"><canvas class="clkpx" id="clkPx" width="40" height="7"></canvas><canvas class="clkdate" id="clkDate" width="40" height="5"></canvas></div></div>`);
   makeEl('corkboard','clk','',true); makeEl('calendar','clk',`<div class="calmini" id="calMini"></div>`,true); makeEl('tomato','clk','',true);
   const cat=makeEl('cat',''); cat.classList.add('clk'); cat.innerHTML+=`<div class="catwrap"><canvas class="catpx" id="catPx" width="21" height="16"></canvas><span class="kao" id="catKao">(=^･ω･^=)</span></div>`;
@@ -481,6 +483,18 @@ function pxRect(c,x,y,w,h,col){ c.fillStyle=col; c.fillRect(x,y,w,h); }
 const KAO={ idle:'(=^･ω･^=)', happy:'(＾• ω •＾)', love:'(=^♡ω♡^=)', surprise:'(=ﾟωﾟ=)', focus:'(=｀ω´=)', sleepy:'(=˘ω˘=)' };
 let catExpr='idle';
 function setKao(){ const k=document.getElementById('catKao'); if(k) k.textContent=KAO[catExpr]||KAO.idle; }
+// cream slime mascot (blush) — drawn once, used as the chat icon/avatar (data URL in --slime)
+function drawSlime(){ const cv=document.createElement('canvas'); cv.width=26; cv.height=18; const c=cv.getContext('2d'); c.imageSmoothingEnabled=false;
+  const cx=13, y0=2, spn=[4,6,8,9,10,10,11,11,11,11,11,11];
+  const OUT='#94835f', BODY='#efe6d4', SHADE='#dccbac', HI='#fcf7ee', EYE='#473d54', BL='#e3a0aa';
+  for(let i=0;i<spn.length;i++){ const y=y0+i,hw=spn[i]; c.fillStyle=OUT; c.fillRect(cx-hw-1,y,hw*2+2,1); }   // side outline
+  c.fillStyle=OUT; c.fillRect(cx-spn[0]-1,y0-1,spn[0]*2+2,1);                                                  // top cap
+  c.fillStyle=OUT; c.fillRect(cx-spn[spn.length-1]-1,y0+spn.length,spn[spn.length-1]*2+2,2);                   // base
+  for(let i=0;i<spn.length;i++){ const y=y0+i,hw=spn[i]; c.fillStyle=(i>=spn.length-3?SHADE:BODY); c.fillRect(cx-hw,y,hw*2,1); }
+  c.fillStyle=HI; c.fillRect(cx+3,y0+3,4,2); c.fillRect(cx+4,y0+5,3,1);                                        // highlight
+  c.fillStyle=EYE; c.fillRect(cx-5,y0+6,2,3); c.fillRect(cx+4,y0+6,2,3);                                       // eyes
+  c.fillStyle=BL; c.fillRect(cx-8,y0+8,2,2); c.fillRect(cx+7,y0+8,2,2);                                        // blush
+  return cv.toDataURL(); }
 function drawCatBlob(){ const cv=document.getElementById('catPx'); if(!cv)return; const c=cv.getContext('2d'); c.clearRect(0,0,cv.width,cv.height); c.imageSmoothingEnabled=false;
   // dumpling / bao silhouette — rounded dome, widest low-middle, flat bottom (refs the attached shape)
   const cx=10, y0=1, spn=[3,5,7,8,9,9,10,10,10,10,10,9,9,8];
@@ -604,13 +618,16 @@ document.getElementById('twPreviewX').onclick=clearPending;
 document.getElementById('twPost').onclick=()=>{ const v=twIn.value.trim(); if(!v&&!pendingImg)return;
   feed.unshift(pendingImg?{t:v,img:pendingImg}:{t:v}); if(feed.length>20)feed.pop(); saveFeed(); renderFeed(); twIn.value=''; clearPending(); };
 document.getElementById('phoneFeed').addEventListener('click',e=>{ const d=e.target.closest('[data-del]'); if(!d)return; feed.splice(+d.dataset.del,1); saveFeed(); renderFeed(); });
-const NCOL=['#f3dbe2','#dfeadb','#e2dff2','#f5ead3','#f7e0c4','#d9e8f0']; const brainIn=document.getElementById('brainIn'); const MAXNOTES=11;
+const NCOL=['#cba9b0','#aebda3','#b3aac2','#cabd9f','#ccac90','#a6b6c0']; // muted dusty pastels
+const OLDNCOL=['#f3dbe2','#dfeadb','#e2dff2','#f5ead3','#f7e0c4','#d9e8f0']; // migrate old bright notes → muted
+const brainIn=document.getElementById('brainIn'); const MAXNOTES=11;
 // tuned scatter slots across the cork — natural spread, minimal overlap; new notes take the next open slot
 const NOTEPOS=[[10,8],[40,6],[62,13],[11,31],[38,29],[61,33],[20,53],[46,51],[12,65],[40,63],[62,57]];
 let noteSlot=0; const jit=()=>(Math.random()*6-3);
 function mkNote(t){ const p=NOTEPOS[noteSlot++ % NOTEPOS.length]; return {t, c:NCOL[(Math.random()*NCOL.length)|0], x:p[0]+jit(), y:p[1]+jit(), r:(Math.random()*18-9)|0}; }
 let notes=(()=>{ const raw=JSON.parse(localStorage.getItem('aq_notes')||'null'); if(raw) return raw.map(n=> typeof n==='string'?mkNote(n):(n.x==null?mkNote(n.t):n));
   return ['drink water 🚰','study w/ friends?','koi tiktok 🐟','save that song'].map(mkNote); })();
+notes.forEach(n=>{ const i=OLDNCOL.indexOf(n.c); if(i>=0)n.c=NCOL[i]; });   // recolor previously-saved bright notes
 function saveNotes(){ localStorage.setItem('aq_notes',JSON.stringify(notes)); }
 function renderPile(){ const el=document.getElementById('brainPile'); el.innerHTML=notes.map((n,i)=>`<span class="pn" style="background:${n.c}">${n.t.replace(/</g,'&lt;')}<u class="pndel" data-i="${i}" title="trash">✕</u></span>`).join('');
   el.querySelectorAll('.pndel').forEach(x=>x.onclick=e=>{ e.stopPropagation(); trashNote(notes[+x.dataset.i]); }); }
@@ -920,7 +937,7 @@ function loop(){ requestAnimationFrame(loop); T+=0.016; drawSky(); drawFx();
 
 /* boot */
 const img=new Image(); img.crossOrigin='anonymous'; img.src='room.png';
-img.onload=()=>{ roomCanvas=keyGreen(img); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); tickTickTick(); setInterval(tickTickTick,300000); if(monSource!=='ticktick') refreshNotionActive(); setInterval(refreshNotionActive,300000); loop();
+img.onload=()=>{ roomCanvas=keyGreen(img); document.documentElement.style.setProperty('--slime',`url("${drawSlime()}")`); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); tickTickTick(); setInterval(tickTickTick,300000); if(monSource!=='ticktick') refreshNotionActive(); setInterval(refreshNotionActive,300000); loop();
   const L=document.getElementById('loading'); L.style.opacity=0; setTimeout(()=>L.remove(),700); };
 img.onerror=()=>{ document.getElementById('loading').textContent='could not load room.png'; };
 addEventListener('resize',fit);
