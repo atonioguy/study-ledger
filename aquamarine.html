@@ -44,6 +44,8 @@
   .mon .t .tm{ color:var(--faint); min-width:13cqw; font-size:5cqh; } .mon .t .tx{ font-size:5.6cqh; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .mon .t.dn .tx{ color:var(--faint); text-decoration:line-through; } .mon .t .dot{ width:2.6cqh; height:2.6cqh; border-radius:50%; flex:none; }
   .mon .ft{ margin-top:auto; display:flex; font-size:4.6cqh; } .mon .ft .o{ margin-left:auto; color:var(--faint); } .mon .ft .p{ color:var(--sage); }
+  .mon .odh{ font-size:4.3cqh; letter-spacing:.1em; text-transform:uppercase; color:var(--koi); margin:1.6cqh 0 .7cqh; opacity:.9; }
+  .mon .t.od{ opacity:.82; } .mon .t.od .tm{ color:var(--koi); }
   .dotk{background:var(--koi)} .dotl{background:var(--lav)} .doth{background:var(--sage)}
 
   /* phone — custom feed, multiple posts visible */
@@ -345,11 +347,12 @@ function fmtDue(iso,allDay){ if(!iso)return '—'; const d=new Date(iso); if(isN
   let h=d.getHours(); const m=String(d.getMinutes()).padStart(2,'0'),ap=h<12?'a':'p'; h=((h+11)%12)+1; return `${h}:${m}${ap}`; }
 const prioCat=p=>p>=5?'h':p>=3?'k':'l';
 function renderMon(){ const ui=E.monitor&&E.monitor.querySelector('#monUI'); if(!ui)return; let rows,foot;
-  if(liveTasks){ const end=new Date(); end.setHours(23,59,59,999);
-    const today=liveTasks.filter(t=>t.due&&new Date(t.due)<=end).sort((a,b)=>a.due<b.due?-1:1);
-    const list=(today.length?today:liveTasks).slice(0,6);
-    rows=list.length? list.map(t=>`<div class="t"><span class="ck"></span><span class="tm">${fmtDue(t.due,t.allDay)}</span><span class="tx">${esc(t.title)}</span><span class="dot dot${prioCat(t.priority)}"></span></div>`).join('')
-      : `<div class="t"><span class="tx" style="color:var(--faint)">all clear ♡</span></div>`;
+  if(liveTasks){ const s=new Date(); s.setHours(0,0,0,0); const end=new Date(); end.setHours(23,59,59,999);
+    const today=liveTasks.filter(t=>{const d=t.due&&new Date(t.due); return d&&d>=s&&d<=end;}).sort((a,b)=>a.due<b.due?-1:1);
+    const od=liveTasks.filter(t=>{const d=t.due&&new Date(t.due); return d&&d<s;}).sort((a,b)=>a.due<b.due?-1:1);
+    const row=(t,over)=>`<div class="t${over?' od':''}"><span class="ck"></span><span class="tm">${over?fmtDue(t.due,true):fmtDue(t.due,t.allDay)}</span><span class="tx">${esc(t.title)}</span><span class="dot dot${prioCat(t.priority)}"></span></div>`;
+    rows = today.length ? today.slice(0,6).map(t=>row(t,false)).join('') : `<div class="t"><span class="tx" style="color:var(--faint)">nothing due today ♡</span></div>`;
+    if(od.length) rows += `<div class="odh">⚠ overdue · ${od.length}</div>` + od.slice(0,4).map(t=>row(t,true)).join('');
     foot=`<span class="p">${today.length} due today</span><span class="o">click to open ✦</span>`;
   } else { const done=TASKS.filter(t=>t[3]).length;
     rows=TASKS.map(t=>`<div class="t ${t[3]?'dn':''}"><span class="ck"></span><span class="tm">${t[0]}</span><span class="tx">${t[1]}</span><span class="dot dot${t[2]}"></span></div>`).join('');
