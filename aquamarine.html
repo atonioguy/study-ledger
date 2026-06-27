@@ -185,7 +185,7 @@
     </div>
 
     <aside id="side">
-      <div class="cgrp"><div class="cl">setup</div><button id="calBtn" class="wide">⊹ align screens</button></div>
+      <div class="cgrp"><div class="cl">setup</div><button id="calBtn" class="wide">⊹ align screens</button><button id="dataBtn" class="wide" style="margin-top:7px">🔗 connect data</button></div>
       <div class="cgrp"><div class="cl">time of day</div><div class="crow"><button data-sky="dawn">🌅</button><button data-sky="day">☀️</button><button data-sky="dusk" class="on">🌆</button><button data-sky="night">🌙</button></div></div>
       <div class="cgrp"><div class="cl">weather</div><div class="crow"><button data-wx="clear" class="on">✨</button><button data-wx="rain">🌧️</button><button data-wx="snow">❄️</button><button id="soundBtn">🔇</button></div></div>
       <div class="cgrp"><div class="cl">tone</div><div class="crow"><button id="coolBtn">🌊 cool</button><button id="autoBtn" class="on">🕐 auto</button></div></div>
@@ -224,6 +224,14 @@
     <div class="ring"><svg width="190" height="190"><circle cx="95" cy="95" r="84" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="6"/><circle id="fRing" cx="95" cy="95" r="84" fill="none" stroke="var(--sakura)" stroke-width="6" stroke-linecap="round" stroke-dasharray="528" stroke-dashoffset="0"/></svg><div class="num" id="fNum">25:00</div></div>
     <div class="l">a calm 25-minute block · the room dims with you</div><div class="ct"><button class="b1" id="fStart">begin ✦</button><button class="b2" data-close>close</button></div></div></div>
   <div class="pop" id="soon"><div class="pc"><span class="px2" data-close>✕</span><h3 id="soonT">Mind</h3><p id="soonP">this room is coming soon ♡ — for now your Desk is home.</p></div></div>
+  <div class="pop" id="dataP"><div class="pc" style="width:min(430px,90vw);padding:24px"><span class="px2" data-close>✕</span>
+    <h3 style="font-size:18px;margin-bottom:4px">🔗 connect your data</h3>
+    <p style="font-size:12px;color:var(--faint);margin-bottom:14px;line-height:1.5">paste your Cloudflare worker URL + key (setup in <b>worker/README.md</b>). stored only in this browser — never in the page.</p>
+    <input id="apiUrl" placeholder="https://aquamarine-data.you.workers.dev" style="width:100%;box-sizing:border-box;background:rgba(8,12,20,.6);border:1px solid rgba(160,180,200,.2);border-radius:12px;padding:12px 14px;color:var(--text);font:inherit;font-size:13px;margin-bottom:9px">
+    <input id="apiKey" placeholder="your AQ_KEY" style="width:100%;box-sizing:border-box;background:rgba(8,12,20,.6);border:1px solid rgba(160,180,200,.2);border-radius:12px;padding:12px 14px;color:var(--text);font:inherit;font-size:13px">
+    <div style="display:flex;gap:9px;margin-top:14px"><button id="apiSave" style="flex:1;border:none;border-radius:12px;padding:12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;background:var(--sakura);color:#2a1820">save ✦</button><button data-close style="flex:1;border:none;border-radius:12px;padding:12px;font:inherit;font-size:13px;cursor:pointer;background:rgba(255,255,255,.07);color:var(--soft)">close</button></div>
+    <div id="apiStatus" style="font-size:11.5px;color:var(--faint);margin-top:11px;min-height:14px"></div>
+  </div></div>
 
 <script>
 const IMG_W=1448,IMG_H=1086,ASPECT=IMG_W/IMG_H;
@@ -330,10 +338,23 @@ function buildEls(){
   const stk=makeEl('notestack','clk','',true); stk.title='new note';   // invisible click zone over the painted sticky stack
   renderMon(); renderSideTasks();
 }
-function renderMon(){ const done=TASKS.filter(t=>t[3]).length; E.monitor.querySelector('#monUI').innerHTML=
-  `<div class="hd"><b id="mHi">good evening, antonio</b><span class="wm">aqua</span></div><div class="sub">today · ticktick</div>`+
-  TASKS.map(t=>`<div class="t ${t[3]?'dn':''}"><span class="ck"></span><span class="tm">${t[0]}</span><span class="tx">${t[1]}</span><span class="dot dot${t[2]}"></span></div>`).join('')+
-  `<div class="ft"><span class="p">${done} of ${TASKS.length} done</span><span class="o">click to open ✦</span></div>`; }
+const esc=s=>String(s).replace(/</g,'&lt;');
+let liveTasks=null;   // set once TickTick is connected
+function fmtDue(iso,allDay){ if(!iso)return '—'; const d=new Date(iso); if(isNaN(d))return '—';
+  if(allDay)return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toLowerCase();
+  let h=d.getHours(); const m=String(d.getMinutes()).padStart(2,'0'),ap=h<12?'a':'p'; h=((h+11)%12)+1; return `${h}:${m}${ap}`; }
+const prioCat=p=>p>=5?'h':p>=3?'k':'l';
+function renderMon(){ const ui=E.monitor&&E.monitor.querySelector('#monUI'); if(!ui)return; let rows,foot;
+  if(liveTasks){ const end=new Date(); end.setHours(23,59,59,999);
+    const today=liveTasks.filter(t=>t.due&&new Date(t.due)<=end).sort((a,b)=>a.due<b.due?-1:1);
+    const list=(today.length?today:liveTasks).slice(0,6);
+    rows=list.length? list.map(t=>`<div class="t"><span class="ck"></span><span class="tm">${fmtDue(t.due,t.allDay)}</span><span class="tx">${esc(t.title)}</span><span class="dot dot${prioCat(t.priority)}"></span></div>`).join('')
+      : `<div class="t"><span class="tx" style="color:var(--faint)">all clear ♡</span></div>`;
+    foot=`<span class="p">${today.length} due today</span><span class="o">click to open ✦</span>`;
+  } else { const done=TASKS.filter(t=>t[3]).length;
+    rows=TASKS.map(t=>`<div class="t ${t[3]?'dn':''}"><span class="ck"></span><span class="tm">${t[0]}</span><span class="tx">${t[1]}</span><span class="dot dot${t[2]}"></span></div>`).join('');
+    foot=`<span class="p">${done} of ${TASKS.length} done</span><span class="o">click to open ✦</span>`; }
+  ui.innerHTML=`<div class="hd"><b id="mHi">good evening, antonio</b><span class="wm">aqua</span></div><div class="sub">today · ticktick</div>`+rows+`<div class="ft">${foot}</div>`; }
 function renderSideTasks(){ const s=document.getElementById('sTasks'); if(!s) return; }
 function layoutEls(){ for(const k in BOX){ const e=E[k]; if(!e) continue; const b=BOX[k]; e.style.left=b.x+'%'; e.style.top=b.y+'%'; e.style.width=b.w+'%'; e.style.height=b.h+'%';
   e.style.transform=`perspective(900px) rotateX(${b.rx||0}deg) rotateY(${b.ry||0}deg) rotate(${b.rz||0}deg)`; e.style.zIndex=b.z||3; } }
@@ -454,6 +475,24 @@ function renderCal(){ const el=document.getElementById('calMini'); if(!el)return
   const first=new Date(y,mo,1).getDay(),dim=new Date(y,mo+1,0).getDate(); for(let i=0;i<first;i++){ const e=document.createElement('div'); e.className='dy dim'; g.appendChild(e); }
   for(let d=1;d<=dim;d++){ const e=document.createElement('div'); e.className='dy'+(d===today?' td':''); e.textContent=d; g.appendChild(e); } })();
 
+/* ===== live data (TickTick via your Cloudflare worker) ===== */
+const API={ url:localStorage.getItem('aq_api_url')||'', key:localStorage.getItem('aq_api_key')||'' };
+function calFromTasks(){ if(!liveTasks)return; const n=new Date(),mo=n.getMonth(),y=n.getFullYear(); EVDAYS.clear();
+  liveTasks.forEach(t=>{ if(!t.due)return; const d=new Date(t.due); if(!isNaN(d)&&d.getMonth()===mo&&d.getFullYear()===y) EVDAYS.add(d.getDate()); }); renderCal(); }
+async function loadTickTick(){ if(!API.url||!API.key) return false;
+  const r=await fetch(API.url.replace(/\/+$/,'')+'/ticktick',{headers:{'x-aq-key':API.key}});
+  if(!r.ok) throw new Error('http '+r.status); const j=await r.json(); if(!Array.isArray(j.tasks)) throw new Error(j.error||'bad response');
+  liveTasks=j.tasks; renderMon(); calFromTasks(); return true; }
+function tickTickTick(){ loadTickTick().catch(e=>console.warn('ticktick:',e&&e.message||e)); }
+const dataBtn=document.getElementById('dataBtn');
+if(dataBtn) dataBtn.onclick=()=>{ document.getElementById('apiUrl').value=API.url; document.getElementById('apiKey').value=API.key; document.getElementById('apiStatus').textContent=''; openP('dataP'); };
+const apiSave=document.getElementById('apiSave');
+if(apiSave) apiSave.onclick=async()=>{ API.url=document.getElementById('apiUrl').value.trim(); API.key=document.getElementById('apiKey').value.trim();
+  localStorage.setItem('aq_api_url',API.url); localStorage.setItem('aq_api_key',API.key);
+  const st=document.getElementById('apiStatus'); st.textContent='connecting…';
+  try{ const ok=await loadTickTick(); st.textContent=ok?(liveTasks.length?`✓ connected — ${liveTasks.length} tasks`:'✓ connected — no open tasks'):'enter a URL and key first'; }
+  catch(e){ st.textContent='✕ could not connect ('+(e&&e.message||e)+')'; } };
+
 /* focus */
 let fTimer=null,fLeft=1500;
 function fFmt(){ const m=String(Math.floor(fLeft/60)).padStart(2,'0'),s=String(fLeft%60).padStart(2,'0'); document.getElementById('fNum').textContent=`${m}:${s}`; document.getElementById('fRing').style.strokeDashoffset=528*(1-fLeft/1500); }
@@ -537,7 +576,7 @@ function loop(){ requestAnimationFrame(loop); T+=0.016; drawSky(); drawFx();
 
 /* boot */
 const img=new Image(); img.crossOrigin='anonymous'; img.src='room.png';
-img.onload=()=>{ roomCanvas=keyGreen(img); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); loop();
+img.onload=()=>{ roomCanvas=keyGreen(img); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); tickTickTick(); setInterval(tickTickTick,300000); loop();
   const L=document.getElementById('loading'); L.style.opacity=0; setTimeout(()=>L.remove(),700); };
 img.onerror=()=>{ document.getElementById('loading').textContent='could not load room.png'; };
 addEventListener('resize',fit);

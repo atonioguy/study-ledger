@@ -1,0 +1,12 @@
+name = "aquamarine-data"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+# Secrets (do NOT put here — set with the CLI so they stay encrypted):
+#   wrangler secret put TICKTICK_TOKEN
+#   wrangler secret put AQ_KEY
+#
+# Non-secret var. Lock this to your dashboard origin once it works, e.g.
+#   ALLOW_ORIGIN = "https://atonioguy.github.io"
+[vars]
+ALLOW_ORIGIN = "*"
