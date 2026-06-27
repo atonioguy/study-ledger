@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=no">
 <title>Aquamarine</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Pixelify+Sans:wght@400;500;600;700&display=swap');
-  :root{ --sakura:#e8b6c4; --lav:#b7b3e0; --sage:#a8c4ab; --koi:#e89a6c; --cyan:#9fe6ff; --text:#eef4f5; --soft:#c2d0d4; --faint:#8aa0ac; --ui:#0e1828; --pixfont:'Silkscreen','Courier New',monospace; --pixfont2:'Pixelify Sans','Trebuchet MS',sans-serif; }
+  @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap');
+  :root{ --sakura:#e8b6c4; --lav:#b7b3e0; --sage:#a8c4ab; --koi:#e89a6c; --cyan:#9fe6ff; --text:#eef4f5; --soft:#c2d0d4; --faint:#8aa0ac; --ui:#0e1828; --pixfont:'Silkscreen','Courier New',monospace; --pixfont2:'VT323','Courier New',monospace; }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ height:100%; background:#070b13; overflow:hidden; font-family:'Avenir Next','Segoe UI',system-ui,sans-serif; color:var(--text); -webkit-font-smoothing:antialiased; user-select:none; }
   #app{ position:fixed; inset:0; display:flex; background:radial-gradient(130% 100% at 50% 30%,#16203a,#0b1019 70%,#070a12); }
@@ -72,7 +72,7 @@
   .calmini .ch{ font-size:8.5cqh; font-weight:600; text-align:center; color:#fbf4e8; letter-spacing:.4px; margin-bottom:1.5cqh; text-shadow:0 0 1.5cqh rgba(244,224,180,.4); }
   .calmini .cw{ display:grid; grid-template-columns:repeat(7,1fr); font-size:5cqh; color:#cbb79c; text-align:center; margin-bottom:.6cqh; }
   .calmini .cd{ display:grid; grid-template-columns:repeat(7,1fr); grid-auto-rows:1fr; gap:.3cqh; flex:1; }
-  .calmini .cd i{ font-style:normal; font-size:5.4cqh; display:grid; place-items:center; color:#ece0cd; border-radius:1.8cqw; position:relative; }
+  .calmini .cd i{ font-style:normal; font-size:6.4cqh; display:grid; place-items:center; color:#ece0cd; border-radius:1.8cqw; position:relative; }
   .calmini .cd i.td{ background:#e9d3a6; color:#5e4733; font-weight:600; box-shadow:0 0 1.6cqh rgba(233,211,166,.6); }
   .calmini .cd i em{ position:absolute; bottom:.4cqh; left:0; right:0; display:flex; justify-content:center; gap:.7cqw; pointer-events:none; }
   .calmini .cd i em u{ width:1.5cqw; height:1.5cqw; border-radius:50%; } .calmini .cd i em u.evd{ background:#e0c79a; }
@@ -285,7 +285,7 @@
   /* notion table in koi */
   #dashP .nchip-pick{ font-family:var(--pixfont2); background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; } #dashP .nchip-pick.on{ background:var(--bar); color:var(--bartx); }
   #dashP .ntbl-wrap{ border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); border-radius:0; }
-  #dashP .ntbl{ font-family:var(--pixfont2); } #dashP .ntbl th{ background:var(--bar); color:var(--bartx); border-bottom:2px solid var(--outline); }
+  #dashP .ntbl{ font-family:var(--pixfont2); font-size:14px; } #dashP .ntbl th{ background:var(--bar); color:var(--bartx); border-bottom:2px solid var(--outline); }
   #dashP .ntbl td{ color:var(--tx); border-bottom:1px solid rgba(0,0,0,.18); } #dashP .ntbl td.title{ color:#fbf7ec; } #dashP .ntbl tr:hover td{ background:rgba(255,255,255,.05); }
   #dashP .nchip{ background:var(--card); color:var(--cardtx); border-radius:0; } #dashP .ncheck{ border-color:var(--lo); background:var(--card); border-radius:0; } #dashP .ncheck.on{ background:#8fae8f; border-color:#8fae8f; }
   #dashP .ntool{ font-family:var(--pixfont2); background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; }
@@ -324,20 +324,30 @@
   .phpager button{ background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; cursor:pointer; padding:3px 10px; font-family:var(--pixfont); font-size:11px; } .phpager button:disabled{ opacity:.4; cursor:default; }
   .phpager .pp{ display:flex; align-items:center; gap:5px; } .phpager #phPageIn{ width:26px; text-align:center; background:var(--hi); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); border-radius:0; color:var(--cardtx); font-family:var(--pixfont); font-size:9px; padding:2px; }
 
-  /* ===== calendar (expanded) — soft, glowy, rounded pixel panel in brown ===== */
-  #calP .pc{ background-color:rgba(108,86,66,.9); background-image:radial-gradient(rgba(46,32,20,.17) 1px,transparent 1.5px); background-size:4px 4px;
-    border:2px solid rgba(230,204,162,.45); border-radius:0; box-shadow:none;
+  /* ===== calendar (expanded) — readable, varied pixel panel (no dots behind text) ===== */
+  #calP .pc{ background:linear-gradient(165deg,#7a6048,#5d4835); border:2px solid #caa06a; border-radius:0; box-shadow:none;
     clip-path:polygon(0 6px,3px 6px,3px 3px,6px 3px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 3px,calc(100% - 3px) 3px,calc(100% - 3px) 6px,100% 6px,100% calc(100% - 6px),calc(100% - 3px) calc(100% - 6px),calc(100% - 3px) calc(100% - 3px),calc(100% - 6px) calc(100% - 3px),calc(100% - 6px) 100%,6px 100%,6px calc(100% - 3px),3px calc(100% - 3px),3px calc(100% - 6px),0 calc(100% - 6px));
-    filter:drop-shadow(0 0 14px rgba(230,204,162,.3)) drop-shadow(0 14px 26px rgba(0,0,0,.45)); color:#f0e7d8; font-family:var(--pixfont2); }
-  #calP .cg .dy{ border-radius:3px; } #calP .cg .dy.td b{ border-radius:2px; }
-  #calP .px2{ background:rgba(244,232,212,.14); color:#f0e7d8; }
-  #calP .calhd h3{ color:#fbf4e8; } #calP .calhd .nav,#calP .calhd .calt{ background:rgba(244,232,212,.12); border:2px solid rgba(228,200,156,.3); color:#f0e7d8; border-radius:9px; }
-  #calP .cg .dw{ color:#cbb79c; } #calP .cg .dy{ background:rgba(244,232,212,.07); border-radius:9px; color:#ece0cd; }
-  #calP .cg .dy:hover{ background:rgba(244,232,212,.15); } #calP .cg .dy.has{ background:rgba(244,232,212,.11); } #calP .cg .dy.dim{ background:transparent; }
-  #calP .cg .dy b{ color:#f0e7d8; } #calP .cg .dy.td b{ background:#e9d3a6; color:#5e4733; border-radius:6px; box-shadow:0 0 9px rgba(233,211,166,.6); } #calP .cg .dy.sel{ outline:2px solid rgba(244,224,180,.85); }
-  #calP .cg .chip{ background:rgba(244,232,212,.16); color:#f5ecdc; } #calP .cg .more{ color:#cbb79c; }
-  #calP #calDay{ border-top:1px solid rgba(244,232,212,.18); } #calP #calDay .cdh{ color:#f0e7d8; } #calP #calDay .empty{ color:#cbb79c; }
-  #calP .bt{ color:#f0e7d8; } #calP .bt:hover{ background:rgba(244,232,212,.08); } #calP .bt .tm{ color:#cbb79c; } #calP .bt .ck{ border-color:#cbb79c; background:rgba(244,232,212,.1); } #calP .bt.dn .ck{ background:#cbab7f; border-color:#cbab7f; } #calP .bt .lb{ background:rgba(244,232,212,.16); color:#f5ecdc; }
+    filter:drop-shadow(0 0 14px rgba(230,200,150,.3)) drop-shadow(0 14px 26px rgba(0,0,0,.45)); color:#f3ead8; font-family:var(--pixfont2); }
+  #calP .px2{ background:#caa06a; color:#3a2a1a; }
+  #calP .calhd h3{ color:#fdf3e2; } #calP .calhd .nav,#calP .calhd .calt{ background:#caa06a; border:2px solid #8a6a44; color:#3a2a1a; border-radius:0; }
+  #calP .cg .dw{ color:#e3b488; font-size:13px; }
+  #calP .cg .dy{ background:#d9c6a4; border:1px solid #b39666; border-radius:0; color:#4a3826; }
+  #calP .cg .dy:hover{ background:#e8d8ba; } #calP .cg .dy.has{ background:#cdd6b0; } #calP .cg .dy.dim{ background:transparent; border-color:transparent; }
+  #calP .cg .dy b{ color:#4a3826; font-size:15px; } #calP .cg .dy.td{ background:#e8b258; border-color:#b87f2e; } #calP .cg .dy.td b{ background:none; color:#4a3018; box-shadow:none; } #calP .cg .dy.sel{ outline:2px solid #8a4a2a; outline-offset:-2px; }
+  #calP .cg .chip{ background:rgba(74,56,38,.16); color:#3f2f1f; border-radius:0; } #calP .cg .more{ color:#6f5640; }
+  #calP #calDay{ border-top:none; margin-top:14px; background:rgba(46,34,24,.55); border:2px solid #8a6a44; padding:10px 12px; }
+  #calP #calDay .cdh{ color:#fdf3e2; } #calP #calDay .empty{ color:#d8c3a2; }
+  #calP .bt{ color:#f3ead8; } #calP .bt:hover{ background:rgba(244,232,212,.08); } #calP .bt .tm{ color:#d8c3a2; } #calP .bt .ck{ border-color:#caa06a; background:rgba(244,232,212,.12); } #calP .bt.dn .ck{ background:#9fb074; border-color:#9fb074; } #calP .bt .lb{ background:rgba(202,160,106,.32); color:#fdf3e2; }
+
+  /* ===== corkboard + new-note as pixel windows ===== */
+  #boardP .pc{ width:auto; }
+  #boardP .bhd{ display:flex; align-items:center; gap:10px; margin-bottom:10px; } #boardP .bhd .sp{ margin-left:auto; font-size:11px; color:var(--tx); font-family:var(--pixfont2); }
+  #boardP .mkbtn, #brainP .a{ background:var(--bar); color:var(--bartx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; font-family:var(--pixfont); font-size:11px; padding:8px 13px; cursor:pointer; } #boardP .mkbtn:active,#brainP .a:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
+  #brainP p{ color:var(--tx); font-family:var(--pixfont2); font-size:14px; margin-bottom:12px; }
+  #brainP input{ background:var(--hi); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); border-radius:0; color:var(--cardtx); font-family:var(--pixfont2); font-size:16px; padding:9px 11px; width:100%; box-sizing:border-box; }
+  #brainP .row{ display:flex; gap:9px; margin-top:14px; } #brainP .row button{ flex:1; border-radius:0; padding:9px; font-family:var(--pixfont); font-size:11px; cursor:pointer; }
+  #brainP .c{ background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); } #brainP .c:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
+  #brainPile .pn{ font-family:var(--pixfont2); font-size:13px; border-radius:0; box-shadow:none; border:2px solid; border-color:rgba(255,255,255,.5) rgba(0,0,0,.25) rgba(0,0,0,.25) rgba(255,255,255,.5); }
 </style>
 </head>
 <body>
@@ -400,12 +410,16 @@
       <div class="phcompose"><textarea id="twIn" placeholder="say something..."></textarea><button id="twAttach" title="attach image file">📎</button><button id="twLink" title="image url">🔗</button><button id="twPost">post</button><input id="twFile" type="file" accept="image/*" hidden></div>
     </div>
   </div></div>
-  <div class="pop" id="brainP"><div class="pc"><span class="px2" data-close>✕</span><h3>🗒️ brain dump</h3><p>catch a thought — it lands on your board</p>
-    <input id="brainIn" placeholder="type anything…" maxlength="60"><div id="brainPile"></div>
-    <div class="row"><button class="a" id="brainAdd">pin it ✦</button><button class="c" data-close>close</button></div></div></div>
-  <div class="pop" id="boardP"><div class="pc"><span class="px2" data-close>✕</span>
-    <div class="bhd"><h3>📌 the board</h3><button class="mkbtn" id="boardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div>
-    <div class="bigboard" id="bigBoard"></div></div></div>
+  <div class="pop" id="brainP"><div class="pc pxwin" style="width:min(440px,90vw);padding:0;display:flex;flex-direction:column;overflow:hidden">
+    <div class="pxbar"><span class="pxico">🗒</span><span class="pxtitle">new note</span><span class="pxbtns"><b>_</b><b>▢</b><b data-close>✕</b></span></div>
+    <div class="pxbody" style="padding:14px"><p>catch a thought — it lands on your board</p>
+      <input id="brainIn" placeholder="type anything…" maxlength="60"><div id="brainPile"></div>
+      <div class="row"><button class="a" id="brainAdd">pin it ✦</button><button class="c" data-close>close</button></div></div></div></div>
+  <div class="pop" id="boardP"><div class="pc pxwin" style="max-width:92vw;padding:0;display:flex;flex-direction:column;overflow:hidden">
+    <div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><span class="pxbtns"><b>_</b><b>▢</b><b data-close>✕</b></span></div>
+    <div class="pxbody" style="padding:12px">
+      <div class="bhd"><button class="mkbtn" id="boardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div>
+      <div class="bigboard" id="bigBoard"></div></div></div></div>
   <div class="pop" id="calP"><div class="pc"><span class="px2" data-close>✕</span>
     <div class="calhd"><button class="nav" id="calPrev">‹</button><h3 id="calTitle">📅 June 2026</h3><button class="nav" id="calNext">›</button><button class="calt" id="calToday">today</button></div>
     <div class="cg" id="calGrid"></div><div id="calDay"></div></div></div>
