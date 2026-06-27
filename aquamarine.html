@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=no">
 <title>Aquamarine</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap');
-  :root{ --sakura:#e8b6c4; --lav:#b7b3e0; --sage:#a8c4ab; --koi:#e89a6c; --cyan:#9fe6ff; --text:#eef4f5; --soft:#c2d0d4; --faint:#8aa0ac; --ui:#0e1828; --pixfont:'Silkscreen','Courier New',monospace; }
+  @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Pixelify+Sans:wght@400;500;600;700&display=swap');
+  :root{ --sakura:#e8b6c4; --lav:#b7b3e0; --sage:#a8c4ab; --koi:#e89a6c; --cyan:#9fe6ff; --text:#eef4f5; --soft:#c2d0d4; --faint:#8aa0ac; --ui:#0e1828; --pixfont:'Silkscreen','Courier New',monospace; --pixfont2:'Pixelify Sans','Trebuchet MS',sans-serif; }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ height:100%; background:#070b13; overflow:hidden; font-family:'Avenir Next','Segoe UI',system-ui,sans-serif; color:var(--text); -webkit-font-smoothing:antialiased; user-select:none; }
   #app{ position:fixed; inset:0; display:flex; background:radial-gradient(130% 100% at 50% 30%,#16203a,#0b1019 70%,#070a12); }
@@ -264,6 +264,36 @@
   .phcompose #twAttach{ background:var(--frame); color:var(--cardtx); font-size:15px; } .phcompose #twPost{ background:var(--bar); color:var(--bartx); font-weight:700; font-size:10px; }
   .phcompose #twAttach:active,.phcompose #twPost:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
   #twPreviewImg{ border:2px solid var(--lo); image-rendering:pixelated; } #twPreviewX{ position:absolute; top:4px; right:4px; background:var(--outline); color:#ece5d7; width:21px; height:18px; display:grid; place-items:center; cursor:pointer; font-size:10px; border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); }
+
+  /* ===== matte variant (koi "Preview"-style window: thick beige mat, outlined buttons) ===== */
+  .pxwin.matte .pxbody{ margin:9px; box-shadow:0 0 0 2px var(--outline); }
+  .pxwin.matte .pxbtns b{ background:var(--frame); border:2px solid var(--outline); color:var(--outline); }
+  .pxwin.matte .pxbtns b[data-close]:hover{ background:#c77f86; color:#2a1416; }
+  /* ===== monitor (tasks) — koi palette + readable pixel font ===== */
+  .monbody{ font-family:var(--pixfont2); padding:18px 20px; color:var(--tx); }
+  #dashP h1{ color:var(--tx); font-family:var(--pixfont2); font-weight:600; } #dashP .s{ color:#b8b1a2; }
+  #dashP .dtab{ font-family:var(--pixfont2); background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; }
+  #dashP .dtab.on{ background:var(--bar); color:var(--bartx); border-color:var(--hi) var(--lo) var(--lo) var(--hi); font-weight:600; }
+  #dashP .dgrp .gl{ color:#b8b1a2; } #dashP .dgrp button{ font-family:var(--pixfont2); background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; }
+  #dashP .dgrp button.on{ background:var(--bar); color:var(--bartx); border-color:var(--hi) var(--lo) var(--lo) var(--hi); }
+  #dashP .bt{ color:var(--tx); border-radius:0; } #dashP .bt:hover{ background:rgba(255,255,255,.05); } #dashP .bt .tm{ color:#b0a99a; } #dashP .bt .tx{ color:var(--tx); }
+  #dashP .bt .ck{ border-color:var(--lo); background:var(--card); border-radius:0; } #dashP .bt.dn .ck{ background:#8fae8f; border-color:#8fae8f; }
+  #dashP .bt .lb{ background:var(--card); color:var(--cardtx); border-radius:0; }
+  #dashP .empty,#dashP .nfoot,#dashP .nempty{ color:#b0a99a; } #dashP .grph{ color:#b8b1a2; } #dashP .grph .gc{ background:var(--card); color:var(--cardtx); }
+  /* notion table in koi */
+  #dashP .nchip-pick{ font-family:var(--pixfont2); background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; } #dashP .nchip-pick.on{ background:var(--bar); color:var(--bartx); }
+  #dashP .ntbl-wrap{ border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); border-radius:0; }
+  #dashP .ntbl{ font-family:var(--pixfont2); } #dashP .ntbl th{ background:var(--bar); color:var(--bartx); border-bottom:2px solid var(--outline); }
+  #dashP .ntbl td{ color:var(--tx); border-bottom:1px solid rgba(0,0,0,.18); } #dashP .ntbl td.title{ color:#fbf7ec; } #dashP .ntbl tr:hover td{ background:rgba(255,255,255,.05); }
+  #dashP .nchip{ background:var(--card); color:var(--cardtx); border-radius:0; } #dashP .ncheck{ border-color:var(--lo); background:var(--card); border-radius:0; } #dashP .ncheck.on{ background:#8fae8f; border-color:#8fae8f; }
+  #dashP .ntool{ font-family:var(--pixfont2); background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; }
+  #dashP .nfilter{ background:var(--frame); border:2px solid var(--outline); border-radius:0; } #dashP .nfh{ color:#6a6760; } #dashP .nfopt{ font-family:var(--pixfont2); background:var(--card); color:var(--cardtx); border:1px solid var(--lo); border-radius:0; } #dashP .nfopt.on{ background:var(--bar); color:var(--bartx); } #dashP .nfclear{ color:#6a6760; }
+  #dashP .ndate em{ color:#b0a99a; }
+  /* mini desk monitor — koi */
+  .mon{ background:linear-gradient(165deg,#5f6258,#50534b) !important; font-family:var(--pixfont2); color:#e3dece; }
+  .mon .hd b{ color:#e8e1d2; } .mon .hd .wm{ color:#a39d8d; } .mon .sub{ color:#a8a293; } .mon .odh{ color:var(--koi); }
+  .mon .t .tm{ color:#a8a293; } .mon .t .tx{ color:#e3dece; } .mon .t .ck{ border-color:#a39d8d; } .mon .t.dn .ck{ background:#8fae8f; border-color:#8fae8f; }
+  .mon .ft .o{ color:#a39d8d; } .mon .ft .p{ color:#bcd0bc; } .mon .nm-chip{ color:#c9c2b3; }
 </style>
 </head>
 <body>
@@ -304,13 +334,16 @@
   <div class="tip" id="tip">click the monitor, phone, board, calendar, or 🍅 ✦ · ⊹ to align</div>
 
   <div class="scrim" id="scrim"></div>
-  <div class="pop" id="dashP"><div class="pc"><span class="px2" data-close>✕</span>
-    <h1 id="dHi">good evening, antonio</h1><div class="s" id="dDate2"></div>
-    <div class="dtabs"><div class="dtab on" data-p="0">Today</div><div class="dtab" data-p="1">Notion</div><div class="dtab" data-p="2">Inbox</div></div>
-    <div class="dgrp" id="dGroupBar"><span class="gl">group</span><button data-g="class" class="on">by class</button><button data-g="time">by time</button></div>
-    <div class="pp1" id="dBig"></div>
-    <div class="pp2"><div id="dNotion"></div></div>
-    <div class="pp2"><div class="bt"><span class="ck" style="border-radius:50%"></span><span class="tx">UNTHSC Registrar — enrollment Mon</span></div><div class="bt"><span class="ck" style="border-radius:50%"></span><span class="tx">Anatomy TA — reply by Fri</span></div></div>
+  <div class="pop" id="dashP"><div class="pc pxwin koi matte" style="width:min(700px,92vw);max-height:86vh;padding:0;display:flex;flex-direction:column;overflow:hidden">
+    <div class="pxbar"><span class="pxico">🖥</span><span class="pxtitle">tasks</span><span class="pxbtns"><b>⤢</b><b>▭</b><b data-close>✕</b></span></div>
+    <div class="pxbody monbody">
+      <h1 id="dHi">good evening, antonio</h1><div class="s" id="dDate2"></div>
+      <div class="dtabs"><div class="dtab on" data-p="0">Today</div><div class="dtab" data-p="1">Notion</div><div class="dtab" data-p="2">Inbox</div></div>
+      <div class="dgrp" id="dGroupBar"><span class="gl">group</span><button data-g="class" class="on">by class</button><button data-g="time">by time</button></div>
+      <div class="pp1" id="dBig"></div>
+      <div class="pp2"><div id="dNotion"></div></div>
+      <div class="pp2"><div class="bt"><span class="ck" style="border-radius:50%"></span><span class="tx">UNTHSC Registrar — enrollment Mon</span></div><div class="bt"><span class="ck" style="border-radius:50%"></span><span class="tx">Anatomy TA — reply by Fri</span></div></div>
+    </div>
   </div></div>
   <div class="pop" id="phoneP"><div class="pc pxwin" style="width:min(340px,86vw);height:min(620px,86vh);padding:0;display:flex;flex-direction:column;overflow:hidden">
     <div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">frogchat</span><span class="pxbtns"><b>_</b><b>▢</b><b data-close>✕</b></span></div>
@@ -641,10 +674,10 @@ function makeNoteEl(n,i,host){ const d=document.createElement('div'); d.classNam
   d.querySelector('.del').addEventListener('pointerdown',ev=>{ ev.stopPropagation(); ev.preventDefault(); trashNote(n); });
   d.addEventListener('pointerdown',ev=>{ ev.stopPropagation(); bringFront(n); d.style.zIndex=999; saveNotes(); });
   const pin=d.querySelector('b');
-  pin.addEventListener('pointerdown',ev=>{ ev.preventDefault(); const r=host.getBoundingClientRect(), sx=ev.clientX, sy=ev.clientY, ox=n.x, oy=n.y; d.classList.add('grab'); pin.setPointerCapture(ev.pointerId);
+  pin.addEventListener('pointerdown',ev=>{ ev.preventDefault(); const r=host.getBoundingClientRect(), sx=ev.clientX, sy=ev.clientY, ox=n.x, oy=n.y; d.classList.add('grab'); try{pin.setPointerCapture(ev.pointerId);}catch(e){}
     const mv=e2=>{ n.x=Math.max(0,Math.min(80, ox+(e2.clientX-sx)/r.width*100)); n.y=Math.max(0,Math.min(82, oy+(e2.clientY-sy)/r.height*100)); d.style.left=n.x+'%'; d.style.top=n.y+'%'; };
-    const up=()=>{ pin.removeEventListener('pointermove',mv); pin.removeEventListener('pointerup',up); d.classList.remove('grab'); saveNotes(); reRenderBoards(); };
-    pin.addEventListener('pointermove',mv); pin.addEventListener('pointerup',up); });
+    const up=()=>{ pin.removeEventListener('pointermove',mv); pin.removeEventListener('pointerup',up); pin.removeEventListener('pointercancel',up); try{pin.releasePointerCapture(ev.pointerId);}catch(e){} d.classList.remove('grab'); saveNotes(); reRenderBoards(); };
+    pin.addEventListener('pointermove',mv); pin.addEventListener('pointerup',up); pin.addEventListener('pointercancel',up); });
   host.appendChild(d); }
 function renderBoard(){ const b=E.corkboard; if(!b)return; b.querySelectorAll('.note').forEach(n=>n.remove()); notes.slice(0,MAXNOTES).forEach((n,i)=>makeNoteEl(n,i,b)); }
 function renderBigBoard(){ const b=document.getElementById('bigBoard'); if(!b)return; const cb=BOX.corkboard; if(cb&&SW&&SH) b.style.aspectRatio=((cb.w*SW)/(cb.h*SH)).toFixed(3); b.querySelectorAll('.note').forEach(n=>n.remove()); notes.slice(0,MAXNOTES).forEach((n,i)=>makeNoteEl(n,i,b)); }
