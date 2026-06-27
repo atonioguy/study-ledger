@@ -371,8 +371,9 @@
   /* ===== pomodoro smart-mirror overlay over the window ===== */
   #pomoOverlay{ display:none; align-items:center; justify-content:center; pointer-events:none; overflow:visible; }
   #pomoOverlay.on{ display:flex; } body.cal #pomoOverlay{ display:flex !important; pointer-events:auto; }
-  #pomoOverlay .pm-in{ text-align:center; padding:3% 6%; border-radius:8px; background:rgba(22,30,48,.16); backdrop-filter:blur(1.5px); border:1px solid rgba(190,215,245,.22);
-    box-shadow:0 0 46px rgba(150,200,255,.32), inset 0 0 26px rgba(150,200,255,.12); animation:pmglow 4s ease-in-out infinite; }
+  #pomoOverlay .pm-in{ height:100%; aspect-ratio:1; max-width:100%; box-sizing:border-box; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:7%;
+    border-radius:50%; background:radial-gradient(circle at 38% 32%, rgba(40,54,82,.22), rgba(16,24,42,.14)); backdrop-filter:blur(1.5px); border:1.5px solid rgba(190,215,245,.26);
+    box-shadow:0 0 50px rgba(150,200,255,.34), inset 0 0 30px rgba(150,200,255,.14); animation:pmglow 4s ease-in-out infinite; }
   @keyframes pmglow{ 0%,100%{ box-shadow:0 0 40px rgba(150,200,255,.26), inset 0 0 24px rgba(150,200,255,.1); } 50%{ box-shadow:0 0 56px rgba(160,210,255,.4), inset 0 0 30px rgba(160,210,255,.16); } }
   #pomoOverlay .pm-tomato{ display:block; width:9vmin; height:8vmin; margin:0 auto 1.4vmin; transition:transform .14s ease; filter:drop-shadow(0 0 6px rgba(160,210,255,.55)); }
   #pomoOverlay .pm-tomato.f2{ transform:translateY(-1vmin) scale(1.04,.92); }
