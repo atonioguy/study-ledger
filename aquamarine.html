@@ -95,6 +95,9 @@
   .note b{ position:absolute; top:-2.6cqw; left:50%; transform:translateX(-50%); width:7cqw; height:7cqw; background:radial-gradient(circle at 35% 30%,#f3a0b4,#cf7088); box-shadow:.3cqw .4cqw 0 rgba(0,0,0,.35); cursor:grab; }
   .note b:active{ cursor:grabbing; }
   .note span{ display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; word-break:break-word; pointer-events:none; }
+  /* trash a post-it (shown on the expanded board) */
+  .note .del{ display:none; position:absolute; top:4%; right:4%; width:16%; aspect-ratio:1; max-width:22px; max-height:22px; background:rgba(40,30,25,.45); color:#fff; border-radius:50%; place-items:center; font-style:normal; font-size:11px; line-height:1; cursor:pointer; z-index:6; }
+  #bigBoard .note .del{ display:grid; } .note .del:hover{ background:#c0392b; }
   /* pixel speech bubble above the mascot */
   #catBubble{ position:absolute; z-index:30; pointer-events:none; max-width:200px; padding:9px 12px; font-size:12.5px; line-height:1.25; color:#3a2f3a; text-align:center;
     background:#fbf3ea; border:3px solid #3a2f3a; image-rendering:pixelated; opacity:0; transform:translate(-50%,6px); transition:opacity .18s, transform .18s;
@@ -196,7 +199,12 @@
   .pp2{ display:none; } .pp2.on{ display:block; } .pp1.off{ display:none; }
   #brainP .pc{ width:min(440px,90vw); padding:24px; } #brainP h3{ font-size:18px; margin-bottom:5px; } #brainP p{ font-size:12px; color:var(--faint); margin-bottom:14px; }
   #brainP input{ width:100%; background:rgba(8,12,20,.6); border:1px solid rgba(160,180,200,.2); border-radius:13px; padding:13px 15px; color:var(--text); font:inherit; font-size:14px; }
-  #brainPile{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; max-height:150px; overflow:auto; } .pn{ font-size:12px; padding:9px 12px; border-radius:9px; color:#2a2418; }
+  #brainPile{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; max-height:150px; overflow:auto; } .pn{ font-size:12px; padding:9px 12px; border-radius:9px; color:#2a2418; display:inline-flex; align-items:center; gap:7px; }
+  .pn .pndel{ cursor:pointer; opacity:.45; font-style:normal; font-size:11px; } .pn .pndel:hover{ opacity:1; color:#a3271f; }
+  /* phone feed posts */
+  .tw{ background:rgba(255,255,255,.05); border-radius:12px; padding:11px 13px; margin-bottom:9px; font-size:13px; color:var(--soft); line-height:1.35; }
+  .tw .twh{ display:flex; align-items:center; } .tw .twh b{ color:var(--text); } .tw .twx{ margin-left:auto; cursor:pointer; color:var(--faint); font-size:12px; padding:1px 6px; border-radius:6px; } .tw .twx:hover{ background:rgba(255,90,130,.2); color:var(--sakura); }
+  .tw .twt{ margin-top:3px; white-space:pre-wrap; word-break:break-word; } .tw .twimg{ margin-top:8px; max-width:100%; border-radius:10px; display:block; }
   #brainP .row{ display:flex; gap:9px; margin-top:14px; } #brainP button{ flex:1; border:none; border-radius:13px; padding:12px; font:inherit; font-size:13px; cursor:pointer; } #brainP .a{ background:var(--sakura); color:#2a1820; font-weight:700; } #brainP .c{ background:rgba(255,255,255,.07); color:var(--soft); }
   /* expanded corkboard */
   #boardP .pc{ width:auto; max-width:92vw; padding:18px 20px 16px; }
@@ -275,7 +283,8 @@
   <div class="pop" id="phoneP"><div class="pc" style="width:min(320px,82vw);height:min(620px,86vh);border-radius:34px;padding:24px 18px;display:flex;flex-direction:column"><span class="px2" data-close>✕</span>
     <h3 style="color:var(--sage);margin:4px 4px 12px">🐦 my feed</h3>
     <div id="phoneFeed" style="flex:1;overflow:auto"></div>
-    <div style="display:flex;gap:7px;margin-top:8px"><textarea id="twIn" placeholder="what's on your mind?" style="flex:1;height:42px;resize:none;background:rgba(8,12,20,.6);border:1px solid rgba(160,180,200,.2);border-radius:12px;color:var(--text);font:inherit;font-size:13px;padding:10px"></textarea><button id="twPost" style="background:var(--sage);color:#16241a;border:none;border-radius:12px;padding:0 15px;font-weight:700;cursor:pointer">post</button></div>
+    <div id="twPreview" style="display:none;position:relative;margin-top:8px"><img id="twPreviewImg" style="max-width:100%;max-height:120px;border-radius:10px;display:block"><span id="twPreviewX" style="position:absolute;top:5px;right:5px;background:rgba(0,0,0,.6);color:#fff;border-radius:50%;width:22px;height:22px;display:grid;place-items:center;cursor:pointer;font-size:12px">✕</span></div>
+    <div style="display:flex;gap:7px;margin-top:8px;align-items:stretch"><textarea id="twIn" placeholder="what's on your mind?" style="flex:1;height:42px;resize:none;background:rgba(8,12,20,.6);border:1px solid rgba(160,180,200,.2);border-radius:12px;color:var(--text);font:inherit;font-size:13px;padding:10px"></textarea><button id="twAttach" title="attach image" style="background:rgba(255,255,255,.07);color:var(--soft);border:1px solid rgba(160,180,200,.2);border-radius:12px;padding:0 12px;font-size:16px;cursor:pointer">📎</button><button id="twPost" style="background:var(--sage);color:#16241a;border:none;border-radius:12px;padding:0 15px;font-weight:700;cursor:pointer">post</button><input id="twFile" type="file" accept="image/*" hidden></div>
   </div></div>
   <div class="pop" id="brainP"><div class="pc"><span class="px2" data-close>✕</span><h3>🗒️ brain dump</h3><p>catch a thought — it lands on your board</p>
     <input id="brainIn" placeholder="type anything…" maxlength="60"><div id="brainPile"></div>
@@ -539,10 +548,29 @@ document.querySelectorAll('#dGroupBar button').forEach(b=>{ b.classList.toggle('
 
 /* feed + brain */
 let feed=JSON.parse(localStorage.getItem('aq_feed')||'null')||['building a desk for my brain 🪴','the bettas judge my list','iced coffee #4 ✦'];
-function renderFeed(){ const f=document.getElementById('phoneFeed'); if(f) f.innerHTML=feed.map(t=>`<div style="background:rgba(255,255,255,.05);border-radius:12px;padding:11px 13px;margin-bottom:9px;font-size:13px;color:var(--soft);line-height:1.35"><b style="color:var(--text)">me</b><br>${t.replace(/</g,'&lt;')}</div>`).join('');
-  const m=document.getElementById('phMini'); if(m) m.innerHTML=feed.slice(0,6).map(t=>`<div class="pm">${t.replace(/</g,'&lt;')}</div>`).join(''); }
-document.getElementById('twPost').onclick=()=>{ const v=twIn.value.trim(); if(v){ feed.unshift(v); if(feed.length>20)feed.pop(); localStorage.setItem('aq_feed',JSON.stringify(feed)); renderFeed(); twIn.value=''; } };
+// posts can be a plain string (legacy) or {t:text, img:dataURL}
+const ptext=p=>typeof p==='string'?p:(p&&p.t||''); const pimg=p=>typeof p==='string'?'':(p&&p.img||'');
+function saveFeed(){ try{ localStorage.setItem('aq_feed',JSON.stringify(feed)); }
+  catch(e){ while(feed.length>3){ feed.pop(); try{ localStorage.setItem('aq_feed',JSON.stringify(feed)); toast('storage full — trimmed old posts'); return; }catch(e2){} } } }
+function renderFeed(){ const f=document.getElementById('phoneFeed');
+  if(f) f.innerHTML=feed.map((p,i)=>{ const t=esc(ptext(p)),im=pimg(p);
+    return `<div class="tw"><div class="twh"><b>me</b><span class="twx" data-del="${i}" title="delete">✕</span></div>${t?`<div class="twt">${t}</div>`:''}${im?`<img class="twimg" src="${im}">`:''}</div>`; }).join('');
+  const m=document.getElementById('phMini'); if(m) m.innerHTML=feed.slice(0,6).map(p=>{ const t=ptext(p),im=pimg(p); return `<div class="pm">${im?'📷 ':''}${esc(t)||'photo'}</div>`; }).join(''); }
 const twIn=document.getElementById('twIn');
+let pendingImg=null;
+// downscale + JPEG-compress so images stay small in localStorage
+function resizeImage(file,maxDim,quality){ return new Promise((res,rej)=>{ const fr=new FileReader();
+  fr.onload=()=>{ const img=new Image(); img.onload=()=>{ let w=img.naturalWidth,h=img.naturalHeight; const s=Math.min(1,maxDim/Math.max(w,h)); w=Math.max(1,Math.round(w*s)); h=Math.max(1,Math.round(h*s));
+    const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); res(c.toDataURL('image/jpeg',quality)); }; img.onerror=rej; img.src=fr.result; }; fr.onerror=rej; fr.readAsDataURL(file); }); }
+const twFile=document.getElementById('twFile');
+document.getElementById('twAttach').onclick=()=>twFile&&twFile.click();
+if(twFile) twFile.onchange=()=>{ const file=twFile.files&&twFile.files[0]; twFile.value=''; if(!file)return;
+  resizeImage(file,640,0.72).then(d=>{ pendingImg=d; const pv=document.getElementById('twPreview'); document.getElementById('twPreviewImg').src=d; pv.style.display='block'; }).catch(()=>toast('couldn’t read that image')); };
+function clearPending(){ pendingImg=null; const pv=document.getElementById('twPreview'); if(pv)pv.style.display='none'; }
+document.getElementById('twPreviewX').onclick=clearPending;
+document.getElementById('twPost').onclick=()=>{ const v=twIn.value.trim(); if(!v&&!pendingImg)return;
+  feed.unshift(pendingImg?{t:v,img:pendingImg}:{t:v}); if(feed.length>20)feed.pop(); saveFeed(); renderFeed(); twIn.value=''; clearPending(); };
+document.getElementById('phoneFeed').addEventListener('click',e=>{ const d=e.target.closest('[data-del]'); if(!d)return; feed.splice(+d.dataset.del,1); saveFeed(); renderFeed(); });
 const NCOL=['#f3dbe2','#dfeadb','#e2dff2','#f5ead3','#f7e0c4','#d9e8f0']; const brainIn=document.getElementById('brainIn'); const MAXNOTES=11;
 // tuned scatter slots across the cork — natural spread, minimal overlap; new notes take the next open slot
 const NOTEPOS=[[10,8],[40,6],[62,13],[11,31],[38,29],[61,33],[20,53],[46,51],[12,65],[40,63],[62,57]];
@@ -551,13 +579,16 @@ function mkNote(t){ const p=NOTEPOS[noteSlot++ % NOTEPOS.length]; return {t, c:N
 let notes=(()=>{ const raw=JSON.parse(localStorage.getItem('aq_notes')||'null'); if(raw) return raw.map(n=> typeof n==='string'?mkNote(n):(n.x==null?mkNote(n.t):n));
   return ['drink water 🚰','study w/ friends?','koi tiktok 🐟','save that song'].map(mkNote); })();
 function saveNotes(){ localStorage.setItem('aq_notes',JSON.stringify(notes)); }
-function renderPile(){ document.getElementById('brainPile').innerHTML=notes.map((n,i)=>`<span class="pn" style="background:${n.c}">${n.t.replace(/</g,'&lt;')}</span>`).join(''); }
+function renderPile(){ const el=document.getElementById('brainPile'); el.innerHTML=notes.map((n,i)=>`<span class="pn" style="background:${n.c}">${n.t.replace(/</g,'&lt;')}<u class="pndel" data-i="${i}" title="trash">✕</u></span>`).join('');
+  el.querySelectorAll('.pndel').forEach(x=>x.onclick=e=>{ e.stopPropagation(); trashNote(notes[+x.dataset.i]); }); }
+function trashNote(n){ const i=notes.indexOf(n); if(i<0)return; notes.splice(i,1); saveNotes(); renderPile(); reRenderBoards(); }
 function bringFront(n){ const i=notes.indexOf(n); if(i>0){ notes.splice(i,1); notes.unshift(n); } }
 // one draggable sticky — pin = move handle, click anywhere = bring to forefront; positions are % of host
 function makeNoteEl(n,i,host){ const d=document.createElement('div'); d.className='note';
   d.style.cssText=`left:${n.x}%;top:${n.y}%;background:${n.c};z-index:${50-i};--r:${n.r}deg`;
-  d.innerHTML=`<b></b><span>${n.t.replace(/</g,'&lt;')}</span>`;
+  d.innerHTML=`<b></b><i class="del" title="trash">✕</i><span>${n.t.replace(/</g,'&lt;')}</span>`;
   d.addEventListener('click',ev=>ev.stopPropagation());
+  d.querySelector('.del').addEventListener('pointerdown',ev=>{ ev.stopPropagation(); ev.preventDefault(); trashNote(n); });
   d.addEventListener('pointerdown',ev=>{ ev.stopPropagation(); bringFront(n); d.style.zIndex=999; saveNotes(); });
   const pin=d.querySelector('b');
   pin.addEventListener('pointerdown',ev=>{ ev.preventDefault(); const r=host.getBoundingClientRect(), sx=ev.clientX, sy=ev.clientY, ox=n.x, oy=n.y; d.classList.add('grab'); pin.setPointerCapture(ev.pointerId);
@@ -831,10 +862,11 @@ async function loadWx(){ try{ const r=await fetch('https://api.open-meteo.com/v1
 /* clocks — 7-segment LED time + 3x5 pixel-font date */
 const SEG={a:[1,0,2,1],f:[0,1,1,2],b:[3,1,1,2],g:[1,3,2,1],e:[0,4,1,2],c:[3,4,1,2],d:[1,6,2,1]};
 const DIG={'0':'abcdef','1':'bc','2':'abged','3':'abgcd','4':'fgbc','5':'afgcd','6':'afgecd','7':'abc','8':'abcdefg','9':'abcdfg'};
-function drawClockPx(str){ const cv=document.getElementById('clkPx'); if(!cv)return;
+let clkColonOn=true, clkHM='';   // colon blinks once a second to show time passing
+function drawClockPx(str,colonOn){ const cv=document.getElementById('clkPx'); if(!cv)return; if(colonOn===undefined)colonOn=true;
   let w=0; for(const ch of str) w+=(ch===':'?1:4)+1; w=Math.max(1,w-1);
   cv.width=w; cv.height=7; const c=cv.getContext('2d'); c.clearRect(0,0,w,7); c.imageSmoothingEnabled=false; c.fillStyle='#dff1ff';
-  let x=0; for(const ch of str){ if(ch===':'){ c.fillRect(x,2,1,1); c.fillRect(x,4,1,1); x+=2; continue; }
+  let x=0; for(const ch of str){ if(ch===':'){ if(colonOn){ c.fillRect(x,2,1,1); c.fillRect(x,4,1,1); } x+=2; continue; }
     for(const s of (DIG[ch]||DIG['0'])){ const r=SEG[s]; c.fillRect(x+r[0],r[1],r[2],r[3]); } x+=5; } }
 // compact 3x5 uppercase pixel font for the date line
 const F35={'A':'010101111101101','B':'110101110101110','C':'011100100100011','D':'110101101101110','E':'111100110100111','F':'111100110100100','G':'011100101101011','H':'101101111101101','I':'111010010010111','J':'001001001101010','K':'101101110101101','L':'100100100100111','M':'101111111101101','N':'101111111111101','O':'010101101101010','P':'110101110100100','R':'110101110101101','S':'011100010001110','T':'111010010010010','U':'101101101101111','V':'101101101101010','W':'101101111111101','Y':'101101010010010','0':'111101101101111','1':'010110010010111','2':'111001111100111','3':'111001111001111','4':'101101111001001','5':'111100111001111','6':'111100111101111','7':'111001010100100','8':'111101111101111','9':'111101111001111',' ':'000000000000000',',':'000000000010100',':':'000010000010000'};
@@ -843,12 +875,13 @@ function drawDatePx(str){ const cv=document.getElementById('clkDate'); if(!cv)re
   cv.width=w; cv.height=5; const c=cv.getContext('2d'); c.clearRect(0,0,w,5); c.imageSmoothingEnabled=false; c.fillStyle='#bfe6ff';
   let x=0; for(const ch of str){ const g=F35[ch]; if(!g){ x+=4; continue; } for(let r=0;r<5;r++)for(let i=0;i<3;i++){ if(g[r*3+i]==='1') c.fillRect(x+i,r,1,1); } x+=4; } }
 function tick(){ const n=new Date(); let h=n.getHours(); const m=String(n.getMinutes()).padStart(2,'0'); const h12=((h+11)%12)+1; const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  const hm=`${h12}:${m}`,ds=n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}); drawClockPx(hm); drawDatePx(ds); set('pT',hm); set('pD',n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}));
+  const hm=`${h12}:${m}`,ds=n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}); clkHM=hm; drawClockPx(hm,clkColonOn); drawDatePx(ds); set('pT',hm); set('pD',n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}));
   const g=(h<5?'still up':h<12?'good morning':h<17?'good afternoon':'good evening')+', antonio'; set('mHi',g); set('dHi',g); set('sGreet',g);
   const dl=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}); set('sDate',dl); set('dDate2',dl); }
 
 function loop(){ requestAnimationFrame(loop); T+=0.016; drawSky(); drawFx();
   const k=document.getElementById('catKao'); if(k){ const blink=(T%4)>3.9; k.textContent=blink?'(=˘ω˘=)':(KAO[catExpr]||KAO.idle); }
+  const cOn=(Date.now()%1000)<500; if(cOn!==clkColonOn){ clkColonOn=cOn; if(clkHM) drawClockPx(clkHM,cOn); }   // blink the clock colon each second
   drawTank();
 }
 
