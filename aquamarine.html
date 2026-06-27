@@ -56,6 +56,12 @@
   .phtwmini.on{ display:block; } #phnTwMiniIn{ width:220px; transform-origin:0 0; }
   .twfb{ display:block; padding:14px; font-size:12px; color:var(--soft); text-align:center; }
   a.twfb{ color:var(--cyan); text-decoration:none; }
+  a.twitter-timeline{ position:absolute; left:-9999px; opacity:0; height:0; overflow:hidden; }  /* hide raw anchor; widgets.js still processes it */
+  .twcard{ padding:26px 18px; text-align:center; color:var(--soft); }
+  .twcard .av{ width:48px; height:48px; border-radius:50%; background:#11161d; display:grid; place-items:center; margin:6px auto 12px; font-size:23px; color:#eaf6ff; border:1px solid rgba(255,255,255,.1); }
+  .twcard .h{ font-size:15px; font-weight:700; color:var(--text); } .twcard .u{ font-size:12.5px; color:var(--faint); margin-top:2px; }
+  .twcard .ob{ display:inline-block; margin-top:15px; background:#eaf6ff; color:#0b1320; font-weight:700; font-size:13px; padding:9px 17px; border-radius:11px; text-decoration:none; }
+  .twcard .nt{ font-size:11px; color:var(--faint); margin-top:13px; line-height:1.45; max-width:230px; margin-left:auto; margin-right:auto; }
   .phtabs{ display:flex; gap:6px; margin:2px 4px 12px; }
   .phtab{ flex:1; border:none; border-radius:11px; padding:9px; font:inherit; font-size:12.5px; cursor:pointer; background:rgba(255,255,255,.06); color:var(--soft); }
   .phtab.on{ background:var(--sage); color:#16241a; font-weight:700; }
@@ -429,13 +435,15 @@ function loadTw(){ if(twP)return twP; twP=new Promise((res,rej)=>{ if(window.twt
   const s=document.createElement('script'); s.src='https://platform.twitter.com/widgets.js'; s.async=true; s.charSet='utf-8';
   s.onload=()=>res(); s.onerror=()=>rej(); document.head.appendChild(s);
   setTimeout(()=>{ (window.twttr&&twttr.widgets)?res():rej(new Error('tw timeout')); },9000); }); return twP; }
-function twLink(){ return `<a class="twfb" href="https://x.com/${TW_USER}" target="_blank" rel="noopener">open @${TW_USER} on 𝕏 ↗</a>`; }
+function twCard(){ return `<div class="twcard" data-fb><div class="av">𝕏</div><div class="h">@${TW_USER}</div><div class="u">on X</div>`+
+  `<a class="ob" href="https://x.com/${TW_USER}" target="_blank" rel="noopener">open on X ↗</a>`+
+  `<div class="nt">the live timeline shows here when you're signed into X in this browser ♡</div></div>`; }
 function twAnchor(opts){ const w=opts.width?` data-width="${opts.width}"`:'',h=opts.height?` data-height="${opts.height}"`:'';
   return `<a class="twitter-timeline" data-theme="dark" data-chrome="nofooter noborders transparent" data-dnt="true"${w}${h} href="https://twitter.com/${TW_USER}?ref_src=twsrc%5Etfw">Posts by @${TW_USER}</a>`; }
 function renderTwInto(el,opts){ if(!el||el.dataset.tw==='1')return; el.dataset.tw='1';
-  el.innerHTML=twAnchor(opts)+'<div class="twfb" data-fb>opening 𝕏 timeline…</div>';
-  loadTw().then(()=>twttr.ready(()=>twttr.widgets.load(el))).catch(()=>{ el.innerHTML=twLink(); });
-  setTimeout(()=>{ if(el.dataset.tw!=='1')return; if(el.querySelector('iframe')){ const fb=el.querySelector('[data-fb]'); if(fb)fb.remove(); } else el.innerHTML=twLink(); }, 7000); }
+  el.innerHTML=twCard()+twAnchor(opts);
+  loadTw().then(()=>twttr.ready(()=>twttr.widgets.load(el))).catch(()=>{});
+  let tries=0; const iv=setInterval(()=>{ if(el.querySelector('iframe')){ const fb=el.querySelector('[data-fb]'); if(fb)fb.remove(); clearInterval(iv); } else if(++tries>14) clearInterval(iv); },700); }
 function scaleTwMini(){ const ph=E.phone, inn=document.getElementById('phnTwMiniIn'); if(!ph||!inn)return; const s=Math.max(.1,ph.clientWidth/220); inn.style.transform=`scale(${s})`; }
 let phoneMode=localStorage.getItem('aq_phmode')||'feed';
 function applyPhoneTabs(){ document.querySelectorAll('.phtab').forEach(b=>b.classList.toggle('on',b.dataset.pm===phoneMode)); }
