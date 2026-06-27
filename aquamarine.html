@@ -188,7 +188,7 @@
   .nfopt.on{ background:var(--sakura); color:#2a1820; border-color:transparent; font-weight:600; } .nfclear{ font-size:11.5px; color:var(--faint); background:none; border:none; cursor:pointer; padding:2px 0; text-decoration:underline; }
   .ntbl th.sortable{ cursor:pointer; user-select:none; } .ntbl th.sortable:hover{ color:var(--soft); }
   .ndate em{ display:block; font-style:normal; font-size:10px; color:var(--faint); margin-top:1px; }
-  .ntbl td.note{ max-width:170px; cursor:pointer; } .ntbl td.note span{ display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; } .ntbl td.note.open span{ -webkit-line-clamp:unset; }
+  .ntbl td.note{ cursor:pointer; } .ntbl td.note span{ display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; max-width:230px; } .ntbl td.note.open span{ -webkit-line-clamp:999; }
   .ntbl .ncheck{ cursor:pointer; }
   .ntbl tr.do-today td{ background:rgba(143,180,230,.14); } .ntbl tr.do-today td.title{ box-shadow:inset 3px 0 0 #8fb4e6; } .ntbl tr.do-today:hover td{ background:rgba(143,180,230,.2); }
   .ntbl tr.due-today td{ background:rgba(232,154,108,.16); } .ntbl tr.due-today td.title{ box-shadow:inset 3px 0 0 var(--koi); } .ntbl tr.due-today:hover td{ background:rgba(232,154,108,.22); }
@@ -677,7 +677,8 @@ function nRel(v){ const d=parseND(v&&v.start); if(!d)return ''; const n=new Date
 function colRank(c){ const n=(c.name||'').toLowerCase(); if(c.type==='title')return 0;
   if(/course|class|subject/.test(n))return 1; if(/categor|type|tag/.test(n))return 2;
   if(/do\s*date|^do$|start/.test(n))return 3; if(/due|deadline|^end$/.test(n))return 4;
-  if(/done|complete|status/.test(n))return 5; if(/note|descr|detail/.test(n))return 9; return 6; }
+  if(/done|complete|status/.test(n))return 5; if(/note|descr|detail/.test(n))return 6; return 7; }
+const isNoteCol=c=>/note|descr|detail/.test((c.name||'').toLowerCase());
 function orderedCols(d){ return d.columns.map((c,i)=>({c,i})).sort((a,b)=>(colRank(a.c)-colRank(b.c))||(a.i-b.i)).map(x=>x.c); }
 function findCol(d,re){ return d.columns.find(c=>re.test((c.name||'').toLowerCase())); }
 let NVIEW=(()=>{ try{ return JSON.parse(localStorage.getItem('aq_notion_view')||'{}'); }catch(e){ return {}; } })();
@@ -716,7 +717,7 @@ function renderNotionTable(d){ const v=viewOf(d.id); const cols=orderedCols(d);
   const rows=visibleRows(d);
   const body=rows.map(r=>{ const doT=doCol&&nIsToday(r.cells[doCol.name]&&r.cells[doCol.name].v), dueT=dueCol&&nIsToday(r.cells[dueCol.name]&&r.cells[dueCol.name].v);
     const rc=dueT?'due-today':doT?'do-today':'';
-    return `<tr class="${rc}" data-pid="${esc(r.id)}"${doT?' data-dotoday="1"':''}>`+cols.map(c=>`<td class="${c.type==='title'?'title':''}${colRank(c)===9?' note':''}">${cellHTML(r.cells[c.name],c)}</td>`).join('')+'</tr>'; }).join('');
+    return `<tr class="${rc}" data-pid="${esc(r.id)}"${doT?' data-dotoday="1"':''}>`+cols.map(c=>`<td class="${c.type==='title'?'title':''}${isNoteCol(c)?' note':''}">${cellHTML(r.cells[c.name],c)}</td>`).join('')+'</tr>'; }).join('');
   const filtCols=cols.filter(c=>(c.type==='select'||c.type==='status')&&/course|class|categor|type|tag/.test((c.name||'').toLowerCase()));
   const nFilt=Object.values(v.filt).reduce((a,arr)=>a+((arr&&arr.length)||0),0);
   const menu=filtCols.map(c=>{ const sel=v.filt[c.name]||[]; return `<div class="nfsec"><div class="nfh">${esc(c.name)}</div><div class="nfopts">`+
@@ -727,6 +728,7 @@ function renderNotionTab(){ const host=document.getElementById('dNotion'); if(!h
   if(!API.url||!API.key){ host.innerHTML=`<div class="nempty">connect your worker first — tap 🔗 connect data</div>`; return; }
   if(!NOTION.pages.length){ host.innerHTML=`<div class="nempty">no databases yet — add them in 🔗 connect data</div>`; return; }
   const active=(monSource!=='ticktick'&&NOTION.pages.some(p=>p.id===monSource))?monSource:NOTION.pages[0].id;
+  if(monSource!==active){ monSource=active; localStorage.setItem('aq_mon_source',active); renderMon(); }   // viewing the Notion tab = this is now the active source
   const chips=NOTION.pages.map(p=>`<button class="nchip-pick${p.id===active?' on':''}" data-id="${esc(p.id)}">${esc(p.title||'database')}</button>`).join('');
   const wire=()=>host.querySelectorAll('.nchip-pick').forEach(b=>b.onclick=()=>{ nFilterOpen=false; setMonSource(b.dataset.id); renderNotionTab(); });
   const d=notionCache[active];
@@ -735,7 +737,8 @@ function renderNotionTab(){ const host=document.getElementById('dNotion'); if(!h
       .catch(e=>{ const h=document.getElementById('dNotion'); if(h) h.innerHTML=`<div class="npick">${chips}</div><div class="nempty">✕ ${esc(e&&e.message||String(e))}</div>`; }); return; }
   host.innerHTML=`<div class="npick">${chips}</div>`+renderNotionTable(d); wire(); attachTableHandlers(host,d,active); }
 function attachTableHandlers(host,d,active){ const v=viewOf(d.id);
-  host.querySelectorAll('.ntbl th.sortable').forEach(th=>th.onclick=()=>{ const col=th.dataset.sort; if(v.sort===col)v.dir=-v.dir; else { v.sort=col; v.dir=1; } saveView(); renderNotionTab(); });
+  host.querySelectorAll('.ntbl th.sortable').forEach(th=>th.onclick=()=>{ const col=th.dataset.sort;   // 3-click cycle: ascending → descending → off
+    if(v.sort!==col){ v.sort=col; v.dir=1; } else if(v.dir===1){ v.dir=-1; } else { v.sort=null; v.dir=1; } saveView(); renderNotionTab(); });
   host.querySelectorAll('.ntbl td.note').forEach(td=>td.onclick=()=>td.classList.toggle('open'));
   host.querySelectorAll('.ntbl .ncheck[data-prop]').forEach(ck=>ck.onclick=async e=>{ e.stopPropagation(); const tr=ck.closest('tr'); const pid=tr.dataset.pid,prop=ck.dataset.prop; const cur=ck.classList.contains('on'),nv=!cur;
     ck.classList.toggle('on',nv); ck.textContent=nv?'✓':''; const row=d.rows.find(r=>r.id===pid); if(row&&row.cells[prop])row.cells[prop].v=nv;
