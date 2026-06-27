@@ -37,7 +37,14 @@ Wrangler prints your worker URL, e.g. `https://aquamarine-data.<you>.workers.dev
 The key lives only in *your* browser (localStorage), never in the repo — so the
 public page shows the cozy room to everyone, but your tasks only to you.
 
-### 5. (optional) Lock it down further
+### 5. (optional) Connect Notion
+Show your Notion databases on the monitor too.
+1. Create an **internal integration**: <https://www.notion.so/my-integrations> → **New integration** → copy the *Internal Integration Secret*.
+2. Add it as a worker secret named **`NOTION_TOKEN`** (dashboard: *Settings → Variables → Add → Encrypt*, or `wrangler secret put NOTION_TOKEN`). Redeploy.
+3. **Share each database with the integration**: open the database in Notion → top-right **•••** → **Connections** → add your integration. (The API only sees pages you share with it.)
+4. In Aquamarine → **🔗 connect data** → **📓 Notion databases → load mine**, then tick the ones to show. Pick the active one in the monitor's **Notion** tab; the mini desk monitor mirrors your last choice.
+
+### 6. (optional) Lock it down further
 - In `wrangler.toml`, set `ALLOW_ORIGIN` to your Pages origin
   (e.g. `https://atonioguy.github.io`) and `wrangler deploy` again.
 - For full login-gating, put the worker behind **Cloudflare Access** (free).
@@ -48,5 +55,7 @@ All require the header `x-aq-key: <AQ_KEY>`.
 - `GET  /ticktick` → `{ tasks: [{id, title, due, allDay, priority, project, projectId}], ts }`
 - `POST /ticktick/complete` — body `{ id, projectId }` → marks the task done in TickTick.
 - `POST /ticktick/reopen` — body `{ id, projectId, title }` → undoes a completion (sets status back to open).
+- `GET  /notion/list` → `{ databases: [{id, title, url}] }` — databases shared with your integration. *(needs `NOTION_TOKEN`)*
+- `GET  /notion?id=<db id or url>` → `{ title, columns:[{name,type}], rows:[{id, cells:{col:{t,v}}}] }` — one database, normalized. *(needs `NOTION_TOKEN`)*
 
-The dashboard's Today view uses these to check tasks off (grouped by class) with an undo toast.
+The dashboard's Today view uses the TickTick routes to check tasks off (grouped by class) with an undo toast; the Notion tab renders the selected database's table.

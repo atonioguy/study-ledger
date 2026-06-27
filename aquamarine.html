@@ -47,6 +47,9 @@
   .mon .odh{ font-size:4.3cqh; letter-spacing:.1em; text-transform:uppercase; color:var(--koi); margin:1.6cqh 0 .7cqh; opacity:.9; }
   .mon .t.od{ opacity:.82; } .mon .t.od .tm{ color:var(--koi); }
   .dotk{background:var(--koi)} .dotl{background:var(--lav)} .doth{background:var(--sage)}
+  /* notion compact row chip on the monitor */
+  .mon .nm-chip{ margin-left:auto; font-size:4.2cqh; color:var(--soft); display:flex; align-items:center; gap:1.2cqw; flex:none; max-width:36cqw; overflow:hidden; white-space:nowrap; }
+  .mon .nm-chip i{ width:2.6cqh; height:2.6cqh; border-radius:50%; flex:none; }
 
   /* phone — custom feed, multiple posts visible */
   .phn{ position:relative; width:100%; height:100%; padding:6cqh 7cqw; box-sizing:border-box; display:flex; flex-direction:column; gap:2cqh; background:linear-gradient(180deg,#101a2a,#0a121f); overflow:hidden; }
@@ -161,6 +164,21 @@
   #toast.on{ opacity:1; pointer-events:auto; transform:translate(-50%,0); }
   #toast span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:60vw; }
   #toast button{ background:var(--sakura); color:#2a1820; border:none; border-radius:9px; padding:6px 13px; font:inherit; font-weight:700; font-size:12px; cursor:pointer; flex:none; }
+  /* notion table (expanded view) */
+  .npick{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:13px; }
+  .nchip-pick{ font-size:12px; padding:7px 13px; border-radius:10px; cursor:pointer; background:rgba(255,255,255,.05); color:var(--soft); border:1px solid rgba(255,255,255,.08); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .nchip-pick.on{ background:var(--sakura); color:#2a1820; border-color:transparent; font-weight:600; }
+  .ntbl-wrap{ overflow:auto; max-height:60vh; border:1px solid rgba(255,255,255,.08); border-radius:12px; }
+  .ntbl{ border-collapse:collapse; width:100%; font-size:12.5px; }
+  .ntbl th{ position:sticky; top:0; background:#16223a; text-align:left; font-weight:600; color:var(--faint); font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; padding:8px 11px; white-space:nowrap; border-bottom:1px solid rgba(255,255,255,.1); }
+  .ntbl td{ padding:8px 11px; border-bottom:1px solid rgba(255,255,255,.05); color:var(--soft); vertical-align:top; max-width:240px; }
+  .ntbl td.title{ color:var(--text); font-weight:500; } .ntbl tr:hover td{ background:rgba(255,255,255,.025); }
+  .nchip{ display:inline-flex; align-items:center; gap:5px; font-size:11px; padding:2px 9px; border-radius:20px; background:rgba(255,255,255,.07); white-space:nowrap; }
+  .nchip i{ width:7px; height:7px; border-radius:50%; flex:none; }
+  .ncheck{ display:inline-grid; place-items:center; width:17px; height:17px; border:1.6px solid var(--faint); border-radius:5px; font-size:11px; color:#16241a; }
+  .ncheck.on{ background:var(--sage); border-color:var(--sage); }
+  .nfoot{ font-size:11px; color:var(--faint); margin-top:10px; } .nempty{ color:var(--faint); font-size:13.5px; padding:18px 4px; text-align:center; }
+  .nrow{ display:flex; align-items:center; gap:9px; cursor:pointer; color:var(--soft); } .nrow input{ accent-color:var(--sakura); width:15px; height:15px; flex:none; }
   .pp2{ display:none; } .pp2.on{ display:block; } .pp1.off{ display:none; }
   #brainP .pc{ width:min(440px,90vw); padding:24px; } #brainP h3{ font-size:18px; margin-bottom:5px; } #brainP p{ font-size:12px; color:var(--faint); margin-bottom:14px; }
   #brainP input{ width:100%; background:rgba(8,12,20,.6); border:1px solid rgba(160,180,200,.2); border-radius:13px; padding:13px 15px; color:var(--text); font:inherit; font-size:14px; }
@@ -237,7 +255,7 @@
     <div class="dtabs"><div class="dtab on" data-p="0">Today</div><div class="dtab" data-p="1">Notion</div><div class="dtab" data-p="2">Inbox</div></div>
     <div class="dgrp" id="dGroupBar"><span class="gl">group</span><button data-g="class" class="on">by class</button><button data-g="time">by time</button></div>
     <div class="pp1" id="dBig"></div>
-    <div class="pp2"><div class="bt"><span class="ck"></span><span class="tx">Research project — outline draft</span><span class="lb">thesis</span></div><div class="bt"><span class="ck"></span><span class="tx">Reading log — 3 articles</span><span class="lb">study</span></div></div>
+    <div class="pp2"><div id="dNotion"></div></div>
     <div class="pp2"><div class="bt"><span class="ck" style="border-radius:50%"></span><span class="tx">UNTHSC Registrar — enrollment Mon</span></div><div class="bt"><span class="ck" style="border-radius:50%"></span><span class="tx">Anatomy TA — reply by Fri</span></div></div>
   </div></div>
   <div class="pop" id="phoneP"><div class="pc" style="width:min(320px,82vw);height:min(620px,86vh);border-radius:34px;padding:24px 18px;display:flex;flex-direction:column"><span class="px2" data-close>✕</span>
@@ -265,6 +283,11 @@
     <input id="apiKey" placeholder="your AQ_KEY" style="width:100%;box-sizing:border-box;background:rgba(8,12,20,.6);border:1px solid rgba(160,180,200,.2);border-radius:12px;padding:12px 14px;color:var(--text);font:inherit;font-size:13px">
     <div style="display:flex;gap:9px;margin-top:14px"><button id="apiSave" style="flex:1;border:none;border-radius:12px;padding:12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;background:var(--sakura);color:#2a1820">save ✦</button><button data-close style="flex:1;border:none;border-radius:12px;padding:12px;font:inherit;font-size:13px;cursor:pointer;background:rgba(255,255,255,.07);color:var(--soft)">close</button></div>
     <div id="apiStatus" style="font-size:11.5px;color:var(--faint);margin-top:11px;min-height:14px"></div>
+    <div id="notionSetup" style="margin-top:16px;border-top:1px solid rgba(255,255,255,.09);padding-top:14px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><b style="font-size:13.5px">📓 Notion databases</b><button id="notionLoad" style="margin-left:auto;background:rgba(255,255,255,.07);color:var(--soft);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:7px 12px;font:inherit;font-size:12px;cursor:pointer">load mine</button></div>
+      <p style="font-size:11px;color:var(--faint);margin-bottom:9px;line-height:1.5">share a database with your Notion integration, then “load mine” and tick the ones to show on the monitor.</p>
+      <div id="notionPick" style="display:flex;flex-direction:column;gap:7px;max-height:170px;overflow:auto;font-size:12.5px;color:var(--faint)">connect your worker, then “load mine”.</div>
+    </div>
   </div></div>
 
 <script>
@@ -378,7 +401,9 @@ function fmtDue(iso,allDay){ if(!iso)return '—'; const d=new Date(iso); if(isN
   if(allDay)return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toLowerCase();
   let h=d.getHours(); const m=String(d.getMinutes()).padStart(2,'0'),ap=h<12?'a':'p'; h=((h+11)%12)+1; return `${h}:${m}${ap}`; }
 const prioCat=p=>p>=5?'h':p>=3?'k':'l';
-function renderMon(){ const ui=E.monitor&&E.monitor.querySelector('#monUI'); if(!ui)return; let rows,foot;
+function renderMon(){ const ui=E.monitor&&E.monitor.querySelector('#monUI'); if(!ui)return;
+  if(typeof monSource!=='undefined'&&monSource!=='ticktick'){ ui.innerHTML=renderMonNotion(monSource); return; }
+  let rows,foot;
   if(liveTasks){ const s=new Date(); s.setHours(0,0,0,0); const end=new Date(); end.setHours(23,59,59,999);
     const today=liveTasks.filter(t=>{const d=t.due&&new Date(t.due); return d&&d>=s&&d<=end;}).sort((a,b)=>a.due<b.due?-1:1);
     const od=liveTasks.filter(t=>{const d=t.due&&new Date(t.due); return d&&d<s;}).sort((a,b)=>a.due<b.due?-1:1);
@@ -454,8 +479,9 @@ function openP(id){ if(openId)document.getElementById(openId).classList.remove('
 function closeP(){ if(openId)document.getElementById(openId).classList.remove('on'); openId=null; scrim.classList.remove('on'); }
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeP); scrim.onclick=closeP;
 els.addEventListener('click',e=>{ if(calOn)return; const el=e.target.closest('.el.clk'); if(!el)return; const k=el.dataset.key;
-  if(k==='monitor') openP('dashP'); else if(k==='phone') openP('phoneP'); else if(k==='corkboard'){ renderBigBoard(); openP('boardP'); } else if(k==='notestack') newNote(); else if(k==='calendar'){ renderCalPopup(); openP('calP'); } else if(k==='tomato') openP('focusP'); else if(k==='cat') catSpeak(); });
-document.querySelectorAll('.dtab').forEach(t=>t.onclick=()=>{ document.querySelector('.dtab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p; document.querySelector('.pp1').classList.toggle('off',i!==0); document.querySelectorAll('.pp2').forEach((p,j)=>p.classList.toggle('on',j===i-1)); syncGroupBar(); });
+  if(k==='monitor') openDash(); else if(k==='phone') openP('phoneP'); else if(k==='corkboard'){ renderBigBoard(); openP('boardP'); } else if(k==='notestack') newNote(); else if(k==='calendar'){ renderCalPopup(); openP('calP'); } else if(k==='tomato') openP('focusP'); else if(k==='cat') catSpeak(); });
+document.querySelectorAll('.dtab').forEach(t=>t.onclick=()=>{ document.querySelector('.dtab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p; document.querySelector('.pp1').classList.toggle('off',i!==0); document.querySelectorAll('.pp2').forEach((p,j)=>p.classList.toggle('on',j===i-1)); syncGroupBar();
+  if(i===0) setMonSource('ticktick'); else if(i===1) renderNotionTab(); });
 const CKS=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16241a" stroke-width="3.5"><path d="M5 13l4 4L19 7"/></svg>`;
 function fmtDueShort(iso,allDay){ const d=new Date(iso); if(isNaN(d))return '—'; const now=new Date(),tmr=new Date(now); tmr.setDate(now.getDate()+1);
   const sd=(a,b)=>a.toDateString()===b.toDateString();
@@ -606,13 +632,81 @@ function toast(msg,undoFn){ let el=document.getElementById('toast'); if(!el){ el
   if(undoFn) el.querySelector('button').onclick=()=>{ el.classList.remove('on'); undoFn(); };
   clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'), undoFn?6000:3200); }
 const dataBtn=document.getElementById('dataBtn');
-if(dataBtn) dataBtn.onclick=()=>{ document.getElementById('apiUrl').value=API.url; document.getElementById('apiKey').value=API.key; document.getElementById('apiStatus').textContent=''; openP('dataP'); };
+if(dataBtn) dataBtn.onclick=()=>{ document.getElementById('apiUrl').value=API.url; document.getElementById('apiKey').value=API.key; document.getElementById('apiStatus').textContent=''; renderNotionPick(NOTION.pages.length?NOTION.pages:null); openP('dataP'); };
 const apiSave=document.getElementById('apiSave');
 if(apiSave) apiSave.onclick=async()=>{ API.url=document.getElementById('apiUrl').value.trim(); API.key=document.getElementById('apiKey').value.trim();
   localStorage.setItem('aq_api_url',API.url); localStorage.setItem('aq_api_key',API.key);
   const st=document.getElementById('apiStatus'); st.textContent='connecting…';
   try{ const ok=await loadTickTick(); st.textContent=ok?(liveTasks.length?`✓ connected — ${liveTasks.length} tasks`:'✓ connected — no open tasks'):'enter a URL and key first'; }
   catch(e){ st.textContent='✕ could not connect ('+(e&&e.message||e)+')'; } };
+
+/* ===== Notion (same worker pattern) ===== */
+const NOTION={ pages:(()=>{ try{ return JSON.parse(localStorage.getItem('aq_notion')||'[]'); }catch(e){ return []; } })() };
+let monSource=localStorage.getItem('aq_mon_source')||'ticktick';   // 'ticktick' or a notion db id
+const notionCache={};
+// Notion select colors → cozy palette
+const NCOLOR={ default:'#9fb0bc', gray:'#9aa3ae', brown:'#c0936e', orange:'#e6a96c', yellow:'#dcc878', green:'#8fc7a0', blue:'#8fb4e6', purple:'#bca7e6', pink:'#e6a7c8', red:'#e68a8a' };
+const ncol=c=>NCOLOR[c]||NCOLOR.default;
+async function apiGet(path){ if(!API.url||!API.key) throw new Error('not connected'); const r=await fetch(API.url.replace(/\/+$/,'')+path,{headers:{'x-aq-key':API.key}});
+  if(!r.ok){ let m='http '+r.status; try{const j=await r.json(); if(j&&j.error)m=j.error;}catch(e){} throw new Error(m); } return r.json(); }
+async function loadNotionDB(id){ const j=await apiGet('/notion?id='+encodeURIComponent(id)); notionCache[id]=j; return j; }
+function setMonSource(s){ monSource=s; localStorage.setItem('aq_mon_source',s); renderMon();
+  if(s!=='ticktick'&&!notionCache[s]) loadNotionDB(s).then(()=>renderMon()).catch(e=>console.warn('notion:',e&&e.message||e)); }
+function nDate(v,full){ if(!v||!v.start)return ''; const f=s=>{ const d=new Date(s); if(isNaN(d))return s; const t=s.length>10;
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toLowerCase()+(full&&t?' '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}).toLowerCase().replace(' ',''):''); };
+  return f(v.start)+(full&&v.end?' → '+f(v.end):''); }
+// compact monitor view of the active notion database
+function renderMonNotion(id){ const d=notionCache[id], meta=NOTION.pages.find(p=>p.id===id); const ttl=(d&&d.title)||(meta&&meta.title)||'notion';
+  if(!d) return `<div class="hd"><b>${esc(ttl)}</b><span class="wm">notion</span></div><div class="sub">loading…</div>`;
+  const titleCol=d.columns.find(c=>c.type==='title'), selCol=d.columns.find(c=>c.type==='select'||c.type==='status'), dateCol=d.columns.find(c=>c.type==='date');
+  const rows=d.rows.slice(0,6).map(r=>{ const nm=titleCol?(r.cells[titleCol.name].v||'(untitled)'):'(row)';
+    const sel=selCol&&r.cells[selCol.name]&&r.cells[selCol.name].v, dt=dateCol&&r.cells[dateCol.name]&&r.cells[dateCol.name].v;
+    const chip=sel?`<span class="nm-chip"><i style="background:${ncol(sel.color)}"></i>${esc(sel.name)}</span>`:'';
+    return `<div class="t"><span class="tm">${esc(nDate(dt))}</span><span class="tx">${esc(nm)}</span>${chip}</div>`; }).join('')
+    ||`<div class="t"><span class="tx" style="color:var(--faint)">no rows ♡</span></div>`;
+  return `<div class="hd"><b>${esc(ttl)}</b><span class="wm">notion</span></div><div class="sub">${d.rows.length} rows</div>`+rows+`<div class="ft"><span class="o">click to open ✦</span></div>`; }
+// full table (expanded view)
+function cellHTML(cell){ if(!cell)return ''; const t=cell.t,v=cell.v;
+  if(t==='select') return v?`<span class="nchip"><i style="background:${ncol(v.color)}"></i>${esc(v.name)}</span>`:'';
+  if(t==='multi') return (v||[]).map(o=>`<span class="nchip"><i style="background:${ncol(o.color)}"></i>${esc(o.name)}</span>`).join(' ');
+  if(t==='check') return v?'<span class="ncheck on">✓</span>':'<span class="ncheck"></span>';
+  if(t==='date') return esc(nDate(v,true));
+  return esc(String(v==null?'':v)); }
+function renderNotionTable(d){ const cols=d.columns;
+  const head=cols.map(c=>`<th>${esc(c.name)}</th>`).join('');
+  const body=d.rows.map(r=>'<tr>'+cols.map(c=>`<td class="${c.type==='title'?'title':''}">${cellHTML(r.cells[c.name])}</td>`).join('')+'</tr>').join('');
+  return `<div class="ntbl-wrap"><table class="ntbl"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div><div class="nfoot">${d.rows.length} rows · ${esc(d.title)}</div>`; }
+function renderNotionTab(){ const host=document.getElementById('dNotion'); if(!host)return;
+  if(!API.url||!API.key){ host.innerHTML=`<div class="nempty">connect your worker first — tap 🔗 connect data</div>`; return; }
+  if(!NOTION.pages.length){ host.innerHTML=`<div class="nempty">no databases yet — add them in 🔗 connect data</div>`; return; }
+  const active=(monSource!=='ticktick'&&NOTION.pages.some(p=>p.id===monSource))?monSource:NOTION.pages[0].id;
+  const chips=NOTION.pages.map(p=>`<button class="nchip-pick${p.id===active?' on':''}" data-id="${esc(p.id)}">${esc(p.title||'database')}</button>`).join('');
+  const d=notionCache[active];
+  let table;
+  if(d){ table=renderNotionTable(d); }
+  else { table=`<div class="nempty">loading…</div>`;
+    loadNotionDB(active).then(()=>{ if(openId==='dashP') renderNotionTab(); if(monSource===active) renderMon(); })
+      .catch(e=>{ const h=document.getElementById('dNotion'); if(h) h.innerHTML=`<div class="npick">${chips}</div><div class="nempty">✕ ${esc(e&&e.message||String(e))}</div>`; }); }
+  host.innerHTML=`<div class="npick">${chips}</div>`+table;
+  host.querySelectorAll('.nchip-pick').forEach(b=>b.onclick=()=>{ setMonSource(b.dataset.id); renderNotionTab(); }); }
+// dataP picker — tick which shared databases to track
+function renderNotionPick(list){ const host=document.getElementById('notionPick'); if(!host)return;
+  if(!list){ host.innerHTML='connect your worker, then “load mine”.'; return; }
+  if(!list.length){ host.innerHTML='no databases shared with your integration yet.'; return; }
+  const have=new Set(NOTION.pages.map(p=>p.id));
+  host.innerHTML=list.map(d=>`<label class="nrow"><input type="checkbox" data-id="${esc(d.id)}" data-title="${esc(d.title||'')}" ${have.has(d.id)?'checked':''}><span>${esc(d.title||'Untitled')}</span></label>`).join('');
+  host.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.onchange=()=>toggleNotionPage(cb.dataset.id,cb.dataset.title,cb.checked)); }
+function toggleNotionPage(id,title,on){ const i=NOTION.pages.findIndex(p=>p.id===id);
+  if(on&&i<0) NOTION.pages.push({id,title}); else if(!on&&i>=0) NOTION.pages.splice(i,1);
+  localStorage.setItem('aq_notion',JSON.stringify(NOTION.pages));
+  if(!on&&monSource===id) setMonSource('ticktick'); }
+const notionLoadBtn=document.getElementById('notionLoad');
+if(notionLoadBtn) notionLoadBtn.onclick=async()=>{ const host=document.getElementById('notionPick'); if(host)host.textContent='loading…';
+  try{ const j=await apiGet('/notion/list'); renderNotionPick(j.databases||[]); }catch(e){ if(host)host.textContent='✕ '+(e&&e.message||e); } };
+function refreshNotionActive(){ if(monSource==='ticktick')return; loadNotionDB(monSource).then(()=>{ renderMon();
+  if(openId==='dashP'&&document.querySelector('.dtab.on')&&document.querySelector('.dtab.on').dataset.p==='1') renderNotionTab(); }).catch(()=>{}); }
+// open the expanded monitor on the tab that matches the active source (where you left off)
+function openDash(){ const tab=(monSource!=='ticktick')?1:0; const dt=document.querySelector(`.dtab[data-p="${tab}"]`); if(dt) dt.click(); openP('dashP'); }
 
 /* focus */
 let fTimer=null,fLeft=1500;
@@ -697,7 +791,7 @@ function loop(){ requestAnimationFrame(loop); T+=0.016; drawSky(); drawFx();
 
 /* boot */
 const img=new Image(); img.crossOrigin='anonymous'; img.src='room.png';
-img.onload=()=>{ roomCanvas=keyGreen(img); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); tickTickTick(); setInterval(tickTickTick,300000); loop();
+img.onload=()=>{ roomCanvas=keyGreen(img); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); tickTickTick(); setInterval(tickTickTick,300000); if(monSource!=='ticktick') refreshNotionActive(); setInterval(refreshNotionActive,300000); loop();
   const L=document.getElementById('loading'); L.style.opacity=0; setTimeout(()=>L.remove(),700); };
 img.onerror=()=>{ document.getElementById('loading').textContent='could not load room.png'; };
 addEventListener('resize',fit);
