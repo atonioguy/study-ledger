@@ -57,13 +57,13 @@
     filter:drop-shadow(0 0 .9cqh #9fe6ff) drop-shadow(0 0 2.4cqh rgba(159,230,255,.55)); }
   .clkui .d{ font-size:12cqh; color:var(--cyan); letter-spacing:1.5px; }
   /* mini month calendar shown in the aligned box (TickTick view goes here later) */
-  .calmini{ width:100%; height:100%; box-sizing:border-box; padding:4cqh 5cqw; display:flex; flex-direction:column; background:linear-gradient(#fbf6ef,#ece1d4); color:#5a4f56; }
-  .calmini .ch{ font-size:9.5cqh; font-weight:800; text-align:center; color:#c0738e; letter-spacing:.4px; margin-bottom:1.5cqh; text-transform:uppercase; }
-  .calmini .cw{ display:grid; grid-template-columns:repeat(7,1fr); font-size:5.6cqh; color:#b29aa3; text-align:center; margin-bottom:.6cqh; }
+  .calmini{ width:100%; height:100%; box-sizing:border-box; padding:4cqh 5cqw; display:flex; flex-direction:column; background:linear-gradient(#f3ebdd,#e4d6c0); color:#715c47; }
+  .calmini .ch{ font-size:9.5cqh; font-weight:800; text-align:center; color:#715c47; letter-spacing:.4px; margin-bottom:1.5cqh; text-transform:uppercase; }
+  .calmini .cw{ display:grid; grid-template-columns:repeat(7,1fr); font-size:5.6cqh; color:#a08a6f; text-align:center; margin-bottom:.6cqh; }
   .calmini .cd{ display:grid; grid-template-columns:repeat(7,1fr); grid-auto-rows:1fr; gap:.3cqh; flex:1; }
-  .calmini .cd i{ font-style:normal; font-size:6cqh; display:grid; place-items:center; color:#6a5d63; border-radius:1.6cqw; position:relative; }
-  .calmini .cd i.td{ background:#e8a0b6; color:#fff; font-weight:800; }
-  .calmini .cd i.ev:after{ content:''; position:absolute; bottom:.4cqh; width:1.4cqw; height:1.4cqw; border-radius:50%; background:#7bbf8a; }
+  .calmini .cd i{ font-style:normal; font-size:6cqh; display:grid; place-items:center; color:#715c47; border-radius:1.6cqw; position:relative; }
+  .calmini .cd i.td{ background:#715c47; color:#f3ebdd; font-weight:800; }
+  .calmini .cd i.ev:after{ content:''; position:absolute; bottom:.4cqh; width:1.4cqw; height:1.4cqw; border-radius:50%; background:#a8895f; }
 
   /* weather HUD (frameless on glass) */
   .wx{ width:100%; height:100%; padding:8cqh 6cqw; color:#eaf6ff; text-shadow:0 0 8px rgba(140,210,255,.5); }
@@ -73,8 +73,9 @@
   /* pixel sprites */
   .px{ width:100%; height:100%; image-rendering:pixelated; }
   /* pixel kaomoji mascot ball */
-  .catwrap{ position:relative; width:100%; height:100%; animation:bob 4s ease-in-out infinite; filter:drop-shadow(0 .4cqmin 1cqmin rgba(0,0,0,.4)); }
-  @keyframes bob{ 0%,100%{ transform:translateY(0) scaleY(1); } 50%{ transform:translateY(-6%) scaleY(.96); } }
+  .catwrap{ position:relative; width:100%; height:100%; transform-origin:50% 100%; animation:bob 3.4s ease-in-out infinite; filter:drop-shadow(0 .4cqmin 1cqmin rgba(0,0,0,.4)); }
+  /* bottom stays planted on the desk; only the top breathes (squash & stretch) */
+  @keyframes bob{ 0%,100%{ transform:scale(1,1); } 45%{ transform:scale(1.035,.93); } 70%{ transform:scale(.985,1.02); } }
   .catpx{ position:absolute; left:50%; top:52%; transform:translate(-50%,-50%); width:104%; height:auto; image-rendering:pixelated; }
   .kao{ position:absolute; inset:0; top:6%; display:grid; place-items:center; font-size:13cqmin; color:#5a4f42; font-weight:600; white-space:nowrap; letter-spacing:-.5px; }
   /* pixel-art post-its on the corkboard — draggable by the pin */
@@ -281,9 +282,12 @@ function drawPixelScene(){ const S=SK[skyMode], W=TWR[skyMode]||TWR.dusk, G=TREE
   for(let x=0;x<LW;x++){ const h=10+Math.round(5*Math.sin(x*0.5)+3*Math.sin(x*1.3+1)+2*Math.sin(x*0.21+3)+2*Math.sin(x*2.7)); const topY=base-h;
     for(let y=topY;y<LH;y++){ const d=y-topY; sb.fillStyle=(d<2)?G[2]:(d<6?G[1]:G[0]); sb.fillRect(x,y,1,1); } }
 }
+// the green window region (fractions of stage) — fit the art to THIS, not the whole stage, so nearly the full image shows
+const WIN={x:0.018,y:-0.02,w:0.545,h:0.70};
 function drawSky(){ sx.imageSmoothingEnabled=false; sx.clearRect(0,0,SW,SH);
   const im=WIMG[skyMode];
-  if(im&&wReady[skyMode]){ const iw=im.naturalWidth,ih=im.naturalHeight,sc=Math.max(SW/iw,SH/ih),dw=iw*sc,dh=ih*sc; sx.drawImage(im,(SW-dw)/2,(SH-dh)*0.16,dw,dh); }
+  if(im&&wReady[skyMode]){ const iw=im.naturalWidth,ih=im.naturalHeight; const wx0=WIN.x*SW,wy0=WIN.y*SH,ww=WIN.w*SW,wh=WIN.h*SH;
+    const sc=Math.max(ww/iw,wh/ih),dw=iw*sc,dh=ih*sc; sx.drawImage(im, wx0+(ww-dw)/2, wy0, dw, dh); }   // top-aligned: full sky+skyline, only the occluded foreground crops
   else { drawPixelScene(); sx.drawImage(skyBuf,0,0,SW,SH); }
   if(wx==='rain'){ sx.strokeStyle='rgba(204,222,236,.5)'; sx.lineWidth=1; sx.beginPath(); for(const d of drops){ const y=(d.y+T*.95*d.s)%1.1,px=Math.round(d.x*SW),py=Math.round(y*SH); sx.moveTo(px,py); sx.lineTo(px-1,py+8*d.l/12); } sx.stroke(); }
   if(wx==='snow'){ sx.fillStyle='rgba(255,255,255,.9)'; for(const f of flakes){ const y=(f.y+T*.08*f.s)%1.05,x=(f.x+Math.sin(T*.6+f.d)*.018); sx.fillRect(Math.round(x*SW),Math.round(y*SH),f.r,f.r); } }
@@ -309,7 +313,7 @@ function buildEls(){
   makeEl('phone','clk',`<div class="scr"><div class="phn"><div class="t" id="pT">—:—</div><div class="d" id="pD"></div><div class="fh">🐦 feed</div><div class="tw" id="pTw"></div></div></div>`,true);
   makeEl('clock','',`<div class="scr"><div class="clkui"><canvas class="clkpx" id="clkPx" width="40" height="5"></canvas><div class="d" id="cD"></div></div></div>`);
   makeEl('corkboard','clk','',true); makeEl('calendar','clk',`<div class="calmini" id="calMini"></div>`,true); makeEl('tomato','clk','',true);
-  const cat=makeEl('cat',''); cat.classList.add('clk'); cat.innerHTML+=`<div class="catwrap"><canvas class="catpx" id="catPx" width="27" height="18"></canvas><span class="kao" id="catKao">(=^･ω･^=)</span></div>`;
+  const cat=makeEl('cat',''); cat.classList.add('clk'); cat.innerHTML+=`<div class="catwrap"><canvas class="catpx" id="catPx" width="21" height="16"></canvas><span class="kao" id="catKao">(=^･ω･^=)</span></div>`;
   const tank=makeEl('tank',''); tank.innerHTML+=`<canvas class="px" id="tankPx" width="64" height="44"></canvas>`;
   const stk=makeEl('notestack','clk','',true); stk.title='new note';   // invisible click zone over the painted sticky stack
   renderMon(); renderSideTasks();
@@ -329,13 +333,13 @@ const KAO={ idle:'(=^･ω･^=)', happy:'(＾• ω •＾)', love:'(=^♡ω♡
 let catExpr='idle';
 function setKao(){ const k=document.getElementById('catKao'); if(k) k.textContent=KAO[catExpr]||KAO.idle; }
 function drawCatBlob(){ const cv=document.getElementById('catPx'); if(!cv)return; const c=cv.getContext('2d'); c.clearRect(0,0,cv.width,cv.height); c.imageSmoothingEnabled=false;
-  // dumpling / bao silhouette — domed top, wide flat-ish bottom (stepped pixel rows)
-  const cx=13, y0=2, spn=[5,8,10,11,12,12,13,13,13,13,13,12,12,11];
+  // dumpling / bao silhouette — rounded dome, widest low-middle, flat bottom (refs the attached shape)
+  const cx=10, y0=1, spn=[3,5,7,8,9,9,10,10,10,10,10,9,9,8];
   for(let i=0;i<spn.length;i++){ const y=y0+i,hw=spn[i]; c.fillStyle='#efe7d7'; c.fillRect(cx-hw,y,hw*2+1,1); }
   for(let i=spn.length-4;i<spn.length;i++){ const y=y0+i,hw=spn[i]; c.fillStyle='#ddd3be'; c.fillRect(cx-hw,y,hw*2+1,1); } // bottom shade
-  c.fillStyle='#f7f1e6'; c.fillRect(cx-6,3,4,1); c.fillRect(cx-7,4,3,1);              // soft top-left glint
-  c.fillStyle='#d9cfba'; c.fillRect(cx-4,2,1,2); c.fillRect(cx+3,2,1,2);              // tiny pleat notches at the dome
-  c.fillStyle='#f3c3d0'; c.fillRect(cx-9,10,2,1); c.fillRect(cx+8,10,2,1); }          // pixel blush
+  c.fillStyle='#f7f1e6'; c.fillRect(cx-5,2,3,1); c.fillRect(cx-6,3,3,1);              // soft top-left glint
+  c.fillStyle='#d9cfba'; c.fillRect(cx-3,1,1,2); c.fillRect(cx+2,1,1,2);              // tiny pleat notches at the dome
+  c.fillStyle='#f3c3d0'; c.fillRect(cx-7,9,2,1); c.fillRect(cx+6,9,2,1); }            // pixel blush
 function drawFishSprite(c,x,y,dir,col,col2,wig){ c.save(); c.translate(x,y); if(dir<0) c.scale(-1,1);
   pxRect(c,-3,-1,4,4,col); // tail
   pxRect(c,-4,wig?-2:0,3,3,col); // tail tip wiggle
@@ -479,8 +483,18 @@ function stopRain(){ if(!rainAud.paused)fadeAud(0,600); if(rgain&&actx)rgain.gai
 document.getElementById('soundBtn').onclick=function(){ soundOn=!soundOn; this.textContent=soundOn?'🔊':'🔇'; this.classList.toggle('on',soundOn); if(soundOn&&wx==='rain')startRain(); else stopRain(); };
 
 /* weather */
+// WMO weather code -> emoji (order matters: showers/thunder sit ABOVE the snow range)
+function wxIcon(code,h){ const night=(h>=19||h<6);
+  if(code>=95) return '⛈️';                 // thunderstorm
+  if(code>=85) return '❄️';                 // 85-86 snow showers
+  if(code>=80) return '🌦️';                 // 80-82 rain showers
+  if(code>=71) return '❄️';                 // 71-77 snow
+  if(code>=51) return '🌧️';                 // 51-67 drizzle / rain
+  if(code>=45) return '🌫️';                 // fog
+  if(code>=1)  return night?'☁️':'⛅';        // 1-3 partly/cloudy
+  return night?'🌙':'☀️'; }                  // 0 clear
 async function loadWx(){ try{ const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.66&longitude=-97.12&current=temperature_2m,apparent_temperature,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto',{cache:'no-store'}); const j=await r.json(),c=j.current,code=c.weather_code,h=new Date().getHours();
-  const t=Math.round(c.temperature_2m),hi=Math.round(j.daily.temperature_2m_max[0]),lo=Math.round(j.daily.temperature_2m_min[0]),fl=Math.round(c.apparent_temperature),ic=code>=71?'❄️':code>=51?'🌧️':code>=45?'🌫️':code>=2?'☁️':(h>=19||h<6?'🌙':'🌤️');
+  const t=Math.round(c.temperature_2m),hi=Math.round(j.daily.temperature_2m_max[0]),lo=Math.round(j.daily.temperature_2m_min[0]),fl=Math.round(c.apparent_temperature),ic=wxIcon(code,h);
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   set('wTp',t+'°'); set('wIc',ic); set('wHl',`H ${hi}° L ${lo}°`); set('sWtp',t+'°'); set('sWic',ic); const m=document.getElementById('sWm'); if(m)m.innerHTML=`H ${hi}° L ${lo}°<br>feels ${fl}°`; }catch(e){} }
 
