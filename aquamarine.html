@@ -431,7 +431,7 @@ function loadTw(){ if(twP)return twP; twP=new Promise((res,rej)=>{ if(window.twt
   setTimeout(()=>{ (window.twttr&&twttr.widgets)?res():rej(new Error('tw timeout')); },9000); }); return twP; }
 function twLink(){ return `<a class="twfb" href="https://x.com/${TW_USER}" target="_blank" rel="noopener">open @${TW_USER} on 𝕏 ↗</a>`; }
 function twAnchor(opts){ const w=opts.width?` data-width="${opts.width}"`:'',h=opts.height?` data-height="${opts.height}"`:'';
-  return `<a class="twitter-timeline" data-theme="dark" data-chrome="noheader nofooter noborders transparent" data-dnt="true"${w}${h} href="https://x.com/${TW_USER}?ref_src=twsrc%5Etfw">@${TW_USER}</a>`; }
+  return `<a class="twitter-timeline" data-theme="dark" data-chrome="nofooter noborders transparent" data-dnt="true"${w}${h} href="https://twitter.com/${TW_USER}?ref_src=twsrc%5Etfw">Posts by @${TW_USER}</a>`; }
 function renderTwInto(el,opts){ if(!el||el.dataset.tw==='1')return; el.dataset.tw='1';
   el.innerHTML=twAnchor(opts)+'<div class="twfb" data-fb>opening 𝕏 timeline…</div>';
   loadTw().then(()=>twttr.ready(()=>twttr.widgets.load(el))).catch(()=>{ el.innerHTML=twLink(); });
