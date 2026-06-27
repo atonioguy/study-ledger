@@ -403,27 +403,35 @@
   .cl-grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:18px; align-items:start; }
   /* each card is a real pixel window, scrollable so no single window overwhelms the page */
   .cwin{ min-width:0; display:flex; flex-direction:column; max-height:min(560px,82vh); }
-  .cwin.col4{ grid-column:span 4; } .cwin.col6{ grid-column:span 6; } .cwin.col8{ grid-column:span 8; } .cwin.col12{ grid-column:span 12; }
-  @media(max-width:880px){ .cwin.col4,.cwin.col6,.cwin.col8{ grid-column:span 12; } }
+  .cwin.col4{ grid-column:span 4; } .cwin.col5{ grid-column:span 5; } .cwin.col6{ grid-column:span 6; } .cwin.col7{ grid-column:span 7; } .cwin.col8{ grid-column:span 8; } .cwin.col12{ grid-column:span 12; }
+  @media(max-width:880px){ .cwin.col4,.cwin.col5,.cwin.col6,.cwin.col7,.cwin.col8{ grid-column:span 12; } }
   .cwin .pxbody{ overflow:auto; }
   .cwin .pxbar .cwn{ margin-left:auto; background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:0 6px; font-size:10px; font-family:var(--pixfont2); }
   .cl-empty{ color:#b0a99a; font-size:14px; padding:8px 2px; font-family:var(--pixfont2); }
   .cpanel{ background:var(--panel); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:4px 9px; }
 
-  /* board notes + antfarm feed inside the default forget.me.not windows */
-  .cl-notes{ display:flex; flex-wrap:wrap; gap:9px; padding:12px; }
-  .cl-notes .nn{ font-size:12px; color:#2a2436; padding:8px 11px; max-width:170px; box-shadow:0 3px 8px rgba(0,0,0,.3); line-height:1.35; word-break:break-word; font-family:var(--pixfont2); border:2px solid rgba(0,0,0,.12); }
+  /* antfarm feed inside the default forget.me.not window */
   .cl-feed{ padding:12px; } .cl-feed .fp{ padding:8px 2px; border-bottom:1px solid rgba(0,0,0,.18); font-family:var(--pixfont2); } .cl-feed .fp:last-child{ border-bottom:none; }
   .cl-feed .fp .fh{ font-size:11px; color:var(--lo); margin-bottom:2px; } .cl-feed .fp .fb{ font-size:14px; color:var(--tx); line-height:1.4; } .cl-feed .fp img{ max-width:100%; max-height:190px; margin-top:6px; display:block; border:2px solid var(--lo); image-rendering:pixelated; }
 
-  /* mini calendar inside the brown window (title shown in the window bar) */
-  .cl-cal .ch{ display:none; }
-  .cl-cal .cw,.cl-cal .cd{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
-  .cl-cal .cw i{ font-size:12px; color:#e3b488; text-align:center; font-style:normal; padding-bottom:3px; font-family:var(--pixfont2); }
-  .cl-cal .cd i{ position:relative; font-style:normal; aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:15px; color:var(--cardtx); font-family:var(--pixfont2); background:var(--card); border:2px solid; border-color:#ecdcb6 #ab8a5e #ab8a5e #ecdcb6; }
-  .cl-cal .cd i:empty{ background:transparent; border-color:transparent; }
-  .cl-cal .cd i.td{ background:#e8b258; border-color:#f6cf86 #b87f2e #b87f2e #f6cf86; color:#4a3018; font-weight:700; box-shadow:inset 0 0 0 1px rgba(255,255,255,.2),0 0 9px rgba(232,178,88,.5); }
-  .cl-cal .cd i em{ position:absolute; bottom:3px; display:flex; gap:2px; } .cl-cal .cd i u{ width:4px; height:4px; border-radius:50%; } .cl-cal .cd i .evd{ background:var(--lav); }
+  /* corkboard window = the same scatter board as the expanded 3D corkboard */
+  #clBoard{ width:100%; height:min(460px,60vh); max-width:none; margin:0; border-radius:0; }
+  #clBoard .note .del{ display:grid; }
+  #clean .bhd{ display:flex; align-items:center; gap:10px; margin-bottom:10px; } #clean .bhd .sp{ margin-left:auto; font-size:11px; color:var(--tx); font-family:var(--pixfont2); }
+  #clean .mkbtn{ background:var(--bar); color:var(--bartx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; font-family:var(--pixfont); font-size:11px; padding:8px 13px; cursor:pointer; } #clean .mkbtn:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
+
+  /* full month calendar inside the brown window — matches the expanded 3D calendar */
+  #clean .calhd{ display:flex; align-items:center; gap:8px; margin-bottom:14px; } #clean .calhd h3{ color:var(--bartx); font-size:17px; white-space:nowrap; margin-right:auto; }
+  #clean .calhd .nav,#clean .calhd .calt{ background:var(--frame); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); color:var(--cardtx); border-radius:0; font-family:var(--pixfont2); cursor:pointer; }
+  #clean .calhd .nav{ width:30px; height:28px; font-size:18px; display:grid; place-items:center; padding:0; } #clean .calhd .calt{ padding:6px 12px; font-size:14px; }
+  #clean .cg{ display:grid; grid-template-columns:repeat(7,1fr); gap:5px; background:var(--panel); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:7px; }
+  #clean .cg .dw{ text-align:center; color:#e3b488; font-size:13px; font-family:var(--pixfont2); padding-bottom:3px; }
+  #clean .cg .dy{ min-height:52px; display:flex; flex-direction:column; gap:2px; padding:4px; font-family:var(--pixfont2); font-size:13px; color:var(--cardtx); background:var(--card); border:2px solid; border-color:#ecdcb6 #ab8a5e #ab8a5e #ecdcb6; cursor:pointer; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(255,255,255,.12); }
+  #clean .cg .dy:hover{ background:#e8d8ba; } #clean .cg .dy.has{ background:#cdd6b0; border-color:#dde6c2 #9eae7e #9eae7e #dde6c2; } #clean .cg .dy.dim{ background:transparent; border-color:transparent; box-shadow:none; cursor:default; }
+  #clean .cg .dy b{ font-size:15px; align-self:flex-start; color:var(--cardtx); } #clean .cg .dy.td{ background:#e8b258; border-color:#f6cf86 #b87f2e #b87f2e #f6cf86; box-shadow:inset 0 0 0 1px rgba(255,255,255,.2),0 0 10px rgba(232,178,88,.5); } #clean .cg .dy.td b{ color:#4a3018; }
+  #clean .cg .dy.sel{ outline:2px solid #8a4a2a; outline-offset:-3px; }
+  #clean .cg .chip{ display:flex; align-items:center; gap:3px; font-size:11px; line-height:1.2; color:#3f2f1f; background:rgba(74,56,38,.16); padding:1.5px 3px; white-space:nowrap; overflow:hidden; } #clean .cg .chip span{ overflow:hidden; text-overflow:ellipsis; } #clean .cg .chip i{ width:5px; height:5px; border-radius:50%; flex:none; } #clean .cg .more{ font-size:11px; color:#6f5640; padding-left:3px; }
+  #clean #clCalDay{ margin-top:14px; background:var(--panel); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:10px 12px; } #clean #clCalDay .cdh{ color:var(--tx); font-family:var(--pixfont2); font-size:15px; margin-bottom:7px; } #clean #clCalDay .empty{ color:#d8c3a2; font-family:var(--pixfont2); font-size:14px; padding:7px 2px; }
 
   /* reuse the expanded-window content styling inside #clean (koi tasks/notion) */
   #clean .monbody{ padding:14px 16px; }
@@ -482,11 +490,11 @@
         <div class="cl-wx"><span class="wxi" id="clWxIc">·</span><div class="col"><div class="wxt" id="clWxTp">—</div><div class="wxs" id="clWxCond">—</div></div><div class="wxhl" id="clWxHl"></div></div>
       </div>
       <div class="cl-grid">
-        <div class="cwin col8 pxwin koi matte"><div class="pxbar"><span class="pxico">✓</span><span class="pxtitle">today</span><span class="cwn" id="clTaskN"></span></div><div class="pxbody monbody"><div class="dgrp" id="clGroupBar"></div><div class="cpanel" id="clTasks"></div></div></div>
-        <div class="cwin col4 pxwin brown matte"><div class="pxbar"><span class="pxico">📅</span><span class="pxtitle" id="clCalTtl">calendar</span></div><div class="pxbody monbody"><div class="cl-cal" id="clCal"></div></div></div>
+        <div class="cwin col7 pxwin koi matte"><div class="pxbar"><span class="pxico">✓</span><span class="pxtitle">today</span><span class="cwn" id="clTaskN"></span></div><div class="pxbody monbody"><div class="dgrp" id="clGroupBar"></div><div class="cpanel" id="clTasks"></div></div></div>
+        <div class="cwin col5 pxwin brown matte"><div class="pxbar"><span class="pxico">📅</span><span class="pxtitle">calendar</span></div><div class="pxbody monbody"><div class="calhd"><button class="nav" id="clCalPrev">‹</button><h3 id="clCalTitle">📅 calendar</h3><button class="calt" id="clCalToday">today</button><button class="nav" id="clCalNext">›</button></div><div class="cg" id="clCalGrid"></div><div id="clCalDay"></div></div></div>
         <div class="cwin col12 pxwin koi matte" id="clCard-notion" style="display:none"><div class="pxbar"><span class="pxico">📓</span><span class="pxtitle" id="clNotionTtl">notion</span></div><div class="pxbody monbody"><div id="clNotion"></div></div></div>
-        <div class="cwin col6 pxwin matte"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">board</span><span class="cwn" id="clNoteN"></span></div><div class="pxbody"><div class="cl-notes" id="clNotes"></div></div></div>
-        <div class="cwin col6 pxwin matte"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
+        <div class="cwin col8 pxwin matte"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div></div></div>
+        <div class="cwin col4 pxwin matte"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
       </div>
     </div>
   </div>
@@ -898,7 +906,7 @@ function setView2d(on){ view2d=on; document.body.classList.toggle('clean2d',on);
   const b=document.getElementById('viewToggle'); if(b){ b.querySelector('.ic').textContent=on?'🪟':'▦'; b.querySelector('.lbl').textContent=on?'room':'clean'; }
   if(on) renderClean(); else fit(); }
 function cleanSync(){ if(document.body.classList.contains('clean2d')) renderClean(); }
-function renderClean(){ clHeader(); clRenderTasks(); clRenderCal(); clRenderNotes(); clRenderFeed(); clRenderNotion(); }
+function renderClean(){ clHeader(); clRenderTasks(); clRenderCalFull(); clRenderBoard(); clRenderFeed(); clRenderNotion(); }
 function clHeader(){ const g=document.getElementById('clGreet'),dt=document.getElementById('clDate'),dHi=document.getElementById('dHi');
   if(g&&dHi&&dHi.textContent) g.textContent=dHi.textContent;
   if(dt) dt.textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
@@ -913,17 +921,32 @@ function clRenderTasks(){ const el=document.getElementById('clTasks'),n=document
   if(n)n.textContent=liveTasks.length;
   el.innerHTML=groupLive(liveTasks).map(([label,arr,over])=>`<div class="grph${over?' ov':''}">${esc(label)}<span class="gc">${arr.length}</span></div>`+arr.map(clTaskRow).join('')).join('');
   el.querySelectorAll('.bt .ck').forEach(ck=>ck.onclick=ev=>{ ev.stopPropagation(); const r=ck.closest('.bt'); const t=liveTasks.find(x=>String(x.id)===r.dataset.id); if(t)checkOff(t,r); }); }
-function clRenderCal(){ const el=document.getElementById('clCal'); if(!el)return; const n=new Date(),y=n.getFullYear(),mo=n.getMonth(),today=n.getDate();
-  const first=new Date(y,mo,1).getDay(),dim=new Date(y,mo+1,0).getDate(),mn=n.toLocaleDateString('en-US',{month:'long'});
-  const by=liveTasks?liveByDay(y,mo):null;
-  let cells=''; for(let i=0;i<first;i++)cells+='<i></i>';
-  for(let d=1;d<=dim;d++){ let dots=''; if(by){ const ts=by[d]||[]; dots=ts.slice(0,3).map(t=>`<u class="dot${prioCat(t.priority)}"></u>`).join(''); } else if(typeof EVDAYS!=='undefined'&&EVDAYS.has(d)) dots='<u class="evd"></u>';
-    cells+=`<i class="${d===today?'td':''}">${d}${dots?`<em>${dots}</em>`:''}</i>`; }
-  el.innerHTML=`<div class="ch">${mn} ${y}</div><div class="cw"><i>S</i><i>M</i><i>T</i><i>W</i><i>T</i><i>F</i><i>S</i></div><div class="cd">${cells}</div>`;
-  const ct=document.getElementById('clCalTtl'); if(ct)ct.textContent=`${mn.toLowerCase()} ${y}`; }
-function clRenderNotes(){ const el=document.getElementById('clNotes'),n=document.getElementById('clNoteN'); if(!el)return;
-  if(n)n.textContent=notes.length;
-  el.innerHTML=notes.length?notes.map(nt=>`<span class="nn" style="background:${nt.c}">${esc(nt.t)}</span>`).join(''):`<div class="cl-empty">no notes pinned yet ♡</div>`; }
+// full month calendar — same markup as the expanded 3D calendar, sharing calView state
+function clRenderCalFull(){ const g=document.getElementById('clCalGrid'); if(!g)return; const {y,mo}=calView; const n=new Date();
+  const today=(y===n.getFullYear()&&mo===n.getMonth())?n.getDate():-1;
+  const tt=document.getElementById('clCalTitle'); if(tt)tt.textContent='📅 '+new Date(y,mo,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  const by=liveByDay(y,mo);
+  let html=['S','M','T','W','T','F','S'].map(d=>`<div class="dw">${d}</div>`).join('');
+  const first=new Date(y,mo,1).getDay(),dim=new Date(y,mo+1,0).getDate();
+  for(let i=0;i<first;i++) html+='<div class="dy dim"></div>';
+  for(let d=1;d<=dim;d++){ const ts=(by[d]||[]).slice().sort(byDue);
+    const chips=ts.slice(0,2).map(t=>`<span class="chip"><i class="dot${prioCat(t.priority)}"></i><span>${esc(t.title)}</span></span>`).join('')+(ts.length>2?`<span class="more">+${ts.length-2} more</span>`:'');
+    html+=`<div class="dy${d===today?' td':''}${calView.sel===d?' sel':''}${ts.length?' has':''}" data-d="${d}"><b>${d}</b>${chips}</div>`; }
+  g.innerHTML=html;
+  g.querySelectorAll('.dy[data-d]').forEach(c=>c.onclick=()=>{ calView.sel=+c.dataset.d; clRenderCalFull(); });
+  clRenderCalDay(); }
+function clRenderCalDay(){ const el=document.getElementById('clCalDay'); if(!el)return; const {y,mo,sel}=calView;
+  if(!sel){ el.innerHTML=`<div class="empty">pick a day to see its tasks</div>`; return; }
+  const ts=(liveByDay(y,mo)[sel]||[]).slice().sort(byDue);
+  const label=new Date(y,mo,sel).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  el.innerHTML=`<div class="cdh">${label}</div>`+(ts.length
+    ? ts.map(t=>`<div class="bt" data-id="${esc(String(t.id))}"><span class="tm">${t.due?fmtDueShort(t.due,t.allDay):'—'}</span><span class="ck"></span><span class="tx">${esc(t.title)}</span><span class="lb">${esc(t.project||'')}</span></div>`).join('')
+    : `<div class="empty">${liveTasks?'nothing scheduled ♡':'connect TickTick to see tasks'}</div>`);
+  el.querySelectorAll('.bt .ck').forEach(ck=>ck.onclick=ev=>{ ev.stopPropagation(); const r=ck.closest('.bt'); const t=liveTasks&&liveTasks.find(x=>String(x.id)===r.dataset.id); if(t)checkOff(t,r); }); }
+// corkboard — the same draggable scatter board as the expanded 3D corkboard
+function clRenderBoard(){ const b=document.getElementById('clBoard'),n=document.getElementById('clNoteN'); if(!b)return;
+  if(n)n.textContent=notes.length;   // fixed landscape board (CSS) — notes are %-positioned so they scatter to fit
+  b.querySelectorAll('.note').forEach(x=>x.remove()); notes.slice(0,MAXNOTES).forEach((nn,i)=>makeNoteEl(nn,i,b)); }
 function clRenderFeed(){ const el=document.getElementById('clFeed'),n=document.getElementById('clFeedN'); if(!el)return;
   if(n)n.textContent=feed.length;
   el.innerHTML=feed.length?feed.slice(0,8).map(p=>{ const t=esc(ptext(p)),im=pimg(p),ago=fmtAgo(ptime(p)); return `<div class="fp"><div class="fh">me${ago?` · ${ago}`:''}</div>${t?`<div class="fb">${t}</div>`:''}${im?`<img src="${im}">`:''}</div>`; }).join(''):`<div class="cl-empty">no posts yet ♡</div>`; }
@@ -938,6 +961,11 @@ function clRenderNotion(){ const card=document.getElementById('clCard-notion'),e
   el.innerHTML=chips+renderNotionTable(d); wire(); attachTableHandlers(el,d,active,clRenderNotion); }   // full sort/filter/check, but re-renders the clean table
 function newNote(){ openP('brainP'); renderPile(); setTimeout(()=>brainIn.focus(),200); }
 document.getElementById('boardNew').onclick=newNote;
+{ const cbn=document.getElementById('clBoardNew'); if(cbn)cbn.onclick=newNote;   // clean corkboard "pin a thought"
+  const p=document.getElementById('clCalPrev'),nx=document.getElementById('clCalNext'),td=document.getElementById('clCalToday');
+  if(p) p.onclick=()=>{ if(--calView.mo<0){calView.mo=11;calView.y--;} calView.sel=null; clRenderCalFull(); };
+  if(nx) nx.onclick=()=>{ if(++calView.mo>11){calView.mo=0;calView.y++;} calView.sel=null; clRenderCalFull(); };
+  if(td) td.onclick=()=>{ const n=new Date(); calView.y=n.getFullYear(); calView.mo=n.getMonth(); calView.sel=n.getDate(); clRenderCalFull(); }; }
 document.getElementById('brainAdd').onclick=()=>{ const v=brainIn.value.trim(); if(v){ notes.unshift(mkNote(v)); if(notes.length>16)notes.pop(); saveNotes(); brainIn.value=''; renderPile(); reRenderBoards(); } };
 brainIn.addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('brainAdd').click(); });
 document.querySelectorAll('.qb').forEach(b=>b.onclick=()=>{ if(b.dataset.q==='brain'){ openP('brainP'); renderPile(); setTimeout(()=>brainIn.focus(),200);} else openP('focusP'); });
