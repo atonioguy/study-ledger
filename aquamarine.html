@@ -68,7 +68,8 @@
   .calmini .cd{ display:grid; grid-template-columns:repeat(7,1fr); grid-auto-rows:1fr; gap:.3cqh; flex:1; }
   .calmini .cd i{ font-style:normal; font-size:6cqh; display:grid; place-items:center; color:#ece0cd; border-radius:1.6cqw; position:relative; }
   .calmini .cd i.td{ background:#f0e6d4; color:#6a5340; font-weight:800; }
-  .calmini .cd i.ev:after{ content:''; position:absolute; bottom:.4cqh; width:1.4cqw; height:1.4cqw; border-radius:50%; background:#e0c79a; }
+  .calmini .cd i em{ position:absolute; bottom:.4cqh; left:0; right:0; display:flex; justify-content:center; gap:.7cqw; pointer-events:none; }
+  .calmini .cd i em u{ width:1.5cqw; height:1.5cqw; border-radius:50%; } .calmini .cd i em u.evd{ background:#e0c79a; }
 
   /* weather HUD (frameless on glass) */
   .wx{ width:100%; height:100%; box-sizing:border-box; padding:7cqh 6cqw; color:#eaf6ff; text-shadow:0 1px 3px rgba(0,0,0,.6);
@@ -171,7 +172,19 @@
   .bigboard{ position:relative; height:min(70vh,600px); width:auto; max-width:86vw; margin:0 auto; aspect-ratio:.83; border-radius:14px; container-type:size; overflow:hidden;
     background:#a9824e; background-image:radial-gradient(rgba(0,0,0,.16) 1px,transparent 1.5px); background-size:7px 7px; box-shadow:inset 0 0 0 10px #6f4d2c, inset 0 0 40px rgba(0,0,0,.35); }
   #boardP .mkbtn{ background:var(--sakura); color:#2a1820; border:none; border-radius:11px; padding:9px 15px; font:inherit; font-weight:700; font-size:13px; cursor:pointer; }
-  #calP .pc{ width:min(520px,92vw); padding:24px; } #calP h3{ font-size:19px; margin-bottom:14px; } .cg{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; } .cg .dw{ text-align:center; font-size:11px; color:var(--faint); } .cg .dy{ aspect-ratio:1; display:grid; place-items:center; border-radius:11px; font-size:14px; color:var(--soft); background:rgba(255,255,255,.03); } .cg .dy.td{ background:var(--sakura); color:#2a1820; font-weight:700; } .cg .dy.dim{ opacity:.25; }
+  #calP .pc{ width:min(580px,94vw); max-height:90vh; overflow:auto; padding:22px 22px 18px; }
+  .calhd{ display:flex; align-items:center; gap:8px; margin-bottom:14px; } .calhd h3{ font-size:18px; white-space:nowrap; }
+  .calhd .nav{ background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); color:var(--soft); width:30px; height:30px; border-radius:9px; cursor:pointer; font-size:17px; display:grid; place-items:center; padding:0; }
+  .calhd .calt{ margin-left:auto; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); color:var(--soft); border-radius:9px; padding:7px 13px; font:inherit; font-size:12px; cursor:pointer; }
+  .cg{ display:grid; grid-template-columns:repeat(7,1fr); gap:5px; } .cg .dw{ text-align:center; font-size:10.5px; letter-spacing:.1em; color:var(--faint); padding-bottom:3px; }
+  .cg .dy{ min-height:56px; display:flex; flex-direction:column; gap:2px; padding:4px 4px 3px; border-radius:9px; font-size:12px; color:var(--soft); background:rgba(255,255,255,.03); cursor:pointer; overflow:hidden; transition:.15s; }
+  .cg .dy:hover{ background:rgba(255,255,255,.07); } .cg .dy.dim{ background:transparent; cursor:default; } .cg .dy.has{ background:rgba(255,255,255,.055); }
+  .cg .dy b{ font-size:12px; font-weight:600; align-self:flex-start; min-width:17px; text-align:center; padding:1px 0; line-height:1.3; border-radius:6px; }
+  .cg .dy.td b{ background:var(--sakura); color:#2a1820; } .cg .dy.sel{ outline:2px solid var(--lav); outline-offset:-1px; }
+  .cg .chip{ display:flex; align-items:center; gap:3px; font-size:9.5px; line-height:1.2; color:var(--soft); background:rgba(255,255,255,.07); border-radius:4px; padding:1.5px 3px; white-space:nowrap; overflow:hidden; }
+  .cg .chip span{ overflow:hidden; text-overflow:ellipsis; } .cg .chip i{ width:5px; height:5px; border-radius:50%; flex:none; } .cg .more{ font-size:9px; color:var(--faint); padding-left:3px; }
+  #calDay{ margin-top:16px; border-top:1px solid rgba(255,255,255,.09); padding-top:13px; }
+  #calDay .cdh{ font-size:12.5px; color:var(--soft); margin-bottom:7px; letter-spacing:.03em; } #calDay .empty{ color:var(--faint); font-size:13px; padding:7px 2px; }
   #focusP .pc{ width:min(400px,88vw); padding:30px; text-align:center; } #focusP .ring{ position:relative; width:190px; height:190px; margin:6px auto 16px; } #focusP .ring svg{ transform:rotate(-90deg); } #focusP .num{ position:absolute; inset:0; display:grid; place-items:center; font-size:50px; font-weight:200; } #focusP .l{ color:var(--soft); font-size:14px; margin-bottom:16px; } #focusP .ct{ display:flex; gap:10px; justify-content:center; } #focusP button{ border:none; border-radius:24px; padding:12px 24px; font:inherit; font-size:14px; cursor:pointer; } #focusP .b1{ background:var(--sakura); color:#2a1820; font-weight:700; } #focusP .b2{ background:rgba(255,255,255,.08); color:var(--soft); }
   #soon .pc{ width:min(380px,86vw); padding:30px; text-align:center; } #soon h3{ font-size:20px; margin-bottom:8px; } #soon p{ color:var(--soft); font-size:13.5px; line-height:1.5; }
 
@@ -238,7 +251,9 @@
   <div class="pop" id="boardP"><div class="pc"><span class="px2" data-close>✕</span>
     <div class="bhd"><h3>📌 the board</h3><button class="mkbtn" id="boardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div>
     <div class="bigboard" id="bigBoard"></div></div></div>
-  <div class="pop" id="calP"><div class="pc"><span class="px2" data-close>✕</span><h3>📅 June 2026</h3><div class="cg" id="calGrid"></div></div></div>
+  <div class="pop" id="calP"><div class="pc"><span class="px2" data-close>✕</span>
+    <div class="calhd"><button class="nav" id="calPrev">‹</button><h3 id="calTitle">📅 June 2026</h3><button class="nav" id="calNext">›</button><button class="calt" id="calToday">today</button></div>
+    <div class="cg" id="calGrid"></div><div id="calDay"></div></div></div>
   <div class="pop" id="focusP"><div class="pc"><span class="px2" data-close>✕</span>
     <div class="ring"><svg width="190" height="190"><circle cx="95" cy="95" r="84" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="6"/><circle id="fRing" cx="95" cy="95" r="84" fill="none" stroke="var(--sakura)" stroke-width="6" stroke-linecap="round" stroke-dasharray="528" stroke-dashoffset="0"/></svg><div class="num" id="fNum">25:00</div></div>
     <div class="l">a calm 25-minute block · the room dims with you</div><div class="ct"><button class="b1" id="fStart">begin ✦</button><button class="b2" data-close>close</button></div></div></div>
@@ -439,7 +454,7 @@ function openP(id){ if(openId)document.getElementById(openId).classList.remove('
 function closeP(){ if(openId)document.getElementById(openId).classList.remove('on'); openId=null; scrim.classList.remove('on'); }
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeP); scrim.onclick=closeP;
 els.addEventListener('click',e=>{ if(calOn)return; const el=e.target.closest('.el.clk'); if(!el)return; const k=el.dataset.key;
-  if(k==='monitor') openP('dashP'); else if(k==='phone') openP('phoneP'); else if(k==='corkboard'){ renderBigBoard(); openP('boardP'); } else if(k==='notestack') newNote(); else if(k==='calendar') openP('calP'); else if(k==='tomato') openP('focusP'); else if(k==='cat') catSpeak(); });
+  if(k==='monitor') openP('dashP'); else if(k==='phone') openP('phoneP'); else if(k==='corkboard'){ renderBigBoard(); openP('boardP'); } else if(k==='notestack') newNote(); else if(k==='calendar'){ renderCalPopup(); openP('calP'); } else if(k==='tomato') openP('focusP'); else if(k==='cat') catSpeak(); });
 document.querySelectorAll('.dtab').forEach(t=>t.onclick=()=>{ document.querySelector('.dtab.on').classList.remove('on'); t.classList.add('on'); const i=+t.dataset.p; document.querySelector('.pp1').classList.toggle('off',i!==0); document.querySelectorAll('.pp2').forEach((p,j)=>p.classList.toggle('on',j===i-1)); syncGroupBar(); });
 const CKS=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16241a" stroke-width="3.5"><path d="M5 13l4 4L19 7"/></svg>`;
 function fmtDueShort(iso,allDay){ const d=new Date(iso); if(isNaN(d))return '—'; const now=new Date(),tmr=new Date(now); tmr.setDate(now.getDate()+1);
@@ -521,21 +536,51 @@ document.querySelectorAll('.qb').forEach(b=>b.onclick=()=>{ if(b.dataset.q==='br
 
 /* calendar — mini view sits in the aligned box; full month opens in the popup. (TickTick feed wires in here later.) */
 const EVDAYS=new Set([3,9,16,22,26,30]); // placeholder event dots until TickTick is connected
+// live tasks bucketed by day-of-month for a given month
+function liveByDay(y,mo){ const m={}; if(liveTasks) liveTasks.forEach(t=>{ if(!t.due)return; const d=new Date(t.due); if(isNaN(d)||d.getFullYear()!==y||d.getMonth()!==mo)return; (m[d.getDate()]||(m[d.getDate()]=[])).push(t); }); return m; }
+const byDue=(a,b)=>((a.due||'9999')<(b.due||'9999')?-1:1);
+// mini month (in the aligned box) — priority-colored dots per day, like TickTick's mini calendar
 function renderCal(){ const el=document.getElementById('calMini'); if(!el)return; const n=new Date(),y=n.getFullYear(),mo=n.getMonth(),today=n.getDate();
   const first=new Date(y,mo,1).getDay(),dim=new Date(y,mo+1,0).getDate(),mn=n.toLocaleDateString('en-US',{month:'short'});
+  const by=liveTasks?liveByDay(y,mo):null;
   let cells=''; for(let i=0;i<first;i++)cells+='<i></i>';
-  for(let d=1;d<=dim;d++)cells+=`<i class="${d===today?'td':''} ${EVDAYS.has(d)?'ev':''}">${d}</i>`;
+  for(let d=1;d<=dim;d++){ let dots='';
+    if(by){ const ts=by[d]||[]; dots=ts.slice(0,3).map(t=>`<u class="dot${prioCat(t.priority)}"></u>`).join(''); }
+    else if(EVDAYS.has(d)) dots='<u class="evd"></u>';
+    cells+=`<i class="${d===today?'td':''}">${d}${dots?`<em>${dots}</em>`:''}</i>`; }
   el.innerHTML=`<div class="ch">${mn} ${y}</div><div class="cw"><i>S</i><i>M</i><i>T</i><i>W</i><i>T</i><i>F</i><i>S</i></div><div class="cd">${cells}</div>`; }
-(function(){ const g=document.getElementById('calGrid'); if(!g)return; const n=new Date(),y=n.getFullYear(),mo=n.getMonth(),today=n.getDate();
-  document.querySelector('#calP h3').textContent='📅 '+n.toLocaleDateString('en-US',{month:'long',year:'numeric'});
-  ['S','M','T','W','T','F','S'].forEach(d=>{ const e=document.createElement('div'); e.className='dw'; e.textContent=d; g.appendChild(e); });
-  const first=new Date(y,mo,1).getDay(),dim=new Date(y,mo+1,0).getDate(); for(let i=0;i<first;i++){ const e=document.createElement('div'); e.className='dy dim'; g.appendChild(e); }
-  for(let d=1;d<=dim;d++){ const e=document.createElement('div'); e.className='dy'+(d===today?' td':''); e.textContent=d; g.appendChild(e); } })();
+// full month popup — TickTick-style cells with task chips + a click-to-open day list
+let calView=(()=>{ const n=new Date(); return {y:n.getFullYear(),mo:n.getMonth(),sel:n.getDate()}; })();
+function renderCalPopup(){ const g=document.getElementById('calGrid'); if(!g)return; const {y,mo}=calView; const n=new Date();
+  const today=(y===n.getFullYear()&&mo===n.getMonth())?n.getDate():-1;
+  document.getElementById('calTitle').textContent='📅 '+new Date(y,mo,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  const by=liveByDay(y,mo);
+  let html=['S','M','T','W','T','F','S'].map(d=>`<div class="dw">${d}</div>`).join('');
+  const first=new Date(y,mo,1).getDay(),dim=new Date(y,mo+1,0).getDate();
+  for(let i=0;i<first;i++) html+='<div class="dy dim"></div>';
+  for(let d=1;d<=dim;d++){ const ts=(by[d]||[]).slice().sort(byDue);
+    const chips=ts.slice(0,2).map(t=>`<span class="chip"><i class="dot${prioCat(t.priority)}"></i><span>${esc(t.title)}</span></span>`).join('')+(ts.length>2?`<span class="more">+${ts.length-2} more</span>`:'');
+    html+=`<div class="dy${d===today?' td':''}${calView.sel===d?' sel':''}${ts.length?' has':''}" data-d="${d}"><b>${d}</b>${chips}</div>`; }
+  g.innerHTML=html;
+  g.querySelectorAll('.dy[data-d]').forEach(c=>c.onclick=()=>{ calView.sel=+c.dataset.d; renderCalPopup(); });
+  renderCalDay(); }
+function renderCalDay(){ const el=document.getElementById('calDay'); if(!el)return; const {y,mo,sel}=calView;
+  if(!sel){ el.innerHTML=`<div class="empty">pick a day to see its tasks</div>`; return; }
+  const ts=(liveByDay(y,mo)[sel]||[]).slice().sort(byDue);
+  const label=new Date(y,mo,sel).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  el.innerHTML=`<div class="cdh">${label}</div>`+(ts.length
+    ? ts.map(t=>`<div class="bt" data-id="${esc(String(t.id))}"><span class="tm">${t.due?fmtDueShort(t.due,t.allDay):'—'}</span><span class="ck"></span><span class="tx">${esc(t.title)}</span><span class="lb">${esc(t.project||'')}</span></div>`).join('')
+    : `<div class="empty">${liveTasks?'nothing scheduled ♡':'connect TickTick to see tasks'}</div>`);
+  el.querySelectorAll('.bt .ck').forEach(ck=>ck.onclick=ev=>{ ev.stopPropagation(); const r=ck.closest('.bt'); const t=liveTasks&&liveTasks.find(x=>String(x.id)===r.dataset.id); if(t)checkOff(t,r); }); }
+function refreshCal(){ renderCal(); if(openId==='calP') renderCalPopup(); }
+{ const p=document.getElementById('calPrev'),nx=document.getElementById('calNext'),td=document.getElementById('calToday');
+  if(p) p.onclick=()=>{ if(--calView.mo<0){calView.mo=11;calView.y--;} calView.sel=null; renderCalPopup(); };
+  if(nx) nx.onclick=()=>{ if(++calView.mo>11){calView.mo=0;calView.y++;} calView.sel=null; renderCalPopup(); };
+  if(td) td.onclick=()=>{ const n=new Date(); calView.y=n.getFullYear(); calView.mo=n.getMonth(); calView.sel=n.getDate(); renderCalPopup(); }; }
 
 /* ===== live data (TickTick via your Cloudflare worker) ===== */
 const API={ url:localStorage.getItem('aq_api_url')||'', key:localStorage.getItem('aq_api_key')||'' };
-function calFromTasks(){ if(!liveTasks)return; const n=new Date(),mo=n.getMonth(),y=n.getFullYear(); EVDAYS.clear();
-  liveTasks.forEach(t=>{ if(!t.due)return; const d=new Date(t.due); if(!isNaN(d)&&d.getMonth()===mo&&d.getFullYear()===y) EVDAYS.add(d.getDate()); }); renderCal(); }
+function calFromTasks(){ refreshCal(); }
 async function loadTickTick(){ if(!API.url||!API.key) return false;
   const r=await fetch(API.url.replace(/\/+$/,'')+'/ticktick',{headers:{'x-aq-key':API.key}});
   if(!r.ok) throw new Error('http '+r.status); const j=await r.json(); if(!Array.isArray(j.tasks)) throw new Error(j.error||'bad response');
@@ -545,7 +590,7 @@ async function postTick(path,body){ if(!API.url||!API.key) throw new Error('not 
   const r=await fetch(API.url.replace(/\/+$/,'')+path,{method:'POST',headers:{'x-aq-key':API.key,'content-type':'application/json'},body:JSON.stringify(body)});
   if(!r.ok){ let m='http '+r.status; try{const j=await r.json(); if(j&&j.error)m=j.error;}catch(e){} throw new Error(m); } return r.json(); }
 // check a task off in TickTick — optimistic strike, drop on success, restore on failure, undo via toast
-async function checkOff(t,row){ if(!t.projectId){ toast('can’t complete — missing project id'); return; }
+async function checkOff(t,row){ if(!t.projectId){ toast('check-off needs the updated worker — redeploy worker.js'); return; }
   if(row){ row.classList.add('dn'); const ck=row.querySelector('.ck'); if(ck)ck.innerHTML=CKS; }
   try{ await postTick('/ticktick/complete',{id:t.id,projectId:t.projectId});
     liveTasks=liveTasks.filter(x=>x!==t); renderBig(); renderMon(); calFromTasks();
