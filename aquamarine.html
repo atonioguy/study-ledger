@@ -302,11 +302,11 @@ function drawSky(){ sx.imageSmoothingEnabled=false; sx.clearRect(0,0,SW,SH);
 }
 function drawFx(){ fxc.clearRect(0,0,SW,SH);
   // soft light flares with a gentle flicker
-  for(const f of FLARES){ const fl=(0.72+0.18*Math.sin(T*5.5+f.x*30)+0.1*Math.sin(T*13+f.y*20))*(f.i||1); const R=f.r*SW, gx=f.x*SW, gy=f.y*SH;
+  for(const f of FLARES){ const fl=(0.88+0.07*Math.sin(T*0.42+f.x*6)+0.035*Math.sin(T*0.73+f.y*4))*(f.i||1); const R=f.r*SW, gx=f.x*SW, gy=f.y*SH;
     const rg=fxc.createRadialGradient(gx,gy,0,gx,gy,R); rg.addColorStop(0,`rgba(${f.c},${0.15*fl})`); rg.addColorStop(.5,`rgba(${f.c},${0.05*fl})`); rg.addColorStop(1,`rgba(${f.c},0)`);
     fxc.fillStyle=rg; fxc.fillRect(gx-R,gy-R,R*2,R*2); }
   // cool ambient glow around the clock
-  const ck=BOX.clock; if(ck){ const gx=(ck.x+ck.w/2)/100*SW, gy=(ck.y+ck.h/2)/100*SH, R=ck.w/100*SW*1.7, fl=0.8+0.12*Math.sin(T*3.1);
+  const ck=BOX.clock; if(ck){ const gx=(ck.x+ck.w/2)/100*SW, gy=(ck.y+ck.h/2)/100*SH, R=ck.w/100*SW*1.7, fl=0.9+0.06*Math.sin(T*0.5);
     const rg=fxc.createRadialGradient(gx,gy,0,gx,gy,R); rg.addColorStop(0,`rgba(150,225,255,${0.12*fl})`); rg.addColorStop(.5,`rgba(130,205,255,${0.045*fl})`); rg.addColorStop(1,'rgba(130,205,255,0)');
     fxc.fillStyle=rg; fxc.fillRect(gx-R,gy-R,R*2,R*2); }
   // floating dust motes
