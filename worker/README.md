@@ -57,5 +57,6 @@ All require the header `x-aq-key: <AQ_KEY>`.
 - `POST /ticktick/reopen` — body `{ id, projectId, title }` → undoes a completion (sets status back to open).
 - `GET  /notion/list` → `{ databases: [{id, title, url}] }` — databases shared with your integration. *(needs `NOTION_TOKEN`)*
 - `GET  /notion?id=<db id or url>` → `{ title, columns:[{name,type}], rows:[{id, cells:{col:{t,v}}}] }` — one database, normalized. *(needs `NOTION_TOKEN`)*
+- `POST /notion/check` — body `{ pageId, prop, value }` → flips a checkbox property on a row. *(needs `NOTION_TOKEN`)*
 
 The dashboard's Today view uses the TickTick routes to check tasks off (grouped by class) with an undo toast; the Notion tab renders the selected database's table.

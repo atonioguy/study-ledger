@@ -42,6 +42,13 @@ export default {
         if (!id) return json({ error: 'need ?id=<database id or url>' }, 400, cors);
         return json(await notionDB(env.NOTION_TOKEN, id), 200, cors);
       }
+      if (url.pathname === '/notion/check' && req.method === 'POST') {
+        if (!env.NOTION_TOKEN) return json({ error: 'NOTION_TOKEN not set' }, 400, cors);
+        const b = await req.json();
+        if (!b.pageId || !b.prop) return json({ error: 'need pageId + prop' }, 400, cors);
+        await notionCheck(env.NOTION_TOKEN, b.pageId, b.prop, !!b.value);
+        return json({ ok: true }, 200, cors);
+      }
     } catch (e) {
       return json({ error: String((e && e.message) || e) }, 502, cors);
     }
@@ -152,6 +159,13 @@ async function notionList(token) {
   const r = await notionFetch(token, '/search', { method: 'POST', body: JSON.stringify({ filter: { property: 'object', value: 'database' }, page_size: 100 }) });
   const databases = (r.results || []).map((d) => ({ id: d.id, title: richText(d.title) || 'Untitled', url: d.url }));
   return { databases, ts: Date.now() };
+}
+// flip a checkbox property on a row (page)
+async function notionCheck(token, pageId, prop, value) {
+  await notionFetch(token, '/pages/' + notionId(pageId), {
+    method: 'PATCH',
+    body: JSON.stringify({ properties: { [prop]: { checkbox: value } } }),
+  });
 }
 // one database's schema + rows, normalized
 async function notionDB(token, rawId) {

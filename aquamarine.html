@@ -179,6 +179,20 @@
   .ncheck.on{ background:var(--sage); border-color:var(--sage); }
   .nfoot{ font-size:11px; color:var(--faint); margin-top:10px; } .nempty{ color:var(--faint); font-size:13.5px; padding:18px 4px; text-align:center; }
   .nrow{ display:flex; align-items:center; gap:9px; cursor:pointer; color:var(--soft); } .nrow input{ accent-color:var(--sakura); width:15px; height:15px; flex:none; }
+  /* notion table tools: sort, filter, jump, relative dates, today highlight, expandable notes */
+  .ntools{ position:relative; display:flex; gap:8px; margin-bottom:11px; flex-wrap:wrap; }
+  .ntool{ font-size:12px; padding:7px 12px; border-radius:10px; cursor:pointer; background:rgba(255,255,255,.06); color:var(--soft); border:1px solid rgba(255,255,255,.1); } .ntool:hover{ background:rgba(255,255,255,.1); }
+  .nfilter{ position:absolute; top:42px; left:0; z-index:6; background:#16223a; border:1px solid rgba(199,170,223,.25); border-radius:13px; padding:14px; box-shadow:0 18px 44px rgba(0,0,0,.55); min-width:220px; max-width:320px; }
+  .nfsec{ margin-bottom:12px; } .nfh{ font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--faint); margin-bottom:8px; }
+  .nfopts{ display:flex; flex-wrap:wrap; gap:6px; } .nfopt{ font-size:11.5px; padding:5px 11px; border-radius:16px; cursor:pointer; background:rgba(255,255,255,.06); color:var(--soft); border:1px solid rgba(255,255,255,.1); }
+  .nfopt.on{ background:var(--sakura); color:#2a1820; border-color:transparent; font-weight:600; } .nfclear{ font-size:11.5px; color:var(--faint); background:none; border:none; cursor:pointer; padding:2px 0; text-decoration:underline; }
+  .ntbl th.sortable{ cursor:pointer; user-select:none; } .ntbl th.sortable:hover{ color:var(--soft); }
+  .ndate em{ display:block; font-style:normal; font-size:10px; color:var(--faint); margin-top:1px; }
+  .ntbl td.note{ max-width:170px; cursor:pointer; } .ntbl td.note span{ display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; } .ntbl td.note.open span{ -webkit-line-clamp:unset; }
+  .ntbl .ncheck{ cursor:pointer; }
+  .ntbl tr.do-today td{ background:rgba(143,180,230,.14); } .ntbl tr.do-today td.title{ box-shadow:inset 3px 0 0 #8fb4e6; } .ntbl tr.do-today:hover td{ background:rgba(143,180,230,.2); }
+  .ntbl tr.due-today td{ background:rgba(232,154,108,.16); } .ntbl tr.due-today td.title{ box-shadow:inset 3px 0 0 var(--koi); } .ntbl tr.due-today:hover td{ background:rgba(232,154,108,.22); }
+  .ntbl tr.flash td{ animation:nflash 1.3s ease; } @keyframes nflash{ 30%{ background:rgba(199,170,223,.32); } }
   .pp2{ display:none; } .pp2.on{ display:block; } .pp1.off{ display:none; }
   #brainP .pc{ width:min(440px,90vw); padding:24px; } #brainP h3{ font-size:18px; margin-bottom:5px; } #brainP p{ font-size:12px; color:var(--faint); margin-bottom:14px; }
   #brainP input{ width:100%; background:rgba(8,12,20,.6); border:1px solid rgba(160,180,200,.2); border-radius:13px; padding:13px 15px; color:var(--text); font:inherit; font-size:14px; }
@@ -652,43 +666,85 @@ async function apiGet(path){ if(!API.url||!API.key) throw new Error('not connect
 async function loadNotionDB(id){ const j=await apiGet('/notion?id='+encodeURIComponent(id)); notionCache[id]=j; return j; }
 function setMonSource(s){ monSource=s; localStorage.setItem('aq_mon_source',s); renderMon();
   if(s!=='ticktick'&&!notionCache[s]) loadNotionDB(s).then(()=>renderMon()).catch(e=>console.warn('notion:',e&&e.message||e)); }
-function nDate(v,full){ if(!v||!v.start)return ''; const f=s=>{ const d=new Date(s); if(isNaN(d))return s; const t=s.length>10;
+function parseND(s){ if(!s)return null; if(/^\d{4}-\d{2}-\d{2}$/.test(s)){ const p=s.split('-').map(Number); return new Date(p[0],p[1]-1,p[2]); } const d=new Date(s); return isNaN(d)?null:d; }
+function nDate(v,full){ if(!v||!v.start)return ''; const f=s=>{ const d=parseND(s); if(!d)return s; const t=s.length>10;
   return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toLowerCase()+(full&&t?' '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}).toLowerCase().replace(' ',''):''); };
   return f(v.start)+(full&&v.end?' → '+f(v.end):''); }
-// compact monitor view of the active notion database
+function nIsToday(v){ const d=parseND(v&&v.start); if(!d)return false; const n=new Date(); return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate(); }
+function nRel(v){ const d=parseND(v&&v.start); if(!d)return ''; const n=new Date(); const a=new Date(d.getFullYear(),d.getMonth(),d.getDate()),b=new Date(n.getFullYear(),n.getMonth(),n.getDate()); const days=Math.round((a-b)/86400000);
+  return days===0?'today':days===1?'tomorrow':days===-1?'yesterday':days>0?('in '+days+' days'):(Math.abs(days)+' days ago'); }
+// column order (task→course→category→do→due→done→…→notes) + per-db view (sort/filter) state
+function colRank(c){ const n=(c.name||'').toLowerCase(); if(c.type==='title')return 0;
+  if(/course|class|subject/.test(n))return 1; if(/categor|type|tag/.test(n))return 2;
+  if(/do\s*date|^do$|start/.test(n))return 3; if(/due|deadline|^end$/.test(n))return 4;
+  if(/done|complete|status/.test(n))return 5; if(/note|descr|detail/.test(n))return 9; return 6; }
+function orderedCols(d){ return d.columns.map((c,i)=>({c,i})).sort((a,b)=>(colRank(a.c)-colRank(b.c))||(a.i-b.i)).map(x=>x.c); }
+function findCol(d,re){ return d.columns.find(c=>re.test((c.name||'').toLowerCase())); }
+let NVIEW=(()=>{ try{ return JSON.parse(localStorage.getItem('aq_notion_view')||'{}'); }catch(e){ return {}; } })();
+function viewOf(id){ if(!NVIEW[id]) NVIEW[id]={sort:null,dir:1,filt:{}}; return NVIEW[id]; }
+function saveView(){ localStorage.setItem('aq_notion_view',JSON.stringify(NVIEW)); }
+let nFilterOpen=false;
+function cellName(cell){ return cell&&cell.v&&(cell.v.name!==undefined?cell.v.name:(typeof cell.v==='object'?null:cell.v)); }
+function distinctVals(d,name){ const s=new Set(); d.rows.forEach(r=>{ const nm=cellName(r.cells[name]); if(nm)s.add(nm); }); return [...s]; }
+function visibleRows(d){ const v=viewOf(d.id); let rows=d.rows.slice();
+  for(const col in v.filt){ const set=v.filt[col]; if(set&&set.length) rows=rows.filter(r=>set.includes(cellName(r.cells[col]))); }
+  if(v.sort){ const sc=v.sort,dir=v.dir; rows.sort((a,b)=>{ const as=(a.cells[sc]&&a.cells[sc].v&&a.cells[sc].v.start)||'', bs=(b.cells[sc]&&b.cells[sc].v&&b.cells[sc].v.start)||'';
+    return as===bs?0:!as?1:!bs?-1:(as<bs?-1:1)*dir; }); }
+  return rows; }
+// compact monitor view of the active notion database (mirrors the active filter/sort)
 function renderMonNotion(id){ const d=notionCache[id], meta=NOTION.pages.find(p=>p.id===id); const ttl=(d&&d.title)||(meta&&meta.title)||'notion';
   if(!d) return `<div class="hd"><b>${esc(ttl)}</b><span class="wm">notion</span></div><div class="sub">loading…</div>`;
-  const titleCol=d.columns.find(c=>c.type==='title'), selCol=d.columns.find(c=>c.type==='select'||c.type==='status'), dateCol=d.columns.find(c=>c.type==='date');
-  const rows=d.rows.slice(0,6).map(r=>{ const nm=titleCol?(r.cells[titleCol.name].v||'(untitled)'):'(row)';
+  const titleCol=d.columns.find(c=>c.type==='title');
+  const selCol=d.columns.find(c=>(c.type==='select'||c.type==='status')&&/categor|type|tag/.test((c.name||'').toLowerCase()))||d.columns.find(c=>c.type==='select'||c.type==='status');
+  const dateCol=findCol(d,/do\s*date|^do$/)||d.columns.find(c=>c.type==='date');
+  const rows=visibleRows(d).slice(0,6).map(r=>{ const nm=titleCol?(r.cells[titleCol.name].v||'(untitled)'):'(row)';
     const sel=selCol&&r.cells[selCol.name]&&r.cells[selCol.name].v, dt=dateCol&&r.cells[dateCol.name]&&r.cells[dateCol.name].v;
     const chip=sel?`<span class="nm-chip"><i style="background:${ncol(sel.color)}"></i>${esc(sel.name)}</span>`:'';
     return `<div class="t"><span class="tm">${esc(nDate(dt))}</span><span class="tx">${esc(nm)}</span>${chip}</div>`; }).join('')
     ||`<div class="t"><span class="tx" style="color:var(--faint)">no rows ♡</span></div>`;
   return `<div class="hd"><b>${esc(ttl)}</b><span class="wm">notion</span></div><div class="sub">${d.rows.length} rows</div>`+rows+`<div class="ft"><span class="o">click to open ✦</span></div>`; }
 // full table (expanded view)
-function cellHTML(cell){ if(!cell)return ''; const t=cell.t,v=cell.v;
+function cellHTML(cell,col){ if(!cell)return ''; const t=cell.t,v=cell.v;
   if(t==='select') return v?`<span class="nchip"><i style="background:${ncol(v.color)}"></i>${esc(v.name)}</span>`:'';
   if(t==='multi') return (v||[]).map(o=>`<span class="nchip"><i style="background:${ncol(o.color)}"></i>${esc(o.name)}</span>`).join(' ');
-  if(t==='check') return v?'<span class="ncheck on">✓</span>':'<span class="ncheck"></span>';
-  if(t==='date') return esc(nDate(v,true));
-  return esc(String(v==null?'':v)); }
-function renderNotionTable(d){ const cols=d.columns;
-  const head=cols.map(c=>`<th>${esc(c.name)}</th>`).join('');
-  const body=d.rows.map(r=>'<tr>'+cols.map(c=>`<td class="${c.type==='title'?'title':''}">${cellHTML(r.cells[c.name])}</td>`).join('')+'</tr>').join('');
-  return `<div class="ntbl-wrap"><table class="ntbl"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div><div class="nfoot">${d.rows.length} rows · ${esc(d.title)}</div>`; }
+  if(t==='check') return `<span class="ncheck${v?' on':''}" data-prop="${esc(col.name)}">${v?'✓':''}</span>`;
+  if(t==='date') return v&&v.start?`<div class="ndate">${esc(nDate(v,true))}<em>(${esc(nRel(v))})</em></div>`:'';
+  return `<span>${esc(String(v==null?'':v))}</span>`; }
+function renderNotionTable(d){ const v=viewOf(d.id); const cols=orderedCols(d);
+  const doCol=findCol(d,/do\s*date|^do$/), dueCol=findCol(d,/due|deadline/);
+  const head=cols.map(c=>{ const s=c.type==='date'; const ar=v.sort===c.name?(v.dir>0?' ▲':' ▼'):''; return `<th class="${s?'sortable':''}"${s?` data-sort="${esc(c.name)}"`:''}>${esc(c.name)}${ar}</th>`; }).join('');
+  const rows=visibleRows(d);
+  const body=rows.map(r=>{ const doT=doCol&&nIsToday(r.cells[doCol.name]&&r.cells[doCol.name].v), dueT=dueCol&&nIsToday(r.cells[dueCol.name]&&r.cells[dueCol.name].v);
+    const rc=dueT?'due-today':doT?'do-today':'';
+    return `<tr class="${rc}" data-pid="${esc(r.id)}"${doT?' data-dotoday="1"':''}>`+cols.map(c=>`<td class="${c.type==='title'?'title':''}${colRank(c)===9?' note':''}">${cellHTML(r.cells[c.name],c)}</td>`).join('')+'</tr>'; }).join('');
+  const filtCols=cols.filter(c=>(c.type==='select'||c.type==='status')&&/course|class|categor|type|tag/.test((c.name||'').toLowerCase()));
+  const nFilt=Object.values(v.filt).reduce((a,arr)=>a+((arr&&arr.length)||0),0);
+  const menu=filtCols.map(c=>{ const sel=v.filt[c.name]||[]; return `<div class="nfsec"><div class="nfh">${esc(c.name)}</div><div class="nfopts">`+
+      distinctVals(d,c.name).map(o=>`<button class="nfopt${sel.includes(o)?' on':''}" data-col="${esc(c.name)}" data-val="${esc(o)}">${esc(o)}</button>`).join('')+`</div></div>`; }).join('')+`<button class="nfclear" id="nFiltClear">clear all</button>`;
+  const tools=`<div class="ntools">${filtCols.length?`<button class="ntool" id="nFilterBtn">⚲ filter${nFilt?` · ${nFilt}`:''}</button>`:''}${doCol?`<button class="ntool" id="nJump">↓ today</button>`:''}<div class="nfilter" id="nFilter" style="display:${nFilterOpen?'block':'none'}">${menu}</div></div>`;
+  return tools+`<div class="ntbl-wrap" id="ntblWrap"><table class="ntbl"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div><div class="nfoot">${rows.length}${rows.length!==d.rows.length?' of '+d.rows.length:''} rows · ${esc(d.title)}</div>`; }
 function renderNotionTab(){ const host=document.getElementById('dNotion'); if(!host)return;
   if(!API.url||!API.key){ host.innerHTML=`<div class="nempty">connect your worker first — tap 🔗 connect data</div>`; return; }
   if(!NOTION.pages.length){ host.innerHTML=`<div class="nempty">no databases yet — add them in 🔗 connect data</div>`; return; }
   const active=(monSource!=='ticktick'&&NOTION.pages.some(p=>p.id===monSource))?monSource:NOTION.pages[0].id;
   const chips=NOTION.pages.map(p=>`<button class="nchip-pick${p.id===active?' on':''}" data-id="${esc(p.id)}">${esc(p.title||'database')}</button>`).join('');
+  const wire=()=>host.querySelectorAll('.nchip-pick').forEach(b=>b.onclick=()=>{ nFilterOpen=false; setMonSource(b.dataset.id); renderNotionTab(); });
   const d=notionCache[active];
-  let table;
-  if(d){ table=renderNotionTable(d); }
-  else { table=`<div class="nempty">loading…</div>`;
+  if(!d){ host.innerHTML=`<div class="npick">${chips}</div><div class="nempty">loading…</div>`; wire();
     loadNotionDB(active).then(()=>{ if(openId==='dashP') renderNotionTab(); if(monSource===active) renderMon(); })
-      .catch(e=>{ const h=document.getElementById('dNotion'); if(h) h.innerHTML=`<div class="npick">${chips}</div><div class="nempty">✕ ${esc(e&&e.message||String(e))}</div>`; }); }
-  host.innerHTML=`<div class="npick">${chips}</div>`+table;
-  host.querySelectorAll('.nchip-pick').forEach(b=>b.onclick=()=>{ setMonSource(b.dataset.id); renderNotionTab(); }); }
+      .catch(e=>{ const h=document.getElementById('dNotion'); if(h) h.innerHTML=`<div class="npick">${chips}</div><div class="nempty">✕ ${esc(e&&e.message||String(e))}</div>`; }); return; }
+  host.innerHTML=`<div class="npick">${chips}</div>`+renderNotionTable(d); wire(); attachTableHandlers(host,d,active); }
+function attachTableHandlers(host,d,active){ const v=viewOf(d.id);
+  host.querySelectorAll('.ntbl th.sortable').forEach(th=>th.onclick=()=>{ const col=th.dataset.sort; if(v.sort===col)v.dir=-v.dir; else { v.sort=col; v.dir=1; } saveView(); renderNotionTab(); });
+  host.querySelectorAll('.ntbl td.note').forEach(td=>td.onclick=()=>td.classList.toggle('open'));
+  host.querySelectorAll('.ntbl .ncheck[data-prop]').forEach(ck=>ck.onclick=async e=>{ e.stopPropagation(); const tr=ck.closest('tr'); const pid=tr.dataset.pid,prop=ck.dataset.prop; const cur=ck.classList.contains('on'),nv=!cur;
+    ck.classList.toggle('on',nv); ck.textContent=nv?'✓':''; const row=d.rows.find(r=>r.id===pid); if(row&&row.cells[prop])row.cells[prop].v=nv;
+    try{ await postTick('/notion/check',{pageId:pid,prop,value:nv}); renderMon(); }
+    catch(err){ ck.classList.toggle('on',cur); ck.textContent=cur?'✓':''; if(row&&row.cells[prop])row.cells[prop].v=cur; toast('notion: '+(err&&err.message||err)); } });
+  const fb=host.querySelector('#nFilterBtn'); if(fb)fb.onclick=()=>{ nFilterOpen=!nFilterOpen; const m=host.querySelector('#nFilter'); if(m)m.style.display=nFilterOpen?'block':'none'; };
+  host.querySelectorAll('.nfopt').forEach(b=>b.onclick=()=>{ const col=b.dataset.col,val=b.dataset.val; const arr=v.filt[col]||(v.filt[col]=[]); const i=arr.indexOf(val); if(i<0)arr.push(val); else arr.splice(i,1); if(!arr.length)delete v.filt[col]; saveView(); nFilterOpen=true; renderNotionTab(); });
+  const fc=host.querySelector('#nFiltClear'); if(fc)fc.onclick=()=>{ v.filt={}; saveView(); nFilterOpen=false; renderNotionTab(); };
+  const jb=host.querySelector('#nJump'); if(jb)jb.onclick=()=>{ const wrap=host.querySelector('#ntblWrap'); const tr=wrap&&wrap.querySelector('tr[data-dotoday="1"]'); if(tr){ tr.scrollIntoView({block:'center',behavior:'smooth'}); tr.classList.add('flash'); setTimeout(()=>tr.classList.remove('flash'),1300); } else toast('no “do” tasks today ♡'); }; }
 // dataP picker — tick which shared databases to track
 function renderNotionPick(list){ const host=document.getElementById('notionPick'); if(!host)return;
   if(!list){ host.innerHTML='connect your worker, then “load mine”.'; return; }
