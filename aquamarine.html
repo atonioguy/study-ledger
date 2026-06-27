@@ -67,20 +67,22 @@
   .clkdate{ width:58%; height:auto; image-rendering:pixelated; display:block; margin:2.2cqh auto 0;
     filter:drop-shadow(0 0 .7cqh rgba(150,225,255,.7)); opacity:.92; }
   /* mini month calendar shown in the aligned box (TickTick view goes here later) */
-  .calmini{ width:100%; height:100%; box-sizing:border-box; padding:4cqh 5cqw; display:flex; flex-direction:column; background:linear-gradient(#7a6450,#6a5340); color:#f0e7d8; }
-  .calmini .ch{ font-size:9.5cqh; font-weight:800; text-align:center; color:#fbf4e8; letter-spacing:.4px; margin-bottom:1.5cqh; text-transform:uppercase; }
-  .calmini .cw{ display:grid; grid-template-columns:repeat(7,1fr); font-size:5.6cqh; color:#c4b39c; text-align:center; margin-bottom:.6cqh; }
+  .calmini{ width:100%; height:100%; box-sizing:border-box; padding:4cqh 5cqw; display:flex; flex-direction:column; font-family:var(--pixfont2); color:#f0e7d8;
+    background:linear-gradient(160deg,rgba(126,100,80,.93),rgba(100,78,60,.94)); border-radius:4cqmin; box-shadow:0 0 3cqmin rgba(228,200,156,.32), inset 0 0 0 0.5cqh rgba(244,232,212,.16); }
+  .calmini .ch{ font-size:8.5cqh; font-weight:600; text-align:center; color:#fbf4e8; letter-spacing:.4px; margin-bottom:1.5cqh; text-shadow:0 0 1.5cqh rgba(244,224,180,.4); }
+  .calmini .cw{ display:grid; grid-template-columns:repeat(7,1fr); font-size:5cqh; color:#cbb79c; text-align:center; margin-bottom:.6cqh; }
   .calmini .cd{ display:grid; grid-template-columns:repeat(7,1fr); grid-auto-rows:1fr; gap:.3cqh; flex:1; }
-  .calmini .cd i{ font-style:normal; font-size:6cqh; display:grid; place-items:center; color:#ece0cd; border-radius:1.6cqw; position:relative; }
-  .calmini .cd i.td{ background:#f0e6d4; color:#6a5340; font-weight:800; }
+  .calmini .cd i{ font-style:normal; font-size:5.4cqh; display:grid; place-items:center; color:#ece0cd; border-radius:1.8cqw; position:relative; }
+  .calmini .cd i.td{ background:#e9d3a6; color:#5e4733; font-weight:600; box-shadow:0 0 1.6cqh rgba(233,211,166,.6); }
   .calmini .cd i em{ position:absolute; bottom:.4cqh; left:0; right:0; display:flex; justify-content:center; gap:.7cqw; pointer-events:none; }
   .calmini .cd i em u{ width:1.5cqw; height:1.5cqw; border-radius:50%; } .calmini .cd i em u.evd{ background:#e0c79a; }
 
-  /* weather HUD (frameless on glass) */
-  .wx{ width:100%; height:100%; box-sizing:border-box; padding:7cqh 6cqw; color:#eaf6ff; text-shadow:0 1px 3px rgba(0,0,0,.6);
-    background:linear-gradient(150deg,rgba(14,22,38,.5),rgba(10,16,30,.42)); backdrop-filter:blur(5px); border:1px solid rgba(180,210,240,.14); border-radius:5cqmin; display:flex; flex-direction:column; justify-content:center; }
-  .wx .r1{ display:flex; align-items:center; gap:2cqw; } .wx .tp{ font-size:30cqh; font-weight:300; }
-  .wx .hl{ font-size:9cqh; color:#bfe2f2; margin-top:1cqh; } .wx .loc{ font-size:7.5cqh; letter-spacing:.18em; text-transform:uppercase; color:#8fbed4; margin-top:1.5cqh; }
+  /* weather — soft, glowy, rounded pixel HUD on the glass */
+  .wx{ width:100%; height:100%; box-sizing:border-box; padding:7cqh 6cqw; color:#eaf6ff; text-shadow:0 1px 2px rgba(0,0,0,.45); font-family:var(--pixfont2);
+    background:linear-gradient(150deg,rgba(70,96,134,.30),rgba(40,58,92,.24)); backdrop-filter:blur(7px); border:2px solid rgba(185,218,248,.34); border-radius:5cqmin;
+    box-shadow:0 0 5cqmin rgba(150,200,255,.34), inset 0 0 2.4cqmin rgba(190,225,255,.16); display:flex; flex-direction:column; justify-content:center; }
+  .wx .r1{ display:flex; align-items:center; gap:2cqw; } .wx .tp{ font-size:26cqh; font-weight:600; text-shadow:0 0 2cqh rgba(160,210,255,.5),0 1px 2px rgba(0,0,0,.4); }
+  .wx .hl{ font-size:8cqh; color:#cdeaf6; margin-top:1.2cqh; } .wx .loc{ font-size:6.5cqh; letter-spacing:.14em; text-transform:uppercase; color:#a3cee0; margin-top:1.8cqh; }
 
   /* pixel sprites */
   .px{ width:100%; height:100%; image-rendering:pixelated; }
@@ -240,7 +242,7 @@
     --body:#4d5156; --spot:#595c62; --tx:#d6cdbf; --card:#c8bcae; --cardtx:#3c3548; --inset:#9c8d8a;
     border-radius:0 !important; background:var(--frame) !important; border:3px solid !important; border-color:var(--hi) var(--lo) var(--lo) var(--hi) !important;
     box-shadow:0 0 0 2px var(--outline), 0 16px 44px rgba(0,0,0,.55) !important; color:var(--tx); font-family:var(--pixfont); image-rendering:pixelated; }
-  .pxwin.koi{ --hi:#f2eee0; --lo:#8f8c84; --frame:#c8c2af; --bar:#8a97a5; --barhi:#a7b2bd; --bartx:#1b2530; --outline:#5a5650; --body:#5b5e55; --spot:#686a61; --tx:#e3dece; --card:#ddd7c6; --cardtx:#2a2e35; --inset:#a39d8d; }
+  .pxwin.koi{ --hi:#f2eee0; --lo:#8f8c84; --frame:#c8c2af; --bar:#8a97a5; --barhi:#a7b2bd; --bartx:#1b2530; --outline:#5a5650; --body:#5b5e55; --spot:#686a61; --tx:#e3dece; --card:#ddd7c6; --cardtx:#2a2e35; --inset:#a39d8d; --panel:#43463f; }
   .pxbar{ display:flex; align-items:center; gap:6px; background:linear-gradient(180deg,var(--barhi) 0 38%,var(--bar) 38%); color:var(--bartx); padding:5px 7px; font-size:11px; letter-spacing:.5px; border-bottom:2px solid var(--outline); flex:none; text-shadow:1px 1px 0 rgba(40,35,55,.45); }
   .pxbar .pxico{ font-size:13px; line-height:1; text-shadow:none; } .pxbar .pxtitle{ flex:1; text-transform:lowercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .pxbtns{ display:flex; gap:3px; flex:none; } .pxbtns b{ width:18px; height:15px; display:grid; place-items:center; font-size:9px; font-weight:400; background:var(--frame); color:#3c3548; border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); }
@@ -299,8 +301,8 @@
   .monbuddy{ flex:none; display:flex; align-items:center; gap:8px; background:var(--card); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:7px 11px 7px 9px; }
   .monbuddy .slimeic{ width:26px; height:19px; flex:none; } .monbuddy .bd{ display:flex; flex-direction:column; line-height:1.3; } .monbuddy .bd b{ font-size:12px; font-weight:600; } .monbuddy .bd .st{ font-size:10px; color:#5a8a5e; }
   /* dither stays on the window interior (base .pxbody); dense content sits on solid panels for readability */
-  #dashP #dBig, #dashP #dNotion{ background:var(--body); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:6px 9px; }
-  #dashP .ntbl-wrap{ background:var(--body); }
+  #dashP #dBig, #dashP #dNotion{ background:var(--panel); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:6px 9px; }
+  #dashP .ntbl-wrap{ background:var(--panel); }
   /* keep select chips inside their column (no overlap into the next) */
   #dashP .ntbl td{ overflow:hidden; } #dashP .nchip{ max-width:100%; } #dashP .nchip>span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
   /* mini desk monitor — a tiny pixel window with a title bar */
@@ -315,6 +317,27 @@
     box-shadow:inset 0 0 6cqmin rgba(0,0,0,.5), inset 0 0.5cqh 0 rgba(255,255,255,.08); mix-blend-mode:normal; }
   /* 🔗 image-url button in the phone composer */
   .phcompose #twLink{ border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; font-family:var(--pixfont); cursor:pointer; padding:0 9px; background:var(--frame); color:var(--cardtx); font-size:13px; } .phcompose #twLink:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
+  /* feed pagination + post timestamps */
+  .pxwin .tw .twts{ font-size:8px; color:var(--lo); margin-left:6px; }
+  .phpager{ display:flex; align-items:center; justify-content:center; gap:8px; flex:none; margin-top:7px; font-family:var(--pixfont); font-size:9px; color:var(--tx); }
+  .phpager:empty{ display:none; }
+  .phpager button{ background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; cursor:pointer; padding:3px 10px; font-family:var(--pixfont); font-size:11px; } .phpager button:disabled{ opacity:.4; cursor:default; }
+  .phpager .pp{ display:flex; align-items:center; gap:5px; } .phpager #phPageIn{ width:26px; text-align:center; background:var(--hi); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); border-radius:0; color:var(--cardtx); font-family:var(--pixfont); font-size:9px; padding:2px; }
+
+  /* ===== calendar (expanded) — soft, glowy, rounded pixel panel in brown ===== */
+  #calP .pc{ background-color:rgba(108,86,66,.9); background-image:radial-gradient(rgba(46,32,20,.17) 1px,transparent 1.5px); background-size:4px 4px;
+    border:2px solid rgba(230,204,162,.45); border-radius:0; box-shadow:none;
+    clip-path:polygon(0 6px,3px 6px,3px 3px,6px 3px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 3px,calc(100% - 3px) 3px,calc(100% - 3px) 6px,100% 6px,100% calc(100% - 6px),calc(100% - 3px) calc(100% - 6px),calc(100% - 3px) calc(100% - 3px),calc(100% - 6px) calc(100% - 3px),calc(100% - 6px) 100%,6px 100%,6px calc(100% - 3px),3px calc(100% - 3px),3px calc(100% - 6px),0 calc(100% - 6px));
+    filter:drop-shadow(0 0 14px rgba(230,204,162,.3)) drop-shadow(0 14px 26px rgba(0,0,0,.45)); color:#f0e7d8; font-family:var(--pixfont2); }
+  #calP .cg .dy{ border-radius:3px; } #calP .cg .dy.td b{ border-radius:2px; }
+  #calP .px2{ background:rgba(244,232,212,.14); color:#f0e7d8; }
+  #calP .calhd h3{ color:#fbf4e8; } #calP .calhd .nav,#calP .calhd .calt{ background:rgba(244,232,212,.12); border:2px solid rgba(228,200,156,.3); color:#f0e7d8; border-radius:9px; }
+  #calP .cg .dw{ color:#cbb79c; } #calP .cg .dy{ background:rgba(244,232,212,.07); border-radius:9px; color:#ece0cd; }
+  #calP .cg .dy:hover{ background:rgba(244,232,212,.15); } #calP .cg .dy.has{ background:rgba(244,232,212,.11); } #calP .cg .dy.dim{ background:transparent; }
+  #calP .cg .dy b{ color:#f0e7d8; } #calP .cg .dy.td b{ background:#e9d3a6; color:#5e4733; border-radius:6px; box-shadow:0 0 9px rgba(233,211,166,.6); } #calP .cg .dy.sel{ outline:2px solid rgba(244,224,180,.85); }
+  #calP .cg .chip{ background:rgba(244,232,212,.16); color:#f5ecdc; } #calP .cg .more{ color:#cbb79c; }
+  #calP #calDay{ border-top:1px solid rgba(244,232,212,.18); } #calP #calDay .cdh{ color:#f0e7d8; } #calP #calDay .empty{ color:#cbb79c; }
+  #calP .bt{ color:#f0e7d8; } #calP .bt:hover{ background:rgba(244,232,212,.08); } #calP .bt .tm{ color:#cbb79c; } #calP .bt .ck{ border-color:#cbb79c; background:rgba(244,232,212,.1); } #calP .bt.dn .ck{ background:#cbab7f; border-color:#cbab7f; } #calP .bt .lb{ background:rgba(244,232,212,.16); color:#f5ecdc; }
 </style>
 </head>
 <body>
@@ -372,6 +395,7 @@
     <div class="pxbody phbody">
       <div class="phfeed-hd">♥ my feed</div>
       <div id="phoneFeed" style="flex:1;overflow:auto"></div>
+      <div class="phpager" id="phPager"></div>
       <div id="twPreview" style="display:none;position:relative;margin-top:8px"><img id="twPreviewImg" style="max-width:100%;max-height:120px;display:block"><span id="twPreviewX">✕</span></div>
       <div class="phcompose"><textarea id="twIn" placeholder="say something..."></textarea><button id="twAttach" title="attach image file">📎</button><button id="twLink" title="image url">🔗</button><button id="twPost">post</button><input id="twFile" type="file" accept="image/*" hidden></div>
     </div>
@@ -650,13 +674,23 @@ document.querySelectorAll('#dGroupBar button').forEach(b=>{ b.classList.toggle('
 
 /* feed + brain */
 let feed=JSON.parse(localStorage.getItem('aq_feed')||'null')||['building a desk for my brain 🪴','the bettas judge my list','iced coffee #4 ✦'];
-// posts can be a plain string (legacy) or {t:text, img:dataURL}
-const ptext=p=>typeof p==='string'?p:(p&&p.t||''); const pimg=p=>typeof p==='string'?'':(p&&p.img||'');
+// posts: plain string (legacy) or {t:text, img:dataURL/url, ts:ms}
+const ptext=p=>typeof p==='string'?p:(p&&p.t||''); const pimg=p=>typeof p==='string'?'':(p&&p.img||''); const ptime=p=>(p&&typeof p==='object'&&p.ts)||0;
+const PER=10; let feedPage=0;
+function fmtAgo(ts){ if(!ts)return ''; const s=Math.floor((Date.now()-ts)/1000); if(s<60)return 'now'; const m=Math.floor(s/60); if(m<60)return m+'m'; const h=Math.floor(m/60); if(h<24)return h+'h'; const d=Math.floor(h/24); if(d<7)return d+'d'; return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric'}).toLowerCase(); }
 function saveFeed(){ try{ localStorage.setItem('aq_feed',JSON.stringify(feed)); }
   catch(e){ while(feed.length>3){ feed.pop(); try{ localStorage.setItem('aq_feed',JSON.stringify(feed)); toast('storage full — trimmed old posts'); return; }catch(e2){} } } }
-function renderFeed(){ const f=document.getElementById('phoneFeed');
-  if(f) f.innerHTML=feed.map((p,i)=>{ const t=esc(ptext(p)),im=pimg(p);
-    return `<div class="tw"><div class="twh"><b>me</b><span class="twx" data-del="${i}" title="delete">✕</span></div>${t?`<div class="twt">${t}</div>`:''}${im?`<img class="twimg" src="${im}">`:''}</div>`; }).join('');
+function feedPages(){ return Math.max(1,Math.ceil(feed.length/PER)); }
+function renderFeed(){ const f=document.getElementById('phoneFeed'); const pages=feedPages();
+  feedPage=Math.max(0,Math.min(pages-1,feedPage)); const start=feedPage*PER, slice=feed.slice(start,start+PER);
+  if(f) f.innerHTML=slice.map((p,j)=>{ const i=start+j,t=esc(ptext(p)),im=pimg(p),ago=fmtAgo(ptime(p));
+    return `<div class="tw"><div class="twh"><b>me</b>${ago?`<span class="twts">${ago}</span>`:''}<span class="twx" data-del="${i}" title="delete">✕</span></div>${t?`<div class="twt">${t}</div>`:''}${im?`<img class="twimg" src="${im}">`:''}</div>`; }).join('')||`<div class="phfeed-hd" style="opacity:.55">no posts yet ♡</div>`;
+  const pg=document.getElementById('phPager');
+  if(pg){ pg.innerHTML = pages>1 ? `<button id="phPrev"${feedPage<=0?' disabled':''}>‹</button><span class="pp">page <input id="phPageIn" value="${feedPage+1}" inputmode="numeric"> / ${pages}</span><button id="phNext"${feedPage>=pages-1?' disabled':''}>›</button>` : '';
+    if(pages>1){ const go=n=>{ feedPage=Math.max(0,Math.min(pages-1,n)); renderFeed(); };
+      const pv=document.getElementById('phPrev'); if(pv)pv.onclick=()=>go(feedPage-1);
+      const nx=document.getElementById('phNext'); if(nx)nx.onclick=()=>go(feedPage+1);
+      const inp=document.getElementById('phPageIn'); if(inp)inp.onchange=()=>{ const n=parseInt(inp.value,10); isNaN(n)?inp.value=feedPage+1:go(n-1); }; } }
   const m=document.getElementById('phMini'); if(m) m.innerHTML=feed.slice(0,6).map(p=>{ const t=ptext(p),im=pimg(p); return `<div class="pm">${im?'📷 ':''}${esc(t)||'photo'}</div>`; }).join(''); }
 const twIn=document.getElementById('twIn');
 let pendingImg=null;
@@ -675,7 +709,7 @@ if(twLink) twLink.onclick=()=>{ const u=(prompt('paste an image URL')||'').trim(
   const im=new Image(); im.onload=()=>setPending(u); im.onerror=()=>toast('couldn’t load that image url'); im.src=u; };
 document.getElementById('twPreviewX').onclick=clearPending;
 document.getElementById('twPost').onclick=()=>{ const v=twIn.value.trim(); if(!v&&!pendingImg)return;
-  feed.unshift(pendingImg?{t:v,img:pendingImg}:{t:v}); if(feed.length>20)feed.pop(); saveFeed(); renderFeed(); twIn.value=''; clearPending(); };
+  const post={t:v,ts:Date.now()}; if(pendingImg)post.img=pendingImg; feed.unshift(post); if(feed.length>50)feed.pop(); feedPage=0; saveFeed(); renderFeed(); twIn.value=''; clearPending(); };
 document.getElementById('phoneFeed').addEventListener('click',e=>{ const d=e.target.closest('[data-del]'); if(!d)return; feed.splice(+d.dataset.del,1); saveFeed(); renderFeed(); });
 const NCOL=['#cba9b0','#aebda3','#b3aac2','#cabd9f','#ccac90','#a6b6c0']; // muted dusty pastels
 const OLDNCOL=['#f3dbe2','#dfeadb','#e2dff2','#f5ead3','#f7e0c4','#d9e8f0']; // migrate old bright notes → muted
