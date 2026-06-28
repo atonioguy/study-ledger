@@ -248,6 +248,7 @@
   .pxbar .pxico{ font-size:13px; line-height:1; text-shadow:none; } .pxbar .pxtitle{ flex:1; text-transform:lowercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .pxbtns{ display:flex; gap:3px; flex:none; } .pxbtns b{ width:18px; height:15px; display:grid; place-items:center; font-size:9px; font-weight:400; background:var(--frame); color:#3c3548; border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); }
   .pxbtns b[data-close]{ cursor:pointer; } .pxbtns b[data-close]:hover{ background:#c77f86; color:#2a1416; }
+  .pxbtns b.pxref{ cursor:pointer; } .pxbtns b.pxref:hover{ background:var(--hi); } .pxbtns b.pxref.spin{ opacity:.55; animation:crspin .7s linear infinite; }
   .pxbody{ flex:1; min-height:0; background-color:var(--body); margin:3px; border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); color:var(--tx); overflow:auto;
     background-image:radial-gradient(var(--spot) 1px,transparent 1.5px); background-size:4px 4px; }
   .pxwin ::-webkit-scrollbar{ width:15px; height:15px; } .pxwin ::-webkit-scrollbar-track{ background:var(--inset); }
@@ -513,7 +514,7 @@
 
   <div class="scrim" id="scrim"></div>
   <div class="pop" id="dashP"><div class="pc pxwin koi matte" style="width:min(900px,94vw);max-height:86vh;padding:0;display:flex;flex-direction:column;overflow:hidden">
-    <div class="pxbar"><span class="pxico">🖥</span><span class="pxtitle">tasks</span><span class="pxbtns"><b>⤢</b><b>▭</b><b data-close>✕</b></span></div>
+    <div class="pxbar"><span class="pxico">🖥</span><span class="pxtitle">tasks</span><span class="pxbtns"><b class="pxref" title="refresh">↻</b><b>⤢</b><b>▭</b><b data-close>✕</b></span></div>
     <div class="pxbody monbody">
       <div class="monhd"><div class="monhl"><h1 id="dHi">good evening, antonio</h1><div class="s" id="dDate2"></div></div>
         <div class="monbuddy"><span class="slimeic"></span><div class="bd"><b>aquamarine</b><span class="st">◍ online</span></div></div></div>
@@ -545,7 +546,7 @@
       <div class="bhd"><button class="mkbtn" id="boardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div>
       <div class="bigboard" id="bigBoard"></div></div></div></div>
   <div class="pop" id="calP"><div class="pc pxwin brown matte" style="width:min(600px,94vw);max-height:90vh;padding:0;display:flex;flex-direction:column;overflow:hidden">
-    <div class="pxbar"><span class="pxico">📅</span><span class="pxtitle">calendar</span><span class="pxbtns"><b>_</b><b>▢</b><b data-close>✕</b></span></div>
+    <div class="pxbar"><span class="pxico">📅</span><span class="pxtitle">calendar</span><span class="pxbtns"><b class="pxref" title="refresh">↻</b><b>_</b><b>▢</b><b data-close>✕</b></span></div>
     <div class="pxbody monbody">
       <div class="calhd"><button class="nav" id="calPrev">‹</button><h3 id="calTitle">📅 June 2026</h3><button class="calt" id="calToday">today</button><button class="nav" id="calNext">›</button></div>
       <div class="cg" id="calGrid"></div><div id="calDay"></div></div></div></div>
@@ -914,8 +915,8 @@ function cleanSync(){ if(document.body.classList.contains('clean2d')) renderClea
 function clRefresh(kind,btn){ if(btn&&btn.classList.contains('spin'))return; if(btn)btn.classList.add('spin');
   const stop=()=>{ if(btn)btn.classList.remove('spin'); };
   if(kind==='notion'){ if(monSource==='ticktick'){ stop(); return; }
-    loadNotionDB(monSource).then(()=>{ renderMon(); cleanSync(); stop(); toast('notion updated ♡'); }).catch(e=>{ stop(); toast('notion: '+(e&&e.message||e)); }); }
-  else { loadTickTick().then(ok=>{ stop(); toast(ok===false?'connect TickTick first':'tasks updated ♡'); }).catch(e=>{ stop(); toast('ticktick: '+(e&&e.message||e)); }); } }
+    loadNotionDB(monSource).then(()=>{ renderMon(); if(openId==='dashP') renderNotionTab(); cleanSync(); stop(); toast('notion updated ♡'); }).catch(e=>{ stop(); toast('notion: '+(e&&e.message||e)); }); }
+  else { loadTickTick().then(ok=>{ stop(); toast(ok===false?'connect TickTick first':'tasks updated ♡'); }).catch(e=>{ stop(); toast('ticktick: '+(e&&e.message||e)); }); } }   // loadTickTick re-renders mini, #dBig, calendar + clean
 function renderClean(){ clHeader(); clRenderTasks(); clRenderCalFull(); clRenderBoard(); clRenderFeed(); clRenderNotion(); }
 function clHeader(){ const g=document.getElementById('clGreet'),dt=document.getElementById('clDate'),dHi=document.getElementById('dHi');
   if(g&&dHi&&dHi.textContent) g.textContent=dHi.textContent;
@@ -972,6 +973,8 @@ function clRenderNotion(){ const card=document.getElementById('clCard-notion'),e
 function newNote(){ openP('brainP'); renderPile(); setTimeout(()=>brainIn.focus(),200); }
 document.getElementById('boardNew').onclick=newNote;
 document.querySelectorAll('#clean .crefresh').forEach(btn=>btn.onclick=()=>clRefresh(btn.dataset.r,btn));
+{ const dRef=document.querySelector('#dashP .pxref'); if(dRef)dRef.onclick=()=>{ const t=document.querySelector('.dtab.on'); clRefresh(t&&t.dataset.p==='1'?'notion':'tasks',dRef); };   // dashP refresh follows the active tab
+  const cRef=document.querySelector('#calP .pxref'); if(cRef)cRef.onclick=()=>clRefresh('tasks',cRef); }
 { const cbn=document.getElementById('clBoardNew'); if(cbn)cbn.onclick=newNote;   // clean corkboard "pin a thought"
   const p=document.getElementById('clCalPrev'),nx=document.getElementById('clCalNext'),td=document.getElementById('clCalToday');
   if(p) p.onclick=()=>{ if(--calView.mo<0){calView.mo=11;calView.y--;} calView.sel=null; clRenderCalFull(); };
