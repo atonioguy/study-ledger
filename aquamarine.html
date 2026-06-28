@@ -406,7 +406,11 @@
   .cwin.col4{ grid-column:span 4; } .cwin.col5{ grid-column:span 5; } .cwin.col6{ grid-column:span 6; } .cwin.col7{ grid-column:span 7; } .cwin.col8{ grid-column:span 8; } .cwin.col12{ grid-column:span 12; }
   @media(max-width:880px){ .cwin.col4,.cwin.col5,.cwin.col6,.cwin.col7,.cwin.col8{ grid-column:span 12; } }
   .cwin .pxbody{ overflow:auto; }
-  .cwin .pxbar .cwn{ margin-left:auto; background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:0 6px; font-size:10px; font-family:var(--pixfont2); }
+  .cwin .pxbar .cwn{ background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:0 6px; font-size:10px; font-family:var(--pixfont2); }
+  .cwin .pxbar .pxtitle{ flex:1; } .cwin .pxbar .cwn{ margin-left:6px; }
+  #clean .crefresh{ flex:none; width:22px; height:16px; display:grid; place-items:center; cursor:pointer; background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); font-size:12px; font-family:var(--pixfont2); margin-left:6px; text-shadow:none; line-height:1; }
+  #clean .crefresh:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); } #clean .crefresh:hover{ background:var(--hi); }
+  #clean .crefresh.spin{ opacity:.6; animation:crspin .7s linear infinite; } @keyframes crspin{ to{ transform:rotate(360deg); } }
   .cl-empty{ color:#b0a99a; font-size:14px; padding:8px 2px; font-family:var(--pixfont2); }
   .cpanel{ background:var(--panel); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:4px 9px; }
 
@@ -490,9 +494,9 @@
         <div class="cl-wx"><span class="wxi" id="clWxIc">·</span><div class="col"><div class="wxt" id="clWxTp">—</div><div class="wxs" id="clWxCond">—</div></div><div class="wxhl" id="clWxHl"></div></div>
       </div>
       <div class="cl-grid">
-        <div class="cwin col7 pxwin koi matte"><div class="pxbar"><span class="pxico">✓</span><span class="pxtitle">today</span><span class="cwn" id="clTaskN"></span></div><div class="pxbody monbody"><div class="dgrp" id="clGroupBar"></div><div class="cpanel" id="clTasks"></div></div></div>
-        <div class="cwin col5 pxwin brown matte"><div class="pxbar"><span class="pxico">📅</span><span class="pxtitle">calendar</span></div><div class="pxbody monbody"><div class="calhd"><button class="nav" id="clCalPrev">‹</button><h3 id="clCalTitle">📅 calendar</h3><button class="calt" id="clCalToday">today</button><button class="nav" id="clCalNext">›</button></div><div class="cg" id="clCalGrid"></div><div id="clCalDay"></div></div></div>
-        <div class="cwin col12 pxwin koi matte" id="clCard-notion" style="display:none"><div class="pxbar"><span class="pxico">📓</span><span class="pxtitle" id="clNotionTtl">notion</span></div><div class="pxbody monbody"><div id="clNotion"></div></div></div>
+        <div class="cwin col7 pxwin koi matte"><div class="pxbar"><span class="pxico">✓</span><span class="pxtitle">today</span><b class="crefresh" data-r="tasks" title="refresh from TickTick">↻</b><span class="cwn" id="clTaskN"></span></div><div class="pxbody monbody"><div class="dgrp" id="clGroupBar"></div><div class="cpanel" id="clTasks"></div></div></div>
+        <div class="cwin col5 pxwin brown matte"><div class="pxbar"><span class="pxico">📅</span><span class="pxtitle">calendar</span><b class="crefresh" data-r="tasks" title="refresh from TickTick">↻</b></div><div class="pxbody monbody"><div class="calhd"><button class="nav" id="clCalPrev">‹</button><h3 id="clCalTitle">📅 calendar</h3><button class="calt" id="clCalToday">today</button><button class="nav" id="clCalNext">›</button></div><div class="cg" id="clCalGrid"></div><div id="clCalDay"></div></div></div>
+        <div class="cwin col12 pxwin koi matte" id="clCard-notion" style="display:none"><div class="pxbar"><span class="pxico">📓</span><span class="pxtitle" id="clNotionTtl">notion</span><b class="crefresh" data-r="notion" title="refresh from Notion">↻</b></div><div class="pxbody monbody"><div id="clNotion"></div></div></div>
         <div class="cwin col8 pxwin matte"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div></div></div>
         <div class="cwin col4 pxwin matte"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
       </div>
@@ -906,6 +910,12 @@ function setView2d(on){ view2d=on; document.body.classList.toggle('clean2d',on);
   const b=document.getElementById('viewToggle'); if(b){ b.querySelector('.ic').textContent=on?'🪟':'▦'; b.querySelector('.lbl').textContent=on?'room':'clean'; }
   if(on) renderClean(); else fit(); }
 function cleanSync(){ if(document.body.classList.contains('clean2d')) renderClean(); }
+// per-window refresh — re-pull that one source from the worker so native-app edits show without a full reload
+function clRefresh(kind,btn){ if(btn&&btn.classList.contains('spin'))return; if(btn)btn.classList.add('spin');
+  const stop=()=>{ if(btn)btn.classList.remove('spin'); };
+  if(kind==='notion'){ if(monSource==='ticktick'){ stop(); return; }
+    loadNotionDB(monSource).then(()=>{ renderMon(); cleanSync(); stop(); toast('notion updated ♡'); }).catch(e=>{ stop(); toast('notion: '+(e&&e.message||e)); }); }
+  else { loadTickTick().then(ok=>{ stop(); toast(ok===false?'connect TickTick first':'tasks updated ♡'); }).catch(e=>{ stop(); toast('ticktick: '+(e&&e.message||e)); }); } }
 function renderClean(){ clHeader(); clRenderTasks(); clRenderCalFull(); clRenderBoard(); clRenderFeed(); clRenderNotion(); }
 function clHeader(){ const g=document.getElementById('clGreet'),dt=document.getElementById('clDate'),dHi=document.getElementById('dHi');
   if(g&&dHi&&dHi.textContent) g.textContent=dHi.textContent;
@@ -961,6 +971,7 @@ function clRenderNotion(){ const card=document.getElementById('clCard-notion'),e
   el.innerHTML=chips+renderNotionTable(d); wire(); attachTableHandlers(el,d,active,clRenderNotion); }   // full sort/filter/check, but re-renders the clean table
 function newNote(){ openP('brainP'); renderPile(); setTimeout(()=>brainIn.focus(),200); }
 document.getElementById('boardNew').onclick=newNote;
+document.querySelectorAll('#clean .crefresh').forEach(btn=>btn.onclick=()=>clRefresh(btn.dataset.r,btn));
 { const cbn=document.getElementById('clBoardNew'); if(cbn)cbn.onclick=newNote;   // clean corkboard "pin a thought"
   const p=document.getElementById('clCalPrev'),nx=document.getElementById('clCalNext'),td=document.getElementById('clCalToday');
   if(p) p.onclick=()=>{ if(--calView.mo<0){calView.mo=11;calView.y--;} calView.sel=null; clRenderCalFull(); };
