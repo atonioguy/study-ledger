@@ -455,6 +455,60 @@
   #clean .nchip{ background:var(--card); color:var(--cardtx); max-width:100%; } #clean .nchip>span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
   #clean .ncheck{ border-color:var(--lo); background:var(--card); } #clean .ncheck.on{ background:#8fae8f; border-color:#8fae8f; }
   #clean .ndate em{ color:#b0a99a; font-size:12px; }
+
+  /* ===== clean view skin toggle ===== */
+  .cl-skin{ display:flex; border:1px solid rgba(160,180,200,.25); border-radius:11px; overflow:hidden; flex:none; }
+  .cl-skin button{ background:rgba(20,28,44,.5); color:var(--soft); border:none; padding:8px 13px; font:inherit; font-size:12px; cursor:pointer; transition:.15s; }
+  .cl-skin button:hover{ color:var(--text); } .cl-skin button.on{ background:var(--sakura); color:#2a1820; font-weight:600; }
+  .cl-keep{ display:none; }
+
+  /* ===== OG (native-app) skin — light windows that imitate the real apps, custom features intact ===== */
+  #clean.og{ --ogtx:#37352f; --ogsub:#787774; --ogline:#ececeb; --oghover:#f6f6f5; --ogblue:#2383e2; }
+  #clean.og .cwin.pxwin{ background:#fff !important; border:1px solid #e3e3e1 !important; border-radius:13px !important; box-shadow:0 8px 28px rgba(0,0,0,.3) !important; color:var(--ogtx); font-family:'Avenir Next','Segoe UI',system-ui,sans-serif !important; image-rendering:auto; }
+  #clean.og .pxbar{ background:#fbfbfa; color:var(--ogtx); border-bottom:1px solid var(--ogline); font-family:inherit; font-size:13px; letter-spacing:0; text-shadow:none; text-transform:none; padding:9px 12px; }
+  #clean.og .pxbar .pxico{ text-shadow:none; } #clean.og .pxbar .pxtitle{ text-transform:none; font-weight:600; }
+  #clean.og .pxbar .cwn{ background:#efefee; color:var(--ogsub); border:none; border-radius:10px; font-family:inherit; padding:1px 8px; }
+  #clean.og .crefresh{ background:none; border:none; color:var(--ogsub); font-size:14px; box-shadow:none; } #clean.og .crefresh:hover{ background:var(--oghover); color:var(--ogtx); }
+  #clean.og .pxbody{ background:#fff !important; background-image:none !important; color:var(--ogtx); margin:0; box-shadow:none; padding:0; }
+  #clean.og .pxbody::-webkit-scrollbar-thumb{ background:#d4d4d2; border:3px solid #fff; border-radius:7px; } #clean.og .pxbody::-webkit-scrollbar-track{ background:#fff; }
+  #clean.og .monbody{ font-family:inherit; padding:6px 4px 10px; } #clean.og .cpanel{ background:none; border:none; padding:0 6px; }
+  #clean.og .cl-empty,#clean.og .empty,#clean.og .nfoot,#clean.og .nempty{ color:var(--ogsub); font-family:inherit; padding-left:8px; }
+  /* TickTick-style task list */
+  #clean.og .dgrp{ padding:6px 8px 2px; } #clean.og .dgrp .gl{ color:var(--ogsub); }
+  #clean.og .dgrp button{ font-family:inherit; background:#fff; color:var(--ogsub); border:1px solid var(--ogline); border-radius:8px; font-size:12.5px; } #clean.og .dgrp button.on{ background:var(--ogblue); color:#fff; border-color:var(--ogblue); }
+  #clean.og .grph{ font-family:inherit; color:var(--ogsub); font-size:11.5px; letter-spacing:.04em; margin:13px 0 1px; padding:0 8px; } #clean.og .grph.ov{ color:#e0533d; } #clean.og .grph .gc{ background:#efefee; color:var(--ogsub); }
+  #clean.og .bt{ display:flex; align-items:center; gap:11px; padding:10px 8px; border-bottom:1px solid var(--ogline); color:var(--ogtx); } #clean.og .bt:hover{ background:var(--oghover); }
+  #clean.og .bt .ck{ order:0; width:19px; height:19px; border:1.5px solid #c1c1bf; border-radius:50%; background:#fff; } #clean.og .bt.dn .ck{ background:var(--ogblue); border-color:var(--ogblue); }
+  #clean.og .bt .tx{ order:1; flex:1; color:var(--ogtx); font-size:14.5px; } #clean.og .bt .lb{ order:2; background:#f0f0ef; color:var(--ogsub); border-radius:6px; font-size:11px; } #clean.og .bt .dot{ order:3; } #clean.og .bt .tm{ order:4; margin-left:6px; color:var(--ogsub); font-size:12.5px; min-width:auto; }
+  /* Notion-style database table */
+  #clean.og .npick{ padding:8px 8px 0; } #clean.og .nchip-pick{ font-family:inherit; background:#fff; color:var(--ogsub); border:1px solid var(--ogline); border-radius:8px; font-size:13px; } #clean.og .nchip-pick.on{ color:var(--ogtx); border-color:#cfcfcd; font-weight:600; box-shadow:inset 0 -2px 0 var(--ogblue); }
+  #clean.og .ntools{ padding:8px; } #clean.og .ntool{ font-family:inherit; background:#fff; color:var(--ogsub); border:1px solid var(--ogline); border-radius:8px; font-size:13px; } #clean.og .ntool:hover{ background:var(--oghover); }
+  #clean.og .nfilter{ background:#fff; border:1px solid var(--ogline); border-radius:11px; box-shadow:0 10px 28px rgba(0,0,0,.14); } #clean.og .nfh{ color:var(--ogsub); } #clean.og .nfopt{ font-family:inherit; background:#fff; color:var(--ogtx); border:1px solid var(--ogline); border-radius:7px; } #clean.og .nfopt.on{ background:var(--ogblue); color:#fff; border-color:var(--ogblue); } #clean.og .nfclear{ color:var(--ogblue); }
+  #clean.og .ntbl-wrap{ border:1px solid var(--ogline); border-radius:9px; background:#fff; margin:0 8px; }
+  #clean.og .ntbl{ font-family:inherit; font-size:14px; } #clean.og .ntbl th{ background:#fbfbfa; color:var(--ogsub); font-size:12px; font-weight:500; text-transform:none; letter-spacing:0; border-bottom:1px solid var(--ogline); padding:7px 11px; }
+  #clean.og .ntbl td{ color:var(--ogtx); border-bottom:1px solid var(--ogline); padding:7px 11px; } #clean.og .ntbl td.title{ color:var(--ogtx); font-weight:500; } #clean.og .ntbl tr:hover td{ background:var(--oghover); }
+  #clean.og .nchip{ background:color-mix(in srgb, var(--nc,#ddd) 26%, #fff); color:#37352f; border-radius:4px; padding:1px 7px; } #clean.og .nchip i{ display:none; }
+  #clean.og .ncheck{ border:1.5px solid #c1c1bf; background:#fff; border-radius:3px; } #clean.og .ncheck.on{ background:var(--ogblue); border-color:var(--ogblue); color:#fff; }
+  #clean.og .ndate em{ color:var(--ogsub); }
+  #clean.og .ntbl tr.do-today td{ background:rgba(35,131,226,.08); } #clean.og .ntbl tr.do-today td.title{ box-shadow:inset 3px 0 0 var(--ogblue); }
+  #clean.og .ntbl tr.due-today td{ background:rgba(224,83,61,.09); } #clean.og .ntbl tr.due-today td.title{ box-shadow:inset 3px 0 0 #e0533d; }
+  /* calendar-app month grid */
+  #clean.og .calhd h3{ color:var(--ogtx); font-size:16px; } #clean.og .calhd .nav,#clean.og .calhd .calt{ background:#fff; border:1px solid var(--ogline); color:var(--ogtx); border-radius:8px; font-family:inherit; }
+  #clean.og .cg{ background:none; border:none; padding:0 8px; gap:0; } #clean.og .cg .dw{ color:var(--ogsub); font-family:inherit; font-size:11px; }
+  #clean.og .cg .dy{ background:#fff; border:1px solid var(--ogline); box-shadow:none; color:var(--ogtx); font-family:inherit; border-radius:0; min-height:54px; } #clean.og .cg .dy:hover{ background:var(--oghover); } #clean.og .cg .dy.has{ background:#fff; } #clean.og .cg .dy.dim{ background:#fafafa; }
+  #clean.og .cg .dy b{ color:var(--ogtx); font-size:13px; font-weight:500; min-width:22px; height:22px; display:grid; place-items:center; } #clean.og .cg .dy.td{ background:#fff; box-shadow:none; } #clean.og .cg .dy.td b{ background:var(--ogblue); color:#fff; border-radius:50%; } #clean.og .cg .dy.sel{ outline:2px solid var(--ogblue); outline-offset:-2px; }
+  #clean.og .cg .chip{ background:rgba(35,131,226,.13); color:#1a6dc4; border-radius:4px; font-family:inherit; font-size:11px; } #clean.og .cg .more{ color:var(--ogsub); }
+  #clean.og #clCalDay{ background:none; border:none; border-top:1px solid var(--ogline); margin-top:12px; padding:11px 8px 0; } #clean.og #clCalDay .cdh{ color:var(--ogtx); font-family:inherit; }
+  /* Keep-style note grid (replaces the cork scatter in og) */
+  #clean.og #clBoard{ display:none; } #clean.og .cl-keep{ display:flex; flex-wrap:wrap; gap:10px; padding:12px; align-content:flex-start; } #clean.og .bhd .sp{ display:none; } #clean.og .mkbtn{ background:var(--ogblue); color:#fff; border:none; border-radius:8px; font-family:inherit; font-size:13px; }
+  .cl-keep .knote{ width:150px; min-height:58px; padding:11px 12px; border-radius:11px; font-size:13px; color:#3a3a36; line-height:1.4; word-break:break-word; box-shadow:0 1px 4px rgba(0,0,0,.13); border:1px solid rgba(0,0,0,.05); position:relative; }
+  .cl-keep .knote .kdel{ position:absolute; top:5px; right:7px; cursor:pointer; opacity:0; color:#555; font-style:normal; font-size:12px; transition:.15s; } .cl-keep .knote:hover .kdel{ opacity:.55; } .cl-keep .knote .kdel:hover{ opacity:1; color:#c0392b; }
+  /* Twitter/X-style feed */
+  #clean.og .cl-feed{ padding:6px 12px; } #clean.og .cl-feed .fp{ border-bottom:1px solid var(--ogline); font-family:inherit; padding:11px 4px 11px 46px; position:relative; }
+  #clean.og .cl-feed .fp:before{ content:''; position:absolute; left:2px; top:11px; width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#cfe3ff,#a7c4e6); box-shadow:inset 0 0 0 1px rgba(0,0,0,.05); }
+  #clean.og .cl-feed .fp:after{ content:'🌙'; position:absolute; left:9px; top:16px; font-size:16px; }
+  #clean.og .cl-feed .fp .fh{ color:var(--ogsub); font-size:12.5px; } #clean.og .cl-feed .fp .fh:first-letter{ color:var(--ogtx); }
+  #clean.og .cl-feed .fp .fb{ color:var(--ogtx); font-size:14.5px; } #clean.og .cl-feed .fp img{ border:1px solid var(--ogline); border-radius:14px; }
 </style>
 </head>
 <body>
@@ -493,12 +547,13 @@
         <span class="moon">🌙</span>
         <div class="ht"><h1 id="clGreet">good evening, antonio</h1><div class="hsub" id="clDate">—</div></div>
         <div class="cl-wx"><span class="wxi" id="clWxIc">·</span><div class="col"><div class="wxt" id="clWxTp">—</div><div class="wxs" id="clWxCond">—</div></div><div class="wxhl" id="clWxHl"></div></div>
+        <div class="cl-skin" title="window style"><button data-skin="pixel" class="on">✦ pixel</button><button data-skin="og">◻ og</button></div>
       </div>
       <div class="cl-grid">
         <div class="cwin col7 pxwin koi matte"><div class="pxbar"><span class="pxico">✓</span><span class="pxtitle">today</span><b class="crefresh" data-r="tasks" title="refresh from TickTick">↻</b><span class="cwn" id="clTaskN"></span></div><div class="pxbody monbody"><div class="dgrp" id="clGroupBar"></div><div class="cpanel" id="clTasks"></div></div></div>
         <div class="cwin col5 pxwin brown matte"><div class="pxbar"><span class="pxico">📅</span><span class="pxtitle">calendar</span><b class="crefresh" data-r="tasks" title="refresh from TickTick">↻</b></div><div class="pxbody monbody"><div class="calhd"><button class="nav" id="clCalPrev">‹</button><h3 id="clCalTitle">📅 calendar</h3><button class="calt" id="clCalToday">today</button><button class="nav" id="clCalNext">›</button></div><div class="cg" id="clCalGrid"></div><div id="clCalDay"></div></div></div>
         <div class="cwin col12 pxwin koi matte" id="clCard-notion" style="display:none"><div class="pxbar"><span class="pxico">📓</span><span class="pxtitle" id="clNotionTtl">notion</span><b class="crefresh" data-r="notion" title="refresh from Notion">↻</b></div><div class="pxbody monbody"><div id="clNotion"></div></div></div>
-        <div class="cwin col8 pxwin matte"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div></div></div>
+        <div class="cwin col8 pxwin matte"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div><div class="cl-keep" id="clKeep"></div></div></div>
         <div class="cwin col4 pxwin matte"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
       </div>
     </div>
@@ -911,6 +966,12 @@ function setView2d(on){ view2d=on; document.body.classList.toggle('clean2d',on);
   const b=document.getElementById('viewToggle'); if(b){ b.querySelector('.ic').textContent=on?'🪟':'▦'; b.querySelector('.lbl').textContent=on?'room':'clean'; }
   if(on) renderClean(); else fit(); }
 function cleanSync(){ if(document.body.classList.contains('clean2d')) renderClean(); }
+// clean view skin: 'pixel' (the pixel windows) or 'og' (native-app imitations)
+let cleanSkin=localStorage.getItem('aq_clean_skin')||'pixel';
+function applyCleanSkin(s){ cleanSkin=s; localStorage.setItem('aq_clean_skin',s); const c=document.getElementById('clean');
+  if(c){ c.classList.toggle('og',s==='og'); c.classList.toggle('pixel',s!=='og'); }
+  document.querySelectorAll('.cl-skin button').forEach(b=>b.classList.toggle('on',b.dataset.skin===s));
+  if(document.body.classList.contains('clean2d')) renderClean(); }
 // per-window refresh — re-pull that one source from the worker so native-app edits show without a full reload
 function clRefresh(kind,btn){ if(btn&&btn.classList.contains('spin'))return; if(btn)btn.classList.add('spin');
   const stop=()=>{ if(btn)btn.classList.remove('spin'); };
@@ -955,9 +1016,12 @@ function clRenderCalDay(){ const el=document.getElementById('clCalDay'); if(!el)
     : `<div class="empty">${liveTasks?'nothing scheduled ♡':'connect TickTick to see tasks'}</div>`);
   el.querySelectorAll('.bt .ck').forEach(ck=>ck.onclick=ev=>{ ev.stopPropagation(); const r=ck.closest('.bt'); const t=liveTasks&&liveTasks.find(x=>String(x.id)===r.dataset.id); if(t)checkOff(t,r); }); }
 // corkboard — the same draggable scatter board as the expanded 3D corkboard
-function clRenderBoard(){ const b=document.getElementById('clBoard'),n=document.getElementById('clNoteN'); if(!b)return;
-  if(n)n.textContent=notes.length;   // fixed landscape board (CSS) — notes are %-positioned so they scatter to fit
-  b.querySelectorAll('.note').forEach(x=>x.remove()); notes.slice(0,MAXNOTES).forEach((nn,i)=>makeNoteEl(nn,i,b)); }
+function clRenderBoard(){ const b=document.getElementById('clBoard'),k=document.getElementById('clKeep'),n=document.getElementById('clNoteN');
+  if(n)n.textContent=notes.length;
+  if(cleanSkin==='og'){ if(!k)return;   // Keep-style flat grid of note cards
+    k.innerHTML=notes.length?notes.map((nt,i)=>`<div class="knote" style="background:${nt.c}">${esc(nt.t)}<u class="kdel" data-i="${i}" title="trash">✕</u></div>`).join(''):`<div class="cl-empty">no notes pinned yet ♡</div>`;
+    k.querySelectorAll('.kdel').forEach(x=>x.onclick=e=>{ e.stopPropagation(); trashNote(notes[+x.dataset.i]); }); return; }
+  if(!b)return; b.querySelectorAll('.note').forEach(x=>x.remove()); notes.slice(0,MAXNOTES).forEach((nn,i)=>makeNoteEl(nn,i,b)); }   // pixel: draggable cork scatter
 function clRenderFeed(){ const el=document.getElementById('clFeed'),n=document.getElementById('clFeedN'); if(!el)return;
   if(n)n.textContent=feed.length;
   el.innerHTML=feed.length?feed.slice(0,8).map(p=>{ const t=esc(ptext(p)),im=pimg(p),ago=fmtAgo(ptime(p)); return `<div class="fp"><div class="fh">me${ago?` · ${ago}`:''}</div>${t?`<div class="fb">${t}</div>`:''}${im?`<img src="${im}">`:''}</div>`; }).join(''):`<div class="cl-empty">no posts yet ♡</div>`; }
@@ -973,6 +1037,8 @@ function clRenderNotion(){ const card=document.getElementById('clCard-notion'),e
 function newNote(){ openP('brainP'); renderPile(); setTimeout(()=>brainIn.focus(),200); }
 document.getElementById('boardNew').onclick=newNote;
 document.querySelectorAll('#clean .crefresh').forEach(btn=>btn.onclick=()=>clRefresh(btn.dataset.r,btn));
+document.querySelectorAll('.cl-skin button').forEach(b=>b.onclick=()=>applyCleanSkin(b.dataset.skin));
+applyCleanSkin(cleanSkin);   // set initial skin classes
 { const dRef=document.querySelector('#dashP .pxref'); if(dRef)dRef.onclick=()=>{ const t=document.querySelector('.dtab.on'); clRefresh(t&&t.dataset.p==='1'?'notion':'tasks',dRef); };   // dashP refresh follows the active tab
   const cRef=document.querySelector('#calP .pxref'); if(cRef)cRef.onclick=()=>clRefresh('tasks',cRef); }
 { const cbn=document.getElementById('clBoardNew'); if(cbn)cbn.onclick=newNote;   // clean corkboard "pin a thought"
@@ -1116,8 +1182,8 @@ function renderMonNotion(id){ const d=notionCache[id], meta=NOTION.pages.find(p=
   return `<div class="hd"><b>${esc(ttl)}</b><span class="wm">notion</span></div><div class="sub">${d.rows.length} rows</div>`+rows+`<div class="ft"><span class="o">click to open ✦</span></div>`; }
 // full table (expanded view)
 function cellHTML(cell,col){ if(!cell)return ''; const t=cell.t,v=cell.v;
-  if(t==='select') return v?`<span class="nchip"><i style="background:${ncol(v.color)}"></i><span>${esc(v.name)}</span></span>`:'';
-  if(t==='multi') return (v||[]).map(o=>`<span class="nchip"><i style="background:${ncol(o.color)}"></i><span>${esc(o.name)}</span></span>`).join(' ');
+  if(t==='select') return v?`<span class="nchip" style="--nc:${ncol(v.color)}"><i style="background:${ncol(v.color)}"></i><span>${esc(v.name)}</span></span>`:'';
+  if(t==='multi') return (v||[]).map(o=>`<span class="nchip" style="--nc:${ncol(o.color)}"><i style="background:${ncol(o.color)}"></i><span>${esc(o.name)}</span></span>`).join(' ');
   if(t==='check') return `<span class="ncheck${v?' on':''}" data-prop="${esc(col.name)}">${v?'✓':''}</span>`;
   if(t==='date') return v&&v.start?`<div class="ndate">${esc(nDate(v,true))}<em>(${esc(nRel(v))})</em></div>`:'';
   return `<span>${esc(String(v==null?'':v))}</span>`; }
