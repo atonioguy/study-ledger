@@ -509,6 +509,23 @@
   #clean.og .cl-feed .fp:after{ content:'🌙'; position:absolute; left:9px; top:16px; font-size:16px; }
   #clean.og .cl-feed .fp .fh{ color:var(--ogsub); font-size:12.5px; } #clean.og .cl-feed .fp .fh:first-letter{ color:var(--ogtx); }
   #clean.og .cl-feed .fp .fb{ color:var(--ogtx); font-size:14.5px; } #clean.og .cl-feed .fp img{ border:1px solid var(--ogline); border-radius:14px; }
+  /* per-window dark toggle button (og skin only) + active hide-done tool */
+  #clean .cdark{ display:none; } #clean.og .cdark{ display:grid; place-items:center; flex:none; width:22px; height:16px; cursor:pointer; background:none; border:none; color:var(--ogsub); font-size:13px; line-height:1; } #clean.og .cdark:hover{ background:var(--oghover); color:var(--ogtx); }
+  #dashP .ntool.on,#clean .ntool.on{ background:var(--bar); color:var(--bartx); } #clean.og .ntool.on{ background:var(--ogblue); color:#fff; border-color:var(--ogblue); }
+
+  /* ===== og per-window dark mode ===== */
+  #clean.og .cwin.dark{ --ogtx:#e7e6e3; --ogsub:#a0a09c; --ogline:#34332f; --oghover:#2a2a27; }
+  #clean.og .cwin.dark.pxwin{ background:#1f1f1d !important; border:1px solid #3a3934 !important; }
+  #clean.og .cwin.dark .pxbar{ background:#26261f; border-bottom-color:#34332f; } #clean.og .cwin.dark .pxbar .cwn{ background:#34332e; }
+  #clean.og .cwin.dark .pxbody{ background:#1f1f1d !important; }
+  #clean.og .cwin.dark .pxbody::-webkit-scrollbar-thumb{ background:#3a3a36; border-color:#1f1f1d; } #clean.og .cwin.dark .pxbody::-webkit-scrollbar-track{ background:#1f1f1d; }
+  #clean.og .cwin.dark .dgrp button{ background:#2a2a27; } #clean.og .cwin.dark .grph .gc{ background:#34332e; }
+  #clean.og .cwin.dark .bt .ck{ background:#2a2a27; border-color:#5a5a55; } #clean.og .cwin.dark .bt .lb{ background:#34332e; }
+  #clean.og .cwin.dark .nchip-pick,#clean.og .cwin.dark .ntool{ background:#2a2a27; } #clean.og .cwin.dark .nfilter{ background:#26261f; } #clean.og .cwin.dark .nfopt{ background:#2a2a27; }
+  #clean.og .cwin.dark .ntbl-wrap{ background:#1f1f1d; } #clean.og .cwin.dark .ntbl th{ background:#26261f; }
+  #clean.og .cwin.dark .nchip{ background:color-mix(in srgb, var(--nc,#888) 32%, #2a2a27); color:#ece9e2; } #clean.og .cwin.dark .ncheck{ background:#2a2a27; border-color:#5a5a55; }
+  #clean.og .cwin.dark .calhd .nav,#clean.og .cwin.dark .calhd .calt{ background:#2a2a27; }
+  #clean.og .cwin.dark .cg .dy{ background:#1d1d1b; } #clean.og .cwin.dark .cg .dy.dim{ background:#181816; } #clean.og .cwin.dark .cg .dy.has{ background:#1d1d1b; } #clean.og .cwin.dark .cg .dy.td{ background:#1d1d1b; }
 </style>
 </head>
 <body>
@@ -550,11 +567,11 @@
         <div class="cl-skin" title="window style"><button data-skin="pixel" class="on">✦ pixel</button><button data-skin="og">◻ og</button></div>
       </div>
       <div class="cl-grid">
-        <div class="cwin col7 pxwin koi matte"><div class="pxbar"><span class="pxico">✓</span><span class="pxtitle">today</span><b class="crefresh" data-r="tasks" title="refresh from TickTick">↻</b><span class="cwn" id="clTaskN"></span></div><div class="pxbody monbody"><div class="dgrp" id="clGroupBar"></div><div class="cpanel" id="clTasks"></div></div></div>
-        <div class="cwin col5 pxwin brown matte"><div class="pxbar"><span class="pxico">📅</span><span class="pxtitle">calendar</span><b class="crefresh" data-r="tasks" title="refresh from TickTick">↻</b></div><div class="pxbody monbody"><div class="calhd"><button class="nav" id="clCalPrev">‹</button><h3 id="clCalTitle">📅 calendar</h3><button class="calt" id="clCalToday">today</button><button class="nav" id="clCalNext">›</button></div><div class="cg" id="clCalGrid"></div><div id="clCalDay"></div></div></div>
-        <div class="cwin col12 pxwin koi matte" id="clCard-notion" style="display:none"><div class="pxbar"><span class="pxico">📓</span><span class="pxtitle" id="clNotionTtl">notion</span><b class="crefresh" data-r="notion" title="refresh from Notion">↻</b></div><div class="pxbody monbody"><div id="clNotion"></div></div></div>
-        <div class="cwin col8 pxwin matte"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div><div class="cl-keep" id="clKeep"></div></div></div>
-        <div class="cwin col4 pxwin matte"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
+        <div class="cwin col7 pxwin koi matte" data-win="today"><div class="pxbar"><span class="pxico">✓</span><span class="pxtitle">today</span><b class="cdark" title="dark mode">☾</b><b class="crefresh" data-r="tasks" title="refresh from TickTick">↻</b><span class="cwn" id="clTaskN"></span></div><div class="pxbody monbody"><div class="dgrp" id="clGroupBar"></div><div class="cpanel" id="clTasks"></div></div></div>
+        <div class="cwin col5 pxwin brown matte" data-win="cal"><div class="pxbar"><span class="pxico">📅</span><span class="pxtitle">calendar</span><b class="cdark" title="dark mode">☾</b><b class="crefresh" data-r="tasks" title="refresh from TickTick">↻</b></div><div class="pxbody monbody"><div class="calhd"><button class="nav" id="clCalPrev">‹</button><h3 id="clCalTitle">📅 calendar</h3><button class="calt" id="clCalToday">today</button><button class="nav" id="clCalNext">›</button></div><div class="cg" id="clCalGrid"></div><div id="clCalDay"></div></div></div>
+        <div class="cwin col12 pxwin koi matte" id="clCard-notion" data-win="notion" style="display:none"><div class="pxbar"><span class="pxico">📓</span><span class="pxtitle" id="clNotionTtl">notion</span><b class="cdark" title="dark mode">☾</b><b class="crefresh" data-r="notion" title="refresh from Notion">↻</b></div><div class="pxbody monbody"><div id="clNotion"></div></div></div>
+        <div class="cwin col8 pxwin matte" data-win="board"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div><div class="cl-keep" id="clKeep"></div></div></div>
+        <div class="cwin col4 pxwin matte" data-win="feed"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
       </div>
     </div>
   </div>
@@ -972,6 +989,9 @@ function applyCleanSkin(s){ cleanSkin=s; localStorage.setItem('aq_clean_skin',s)
   if(c){ c.classList.toggle('og',s==='og'); c.classList.toggle('pixel',s!=='og'); }
   document.querySelectorAll('.cl-skin button').forEach(b=>b.classList.toggle('on',b.dataset.skin===s));
   if(document.body.classList.contains('clean2d')) renderClean(); }
+// per-window dark mode (og skin) — each clean window remembers its own light/dark
+let clDark=(()=>{ try{ return JSON.parse(localStorage.getItem('aq_cl_dark')||'{}'); }catch(e){ return {}; } })();
+function applyClDark(){ document.querySelectorAll('#clean .cwin[data-win]').forEach(w=>{ const on=!!clDark[w.dataset.win]; w.classList.toggle('dark',on); const btn=w.querySelector('.cdark'); if(btn)btn.textContent=on?'☀':'☾'; }); }
 // per-window refresh — re-pull that one source from the worker so native-app edits show without a full reload
 function clRefresh(kind,btn){ if(btn&&btn.classList.contains('spin'))return; if(btn)btn.classList.add('spin');
   const stop=()=>{ if(btn)btn.classList.remove('spin'); };
@@ -1038,7 +1058,8 @@ function newNote(){ openP('brainP'); renderPile(); setTimeout(()=>brainIn.focus(
 document.getElementById('boardNew').onclick=newNote;
 document.querySelectorAll('#clean .crefresh').forEach(btn=>btn.onclick=()=>clRefresh(btn.dataset.r,btn));
 document.querySelectorAll('.cl-skin button').forEach(b=>b.onclick=()=>applyCleanSkin(b.dataset.skin));
-applyCleanSkin(cleanSkin);   // set initial skin classes
+document.querySelectorAll('#clean .cdark').forEach(btn=>btn.onclick=()=>{ const w=btn.closest('.cwin'),k=w.dataset.win; clDark[k]=!clDark[k]; localStorage.setItem('aq_cl_dark',JSON.stringify(clDark)); applyClDark(); });
+applyCleanSkin(cleanSkin); applyClDark();   // set initial skin + per-window dark classes
 { const dRef=document.querySelector('#dashP .pxref'); if(dRef)dRef.onclick=()=>{ const t=document.querySelector('.dtab.on'); clRefresh(t&&t.dataset.p==='1'?'notion':'tasks',dRef); };   // dashP refresh follows the active tab
   const cRef=document.querySelector('#calP .pxref'); if(cRef)cRef.onclick=()=>clRefresh('tasks',cRef); }
 { const cbn=document.getElementById('clBoardNew'); if(cbn)cbn.onclick=newNote;   // clean corkboard "pin a thought"
@@ -1165,6 +1186,7 @@ function cellName(cell){ return cell&&cell.v&&(cell.v.name!==undefined?cell.v.na
 function distinctVals(d,name){ const s=new Set(); d.rows.forEach(r=>{ const nm=cellName(r.cells[name]); if(nm)s.add(nm); }); return [...s]; }
 function visibleRows(d){ const v=viewOf(d.id); let rows=d.rows.slice();
   for(const col in v.filt){ const set=v.filt[col]; if(set&&set.length) rows=rows.filter(r=>set.includes(cellName(r.cells[col]))); }
+  if(v.hideDone){ const dc=d.columns.find(c=>c.type==='checkbox'); if(dc) rows=rows.filter(r=>!(r.cells[dc.name]&&r.cells[dc.name].v)); }
   if(v.sort){ const sc=v.sort,dir=v.dir; rows.sort((a,b)=>{ const as=(a.cells[sc]&&a.cells[sc].v&&a.cells[sc].v.start)||'', bs=(b.cells[sc]&&b.cells[sc].v&&b.cells[sc].v.start)||'';
     return as===bs?0:!as?1:!bs?-1:(as<bs?-1:1)*dir; }); }
   return rows; }
@@ -1202,7 +1224,8 @@ function renderNotionTable(d){ const v=viewOf(d.id); const cols=orderedCols(d);
   const nFilt=Object.values(v.filt).reduce((a,arr)=>a+((arr&&arr.length)||0),0);
   const menu=filtCols.map(c=>{ const sel=v.filt[c.name]||[]; return `<div class="nfsec"><div class="nfh">${esc(c.name)}</div><div class="nfopts">`+
       distinctVals(d,c.name).map(o=>`<button class="nfopt${sel.includes(o)?' on':''}" data-col="${esc(c.name)}" data-val="${esc(o)}">${esc(o)}</button>`).join('')+`</div></div>`; }).join('')+`<button class="nfclear" id="nFiltClear">clear all</button>`;
-  const tools=`<div class="ntools">${filtCols.length?`<button class="ntool" id="nFilterBtn">⚲ filter${nFilt?` · ${nFilt}`:''}</button>`:''}${doCol?`<button class="ntool" id="nJump">↓ today</button>`:''}<div class="nfilter" id="nFilter" style="display:${nFilterOpen?'block':'none'}">${menu}</div></div>`;
+  const doneCol=d.columns.find(c=>c.type==='checkbox');
+  const tools=`<div class="ntools">${filtCols.length?`<button class="ntool" id="nFilterBtn">⚲ filter${nFilt?` · ${nFilt}`:''}</button>`:''}${doneCol?`<button class="ntool${v.hideDone?' on':''}" id="nHideDone">${v.hideDone?'☑ show done':'☐ hide done'}</button>`:''}${doCol?`<button class="ntool" id="nJump">↓ today</button>`:''}<div class="nfilter" id="nFilter" style="display:${nFilterOpen?'block':'none'}">${menu}</div></div>`;
   return tools+`<div class="ntbl-wrap" id="ntblWrap"><table class="ntbl" style="width:${totalW}px">${colg}<thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div><div class="nfoot">${rows.length}${rows.length!==d.rows.length?' of '+d.rows.length:''} rows · ${esc(d.title)}</div>`; }
 function renderNotionTab(){ const host=document.getElementById('dNotion'); if(!host)return;
   if(!API.url||!API.key){ host.innerHTML=`<div class="nempty">connect your worker first — tap 🔗 connect data</div>`; return; }
@@ -1225,6 +1248,7 @@ function attachTableHandlers(host,d,active,rerender){ const v=viewOf(d.id); rere
     try{ await postTick('/notion/check',{pageId:pid,prop,value:nv}); renderMon(); }
     catch(err){ ck.classList.toggle('on',cur); ck.textContent=cur?'✓':''; if(row&&row.cells[prop])row.cells[prop].v=cur; toast('notion: '+(err&&err.message||err)); } });
   const fb=host.querySelector('#nFilterBtn'); if(fb)fb.onclick=()=>{ nFilterOpen=!nFilterOpen; const m=host.querySelector('#nFilter'); if(m)m.style.display=nFilterOpen?'block':'none'; };
+  const hd=host.querySelector('#nHideDone'); if(hd)hd.onclick=()=>{ v.hideDone=!v.hideDone; saveView(); rerender(); renderMon(); };
   host.querySelectorAll('.nfopt').forEach(b=>b.onclick=()=>{ const col=b.dataset.col,val=b.dataset.val; const arr=v.filt[col]||(v.filt[col]=[]); const i=arr.indexOf(val); if(i<0)arr.push(val); else arr.splice(i,1); if(!arr.length)delete v.filt[col]; saveView(); nFilterOpen=true; rerender(); });
   const fc=host.querySelector('#nFiltClear'); if(fc)fc.onclick=()=>{ v.filt={}; saveView(); nFilterOpen=false; rerender(); };
   const jb=host.querySelector('#nJump'); if(jb)jb.onclick=()=>{ const wrap=host.querySelector('#ntblWrap'); const tr=wrap&&wrap.querySelector('tr[data-dotoday="1"]'); if(tr){ tr.scrollIntoView({block:'center',behavior:'smooth'}); tr.classList.add('flash'); setTimeout(()=>tr.classList.remove('flash'),1300); } else toast('no “do” tasks today ♡'); }; }
