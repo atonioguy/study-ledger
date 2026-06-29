@@ -526,6 +526,60 @@
   #clean.og .cwin.dark .nchip{ background:color-mix(in srgb, var(--nc,#888) 32%, #2a2a27); color:#ece9e2; } #clean.og .cwin.dark .ncheck{ background:#2a2a27; border-color:#5a5a55; }
   #clean.og .cwin.dark .calhd .nav,#clean.og .cwin.dark .calhd .calt{ background:#2a2a27; }
   #clean.og .cwin.dark .cg .dy{ background:#1d1d1b; } #clean.og .cwin.dark .cg .dy.dim{ background:#181816; } #clean.og .cwin.dark .cg .dy.has{ background:#1d1d1b; } #clean.og .cwin.dark .cg .dy.td{ background:#1d1d1b; }
+
+  /* ===== exam-campaign window — one consistent pixel design (phone palette), skin-independent ===== */
+  .cw-win{ --hi:#d9cfc0; --lo:#a0908d; --frame:#c4b6ad; --bar:#61768a; --barhi:#70a49d; --bartx:#ece5d7; --outline:#4d4268; --body:#4d5156; --spot:#595c62; --tx:#d6cdbf; --card:#c8bcae; --cardtx:#3c3548; --inset:#9c8d8a;
+    max-height:none; background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.5); image-rendering:pixelated; font-family:var(--pixfont); color:var(--tx); }
+  .cwbar{ display:flex; align-items:center; gap:7px; flex:none; background:linear-gradient(180deg,var(--barhi) 0 38%,var(--bar) 38%); color:var(--bartx); padding:6px 9px; border-bottom:2px solid var(--outline); font-size:11px; letter-spacing:.5px; text-shadow:1px 1px 0 rgba(40,35,55,.45); }
+  .cwico{ font-size:13px; text-shadow:none; } .cwtitle{ text-transform:lowercase; } .cwsub{ margin-left:10px; font-family:var(--pixfont2); font-size:14px; opacity:.85; letter-spacing:0; }
+  .cwreset{ margin-left:auto; background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); font-family:var(--pixfont); font-size:9px; padding:5px 9px; cursor:pointer; } .cwreset:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
+  .cwbody{ position:relative; flex:1; min-height:0; overflow:auto; background-color:var(--body); margin:3px; border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:14px; background-image:radial-gradient(var(--spot) 1px,transparent 1.5px); background-size:4px 4px; }
+  .cw-fx{ position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:8; }
+  .cw-confetti{ position:absolute; width:6px; height:6px; image-rendering:pixelated; }
+  .cw-xpfloat{ position:absolute; font-family:var(--pixfont); font-size:13px; color:#ffce6a; text-shadow:1.5px 1.5px 0 #5a3a1a; transform:translate(-50%,0); white-space:nowrap; }
+  .cw-banner{ position:absolute; left:50%; top:16px; transform:translate(-50%,-20px); background:linear-gradient(180deg,var(--barhi),var(--bar)); color:var(--bartx); border:2px solid var(--outline); padding:9px 18px; font-family:var(--pixfont); font-size:12px; letter-spacing:1px; opacity:0; pointer-events:none; z-index:12; box-shadow:0 0 22px rgba(112,164,157,.75); white-space:nowrap; text-shadow:1px 1px 0 rgba(40,35,55,.5); }
+  .cw-banner.show{ animation:cwBanner 2.2s cubic-bezier(.2,.8,.2,1); }
+  .cw-hero{ display:flex; align-items:center; gap:16px; background:var(--card); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:12px 14px; margin-bottom:12px; }
+  .cw-buddies{ display:flex; align-items:flex-end; gap:6px; flex:none; }
+  .cw-slime{ width:48px; height:35px; animation:cwBob 2.4s ease-in-out infinite; transform-origin:50% 100%; } .cw-tom{ width:34px; height:30px; animation:cwBob 2.4s ease-in-out infinite .6s; transform-origin:50% 100%; }
+  .cw-slime.cheer,.cw-tom.cheer{ animation:cwHop .7s ease; }
+  .cw-level{ flex:1; min-width:0; }
+  .cw-lvrow{ display:flex; align-items:center; gap:9px; margin-bottom:7px; }
+  .cw-lv{ font-family:var(--pixfont); font-size:11px; background:var(--bar); color:var(--bartx); padding:3px 8px; border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); text-transform:lowercase; }
+  .cw-rank{ font-family:var(--pixfont2); font-size:17px; color:var(--cardtx); text-transform:lowercase; flex:1; } .cw-streak{ font-family:var(--pixfont2); font-size:16px; color:var(--cardtx); }
+  .cw-xptrack{ height:15px; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); overflow:hidden; }
+  .cw-xpfill{ height:100%; width:0%; background:linear-gradient(90deg,#e8b6c4,#e89a6c); box-shadow:0 0 12px rgba(232,154,108,.8); transition:width .6s cubic-bezier(.2,.8,.2,1); position:relative; overflow:hidden; }
+  .cw-xpfill:after{ content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent); animation:cwShine 2s linear infinite; }
+  .cw-xpnum{ font-family:var(--pixfont2); font-size:15px; color:var(--cardtx); margin-top:3px; text-align:right; }
+  .cw-bars{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+  .cw-barcard{ background:var(--card); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:9px 11px; }
+  .cw-bartop{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:7px; }
+  .cw-barlabel{ font-family:var(--pixfont); font-size:10px; color:var(--cardtx); text-transform:lowercase; } .cw-barcount{ font-family:var(--pixfont2); font-size:14px; color:var(--cardtx); }
+  .cw-track{ height:12px; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); overflow:hidden; }
+  .cw-fill{ height:100%; width:0%; background:repeating-linear-gradient(45deg,#8fae8f 0 6px,#7d9d7d 6px 12px); transition:width .55s cubic-bezier(.2,.8,.2,1); }
+  .cw-sec{ font-family:var(--pixfont); font-size:9px; color:var(--tx); opacity:.7; letter-spacing:1px; margin:0 2px 8px; text-transform:lowercase; }
+  .cw-list{ display:flex; flex-direction:column; gap:7px; }
+  .cw-row{ display:flex; align-items:center; gap:11px; background:var(--card); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:9px 11px; cursor:pointer; position:relative; transition:transform .07s, filter .15s; }
+  .cw-row:hover{ filter:brightness(1.05); } .cw-row:active{ transform:translateY(1px); }
+  .cw-row.today{ box-shadow:inset 0 0 0 2px #70a49d; } .cw-row.review{ background:#bcb2a3; }
+  .cw-check{ flex:none; width:24px; height:24px; background:var(--frame); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); display:grid; place-items:center; }
+  .cw-check svg{ width:14px; height:14px; stroke:#fff; stroke-width:3.4; fill:none; opacity:0; stroke-dasharray:24; stroke-dashoffset:24; }
+  .cw-row.done .cw-check{ background:#8fae8f; border-color:#8fae8f; } .cw-row.done .cw-check svg{ opacity:1; animation:cwCheck .3s ease .04s forwards; }
+  .cw-check.pop{ animation:cwPop .34s ease; }
+  .cw-day{ flex:none; width:42px; text-align:center; } .cw-day b{ display:block; font-family:var(--pixfont); font-size:10px; color:var(--cardtx); } .cw-day i{ font-family:var(--pixfont2); font-size:13px; font-style:normal; color:var(--cardtx); opacity:.8; }
+  .cw-body2{ flex:1; min-width:0; } .cw-task{ font-family:var(--pixfont2); font-size:17px; color:var(--cardtx); display:block; line-height:1.15; } .cw-meta{ font-family:var(--pixfont2); font-size:13px; color:var(--cardtx); opacity:.7; display:block; }
+  .cw-flag{ font-family:var(--pixfont); font-size:8px; color:#2f6256; }
+  .cw-row.done .cw-task{ opacity:.55; text-decoration:line-through; }
+  .cw-xp{ flex:none; font-family:var(--pixfont2); font-size:16px; color:#c97b46; }
+  .cw-pill{ flex:none; font-family:var(--pixfont); font-size:8px; padding:3px 7px; background:#70a49d; color:#0f201d; } .cw-pill.rev{ background:#b7b3e0; color:#26224a; }
+  .cw-note{ font-family:var(--pixfont2); font-size:14px; color:var(--cardtx); margin-top:12px; background:var(--card); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:9px 11px; } .cw-note b{ color:#3a6a5e; }
+  @keyframes cwBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+  @keyframes cwHop{ 0%{transform:translateY(0) scaleY(1)} 25%{transform:translateY(-16px) scaleY(1.08)} 50%{transform:translateY(0) scaleY(.88)} 68%{transform:translateY(-6px)} 100%{transform:translateY(0)} }
+  @keyframes cwPop{ 0%{transform:scale(1)} 45%{transform:scale(1.4)} 100%{transform:scale(1)} }
+  @keyframes cwCheck{ to{ stroke-dashoffset:0 } }
+  @keyframes cwShine{ 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+  @keyframes cwBanner{ 0%{opacity:0;transform:translate(-50%,-22px) scale(.82)} 13%{opacity:1;transform:translate(-50%,0) scale(1)} 82%{opacity:1} 100%{opacity:0;transform:translate(-50%,-8px)} }
+  @media(max-width:560px){ .cw-bars{ grid-template-columns:1fr; } .cw-hero{ flex-wrap:wrap; } }
 </style>
 </head>
 <body>
@@ -572,6 +626,28 @@
         <div class="cwin col12 pxwin koi matte" id="clCard-notion" data-win="notion" style="display:none"><div class="pxbar"><span class="pxico">📓</span><span class="pxtitle" id="clNotionTtl">notion</span><b class="cdark" title="dark mode">☾</b><b class="crefresh" data-r="notion" title="refresh from Notion">↻</b></div><div class="pxbody monbody"><div id="clNotion"></div></div></div>
         <div class="cwin col8 pxwin matte" data-win="board"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div><div class="cl-keep" id="clKeep"></div></div></div>
         <div class="cwin col4 pxwin matte" data-win="feed"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
+        <div class="cwin col12 cw-win">
+          <div class="cwbar"><span class="cwico">✦</span><span class="cwtitle">exam campaign · m5 + m6</span><span class="cwsub">~3h 7m video · exam sun/mon</span><button class="cwreset" id="cwReset">⟲ reset</button></div>
+          <div class="cwbody">
+            <div class="cw-fx" id="cwFx"></div>
+            <div class="cw-banner" id="cwBanner"></div>
+            <div class="cw-hero">
+              <div class="cw-buddies"><span class="cw-slime slimeic" id="cwSlime"></span><span class="cw-tom tomatoic" id="cwTom"></span></div>
+              <div class="cw-level">
+                <div class="cw-lvrow"><span class="cw-lv" id="cwLv">lv 1</span><span class="cw-rank" id="cwRank">fresh start</span><span class="cw-streak" id="cwStreak">🔥 0/7</span></div>
+                <div class="cw-xptrack"><div class="cw-xpfill" id="cwXpFill"></div></div>
+                <div class="cw-xpnum" id="cwXpTotal">0 / 250 xp</div>
+              </div>
+            </div>
+            <div class="cw-bars">
+              <div class="cw-barcard"><div class="cw-bartop"><span class="cw-barlabel">module 5</span><span class="cw-barcount" id="cwCountM5">0 / 3 lessons</span></div><div class="cw-track"><div class="cw-fill" id="cwFillM5"></div></div></div>
+              <div class="cw-barcard"><div class="cw-bartop"><span class="cw-barlabel">module 6</span><span class="cw-barcount" id="cwCountM6">0 / 4 lessons</span></div><div class="cw-track"><div class="cw-fill" id="cwFillM6"></div></div></div>
+            </div>
+            <div class="cw-sec">the week</div>
+            <div class="cw-list" id="cwList"></div>
+            <div class="cw-note"><b>content done by friday.</b> weekend is recall, not rewatching — a slipped day rolls forward, the buffer absorbs it.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -992,6 +1068,64 @@ function applyCleanSkin(s){ cleanSkin=s; localStorage.setItem('aq_clean_skin',s)
 // per-window dark mode (og skin) — each clean window remembers its own light/dark
 let clDark=(()=>{ try{ return JSON.parse(localStorage.getItem('aq_cl_dark')||'{}'); }catch(e){ return {}; } })();
 function applyClDark(){ document.querySelectorAll('#clean .cwin[data-win]').forEach(w=>{ const on=!!clDark[w.dataset.win]; w.classList.toggle('dark',on); const btn=w.querySelector('.cdark'); if(btn)btn.textContent=on?'☀':'☾'; }); }
+
+/* ===== exam campaign — gamified study planner (clean view, one consistent design) ===== */
+const CAMP=[
+  {id:'mon',day:'mon',date:'6/29',task:'m5 · lesson 1',meta:'3 videos · ~40 min · crashing, floor = 1 part',m5:1,m6:0,xp:40,today:true},
+  {id:'tue',day:'tue',date:'6/30',task:'m5 · lesson 2',meta:'3 videos · ~31 min',m5:1,m6:0,xp:30},
+  {id:'wed',day:'wed',date:'7/1',task:'m5 · lesson 3',flag:'→ m5 done',meta:'4 videos · ~35 min',m5:1,m6:0,xp:35},
+  {id:'thu',day:'thu',date:'7/2',task:'m6 · lessons 1 + 2 + 3',meta:'5 videos · ~44 min',m5:0,m6:3,xp:50},
+  {id:'fri',day:'fri',date:'7/3',task:'m6 · lesson 4',flag:'→ m6 done',meta:'4 videos · ~36 min',m5:0,m6:1,xp:35},
+  {id:'sat',day:'sat',date:'7/4',task:'self-quiz + weak spots',meta:'active recall · flex for july 4',m5:0,m6:0,xp:40,review:true},
+  {id:'sun',day:'sun',date:'7/5',task:'light review + buffer',meta:'re-quiz weak spots · exam window',m5:0,m6:0,xp:20,review:true},
+];
+const M5_TOTAL=3,M6_TOTAL=4,XP_TOTAL=250;
+const RANKS=[[0,'fresh start'],[50,'warming up'],[100,'in the zone'],[150,'locked in'],[200,'almost there'],[250,'exam ready ✦']];
+function rankFor(xp){ let r=RANKS[0],lv=1; RANKS.forEach((e,i)=>{ if(xp>=e[0]){ r=e; lv=i+1; } }); return {name:r[1],lv}; }
+let campDone={}; try{ campDone=JSON.parse(localStorage.getItem('aq_campaign'))||JSON.parse(localStorage.getItem('exam-campaign-m5m6'))||{}; }catch(e){}
+function saveCampaign(){ try{ localStorage.setItem('aq_campaign',JSON.stringify(campDone)); }catch(e){} }
+function campStats(){ let m5=0,m6=0,xp=0; CAMP.forEach(c=>{ if(campDone[c.id]){ m5+=c.m5; m6+=c.m6; xp+=c.xp; } }); if(m5>M5_TOTAL)m5=M5_TOTAL; if(m6>M6_TOTAL)m6=M6_TOTAL; return {m5,m6,xp,lv:rankFor(xp).lv}; }
+// sound hooks — populate CW_SFX with new Audio(url) once mp3s are provided; silent until then
+const CW_SFX={};
+function cwSfx(n){ const a=CW_SFX[n]; if(a){ try{ a.currentTime=0; a.play(); }catch(e){} } }
+function cwBuzz(p){ try{ navigator.vibrate&&navigator.vibrate(p); }catch(e){} }
+const cwTxt=(id,t)=>{ const e=document.getElementById(id); if(e)e.textContent=t; };
+const cwSetW=(id,f)=>{ const e=document.getElementById(id); if(e)e.style.width=Math.round(Math.max(0,Math.min(1,f))*100)+'%'; };
+function cwCountUp(el,from,to){ if(!el)return; const t0=performance.now(),dur=520; (function step(t){ const k=Math.min(1,(t-t0)/dur); el.textContent=Math.round(from+(to-from)*k)+' / '+XP_TOTAL+' xp'; if(k<1)requestAnimationFrame(step); })(performance.now()); }
+function campUpdate(prevXp){ const s=campStats();
+  cwSetW('cwFillM5',s.m5/M5_TOTAL); cwSetW('cwFillM6',s.m6/M6_TOTAL); cwSetW('cwXpFill',s.xp/XP_TOTAL);
+  cwTxt('cwCountM5',s.m5+' / '+M5_TOTAL+' lessons'); cwTxt('cwCountM6',s.m6+' / '+M6_TOTAL+' lessons');
+  cwCountUp(document.getElementById('cwXpTotal'), prevXp==null?s.xp:prevXp, s.xp);
+  const rk=rankFor(s.xp); cwTxt('cwLv','lv '+rk.lv); cwTxt('cwRank',rk.name);
+  cwTxt('cwStreak','🔥 '+CAMP.filter(c=>campDone[c.id]).length+'/7'); }
+function cwCheer(){ ['cwSlime','cwTom'].forEach(id=>{ const m=document.getElementById(id); if(!m)return; m.classList.remove('cheer'); void m.offsetWidth; m.classList.add('cheer'); setTimeout(()=>m.classList.remove('cheer'),720); }); }
+function cwBanner(t){ const b=document.getElementById('cwBanner'); if(!b)return; b.textContent=t; b.classList.remove('show'); void b.offsetWidth; b.classList.add('show'); }
+function cwBurst(x,y,big){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); const cols=['#e8b6c4','#b7b3e0','#a8c4ab','#e89a6c','#9fe6ff','#f0d878']; const n=big?30:13;
+  for(let i=0;i<n;i++){ const d=document.createElement('i'); d.className='cw-confetti'; d.style.left=(x-r.left)+'px'; d.style.top=(y-r.top)+'px'; d.style.background=cols[i%cols.length]; fx.appendChild(d);
+    const ang=Math.PI*2*(i/n)+Math.random(), dist=(big?80:46)*(0.5+Math.random()), dx=Math.cos(ang)*dist, dy=Math.sin(ang)*dist-(big?44:26);
+    d.animate([{transform:'translate(0,0) rotate(0deg)',opacity:1},{transform:`translate(${dx}px,${dy+70}px) rotate(${(Math.random()*720-360)|0}deg)`,opacity:0}],{duration:big?950:680,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>d.remove(); } }
+function cwXpFloat(x,y,amt){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); const e=document.createElement('span'); e.className='cw-xpfloat'; e.textContent='+'+amt+' xp'; e.style.left=(x-r.left)+'px'; e.style.top=(y-r.top)+'px'; fx.appendChild(e);
+  e.animate([{transform:'translate(-50%,0)',opacity:1},{transform:'translate(-50%,-42px)',opacity:0}],{duration:820,easing:'ease-out'}).onfinish=()=>e.remove(); }
+function cwBigCelebrate(){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); for(let i=0;i<3;i++) setTimeout(()=>cwBurst(r.left+r.width*(0.22+0.28*i),r.top+34,true),i*130); cwCheer(); cwBuzz([30,40,30,40,70]); cwSfx('levelup'); }
+function cwToggle(row){ const id=row.dataset.id, item=CAMP.find(c=>c.id===id); const before=campStats();
+  campDone[id]=!campDone[id]; saveCampaign(); row.classList.toggle('done',!!campDone[id]); const after=campStats(); campUpdate(before.xp);
+  if(campDone[id]){ const ck=row.querySelector('.cw-check'); if(ck){ ck.classList.remove('pop'); void ck.offsetWidth; ck.classList.add('pop'); const b=ck.getBoundingClientRect(); cwBurst(b.left+b.width/2,b.top+b.height/2,false); cwXpFloat(b.left+b.width/2,b.top,item.xp); }
+    cwCheer(); cwBuzz(18); cwSfx('check'); cwSfx('xp'); let big=false;
+    if(before.m5<M5_TOTAL&&after.m5>=M5_TOTAL){ cwBanner('★ module 5 cleared ★'); big=true; }
+    if(before.m6<M6_TOTAL&&after.m6>=M6_TOTAL){ cwBanner('★ module 6 cleared ★'); big=true; }
+    if(after.xp>=XP_TOTAL&&before.xp<XP_TOTAL){ cwBanner('✦ exam ready ✦'); big=true; }
+    else if(after.lv>before.lv){ cwBanner('level up! lv '+after.lv+' · '+rankFor(after.xp).name); big=true; }
+    if(big) cwBigCelebrate();
+  } else { cwBuzz(8); } }
+function buildCampaign(){ const list=document.getElementById('cwList'); if(!list)return;
+  list.innerHTML=CAMP.map(c=>`<div class="cw-row${c.today?' today':''}${c.review?' review':''}${campDone[c.id]?' done':''}" data-id="${c.id}">`+
+    `<span class="cw-check"><svg viewBox="0 0 18 18"><polyline points="3,9 7,13 15,4"/></svg></span>`+
+    `<span class="cw-day"><b>${c.day}</b><i>${c.date}</i></span>`+
+    `<span class="cw-body2"><span class="cw-task">${esc(c.task)}${c.flag?` <span class="cw-flag">${esc(c.flag)}</span>`:''}</span><span class="cw-meta">${esc(c.meta)}</span></span>`+
+    `<span class="cw-xp">+${c.xp}</span>`+(c.today?'<span class="cw-pill">today</span>':c.review?'<span class="cw-pill rev">review</span>':'')+`</div>`).join('');
+  list.querySelectorAll('.cw-row').forEach(r=>r.onclick=()=>cwToggle(r));
+  const rs=document.getElementById('cwReset'); if(rs)rs.onclick=e=>{ e.stopPropagation(); campDone={}; saveCampaign(); list.querySelectorAll('.cw-row').forEach(r=>r.classList.remove('done')); campUpdate(); cwBuzz(10); };
+  campUpdate(); }
 // per-window refresh — re-pull that one source from the worker so native-app edits show without a full reload
 function clRefresh(kind,btn){ if(btn&&btn.classList.contains('spin'))return; if(btn)btn.classList.add('spin');
   const stop=()=>{ if(btn)btn.classList.remove('spin'); };
@@ -1366,7 +1500,7 @@ function loop(){ requestAnimationFrame(loop); if(document.body.classList.contain
 
 /* boot */
 const img=new Image(); img.crossOrigin='anonymous'; img.src='room.png';
-img.onload=()=>{ roomCanvas=keyGreen(img); const rs=document.documentElement.style; rs.setProperty('--slime',`url("${drawSlime()}")`); rs.setProperty('--tomato',`url("${drawTomato()}")`); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); tickTickTick(); setInterval(tickTickTick,300000); if(monSource!=='ticktick') refreshNotionActive(); setInterval(refreshNotionActive,300000); loop(); if(view2d) setView2d(true);
+img.onload=()=>{ roomCanvas=keyGreen(img); const rs=document.documentElement.style; rs.setProperty('--slime',`url("${drawSlime()}")`); rs.setProperty('--tomato',`url("${drawTomato()}")`); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); buildCampaign(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); tickTickTick(); setInterval(tickTickTick,300000); if(monSource!=='ticktick') refreshNotionActive(); setInterval(refreshNotionActive,300000); loop(); if(view2d) setView2d(true);
   const L=document.getElementById('loading'); L.style.opacity=0; setTimeout(()=>L.remove(),700); };
 img.onerror=()=>{ document.getElementById('loading').textContent='could not load room.png'; };
 addEventListener('resize',fit);
