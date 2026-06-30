@@ -314,7 +314,7 @@
   .ms-stage{ justify-content:center; gap:14px; min-height:142px; padding:16px 12px; }
   .ms-stage.has-bud{ gap:8px; justify-content:space-evenly; }
   .ms-slime{ width:120px; height:108px; } .ms-tom{ width:96px; height:88px; }
-  .ms-bud{ width:104px; height:104px; background:center bottom/contain no-repeat; image-rendering:pixelated; display:none; }
+  .ms-bud{ width:70px; height:70px; background:center bottom/contain no-repeat; image-rendering:pixelated; display:none; }
   .ms-mascot{ transform-origin:50% 100%; animation:cwSquish 2.6s ease-in-out infinite; }
   .ms-tom{ animation-delay:.4s; } .ms-bud{ animation-delay:.8s; }
   /* shop preview: fill more + squish */
@@ -529,7 +529,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v1.6';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v1.7';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
