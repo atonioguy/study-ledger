@@ -593,7 +593,7 @@
   .cw-check{ flex:none; width:24px; height:24px; background:var(--frame); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); display:grid; place-items:center; }
   .cw-check svg{ width:14px; height:14px; stroke:#fff; stroke-width:3.4; fill:none; opacity:0; stroke-dasharray:24; stroke-dashoffset:24; }
   .cw-row.done .cw-check{ background:#5fe0c8; border-color:#5fe0c8; box-shadow:0 0 8px rgba(95,224,200,.6); } .cw-row.done .cw-check svg{ stroke:#10302a; opacity:1; animation:cwCheck .3s ease .04s forwards; }
-  .cw-check.pop{ animation:cwPop .34s ease; }
+  .cw-check.cwpop{ animation:cwPop .34s ease; }
   .cw-day{ flex:none; width:42px; text-align:center; } .cw-day b{ display:block; font-family:var(--pixfont); font-size:10px; color:var(--cardtx); } .cw-day i{ font-family:var(--pixfont2); font-size:13px; font-style:normal; color:var(--cardtx); opacity:.8; }
   .cw-body2{ flex:1; min-width:0; } .cw-task{ font-family:var(--pixfont2); font-size:17px; color:var(--cardtx); display:block; line-height:1.15; } .cw-meta{ font-family:var(--pixfont2); font-size:13px; color:var(--cardtx); opacity:.7; display:block; }
   .cw-flag{ font-family:var(--pixfont); font-size:8px; color:#6fe0cc; }
@@ -617,7 +617,7 @@
   .cw-ntime{ font-family:var(--pixfont2); font-size:17px; color:var(--cardtx); }
   .cw-node.done{ background:linear-gradient(180deg,#26a589,#13715f); border-color:#7df0d8 #0a3a31 #0a3a31 #7df0d8; box-shadow:0 4px 0 #062019, 0 0 0 1px rgba(125,240,216,.5), 0 0 20px rgba(95,224,200,.7); }
   .cw-node.done .cw-ntime{ color:#dafff7; } .cw-node.done .cw-np{ color:#aef0e2; } .cw-node.done .cw-nxp{ color:#ffe08a; }
-  .cw-node.pop,.cw-quest.pop{ animation:cwPop .34s ease; }
+  .cw-node.cwpop,.cw-quest.cwpop{ animation:cwPop .34s ease; }
   /* ===== review quests — bigger feature buttons ===== */
   .cw-quests{ display:flex; flex-wrap:wrap; gap:10px; margin-top:2px; }
   .cw-quest{ position:relative; flex:1 1 188px; min-height:66px; display:flex; align-items:center; gap:10px; padding:11px 12px; cursor:pointer; text-align:left;
@@ -694,7 +694,7 @@
       </div>
       <div class="cl-bottom">
         <div class="cwin cw-win">
-          <div class="cwbar"><span class="cwico">✦</span><span class="cwtitle">exam campaign</span><span class="cwsub">m5+m6 · exam sun · b45</span><button class="cwreset" id="cwReset">⟲ reset</button></div>
+          <div class="cwbar"><span class="cwico">✦</span><span class="cwtitle">exam campaign</span><span class="cwsub">m5+m6 · exam sun · b46</span><button class="cwreset" id="cwReset">⟲ reset</button></div>
           <div class="cwbody">
             <div class="cw-fx" id="cwFx"></div>
             <div class="cw-banner" id="cwBanner"></div>
@@ -1212,7 +1212,7 @@ function cwToggle(row,ev){ const id=row.dataset.id, item=CAMP_ITEMS.find(c=>c.id
   campDone[id]=!campDone[id]; saveCampaign(); row.classList.toggle('done',!!campDone[id]); cwSetIcon(row,campDone[id]); const after=campStats(); campUpdate(before.xp);
   if(campDone[id]){ let cx,cy; if(ev&&ev.clientX){ cx=ev.clientX; cy=ev.clientY; } else { const b=row.getBoundingClientRect(); cx=b.left+b.width/2; cy=b.top+b.height/2; }
     cwBurst(cx,cy,false); cwXpFloat(cx,cy-8,item.xp);   // effects spawn where you clicked (before the pop animation perturbs the rect)
-    row.classList.remove('pop'); void row.offsetWidth; row.classList.add('pop');
+    row.classList.remove('cwpop'); void row.offsetWidth; row.classList.add('cwpop');
     cwCheer(); cwBuzz(16); cwSfx('check'); setTimeout(()=>cwSfx('xp'),70);
     const lesDone=lesObj&&!lesWasDone&&lesObj.parts.every(p=>campDone[p.id]); let big=false;
     if(before.m5<M5_PARTS&&after.m5>=M5_PARTS){ cwBanner('★ module 5 cleared ★'); big=true; }
