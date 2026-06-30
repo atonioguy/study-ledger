@@ -1195,10 +1195,12 @@ function cwBurst(x,y,big){ const fx=document.getElementById('cwFx'); if(!fx)retu
 function cwXpFloat(x,y,amt){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); const e=document.createElement('span'); e.className='cw-xpfloat'; e.textContent='+'+amt+' xp'; e.style.left=(x-r.left)+'px'; e.style.top=(y-r.top)+'px'; fx.appendChild(e);
   e.animate([{transform:'translate(-50%,0)',opacity:1},{transform:'translate(-50%,-42px)',opacity:0}],{duration:820,easing:'ease-out'}).onfinish=()=>e.remove(); }
 function cwBigCelebrate(){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); for(let i=0;i<3;i++) setTimeout(()=>cwBurst(r.left+r.width*(0.22+0.28*i),r.top+34,true),i*130); cwCheer(); cwBuzz([30,40,30,40,70]); cwSfx('levelup'); }
-function cwToggle(row){ const id=row.dataset.id, item=CAMP_ITEMS.find(c=>c.id===id); if(!item)return; const before=campStats();
+function cwToggle(row,ev){ const id=row.dataset.id, item=CAMP_ITEMS.find(c=>c.id===id); if(!item)return; const before=campStats();
   const lkey=row.dataset.les; let lesObj=null, lesWasDone=false; if(lkey){ const k=lkey.split('-'); lesObj=CAMP_MODS[+k[0]].lessons[+k[1]]; lesWasDone=lesObj.parts.every(p=>campDone[p.id]); }
   campDone[id]=!campDone[id]; saveCampaign(); row.classList.toggle('done',!!campDone[id]); const after=campStats(); campUpdate(before.xp);
-  if(campDone[id]){ row.classList.remove('pop'); void row.offsetWidth; row.classList.add('pop'); const b=row.getBoundingClientRect(); cwBurst(b.left+b.width/2,b.top+b.height/2,false); cwXpFloat(b.left+b.width/2,b.top+6,item.xp);
+  if(campDone[id]){ let cx,cy; if(ev&&ev.clientX){ cx=ev.clientX; cy=ev.clientY; } else { const b=row.getBoundingClientRect(); cx=b.left+b.width/2; cy=b.top+b.height/2; }
+    cwBurst(cx,cy,false); cwXpFloat(cx,cy-8,item.xp);   // effects spawn where you clicked (before the pop animation perturbs the rect)
+    row.classList.remove('pop'); void row.offsetWidth; row.classList.add('pop');
     cwCheer(); cwBuzz(16); cwSfx('check'); setTimeout(()=>cwSfx('xp'),70);
     const lesDone=lesObj&&!lesWasDone&&lesObj.parts.every(p=>campDone[p.id]); let big=false;
     if(before.m5<M5_PARTS&&after.m5>=M5_PARTS){ cwBanner('★ module 5 cleared ★'); big=true; }
@@ -1220,7 +1222,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   h+=`<div class="cw-mod"><span class="cw-modlabel">review</span><span class="cw-modmeta">recall, not rewatching</span></div>`;
   h+=`<div class="cw-quests">`+CAMP_REVIEW.map(r=>`<button class="cw-quest${campDone[r.id]?' done':''}" data-id="${r.id}"><span class="cw-qicon">${r.id==='sat'?'🧠':'🌙'}</span><span class="cw-qbody"><span class="cw-qtask">${esc(r.task)}</span><span class="cw-qmeta">${r.day} ${r.date} · ${esc(r.meta)}</span></span><span class="cw-qxp">+${r.xp}</span></button>`).join('')+`</div>`;
   list.innerHTML=h;
-  list.querySelectorAll('.cw-node,.cw-quest').forEach(el=>el.onclick=()=>cwToggle(el));
+  list.querySelectorAll('.cw-node,.cw-quest').forEach(el=>el.onclick=(e)=>cwToggle(el,e));
   const rs=document.getElementById('cwReset'); if(rs)rs.onclick=e=>{ e.stopPropagation(); campDone={}; saveCampaign(); list.querySelectorAll('.cw-node,.cw-quest').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-les').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-modtrack').forEach(x=>x.classList.remove('full')); campUpdate(); cwSfx('reset'); cwBuzz(12); };
   campUpdate(); }
 // per-window refresh — re-pull that one source from the worker so native-app edits show without a full reload
