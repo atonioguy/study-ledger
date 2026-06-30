@@ -1,4 +1,4 @@
-<!-- build log: v2.14 live · next: Module 6 complete — all lessons built; polish/QA pass -->
+<!-- build log: v2.15 live · swapped M5L1 q4/q5 hand-drawn SVGs for textbook figures; images moved to images/ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -353,7 +353,7 @@
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
-  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.14</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.15</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
   <div class="sb-focus">
     <div class="sb-focus-label">Focus</div>
     <div class="sb-focus-row">
@@ -447,20 +447,7 @@
             <li><span class="concept">obligate anaerobes</span> &mdash; anoxic core (after surface microbes use up the O<sub>2</sub>)</li>
           </ul>
           <figure style="margin:10px 0 4px;">
-  <svg viewBox="0 0 300 240" role="img" aria-label="Oxygen gradient across a single soil particle, from an oxic surface to an anoxic core" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto;">
-    <ellipse cx="150" cy="116" rx="128" ry="100" fill="#C49A63"/>
-    <ellipse cx="150" cy="116" rx="108" ry="84" fill="#D9B985"/>
-    <ellipse cx="150" cy="116" rx="88" ry="68" fill="#ECD8A6"/>
-    <ellipse cx="150" cy="116" rx="66" ry="51" fill="#D6D3CC"/>
-    <ellipse cx="150" cy="116" rx="44" ry="34" fill="#BDBBDA"/>
-    <ellipse cx="150" cy="116" rx="22" ry="18" fill="#6E5A93"/>
-    <g font-family="system-ui,-apple-system,sans-serif" font-size="12.5" font-weight="700" fill="#3a2f22" paint-order="stroke" stroke="#fdf6e3" stroke-width="3" stroke-linejoin="round">
-      <text x="74" y="60">21</text><text x="92" y="78">15</text><text x="108" y="94">10</text><text x="122" y="106">5</text><text x="135" y="116">1</text><text x="146" y="120" fill="#ffffff" stroke="none">0</text>
-    </g>
-    <g font-family="system-ui,-apple-system,sans-serif" font-size="11.5" fill="currentColor" text-anchor="middle">
-      <text x="150" y="13">Oxic surface → aerobes</text><text x="150" y="232">Anoxic core → obligate anaerobes</text>
-    </g>
-  </svg>
+  <img src="images/soil-particle-o2.png" alt="Oxygen concentration contours across a single soil particle — ~21% at the oxic surface down to 0% in the anoxic core" style="width:100%;max-width:340px;height:auto;display:block;margin:0 auto;border-radius:6px;" loading="lazy">
   <figcaption style="font-size:.82em;color:var(--ink-soft);font-style:italic;text-align:center;margin-top:2px;">O₂ (%) across one soil particle — surface microbes consume the O₂, so the core turns anoxic.</figcaption>
 </figure>
         </div>
@@ -489,27 +476,7 @@
           </ul>
           <p>The <span class="mem">soil surface (O + A horizons)</span> holds the most organic matter and microbial life &mdash; the most species-abundant layer; activity falls with depth.</p>
 <figure style="margin:10px 0 4px;">
-  <svg viewBox="0 0 360 282" role="img" aria-label="Soil profile: O, A, B, C horizons; organic matter and microbial activity are highest at the surface and fall with depth" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:360px;height:auto;display:block;margin:0 auto;">
-    <g stroke="#5a8f3c" stroke-width="2" stroke-linecap="round" fill="none">
-      <path d="M86 42 q-3 -16 -8 -22"/><path d="M96 42 q1 -18 -2 -24"/><path d="M106 42 q4 -15 9 -21"/><path d="M120 42 q-2 -17 -6 -23"/><path d="M132 42 q3 -16 8 -22"/><path d="M146 42 q-1 -18 3 -24"/>
-    </g>
-    <rect x="58" y="42" width="120" height="18" fill="#463524"/>
-    <rect x="58" y="60" width="120" height="68" fill="#6B4F34"/>
-    <rect x="58" y="128" width="120" height="76" fill="#B5996A"/>
-    <rect x="58" y="204" width="120" height="58" fill="#CABFA6"/>
-    <rect x="58" y="42" width="120" height="220" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1"/>
-    <g fill="#2a1d12">
-      <circle cx="84" cy="78" r="2"/><circle cx="104" cy="72" r="2"/><circle cx="126" cy="84" r="2"/><circle cx="150" cy="76" r="2"/><circle cx="92" cy="98" r="2"/><circle cx="118" cy="104" r="2"/><circle cx="142" cy="96" r="2"/><circle cx="108" cy="116" r="2"/><circle cx="134" cy="118" r="2"/>
-      <circle cx="90" cy="150" r="1.8"/><circle cx="120" cy="160" r="1.8"/><circle cx="148" cy="146" r="1.8"/><circle cx="106" cy="184" r="1.8"/><circle cx="138" cy="190" r="1.8"/>
-      <circle cx="100" cy="228" r="1.6"/><circle cx="140" cy="240" r="1.6"/>
-    </g>
-    <g font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="15">
-      <text x="66" y="56" fill="#fff">O</text><text x="66" y="99" fill="#fff">A</text><text x="66" y="171" fill="#2a2018">B</text><text x="66" y="237" fill="#2a2018">C</text>
-    </g>
-    <g font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="currentColor">
-      <text x="190" y="55">O — plant litter</text><text x="190" y="98">A — topsoil · most microbes</text><text x="190" y="170">B — subsoil (leached)</text><text x="190" y="236">C — bedrock base</text>
-    </g>
-  </svg>
+  <img src="images/soil-horizons.png" alt="Soil profile: O, A, B, C horizons; organic carbon decreases with depth, and microbial activity is highest in the O and A surface horizons" style="width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border-radius:6px;" loading="lazy">
   <figcaption style="font-size:.82em;color:var(--ink-soft);font-style:italic;text-align:center;margin-top:2px;">Soil horizons O–C. Organic matter and microbial life are highest at the surface (O + A) and fall with depth.</figcaption>
 </figure>
         </div>
