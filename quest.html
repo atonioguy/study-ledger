@@ -198,6 +198,37 @@
   .sq-modrow{ display:flex; gap:9px; margin-top:14px; }
   .sq-mbtn{ flex:1; background:var(--card); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); font-family:var(--pixfont); font-size:10px; padding:11px; cursor:pointer; text-transform:lowercase; } .sq-mbtn:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
   .sq-mbtn.primary{ background:var(--bar); color:var(--bartx); }
+  /* ===== buddies / collection ===== */
+  .hud-buds .cw-bud{ width:30px; height:28px; background:center/contain no-repeat; image-rendering:pixelated; display:none; }
+  .sq-bhd{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin:0 2px 14px; }
+  .sq-bttl{ font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1px; text-transform:lowercase; margin:0; }
+  .sq-bttl span{ color:var(--cardtx); opacity:.8; }
+  .sq-bpity{ font-family:var(--pixfont2); font-size:13px; color:var(--teal); margin-top:5px; min-height:16px; }
+  .sq-hatch{ display:flex; flex-direction:column; align-items:center; gap:12px; background:linear-gradient(180deg,#3a3060,#272050); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:18px 14px; margin-bottom:16px; position:relative; overflow:hidden; }
+  .sq-hatch::after{ content:''; position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg,rgba(8,5,20,.22) 0 1px,transparent 1px 3px); }
+  .sq-egg{ font-size:60px; line-height:1; filter:drop-shadow(0 6px 10px rgba(0,0,0,.4)); animation:cwBob 2.6s ease-in-out infinite; position:relative; z-index:1; }
+  .sq-egg.shake{ animation:sqShake .42s ease; }
+  @keyframes sqShake{ 0%,100%{transform:rotate(0)} 20%{transform:rotate(-12deg)} 40%{transform:rotate(11deg)} 60%{transform:rotate(-8deg)} 80%{transform:rotate(6deg)} }
+  .sq-bigbtn{ font-family:var(--pixfont); font-size:12px; letter-spacing:.5px; color:var(--bartx); background:linear-gradient(180deg,var(--barhi),var(--bar)); border:3px solid; border-color:#a08fe0 #1a1330 #1a1330 #a08fe0; box-shadow:0 4px 0 #0e0820; padding:12px 22px; cursor:pointer; text-transform:lowercase; position:relative; z-index:1; }
+  .sq-bigbtn:active{ transform:translateY(2px); box-shadow:0 2px 0 #0e0820; }
+  .sq-bigbtn.off{ opacity:.45; filter:grayscale(.4); }
+  .sq-dex{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .dx-cell{ position:relative; display:flex; flex-direction:column; align-items:center; gap:5px; padding:11px 4px 8px; background:var(--card); border:2px solid; border-color:var(--rc) var(--lo) var(--lo) var(--rc); cursor:default; box-shadow:inset 0 0 0 1px rgba(0,0,0,.2); }
+  .dx-cell.owned{ cursor:pointer; box-shadow:0 0 12px -2px var(--rc), inset 0 0 0 1px rgba(255,255,255,.08); }
+  .dx-cell.active{ outline:2px solid var(--gold); outline-offset:-4px; }
+  .dx-art{ width:46px; height:42px; background:center/contain no-repeat; image-rendering:pixelated; }
+  .dx-art.dx-lock{ display:grid; place-items:center; font-family:var(--pixfont); font-size:20px; color:var(--lo); background:var(--inset); width:46px; height:42px; }
+  .dx-name{ font-family:var(--pixfont2); font-size:14px; color:var(--cardtx); }
+  .dx-cell:not(.owned) .dx-name{ opacity:.5; }
+  .sq-reveal{ text-align:center; }
+  .sq-rerar{ font-family:var(--pixfont); font-size:11px; letter-spacing:2px; text-transform:uppercase; }
+  .sq-rebud{ width:120px; height:112px; margin:10px auto 4px; background:center/contain no-repeat; image-rendering:pixelated; }
+  .sq-rename{ font-family:var(--pixfont); font-size:18px; color:var(--cardtx); text-transform:lowercase; }
+  .sq-renote{ font-family:var(--pixfont2); font-size:16px; color:var(--gold); margin:6px 0 14px; }
+  .sq-dev{ margin-top:14px; padding-top:12px; border-top:1px dashed rgba(160,135,225,.35); }
+  .sq-dev .lbl{ font-family:var(--pixfont); font-size:8px; letter-spacing:1px; text-transform:uppercase; color:var(--tx); opacity:.5; display:block; margin-bottom:7px; }
+  .sq-dev .row{ display:flex; gap:8px; }
+  .sq-dev button{ flex:1; font-family:var(--pixfont2); font-size:13px; background:var(--inset); color:var(--cardtx); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:8px 6px; cursor:pointer; }
   /* effects layer spans the whole app */
   #cwFx{ position:fixed; inset:0; z-index:40; pointer-events:none; }
   #cwBanner{ position:fixed; left:50%; top:88px; z-index:42; }
@@ -207,7 +238,7 @@
 <body>
   <div id="app">
     <header id="hud">
-      <span class="hud-buds"><span class="cw-slime" id="cwSlime"></span><span class="cw-tom" id="cwTom"></span></span>
+      <span class="hud-buds"><span class="cw-slime" id="cwSlime"></span><span class="cw-tom" id="cwTom"></span><span class="cw-bud" id="cwBud"></span></span>
       <div class="hud-mid">
         <div class="hud-lvrow"><span class="cw-lv" id="cwLv">lv 1</span><span class="cw-rank" id="cwRank">fresh start</span><span class="cw-streak" id="cwStreak">🔥 0/7</span></div>
         <div class="hud-xptrack"><div class="cw-xpfill" id="cwXpFill"></div></div>
@@ -227,13 +258,15 @@
       </section>
 
       <section class="screen" id="screen-buddies" data-screen="buddies">
-        <div class="sq-stub">
-          <div class="em">🥚</div>
-          <h2>buddy collection</h2>
-          <p>hatch friends with ⭐ stars — each one has a rarity, common to legendary.</p>
-          <div class="sq-vault"><span class="slot">❔</span><span class="slot">❔</span><span class="slot">❔</span><span class="slot">❔</span><span class="slot">❔</span><span class="slot">❔</span></div>
-          <span class="sq-soon">coming soon</span>
+        <div class="sq-bhd">
+          <div><h2 class="sq-bttl">buddies <span id="budCount">0/12</span></h2><div class="sq-bpity" id="budPity"></div></div>
+          <span class="sq-chip star">⭐ <b id="sqStars2">0</b></span>
         </div>
+        <div class="sq-hatch">
+          <div class="sq-egg" id="budEgg">🥚</div>
+          <button id="budHatch" class="sq-bigbtn">hatch · 3⭐</button>
+        </div>
+        <div class="sq-dex" id="budDex"></div>
       </section>
 
       <section class="screen" id="screen-shop" data-screen="shop">
@@ -260,7 +293,15 @@
       <label>AQ key</label>
       <input id="syncKey" type="text" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="your AQ_KEY">
       <div class="sq-syncstatus" id="syncStatus"></div>
+      <div class="sq-dev"><span class="lbl">— testing (temporary) —</span><div class="row"><button id="devGrant">＋ 10⭐ · 60🪙</button><button id="devWipe">wipe wallet+buddies</button></div></div>
       <div class="sq-modrow"><button id="syncCancel" class="sq-mbtn">close</button><button id="syncSave" class="sq-mbtn primary">save</button></div>
+    </div></div>
+    <div id="budReveal" class="sq-modal"><div class="sq-card sq-reveal">
+      <div class="sq-rerar" id="reRar"></div>
+      <div class="sq-rebud" id="reBud"></div>
+      <div class="sq-rename" id="reName"></div>
+      <div class="sq-renote" id="reNote"></div>
+      <button class="sq-mbtn primary" id="reOk">nice!</button>
     </div></div>
     <div id="cwFx"></div>
     <div class="cw-banner" id="cwBanner"></div>
@@ -383,13 +424,13 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   const rs=document.getElementById('cwReset'); if(rs)rs.onclick=e=>{ e.stopPropagation(); campDone={}; saveCampaign(); list.querySelectorAll('.cw-node,.cw-quest').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-node').forEach(x=>cwSetIcon(x,false)); list.querySelectorAll('.cw-les').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-modtrack').forEach(x=>x.classList.remove('full')); campUpdate(); cwSfx('reset'); cwBuzz(12); };
   campUpdate(); }
 
-// ===== Side Quest shell: economy, HUD, nav, questline, cloud sync =====
+// ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
 
-  // ---- low-latency audio: decode the embedded sfx into Web Audio buffers (HTMLAudio has tap delay on iOS) ----
+  // ---- low-latency audio: decode the embedded sfx into Web Audio buffers ----
   let _actx=null; const _buf={}; const _vol={check:.5,xp:.55,levelup:.7,reset:.6};
   function unlockAudio(){
     if(!_actx){ try{ _actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
@@ -400,21 +441,22 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   }
   cwSfx=function(n){
     if(_actx && _buf[n]){ try{ const s=_actx.createBufferSource(); s.buffer=_buf[n]; const g=_actx.createGain(); g.gain.value=_vol[n]||.6; s.connect(g); g.connect(_actx.destination); s.start(0); return; }catch(e){} }
-    const a=CW_SFX[n]; if(a){ try{ a.currentTime=0; a.play(); }catch(e){} }   // fallback until buffers decode
+    const a=CW_SFX[n]; if(a){ try{ a.currentTime=0; a.play(); }catch(e){} }
   };
   ['pointerdown','touchstart','mousedown'].forEach(ev=>window.addEventListener(ev,unlockAudio,{passive:true}));
 
-  // ---- economy: earned is derived from progress; spent is stored (0 for now) ----
+  // ---- economy: balance = earned(from progress) − spent(stored, can be negative = a gain) ----
   function lessonsCleared(){ let n=0; CAMP_MODS.forEach(m=>m.lessons.forEach(les=>{ if(les.parts.every(p=>campDone[p.id])) n++; })); return n; }
   function modulesCleared(){ let n=0; CAMP_MODS.forEach(m=>{ if(m.lessons.every(les=>les.parts.every(p=>campDone[p.id]))) n++; }); return n; }
-  function coinsEarned(){ return campStats().xp; }                                  // 1 coin per xp
-  function starsEarned(){ return lessonsCleared() + modulesCleared()*3; }           // rare
+  function coinsEarned(){ return campStats().xp; }
+  function starsEarned(){ return lessonsCleared() + modulesCleared()*3; }
   function readEcon(){ try{ return JSON.parse(localStorage.getItem('aq_econ')||'{}'); }catch(e){ return {}; } }
   function coinBal(){ const e=readEcon(); return Math.max(0,coinsEarned()-(e.c||0)); }
   function starBal(){ const e=readEcon(); return Math.max(0,starsEarned()-(e.s||0)); }
+  function adjustBalance(dc,ds){ const e=readEcon(); e.c=(e.c||0)-dc; e.s=(e.s||0)-ds; localStorage.setItem('aq_econ',JSON.stringify(e)); }  // +dc raises coin balance
   let shownCoins=coinBal(), shownStars=starBal();
   function countChip(el,from,to){ if(!el)return; if(from===to){ el.textContent=to; return; } const t0=performance.now(),dur=550; (function step(t){ const k=Math.min(1,(t-t0)/dur); el.textContent=Math.round(from+(to-from)*k); if(k<1)requestAnimationFrame(step); })(performance.now()); }
-  function refreshEcon(){ const c=coinBal(), s=starBal(); countChip(document.getElementById('sqCoins'),shownCoins,c); countChip(document.getElementById('sqStars'),shownStars,s); shownCoins=c; shownStars=s; }
+  function refreshEcon(){ const c=coinBal(), s=starBal(); countChip(document.getElementById('sqCoins'),shownCoins,c); countChip(document.getElementById('sqStars'),shownStars,s); shownCoins=c; shownStars=s; refreshBuddies(); }
 
   // ---- avatar token on the current (first unfinished) lesson ----
   function placeAvatar(){
@@ -428,11 +470,109 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   }
   function coinFloat(x,y,amt){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); const e=document.createElement('span'); e.className='sq-coinfloat'; e.textContent='+'+amt+' 🪙'; e.style.left=(x-r.left)+'px'; e.style.top=(y-r.top+12)+'px'; fx.appendChild(e); e.animate([{transform:'translate(-50%,0)',opacity:1},{transform:'translate(-50%,-34px)',opacity:0}],{duration:900,easing:'ease-out'}).onfinish=()=>e.remove(); }
 
-  // ---- cloud sync (reads the dashboard's saved worker config; editable via the ⚙ panel) ----
+  // ===== buddy collection (gacha) =====
+  function shade(hex,amt){ const n=parseInt(hex.slice(1),16); let r=(n>>16)+amt,g=((n>>8)&255)+amt,b=(n&255)+amt; r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b)); return 'rgb('+r+','+g+','+b+')'; }
+  function drawBuddy(color,topper){
+    const cv=document.createElement('canvas'); cv.width=32; cv.height=30; const c=cv.getContext('2d'); c.imageSmoothingEnabled=false;
+    const px=(x,y,w,h,col)=>{ c.fillStyle=col; c.fillRect(x,y,w,h); };
+    px(10,27,12,2,'rgba(0,0,0,.22)');                                   // shadow
+    const rows=[[13,6],[11,10],[9,14],[8,16],[8,16],[8,16],[8,16],[8,16],[8,16],[8,16],[8,16],[9,14],[11,10],[13,6]];
+    rows.forEach((r,i)=>px(r[0],8+i,r[1],1,color));                     // body blob
+    px(11,11,10,4,shade(color,20));                                     // belly highlight
+    px(8,19,16,3,shade(color,-22));                                     // base shading
+    px(12,14,2,3,'#1a1330'); px(18,14,2,3,'#1a1330');                   // eyes
+    px(12,14,1,1,'#fff'); px(18,14,1,1,'#fff');                         // glints
+    px(10,17,2,1,'rgba(255,140,170,.65)'); px(20,17,2,1,'rgba(255,140,170,.65)'); // blush
+    if(topper==='leaf'){ px(15,4,2,5,'#4fa84f'); px(13,5,2,2,'#74c86a'); px(17,5,2,2,'#74c86a'); }
+    else if(topper==='ears'){ px(9,6,3,4,color); px(20,6,3,4,color); px(10,7,1,2,shade(color,-28)); px(21,7,1,2,shade(color,-28)); }
+    else if(topper==='horn'){ px(15,3,2,6,'#fff0c0'); px(15,3,2,2,'#ffe08a'); }
+    else if(topper==='antenna'){ px(15,3,2,5,shade(color,-28)); px(14,2,4,2,'#ffd96b'); }
+    else if(topper==='crown'){ px(11,2,2,2,'#ffd05f'); px(15,1,2,3,'#ffd05f'); px(19,2,2,2,'#ffd05f'); px(11,4,10,3,'#ffd05f'); px(12,6,8,1,'#d99a32'); }
+    else if(topper==='star'){ px(15,2,2,2,'#fff4c2'); px(14,3,4,1,'#fff4c2'); px(13,4,6,1,'#ffe08a'); }
+    return cv.toDataURL();
+  }
+  const RARC={ common:'#9b88c8', rare:'#5f91e0', epic:'#b66ff0', legendary:'#ffd05f' };
+  const BUDDIES=[
+    {id:'mochi', name:'mochi', rar:'common', color:'#f3e9d2', top:'none'},
+    {id:'pea',   name:'pea',   rar:'common', color:'#9fd47a', top:'leaf'},
+    {id:'berry', name:'berry', rar:'common', color:'#e87aa0', top:'none'},
+    {id:'puff',  name:'puff',  rar:'common', color:'#cfe0ef', top:'none'},
+    {id:'zest',  name:'zest',  rar:'rare',   color:'#ffd96b', top:'leaf'},
+    {id:'kit',   name:'kit',   rar:'rare',   color:'#f0a060', top:'ears'},
+    {id:'taro',  name:'taro',  rar:'rare',   color:'#b9a6ef', top:'none'},
+    {id:'frost', name:'frost', rar:'epic',   color:'#7fe0e8', top:'horn'},
+    {id:'ember', name:'ember', rar:'epic',   color:'#ff7a5a', top:'horn'},
+    {id:'shade', name:'shade', rar:'epic',   color:'#8a7fc8', top:'antenna'},
+    {id:'astra', name:'astra', rar:'legendary', color:'#ffe9a8', top:'crown'},
+    {id:'nova',  name:'nova',  rar:'legendary', color:'#c9a0ff', top:'star'},
+  ];
+  const HATCH_COST=3, PITY=10;
+  let BUD={owned:{},active:null,pity:0};
+  function loadBud(){ try{ const d=JSON.parse(localStorage.getItem('aq_buddies')||'{}'); BUD={owned:d.owned||{},active:d.active||null,pity:d.pity||0}; }catch(e){ BUD={owned:{},active:null,pity:0}; } }
+  function saveBud(){ localStorage.setItem('aq_buddies',JSON.stringify(BUD)); }
+  function ownedCount(){ return Object.keys(BUD.owned).length; }
+  function rollRarity(){ if(BUD.pity>=PITY-1) return Math.random()<0.78?'epic':'legendary'; const r=Math.random()*100; if(r<3)return'legendary'; if(r<12)return'epic'; if(r<40)return'rare'; return'common'; }
+
+  function renderActiveBuddy(){
+    const el=document.getElementById('cwBud'); if(!el)return;
+    const b=BUD.active && BUDDIES.find(x=>x.id===BUD.active);
+    if(b){ el.style.display='block'; el.style.backgroundImage='url("'+drawBuddy(b.color,b.top)+'")'; } else el.style.display='none';
+  }
+  function refreshBuddies(){
+    const cnt=document.getElementById('budCount'); if(cnt) cnt.textContent=ownedCount()+'/'+BUDDIES.length;
+    const s2=document.getElementById('sqStars2'); if(s2) s2.textContent=starBal();
+    const pity=document.getElementById('budPity'); if(pity) pity.textContent= BUD.pity>0 ? ('✦ guaranteed epic+ in '+(PITY-BUD.pity)) : '';
+    const hb=document.getElementById('budHatch'); if(hb){ const can=starBal()>=HATCH_COST; hb.disabled=!can; hb.classList.toggle('off',!can); }
+  }
+  function renderDex(){
+    const dex=document.getElementById('budDex'); if(!dex)return;
+    dex.innerHTML=BUDDIES.map(b=>{ const owned=!!BUD.owned[b.id], act=BUD.active===b.id;
+      const inner = owned ? '<span class="dx-art" style="background-image:url(\''+drawBuddy(b.color,b.top)+'\')"></span><span class="dx-name">'+b.name+'</span>'
+                          : '<span class="dx-art dx-lock">?</span><span class="dx-name">???</span>';
+      return '<button class="dx-cell'+(owned?' owned':'')+(act?' active':'')+'" data-bud="'+b.id+'" style="--rc:'+RARC[b.rar]+'">'+inner+'</button>';
+    }).join('');
+    dex.querySelectorAll('.dx-cell.owned').forEach(el=>el.onclick=()=>{ BUD.active=el.dataset.bud; saveBud(); renderDex(); renderActiveBuddy(); cwSfx('check'); cwBuzz(8); markChanged(); });
+  }
+  function showReveal(b,isNew,note){
+    const m=document.getElementById('budReveal');
+    document.getElementById('reRar').textContent=b.rar; document.getElementById('reRar').style.color=RARC[b.rar];
+    document.getElementById('reBud').style.backgroundImage='url("'+drawBuddy(b.color,b.top)+'")';
+    document.getElementById('reBud').style.filter='drop-shadow(0 0 14px '+RARC[b.rar]+')';
+    document.getElementById('reName').textContent=b.name;
+    document.getElementById('reNote').textContent=note;
+    m.querySelector('.sq-reveal').style.borderColor=RARC[b.rar];
+    m.classList.add('on');
+    const big=(b.rar==='epic'||b.rar==='legendary');
+    const fx=document.getElementById('cwFx'); if(fx){ const r=fx.getBoundingClientRect(); cwBurst(r.left+r.width/2, r.top+r.height*0.4, big); if(big) setTimeout(()=>cwBurst(r.left+r.width/2,r.top+r.height*0.4,true),160); }
+    cwSfx(big?'levelup':'xp'); cwBuzz(big?[20,40,30]:16);
+  }
+  function hatch(){
+    if(starBal()<HATCH_COST) return;
+    adjustBalance(0,-HATCH_COST);
+    const rar=rollRarity();
+    if(rar==='epic'||rar==='legendary') BUD.pity=0; else BUD.pity++;
+    const pool=BUDDIES.filter(b=>b.rar===rar); const pick=pool[Math.floor(Math.random()*pool.length)];
+    const isNew=!BUD.owned[pick.id]; let note;
+    if(isNew){ BUD.owned[pick.id]=1; if(!BUD.active)BUD.active=pick.id; note='new buddy!'; }
+    else { adjustBalance(12,0); note='duplicate · +12 🪙'; }
+    saveBud(); refreshEcon(); renderDex(); renderActiveBuddy(); markChanged();
+    // little egg shake, then reveal
+    const egg=document.getElementById('budEgg'); if(egg){ egg.classList.remove('shake'); void egg.offsetWidth; egg.classList.add('shake'); }
+    setTimeout(()=>showReveal(pick,isNew,note),430);
+  }
+  function initBuddies(){
+    loadBud(); renderDex(); renderActiveBuddy();
+    const hb=document.getElementById('budHatch'); if(hb)hb.onclick=hatch;
+    const ok=document.getElementById('reOk'); if(ok)ok.onclick=()=>document.getElementById('budReveal').classList.remove('on');
+    const rv=document.getElementById('budReveal'); if(rv)rv.onclick=(e)=>{ if(e.target.id==='budReveal')rv.classList.remove('on'); };
+  }
+
+  // ---- cloud sync ----
   const API={ url:(localStorage.getItem('aq_api_url')||'').replace(/\/+$/,''), key:localStorage.getItem('aq_api_key')||'' };
   const syncOn=()=>!!(API.url&&API.key);
   const stamp=()=>parseInt(localStorage.getItem('aq_save_t')||'0',10);
-  function snapshot(){ return { v:1, t:stamp(), campDone:campDone, econ:readEcon() }; }
+  function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
+  function snapshot(){ return { v:2, t:stamp(), campDone:campDone, econ:readEcon(), buddies:lsGet('aq_buddies') }; }
   let pushTimer=0;
   function pushCloud(){ if(!syncOn())return; clearTimeout(pushTimer); pushTimer=setTimeout(()=>{
     fetch(API.url+'/save?slot=sidequest',{method:'POST',headers:{'x-aq-key':API.key,'content-type':'application/json'},body:JSON.stringify(snapshot())}).catch(()=>{});
@@ -440,7 +580,12 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   async function pullCloud(){ if(!syncOn())return false; try{
     const r=await fetch(API.url+'/save?slot=sidequest',{headers:{'x-aq-key':API.key}});
     if(!r.ok)return false; const d=await r.json();
-    if(d && d.campDone && (d.t||0)>stamp()){ campDone=d.campDone; saveCampaign(); if(d.econ)localStorage.setItem('aq_econ',JSON.stringify(d.econ)); localStorage.setItem('aq_save_t',String(d.t||0)); return true; }
+    if(d && d.campDone && (d.t||0)>stamp()){
+      campDone=d.campDone; saveCampaign();
+      if(d.econ)localStorage.setItem('aq_econ',JSON.stringify(d.econ));
+      if(d.buddies)localStorage.setItem('aq_buddies',JSON.stringify(d.buddies));
+      localStorage.setItem('aq_save_t',String(d.t||0)); return true;
+    }
     return false;
   }catch(e){ return false; } }
   function markChanged(){ localStorage.setItem('aq_save_t',String(Date.now())); pushCloud(); }
@@ -450,13 +595,12 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   cwToggle=function(row,ev){
     const wasDone=!!campDone[row.dataset.id];
     const item=CAMP_ITEMS.find(c=>c.id===row.dataset.id);
-    _toggle(row,ev);                                  // real work + all existing juice
+    _toggle(row,ev);
     const nowDone=!!campDone[row.dataset.id];
     if(nowDone&&!wasDone&&item){ const cx=(ev&&ev.clientX)||0, cy=(ev&&ev.clientY)||0; if(cx)coinFloat(cx,cy,item.xp); }
     refreshEcon(); placeAvatar(); markChanged();
   };
 
-  // ---- render (re-wires reset each time, since buildCampaign resets its onclick) ----
   function rebuild(){
     buildCampaign();
     const rsb=document.getElementById('cwReset'); if(rsb){ const orig=rsb.onclick; rsb.onclick=(e)=>{ if(orig)orig(e); refreshEcon(); placeAvatar(); markChanged(); }; }
@@ -491,17 +635,21 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
       const r=await fetch(API.url+'/save?slot=sidequest',{headers:{'x-aq-key':API.key}});
       if(r.status===401){ st.textContent='✕ wrong key'; return; }
       if(!r.ok){ st.textContent='✕ worker error ('+r.status+') — KV bound?'; return; }
-      const adopted=await pullCloud(); rebuild(); if(!adopted) pushCloud();
+      const adopted=await pullCloud(); loadBud(); rebuild(); renderDex(); renderActiveBuddy(); if(!adopted) pushCloud();
       st.textContent='✓ connected — synced'; cwSfx('levelup'); cwBuzz(16);
       setTimeout(closeSync,800);
     }catch(e){ st.textContent='✕ cannot reach worker'; }
   };
+  // --- TEMP testing tools (remove before final) ---
+  const dg=document.getElementById('devGrant'); if(dg)dg.onclick=()=>{ adjustBalance(60,10); refreshEcon(); markChanged(); cwSfx('xp'); cwBuzz(10); document.getElementById('syncStatus').textContent='＋ granted 60🪙 · 10⭐ (test)'; };
+  const dw=document.getElementById('devWipe'); if(dw)dw.onclick=()=>{ localStorage.removeItem('aq_econ'); localStorage.removeItem('aq_buddies'); loadBud(); refreshEcon(); renderDex(); renderActiveBuddy(); markChanged(); document.getElementById('syncStatus').textContent='wiped wallet + buddies'; };
 
   // ---- boot ----
   if(new URLSearchParams(location.search).has('embed')){ document.documentElement.classList.add('embed'); document.body.classList.add('embed'); }
-  const adopted=await pullCloud();                    // adopt newer cloud save before first render
+  const adopted=await pullCloud();
+  initBuddies();
   rebuild();
-  if(syncOn() && !adopted) pushCloud();               // seed cloud from this device on first run
+  if(syncOn() && !adopted) pushCloud();
 })();
 
 </script>
