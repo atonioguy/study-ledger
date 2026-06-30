@@ -1,4 +1,4 @@
-<!-- build log: v2.13 live · next: build M6L4 (Human Microbiome) blocks with real content + reinforcement quiz -->
+<!-- build log: v2.14 live · next: Module 6 complete — all lessons built; polish/QA pass -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -353,7 +353,7 @@
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
-  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.13</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.14</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
   <div class="sb-focus">
     <div class="sb-focus-label">Focus</div>
     <div class="sb-focus-row">
@@ -476,17 +476,47 @@
         <div class="support">
           <div class="sub">Composition</div>
           <ul>
-            <li><span class="mem">~50% air + water</span> (the largest component)</li>
-            <li><span class="mem">~40% inorganic mineral matter</span></li>
-            <li><span class="mem">~5% organic matter</span>, <span class="mem">~5% organisms</span></li>
+            <li><span class="mem">Air + water</span> ~50% <span class="concept">(the largest component)</span></li>
+            <li><span class="mem">Inorganic / mineral matter</span> ~40%</li>
+            <li><span class="mem">Organic matter</span> ~5%, <span class="mem">organisms</span> ~5%</li>
           </ul>
-          <div class="sub">Layers</div>
-          <p>Four distinct layers; the <span class="mem">surface / topsoil</span> holds the most organic matter and microbial life, falling with depth.</p>
+          <div class="sub">Layers — the O / A / B / C horizons</div>
+          <ul>
+            <li><span class="mem">O horizon</span> &mdash; surface layer of undecomposed plant litter.</li>
+            <li><span class="mem">A horizon</span> &mdash; topsoil; dark, organic-rich, <span class="concept">highest microbial activity</span>.</li>
+            <li><span class="mem">B horizon</span> &mdash; subsoil; leached minerals/humus accumulate, little organic matter, lower activity.</li>
+            <li><span class="mem">C horizon</span> &mdash; soil base developed from bedrock; microbial activity very low.</li>
+          </ul>
+          <p>The <span class="mem">soil surface (O + A horizons)</span> holds the most organic matter and microbial life &mdash; the most species-abundant layer; activity falls with depth.</p>
+<figure style="margin:10px 0 4px;">
+  <svg viewBox="0 0 360 282" role="img" aria-label="Soil profile: O, A, B, C horizons; organic matter and microbial activity are highest at the surface and fall with depth" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:360px;height:auto;display:block;margin:0 auto;">
+    <g stroke="#5a8f3c" stroke-width="2" stroke-linecap="round" fill="none">
+      <path d="M86 42 q-3 -16 -8 -22"/><path d="M96 42 q1 -18 -2 -24"/><path d="M106 42 q4 -15 9 -21"/><path d="M120 42 q-2 -17 -6 -23"/><path d="M132 42 q3 -16 8 -22"/><path d="M146 42 q-1 -18 3 -24"/>
+    </g>
+    <rect x="58" y="42" width="120" height="18" fill="#463524"/>
+    <rect x="58" y="60" width="120" height="68" fill="#6B4F34"/>
+    <rect x="58" y="128" width="120" height="76" fill="#B5996A"/>
+    <rect x="58" y="204" width="120" height="58" fill="#CABFA6"/>
+    <rect x="58" y="42" width="120" height="220" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1"/>
+    <g fill="#2a1d12">
+      <circle cx="84" cy="78" r="2"/><circle cx="104" cy="72" r="2"/><circle cx="126" cy="84" r="2"/><circle cx="150" cy="76" r="2"/><circle cx="92" cy="98" r="2"/><circle cx="118" cy="104" r="2"/><circle cx="142" cy="96" r="2"/><circle cx="108" cy="116" r="2"/><circle cx="134" cy="118" r="2"/>
+      <circle cx="90" cy="150" r="1.8"/><circle cx="120" cy="160" r="1.8"/><circle cx="148" cy="146" r="1.8"/><circle cx="106" cy="184" r="1.8"/><circle cx="138" cy="190" r="1.8"/>
+      <circle cx="100" cy="228" r="1.6"/><circle cx="140" cy="240" r="1.6"/>
+    </g>
+    <g font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="15">
+      <text x="66" y="56" fill="#fff">O</text><text x="66" y="99" fill="#fff">A</text><text x="66" y="171" fill="#2a2018">B</text><text x="66" y="237" fill="#2a2018">C</text>
+    </g>
+    <g font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="currentColor">
+      <text x="190" y="55">O — plant litter</text><text x="190" y="98">A — topsoil · most microbes</text><text x="190" y="170">B — subsoil (leached)</text><text x="190" y="236">C — bedrock base</text>
+    </g>
+  </svg>
+  <figcaption style="font-size:.82em;color:var(--ink-soft);font-style:italic;text-align:center;margin-top:2px;">Soil horizons O–C. Organic matter and microbial life are highest at the surface (O + A) and fall with depth.</figcaption>
+</figure>
         </div>
       </div>
       <div class="explain bl"><span class="lbl">Explanation</span>
         <div class="ex-why"><span class="ex-lab">Concept</span>The counterintuitive part is that air + water (~50%) just edges out mineral matter (~40%) &mdash; soil is more empty space than solid. And the biology is top-heavy: organic matter and microbes concentrate at the surface and thin out with depth.</div>
-        <div class="ex-exam"><span class="ex-lab">On the exam</span>A question might ask for the largest component (air + water) or where microbes concentrate (the surface). <em>[Flag: the deck states only &ldquo;4 distinct layers&rdquo; and &ldquo;most growth on the surface&rdquo; &mdash; the O/A/B/C horizon names are standard soil science; the stated point to lock in is &ldquo;surface = most abundant.&rdquo;]</em></div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>You won&rsquo;t be asked to memorize the exact percentages &mdash; focus on which component is largest (<span class="concept">air + water</span>) and which layer is most species-abundant: the surface, i.e. the <span class="mem">O and A horizons</span>. Know the four horizons in order (O / A / B / C) and that microbial activity falls with depth.</div>
       </div>
       <div class="fc" data-deck="m5l1-q5"></div>
     </article>
@@ -1297,179 +1327,287 @@
 
   <section class="lesson" id="m6l4" data-module="Module 6 — Symbiosis">
     <h2 class="lesson-title">Module 6 · Lesson 4 — The Human Microbiome</h2>
-    <p class="lesson-meta">13 topics · filler content shown for layout testing.</p>
+    <p class="lesson-meta">Built from the M6L4 review doc + lecture deck · 12 of Exam 3’s questions come from this lesson.</p>
     <div class="topic-divider" id="m6l4-d20" data-topic="Microbiome Overview"><div class="td-inner"><span>Microbiome Overview</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l4-q1" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q1</span><span class="q-text">What are some reasons to study the microbiome, and what benefit does the microbiome have against infection?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">We study the microbiome to <span class="mem">predict, target, and personalize</span> care; its biggest defensive payoff is <span class="concept">colonization resistance</span> &mdash; resident microbes <span class="mem">crowd out pathogens</span>.</div>
+        <div class="support">
+          <div class="sub">Why study it</div>
+          <ul>
+            <li>Develop <span class="mem">biomarkers</span> to predict disease predisposition.</li>
+            <li>Design <span class="concept">targeted therapies</span> and <span class="concept">personalized drug therapies / probiotics</span>.</li>
+          </ul>
+          <div class="sub">Benefit against infection</div>
+          <p>Resident microbes <span class="mem">limit pathogens&rsquo; ability to colonize</span> &mdash; the basis of probiotics and fecal transplants, which &ldquo;exclude the disease-causing organism.&rdquo;</p>
+          <p><em>[Flag: the deck states probiotics &ldquo;limit the ability of pathogens to colonize&rdquo; and fecal transplants &ldquo;exclude the disease-causing organism&rdquo;; the umbrella term <span class="concept">colonization resistance</span> is standard textbook (no textbook available to cross-check) &mdash; confirm against the lecture video.]</em></p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>The microbiome is being mined for clinical signal: which microbes you carry may predict disease risk and how you&rsquo;ll respond to a drug, opening the door to personalized therapy and probiotics. Defensively, a full house of commensals leaves no room or resources for invaders &mdash; they occupy the niches a pathogen would need, so an intact community is itself a barrier to infection.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>Expect &ldquo;why study the microbiome&rdquo; (biomarkers, targeted/personalized therapy) and the infection-defense angle (resident microbes block pathogen colonization). A distractor frames the benefit as the microbiome <em>directly killing</em> pathogens with antibiotics rather than competitively excluding them.</div>
       </div>
+      <div class="fc" data-deck="m6l4-q1"></div>
     </article>
     <div class="topic-divider" id="m6l4-d21" data-topic="GI Tract"><div class="td-inner"><span>GI Tract</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l4-q2" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q2</span><span class="q-text">What does the human gut microbiome tend to look like, what benefits can they provide, and what organisms do you expect in the GI tract of a healthy individual?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">The gut microbiome is dense (<span class="mem">~10<sup>13</sup> cells</span>) and mostly <span class="mem">Firmicutes + Bacteroidetes</span> (with Proteobacteria); it <span class="concept">ferments food, makes nutrients, and trains the immune system</span>. Individuals fall into <span class="mem">3 enterotypes</span>.</div>
+        <div class="support">
+          <div class="sub">What it looks like</div>
+          <ul>
+            <li>~10<sup>13</sup> microbial cells; the colon is essentially an <span class="concept">in vivo fermentation vessel</span>.</li>
+            <li>98% of gut bacteria = <span class="mem">Firmicutes, Bacteroidetes, Proteobacteria</span> (mostly Firmicutes and/or Bacteroidetes).</li>
+            <li>3 enterotypes: enriched in <span class="mem">Bacteroides</span> (#1), <span class="mem">Prevotella</span> (#2), or <span class="mem">Ruminococcus</span> (#3).</li>
+          </ul>
+          <div class="sub">Benefits</div>
+          <ul>
+            <li><span class="concept">Vitamin production</span>, steroid modification, amino acid biosynthesis; may regulate metabolism.</li>
+            <li>Develops/trains the <span class="concept">immune system</span> (which doesn&rsquo;t develop properly without microbial stimulation).</li>
+          </ul>
+          <div class="sub">Healthy GI taxa</div>
+          <ul>
+            <li>Stomach (despite ~pH 2): Firmicutes, Bacteroidetes, Actinobacteria (gastric fluid); Firmicutes + Proteobacteria (mucus).</li>
+            <li>Colon: Firmicutes, Bacteroidetes, Proteobacteria; enterotype genera <span class="mem">Bacteroides / Prevotella / Ruminococcus</span>.</li>
+          </ul>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Picture the colon as a fermenter packed with ~10<sup>13</sup> cells, overwhelmingly Firmicutes and Bacteroidetes. They earn their keep by fermenting what we can&rsquo;t digest, producing vitamins and other metabolites, and tutoring the immune system. Despite individual variation, people cluster into three enterotypes named for their dominant genus.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>Know the two dominant phyla (Firmicutes, Bacteroidetes) and the three enterotype genera (Bacteroides, Prevotella, Ruminococcus). A &ldquo;healthy GI organisms&rdquo; stem wants those names; a benefits stem wants vitamins/metabolism/immune training. A distractor claims the acidic stomach is sterile &mdash; it isn&rsquo;t (rich microbiome, incl. <em>H. pylori</em>).</div>
       </div>
+      <div class="fc" data-deck="m6l4-q2"></div>
     </article>
     <article class="q" id="m6l4-q3" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q3</span><span class="q-text">What is the cause of peptic ulcers, and why is it able to survive in the stomach?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">Peptic ulcers are caused by <span class="mem">Helicobacter pylori</span> overgrowth. It survives the stomach because it is <span class="mem">acid-resistant</span> and lives in the protective <span class="concept">gastric mucosa</span>.</div>
+        <div class="support">
+          <div class="sub">The pathogen</div>
+          <ul>
+            <li><span class="mem">H. pylori</span> is acid-resistant; found in the gastric mucosa of ~<span class="concept">50% of the population</span>; <span class="mem">overgrowth</span> causes peptic ulcers.</li>
+          </ul>
+          <div class="sub">How it survives ~pH 2</div>
+          <p>It shelters in the <span class="concept">mucus layer (gastric mucosa)</span>, away from the most acidic lumen.</p>
+          <p><em>[Flag: the deck states <em>H. pylori</em> is &ldquo;acid resistant&rdquo; and lives in the gastric mucosa; the specific mechanism &mdash; urease converting urea &rarr; ammonia to neutralize local acid, plus a spiral shape and flagella to burrow into the mucus &mdash; is standard textbook (no textbook available to cross-check) &mdash; confirm against the lecture video.]</em></p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Most microbes can&rsquo;t colonize a pH-2 stomach, but <em>H. pylori</em> can &mdash; it tucks into the mucus layer lining the stomach (the gastric mucosa), where the pH is far gentler than the lumen, and it is intrinsically acid-resistant. Carriage is common (~half of people); disease comes when it overgrows and ulcerates the lining.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>&ldquo;A microbe causes peptic ulcers and survives stomach acid&rdquo; &rarr; <em>H. pylori</em>. If the stem asks the mechanism, the textbook answer is urease (ammonia neutralizes acid) + spiral shape/flagella to reach the mucus &mdash; but the deck only commits to &ldquo;acid-resistant, lives in the gastric mucosa,&rdquo; so lead with that.</div>
       </div>
+      <div class="fc" data-deck="m6l4-q3"></div>
     </article>
     <article class="q" id="m6l4-q4" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q4</span><span class="q-text">What is the relationship between microbes in the large intestine and propensity for obesity, and what did they see in mice and humans?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">Large-intestine microbes <span class="concept">may regulate metabolism</span> and influence <span class="mem">propensity for obesity</span>. <span class="mem">Mice</span> showed the microbiota drives fat gain; <span class="mem">humans</span> only partly matched the mouse pattern.</div>
+        <div class="support">
+          <div class="sub">In mice</div>
+          <ul>
+            <li>Normal mice have <span class="mem">~40% more fat</span> than germ-free mice on the same diet.</li>
+            <li>Germ-free mice given a normal microbiota <span class="concept">gain weight</span>.</li>
+            <li>Genetically obese mice have a different microbiota: <span class="mem">more Firmicutes + more methanogenic Archaea</span>.</li>
+          </ul>
+          <div class="sub">In humans</div>
+          <ul>
+            <li>Human studies <span class="mem">could NOT confirm</span> the Bacteroidetes&ndash;Firmicutes relationship found in mice.</li>
+            <li>But obese humans more often harbor <span class="mem">Prevotella + methanogenic Archaea</span>.</li>
+            <li>Outcome depends on <span class="concept">diet as well as genetics</span>.</li>
+          </ul>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>The mouse data make a strong causal case: microbes change how much energy the host harvests, so colonizing germ-free mice makes them gain fat, and obese mice carry a shifted community (more Firmicutes, more methanogens). Humans are messier &mdash; the exact Firmicutes:Bacteroidetes ratio from mice didn&rsquo;t replicate, though obese people do trend toward Prevotella and methanogens. The honest takeaway: diet + genetics both shape it.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>The trap is overstating the human data &mdash; the Bacteroidetes&ndash;Firmicutes ratio was a <em>mouse</em> finding that humans did NOT confirm. Know the mouse evidence (40% more fat; germ-free gain weight on transplant; obese mice = more Firmicutes + methanogens) and the human nuance (Prevotella + methanogens; depends on diet + genetics).</div>
       </div>
+      <div class="fc" data-deck="m6l4-q4"></div>
     </article>
     <article class="q" id="m6l4-q5" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q5</span><span class="q-text">What are some concerns with using a mouse model for GI microbiota studies?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">Mice are convenient but <span class="concept">anatomically different</span>: they have a <span class="mem">large cecum</span> and do most <span class="mem">fermentation in the cecum</span>, whereas humans ferment in the <span class="mem">large intestine</span>.</div>
+        <div class="support">
+          <div class="sub">Why translation is imperfect</div>
+          <ul>
+            <li>Mice have <span class="mem">larger cecums</span>; most fermentation is completed there (vs the human large intestine).</li>
+            <li>Different gut anatomy/physiology means results don&rsquo;t always carry over to humans.</li>
+          </ul>
+          <div class="sub">Why mice are still used</div>
+          <p>Short life cycles, well-defined genetic lines, and they can be raised <span class="concept">germ-free</span> &mdash; good for antibiotic therapy, dietary control, and fecal-transplant studies.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>The headline concern is the fermentation site: a mouse runs most of its fermentation in a big cecum, while humans do it in the colon, so a microbiota that behaves one way in a mouse gut may behave differently in ours. Mice are still valuable because they&rsquo;re fast-breeding, genetically uniform, and can be made germ-free &mdash; ideal for controlled diet/antibiotic/transplant experiments &mdash; but their anatomy is the caveat.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>The expected answer is the cecum difference (mice ferment in a large cecum; humans in the large intestine). A distractor lists a <em>strength</em> (germ-free, short life cycle) as if it were a &ldquo;concern.&rdquo; <em>[Flag: additional textbook concerns &mdash; coprophagy and germ-free/gnotobiotic limitations &mdash; go beyond this deck; confirm against the lecture video.]</em></div>
       </div>
+      <div class="fc" data-deck="m6l4-q5"></div>
     </article>
     <div class="topic-divider" id="m6l4-d22" data-topic="Other Body Sites"><div class="td-inner"><span>Other Body Sites</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l4-q6" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q6</span><span class="q-text">What are the factors that impact the composition of the skin microbiota?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">Skin microbiota is set by the <span class="mem">microenvironment type</span> (<span class="mem">dry / moist / sebaceous</span>) plus <span class="mem">environmental</span> (weather) and <span class="mem">host</span> factors (age, hygiene, sex).</div>
+        <div class="support">
+          <div class="sub">Factors</div>
+          <ul>
+            <li><span class="mem">Skin microenvironment</span>: dry, moist, or sebaceous &mdash; differing moisture and chemical composition.</li>
+            <li><span class="mem">Environmental</span> factors &mdash; e.g., weather.</li>
+            <li><span class="mem">Host</span> factors &mdash; age, personal hygiene, sex, etc.</li>
+          </ul>
+          <div class="sub">Scale &amp; typical genera</div>
+          <p>~1 million bacteria/cm<sup>2</sup> (~10<sup>10</sup> on an adult); each microenvironment has a unique community: <span class="concept">Staphylococcus, Propionibacterium, Corynebacterium</span>.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Skin isn&rsquo;t one habitat &mdash; a dry forearm, a moist armpit, and an oily forehead are different worlds, so the biggest driver of who lives where is the local microenvironment (moisture + chemistry). On top of that, external conditions (weather) and host traits (age, hygiene, sex) tune the community, which is why each site carries its own signature genera.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>List the three microenvironments (dry/moist/sebaceous) plus environmental and host factors. A &ldquo;which factor shapes skin microbiota&rdquo; stem accepts moisture/site, weather, age, hygiene, sex. Recognize the signature genera (Staphylococcus, Propionibacterium, Corynebacterium).</div>
       </div>
+      <div class="fc" data-deck="m6l4-q6"></div>
     </article>
     <article class="q" id="m6l4-q7" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q7</span><span class="q-text">What causes dental plaque and periodontitis, and is this an increase or decrease in species diversity within the oral cavity?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway"><span class="mem">Dental plaque</span> is a <span class="mem">biofilm</span> of <span class="mem">Streptococcus</span> + other fermenting bacteria whose acid wears enamel (caries); the periodontitis shift is an <span class="concept">increase</span> in oral species diversity.</div>
+        <div class="support">
+          <div class="sub">Cause</div>
+          <ul>
+            <li>Plaque = a <span class="mem">biofilm on teeth</span>; <span class="mem">Streptococcus</span> + other fermenters produce <span class="concept">acid</span> that wears down enamel (dental caries).</li>
+            <li>Periodontal disease contributes to systemic conditions &mdash; cardiovascular disease, arthritis.</li>
+          </ul>
+          <div class="sub">Diversity direction</div>
+          <p><em>[Flag: the review doc asks increase vs decrease, but the M6L4 deck doesn&rsquo;t state a direction; standard textbook is that periodontitis is a dysbiotic <span class="concept">increase</span> in subgingival diversity (more anaerobes / gram-negatives) (no textbook available to cross-check) &mdash; confirm against the lecture video.]</em></p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Plaque is the classic oral biofilm: Streptococcus and friends ferment sugars to acid, and that acid demineralizes enamel into caries; when the gum-line community shifts, periodontitis sets in and even feeds systemic disease. As for diversity, the typical teaching is that periodontitis is an <em>increase</em> &mdash; a dysbiotic bloom of additional anaerobic species in the pocket.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>Pair plaque &rarr; biofilm of Streptococcus/fermenters &rarr; acid &rarr; enamel breakdown. For the diversity item the expected answer is &ldquo;increase,&rdquo; but since the deck doesn&rsquo;t state it explicitly, confirm the direction your instructor used. A distractor calls plaque a single planktonic species rather than a biofilm.</div>
       </div>
+      <div class="fc" data-deck="m6l4-q7"></div>
     </article>
     <article class="q" id="m6l4-q8" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q8</span><span class="q-text">What does the microbiota within the lower respiratory tract look like, and what types of microbes are able to reach the lungs?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">In a healthy adult the <span class="mem">lower respiratory tract is essentially sterile</span> &mdash; no normal microbiota. Only <span class="mem">very small particles (&lt;10 &micro;m)</span> reach the lungs; pathogens that do cause <span class="concept">pneumonia</span>.</div>
+        <div class="support">
+          <div class="sub">Upper vs lower</div>
+          <ul>
+            <li><span class="concept">Upper RT</span>: microbes thrive (enter from air), get trapped in mucus, then expelled in nasal secretions or swallowed and killed in the stomach.</li>
+            <li><span class="mem">Lower RT</span>: naturally sterile; no normal microbiota in healthy adults.</li>
+          </ul>
+          <div class="sub">What reaches the lungs</div>
+          <p>Only particles <span class="mem">&lt;10 &micro;m</span>; pathogenic microbes that reach the lungs cause <span class="concept">pneumonia</span>.</p>
+          <p><em>[Flag: the deck writes &ldquo;&lt;10mm&rdquo; (almost certainly a typo for &lt;10 &micro;m) and calls the lower RT &ldquo;naturally sterile&rdquo;; modern sequencing instead describes a low-biomass community seeded from the upper airway (no textbook available to cross-check) &mdash; confirm against the lecture video.]</em></p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>The airway is a filter. The upper tract is full of microbes, but mucus and the swallow-and-acid-kill route keep them from descending, so in health the lower tract stays essentially sterile. Only the smallest airborne particles slip past into the lungs, and when those carry pathogens you get pneumonia.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>Lower RT in a healthy adult = sterile / no normal microbiota (the deck&rsquo;s position); only &lt;10 &micro;m particles reach the lungs; pathogens there &rarr; pneumonia. A distractor describes a thriving normal lung flora (true by modern sequencing, but not the deck&rsquo;s framing &mdash; go with the deck).</div>
       </div>
+      <div class="fc" data-deck="m6l4-q8"></div>
     </article>
     <article class="q" id="m6l4-q9" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q9</span><span class="q-text">What is the common environment for a female urogenital tract, and what happens when antibiotics are taken?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">The healthy vagina is <span class="mem">weakly acidic</span> and glycogen-rich, dominated by <span class="mem">Lactobacillus acidophilus</span> that ferments glucose to <span class="mem">lactic acid</span>. <span class="concept">Antibiotics</span> wipe out Lactobacillus &rarr; <span class="mem">yeast overgrowth</span>.</div>
+        <div class="support">
+          <div class="sub">Common environment</div>
+          <p>Weakly acidic + significant <span class="concept">glycogen</span>; <span class="mem">Lactobacillus acidophilus</span> ferments glucose &rarr; <span class="mem">lactic acid</span>, keeping the pH low and protective.</p>
+          <div class="sub">With antibiotics</div>
+          <ul>
+            <li>Antibiotics kill the protective Lactobacillus &rarr; <span class="mem">yeast overgrowth</span>.</li>
+            <li>(Separately, altered urethral pH lets pathogens like <span class="concept">E. coli</span> and <span class="concept">Proteus mirabilis</span> grow &rarr; UTIs.)</li>
+          </ul>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>The vagina protects itself chemically: Lactobacillus eats glycogen-derived glucose and excretes lactic acid, holding the pH low enough to deter pathogens. Antibiotics are indiscriminate &mdash; they kill the Lactobacillus too, removing the acid barrier and letting yeast (which antibiotics don&rsquo;t touch) bloom.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>&ldquo;Antibiotics deplete vaginal Lactobacillus, leading to ___&rdquo; &rarr; yeast overgrowth. Know the protective chain: glycogen &rarr; Lactobacillus &rarr; lactic acid &rarr; low pH. A distractor credits the acidity to the host rather than to bacterial fermentation.</div>
       </div>
+      <div class="fc" data-deck="m6l4-q9"></div>
     </article>
     <div class="topic-divider" id="m6l4-d23" data-topic="Virome &amp; Clinical"><div class="td-inner"><span>Virome &amp; Clinical</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l4-q10" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q10</span><span class="q-text">What is a benefit to the human virome?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">A healthy person is full of viruses, and a key benefit is that <span class="mem">bacteriophages</span> act as a <span class="mem">first line of defense against pathogens</span>.</div>
+        <div class="support">
+          <div class="sub">The virome</div>
+          <ul>
+            <li>Many resident viruses; some cause disease, some are mild, and some are essentially harmless (plant viruses, bacteriophages).</li>
+            <li><span class="mem">Bacteriophages</span> = a <span class="concept">first line of defense</span> against bacterial pathogens.</li>
+          </ul>
+          <p><em>[Flag: the deck names phages as a &ldquo;first line of defense against pathogens&rdquo;; the broader mechanism (phages regulate bacterial population balance and aid mucosal defense / gene transfer) is standard textbook (no textbook available to cross-check) &mdash; confirm against the lecture video.]</em></p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Not all our viruses are enemies. Bacteriophages infect bacteria, so a resident phage population helps hold bacterial pathogens in check &mdash; a built-in antibacterial defense layered on top of the bacterial community itself.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>&ldquo;A benefit of the human virome&rdquo; &rarr; bacteriophages defend against (bacterial) pathogens. A distractor implies all viruses are harmful; the point is that phages are beneficial members of the virome.</div>
       </div>
+      <div class="fc" data-deck="m6l4-q10"></div>
     </article>
     <article class="q" id="m6l4-q11" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q11</span><span class="q-text">What is commonly seen in patients with IBD?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">IBD shows <span class="mem">lower gut microbiome diversity</span> (dysbiosis) with <span class="concept">chronic inflammation</span> and loss of homeostasis.</div>
+        <div class="support">
+          <div class="sub">Hallmarks</div>
+          <ul>
+            <li><span class="mem">Lower gut microbiome diversity</span>; chronic gut inflammation + disruption of homeostasis.</li>
+            <li><span class="concept">Increased risk with antibiotic use</span>; correlates with a western diet; transmissible between family members.</li>
+          </ul>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>IBD is the textbook example of dysbiosis: the community loses diversity and stops keeping the gut in balance, so inflammation runs chronic. The links to antibiotics, western diet, and family transmission all point back to a disrupted microbial community as central, not incidental.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>&ldquo;What&rsquo;s commonly seen in IBD?&rdquo; &rarr; reduced / lower gut microbiome diversity (dysbiosis) with chronic inflammation. A distractor says IBD shows <em>increased</em> diversity &mdash; it&rsquo;s the opposite.</div>
       </div>
+      <div class="fc" data-deck="m6l4-q11"></div>
     </article>
     <article class="q" id="m6l4-q12" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q12</span><span class="q-text">What are some risks with antibiotic use in newborns?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">Antibiotics in newborns <span class="mem">decrease ALL gut microbes</span> (target + non-target) during a critical window, raising the risk of <span class="mem">IBD / dysbiosis disorders</span> and <span class="mem">C. difficile</span> infection.</div>
+        <div class="support">
+          <div class="sub">Risks</div>
+          <ul>
+            <li>Oral antibiotics <span class="mem">decrease all gut microbes</span> &mdash; target and non-target alike.</li>
+            <li>Use in the <span class="concept">first few months of life</span> increases risk of <span class="mem">IBD</span> and other dysbiosis-related disorders.</li>
+            <li><span class="mem">Clostridium difficile</span> infection (a <span class="concept">spore-former, generally antibiotic-resistant</span>) is associated with antibiotic use; fecal transplant is a newer therapy.</li>
+          </ul>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Antibiotics can&rsquo;t aim &mdash; they flatten the whole gut community, and doing that while an infant&rsquo;s microbiome is still assembling derails its development, raising later dysbiosis risk (IBD and more). It also clears space for <em>C. difficile</em>, which shrugs off antibiotics as a resistant spore-former and overgrows.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>Newborn antibiotic risks &rarr; wipes out all gut microbes during a key developmental window &rarr; IBD/dysbiosis later + <em>C. difficile</em> overgrowth. A distractor says antibiotics only hit the target pathogen (they hit everything).</div>
       </div>
+      <div class="fc" data-deck="m6l4-q12"></div>
     </article>
     <article class="q" id="m6l4-q13" data-lesson="m6l4">
       <div class="q-head"><span class="q-num">M6L4 Q13</span><span class="q-text">What are probiotics and prebiotics, and when should these be taken?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway"><span class="mem">Probiotics</span> = live beneficial microbes you ingest; <span class="mem">prebiotics</span> = indigestible food that feeds your good gut bacteria. Together = a <span class="concept">synbiotic</span>.</div>
+        <div class="support">
+          <table>
+            <tr><th>Term</th><th>What it is</th><th>Examples</th></tr>
+            <tr><td><span class="mem">Probiotic</span></td><td>live organisms that confer a health benefit</td><td>Bifidobacterium, Lactobacillus (yogurt, probiotic drinks)</td></tr>
+            <tr><td><span class="mem">Prebiotic</span></td><td>indigestible by humans; feeds fermentative gut bacteria</td><td>typically carbohydrates</td></tr>
+          </table>
+          <div class="sub">How / when</div>
+          <ul>
+            <li>Probiotics may work by <span class="concept">limiting pathogens&rsquo; ability to colonize</span> the gut.</li>
+            <li>Probiotic + prebiotic = <span class="mem">synbiotic</span>; most success in <span class="concept">sepsis treatment for young kids</span>.</li>
+          </ul>
+          <p><em>[Flag: the deck gives the synbiotic / sepsis-in-young-children success but doesn&rsquo;t spell out general timing; the common guidance to take probiotics during/after antibiotics (to restore flora) and prebiotics regularly is standard textbook (no textbook available to cross-check) &mdash; confirm against the lecture video.]</em></p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>The pair is &ldquo;bugs vs. food for bugs&rdquo;: probiotics add live beneficial organisms (Lactobacillus, Bifidobacterium), while prebiotics are fibers we can&rsquo;t digest that selectively feed the good residents. Combine them and you get a synbiotic. Because antibiotics strip the gut, restoring or feeding beneficial microbes is the logical follow-up.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>Define both precisely &mdash; probiotic = live microbes; prebiotic = indigestible fiber/food for them; together = synbiotic. The deck&rsquo;s timing hook is &ldquo;most success in sepsis treatment for young kids.&rdquo; A distractor swaps the definitions (calling fiber a probiotic).</div>
       </div>
+      <div class="fc" data-deck="m6l4-q13"></div>
     </article>
     <div class="topic-divider" id="m6l4-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
     <div id="m6l4-quiz" class="quiz-shell" style="scroll-margin-top:var(--stack-h);">
@@ -2163,9 +2301,9 @@ window.smoothScrollTo=function(el){
     {p:'On a single soil aggregate, where would you most expect to find obligate anaerobes?',
      o:['on the oxygenated outer surface','in the anoxic interior, after surface microbes consume the O<sub>2</sub>','spread evenly throughout the particle','only in well-drained surface films'],
      a:1, fb:'Aerobes consume O<sub>2</sub> at the surface, leaving the interior anoxic — the microenvironment that suits anaerobes.'},
-    {p:'Using the proportions from lecture, the single largest component of soil is:',
-     o:['organic matter (~5%)','living organisms (~5%)','inorganic / mineral matter (~40%)','air and water (~50%)'],
-     a:3, fb:'~50% air + water, ~40% inorganic, ~5% organic, ~5% organisms. Most microbial growth sits at the surface / topsoil.'},
+    {p:'The single largest component of soil is:',
+     o:['organic matter','living organisms','inorganic / mineral matter','air and water (pore space)'],
+     a:3, fb:'Air + water (pore space) is the largest component — soil is more empty space than solid. (You won’t be tested on the exact percentages.)'},
     {p:'Why are very small cells favored in the nutrient-starved deep subsurface?',
      o:['they store more nutrients internally','a higher surface-area-to-volume ratio improves uptake efficiency','they divide faster than large cells','their small size lets them resist pressure'],
      a:1, fb:'Small size → high surface-area-to-volume ratio → more efficient scavenging of scarce nutrients (the Module 1 SA:V idea).'},
@@ -2186,7 +2324,10 @@ window.smoothScrollTo=function(el){
      a:0, fb:'Pelagibacter is the abundant pelagic oligotroph (grows best at very low nutrients) and carries proteorhodopsin.'},
     {p:'The deep sea is cold, dark, high-pressure, and nutrient-poor. What explains how thermophiles can still be found there?',
      o:['sunlight penetrates below 1000 m','hydrothermal vents create localized hot, chemolithotroph-fueled habitats','high pressure raises water temperature globally','piezophiles generate their own metabolic heat'],
-     a:1, fb:'Hydrothermal vents are the exception — they supply heat and reduced chemicals, supporting chemolithotrophic thermophiles and hyperthermophiles.'}
+     a:1, fb:'Hydrothermal vents are the exception — they supply heat and reduced chemicals, supporting chemolithotrophic thermophiles and hyperthermophiles.'},
+    {p:'Soil has four horizons (O, A, B, C). Which is the most species-abundant — most organic matter and microbial growth?',
+     o:['the C horizon (bedrock base)','the B horizon (subsoil)','the surface: the O and A horizons','all four equally'],
+     a:2, fb:'Organic matter and microbes concentrate at the surface (O + A horizons) and fall with depth; the C horizon, formed from bedrock, has the lowest activity.'}
   ];
 
   QUIZZES.m5l2=[
@@ -2363,6 +2504,57 @@ window.smoothScrollTo=function(el){
      a:1, fb:'Microbes hydrolyze cellulose to glucose and ferment it to fatty acids — the ruminant&rsquo;s main energy source (plus microbial protein and vitamins).'}
   ];
 
+  QUIZZES.m6l4=[
+    {p:'Which is a reason scientists study the human microbiome?',
+     o:['to sterilize the body of all microbes','to develop biomarkers for disease and design personalized therapies/probiotics','to prove microbes are always harmful','to replace the immune system'],
+     a:1, fb:'Goals include biomarkers for disease predisposition and targeted/personalized drug therapy and probiotics.'},
+    {p:'How does an intact resident microbiota help defend against infection?',
+     o:['it secretes antibiotics that cure all disease','it limits pathogens&rsquo; ability to colonize (occupies niches/resources)','it raises body temperature','it blocks all viruses'],
+     a:1, fb:'Resident microbes exclude pathogens by competing for space/resources — the principle behind probiotics and fecal transplants.'},
+    {p:'The healthy gut microbiome is dominated by which two phyla?',
+     o:['Cyanobacteria and Actinobacteria','Firmicutes and Bacteroidetes','Proteobacteria and Spirochaetes','Archaea and fungi'],
+     a:1, fb:'~98% of gut bacteria are Firmicutes, Bacteroidetes, and Proteobacteria — mostly Firmicutes and/or Bacteroidetes.'},
+    {p:'A gut community is classified by whether it is enriched in Bacteroides, Prevotella, or Ruminococcus. This classification is called a(n):',
+     o:['enterotype','biofilm','symbiosome','horizon'],
+     a:0, fb:'The three basic enterotypes are enriched in Bacteroides (#1), Prevotella (#2), or Ruminococcus (#3).'},
+    {p:'A microbe causes peptic ulcers and survives stomach acid by living in the gastric mucosa. Name it:',
+     o:['Lactobacillus acidophilus','Helicobacter pylori','Clostridium difficile','Agrobacterium tumefaciens'],
+     a:1, fb:'H. pylori is acid-resistant, lives in the gastric mucosa (~50% of people), and its overgrowth causes peptic ulcers.'},
+    {p:'In germ-free mice given a normal mouse microbiota, the expected result is:',
+     o:['they lose weight','they gain weight / fat','no change in fat','they become sterile'],
+     a:1, fb:'Normal mice carry ~40% more fat than germ-free mice on the same diet, and colonizing germ-free mice makes them gain weight.'},
+    {p:'How did human obesity data compare with the mouse microbiome findings?',
+     o:['humans confirmed the exact Bacteroidetes–Firmicutes ratio','humans did NOT confirm the mouse ratio, though obese people trend toward Prevotella + methanogens','humans showed the opposite of every mouse result','no human studies were done'],
+     a:1, fb:'The Bacteroidetes–Firmicutes ratio was a mouse finding humans could not confirm; obese humans more often harbor Prevotella and methanogenic Archaea (diet + genetics matter).'},
+    {p:'A key concern when extrapolating mouse-gut microbiome results to humans is that mice:',
+     o:['have no gut microbes','do most fermentation in a large cecum, while humans ferment in the large intestine','cannot be raised germ-free','live longer than humans'],
+     a:1, fb:'Mice have larger cecums and complete most fermentation there; humans ferment in the large intestine — an anatomical difference that limits translation.'},
+    {p:'Which best describes a major factor shaping the skin microbiota?',
+     o:['the rumen environment','the skin microenvironment type (dry / moist / sebaceous)','stomach pH','leghemoglobin levels'],
+     a:1, fb:'Skin communities track the microenvironment (dry/moist/sebaceous) plus environmental (weather) and host factors (age, hygiene, sex).'},
+    {p:'Dental plaque is best described as:',
+     o:['a single planktonic species','a biofilm of Streptococcus and other fermenters that produce enamel-eroding acid','a viral infection of the gums','a sterile mineral deposit'],
+     a:1, fb:'Plaque is a biofilm; fermenters produce acid that wears down enamel (caries).'},
+    {p:'In a healthy adult, the lower respiratory tract is described (per the deck) as:',
+     o:['densely colonized','essentially sterile — no normal microbiota; only particles <10 &micro;m reach the lungs','dominated by Lactobacillus','an anaerobic fermentation chamber'],
+     a:1, fb:'The deck treats the lower RT as naturally sterile in healthy adults; only very small particles (<10 &micro;m) reach the lungs, and pathogens there cause pneumonia.'},
+    {p:'Antibiotics deplete vaginal Lactobacillus. The most likely consequence is:',
+     o:['lower pH','yeast overgrowth','more lactic acid','nitrogen fixation'],
+     a:1, fb:'Lactobacillus makes lactic acid that keeps pH low; remove it with antibiotics and yeast overgrows.'},
+    {p:'A benefit of the human virome is that bacteriophages:',
+     o:['cause all human disease','serve as a first line of defense against bacterial pathogens','digest cellulose','fix nitrogen'],
+     a:1, fb:'Phages infect bacteria and act as a first line of defense against bacterial pathogens.'},
+    {p:'Compared with healthy individuals, IBD patients commonly show:',
+     o:['higher gut microbiome diversity','lower gut microbiome diversity (dysbiosis) with chronic inflammation','no microbiome at all','a sterile colon'],
+     a:1, fb:'IBD features lower microbiome diversity and chronic inflammation; risk rises with antibiotic use and western diet.'},
+    {p:'A newborn given oral antibiotics is at increased risk because antibiotics:',
+     o:['only kill the target pathogen','decrease ALL gut microbes during a critical window, raising IBD/dysbiosis risk and C. difficile infection','permanently sterilize the gut','boost Lactobacillus'],
+     a:1, fb:'Oral antibiotics hit target and non-target microbes; early-life use raises IBD/dysbiosis risk and opens the door to C. difficile.'},
+    {p:'Which correctly distinguishes the two?',
+     o:['probiotics are fibers; prebiotics are live microbes','probiotics are live beneficial microbes; prebiotics are indigestible food that feeds gut bacteria','both are live microbes','both are antibiotics'],
+     a:1, fb:'Probiotic = live beneficial organisms (Lactobacillus, Bifidobacterium); prebiotic = indigestible carbs that feed them; together = a synbiotic.'}
+  ];
+
   function render(shell,title,data){
     while(shell.firstChild) shell.removeChild(shell.firstChild);
     if(title) shell.appendChild(title);
@@ -2432,10 +2624,13 @@ window.smoothScrollTo=function(el){
       {q:'On a soil particle, where are <strong>obligate anaerobes</strong> &mdash; and why?', a:'In the anoxic core, after surface microbes consume the O<sub>2</sub>.'}
     ],
     'm5l1-q5':[
-      {q:'Soil is ~__% <strong>air + water</strong>?', a:'~50% &mdash; the single largest component.'},
-      {q:'Soil is ~__% <strong>inorganic / mineral matter</strong>?', a:'~40%.'},
-      {q:'Soil is ~__% <strong>organic matter</strong> and ~__% <strong>organisms</strong>?', a:'~5% organic, ~5% organisms.'},
-      {q:'How many soil layers, and which is most species-abundant?', a:'Four layers; the <span class="mem">surface / topsoil</span> is most species-abundant (growth falls with depth).'}
+      {q:'What is the <strong>largest single component</strong> of soil?', a:'<span class="mem">Air + water</span> (pore space) &mdash; soil is more empty space than solid. (Exact percentages aren&rsquo;t tested.)'},
+      {q:'Name soil&rsquo;s <strong>four layers (horizons)</strong>, top to bottom.', a:'<span class="mem">O</span> &rarr; <span class="mem">A</span> &rarr; <span class="mem">B</span> &rarr; <span class="mem">C</span> horizons.'},
+      {q:'What is the <strong>O horizon</strong>?', a:'The surface layer of undecomposed plant litter.'},
+      {q:'What is the <strong>A horizon</strong>?', a:'Topsoil &mdash; dark, organic-rich, with the highest microbial activity.'},
+      {q:'What is the <strong>B horizon</strong>?', a:'Subsoil &mdash; leached minerals/humus accumulate; little organic matter, lower microbial activity.'},
+      {q:'What is the <strong>C horizon</strong>?', a:'The soil base developed from underlying bedrock; microbial activity very low.'},
+      {q:'Which soil layer is <strong>most species-abundant</strong>, and why?', a:'The surface &mdash; the <span class="mem">O + A horizons</span> &mdash; most organic matter and microbial growth; activity falls with depth.'}
     ],
     'm5l1-q6':[
       {q:'Why are small cells favored in the nutrient-poor subsurface?', a:'High <span class="mem">surface-area-to-volume ratio</span> &rarr; more efficient nutrient uptake when nutrients are scarce (oligotrophic).'}
@@ -2677,6 +2872,77 @@ window.smoothScrollTo=function(el){
       {q:'What do rumen microbes do to <strong>cellulose</strong>?', a:'Hydrolyze cellulose &rarr; glucose, then ferment it (&rarr; fatty acids, methane, CO<sub>2</sub>).'},
       {q:'<strong>Main nutrition</strong> the host gets?', a:'Fatty acids &mdash; the host&rsquo;s main energy source.'},
       {q:'Other nutrition from rumen microbes?', a:'Amino acids, vitamins, and microbial protein (the host digests the microbes).'}
+    ],
+    'm6l4-q1':[
+      {q:'Why <strong>study the microbiome</strong>?', a:'To develop biomarkers for disease risk and design targeted / personalized therapies and probiotics.'},
+      {q:'Microbiome <strong>benefit against infection</strong>?', a:'Resident microbes limit pathogens&rsquo; ability to colonize (the basis of probiotics &amp; fecal transplants).'},
+      {q:'What is <strong>colonization resistance</strong>?', a:'Commensals exclude pathogens by occupying niches/resources (deck: &ldquo;exclude the disease-causing organism&rdquo;).'}
+    ],
+    'm6l4-q2':[
+      {q:'Two <strong>dominant gut phyla</strong>?', a:'Firmicutes and Bacteroidetes (with Proteobacteria; ~98% of gut bacteria).'},
+      {q:'How many <strong>gut microbial cells</strong>?', a:'~10<sup>13</sup>.'},
+      {q:'The <strong>3 enterotypes</strong>?', a:'Enriched in Bacteroides (#1), Prevotella (#2), or Ruminococcus (#3).'},
+      {q:'Gut microbiome <strong>benefits</strong>?', a:'Vitamin production, steroid modification, amino acid biosynthesis, metabolism regulation, immune training.'},
+      {q:'Is the healthy <strong>stomach sterile</strong>?', a:'No &mdash; a rich microbiome (Firmicutes, Bacteroidetes, Actinobacteria) despite ~pH 2.'}
+    ],
+    'm6l4-q3':[
+      {q:'<strong>Cause of peptic ulcers</strong>?', a:'<em>Helicobacter pylori</em> overgrowth.'},
+      {q:'How common is <strong>H. pylori</strong> carriage?', a:'~50% of the population (in the gastric mucosa).'},
+      {q:'How does <em>H. pylori</em> <strong>survive the stomach</strong>?', a:'It is acid-resistant and shelters in the gastric mucus layer (mucosa).'},
+      {q:'Textbook mechanism for acid survival? <em>[not in deck]</em>', a:'Urease (urea &rarr; ammonia neutralizes acid) + spiral shape/flagella to burrow into mucus &mdash; confirm vs lecture video.'}
+    ],
+    'm6l4-q4':[
+      {q:'Large-intestine microbes &amp; <strong>obesity</strong>?', a:'May regulate metabolism and influence propensity for obesity.'},
+      {q:'<strong>Mouse</strong> fat finding?', a:'Normal mice ~40% more fat than germ-free on the same diet; transplanting normal microbiota &rarr; weight gain.'},
+      {q:'<strong>Genetically obese mice</strong> microbiota?', a:'More Firmicutes + more methanogenic Archaea.'},
+      {q:'<strong>Human</strong> obesity finding?', a:'Couldn&rsquo;t confirm the mouse Bacteroidetes&ndash;Firmicutes ratio; obese humans more often have Prevotella + methanogenic Archaea.'}
+    ],
+    'm6l4-q5':[
+      {q:'Main <strong>mouse-model concern</strong>?', a:'Mice have a large cecum and ferment there; humans ferment in the large intestine.'},
+      {q:'Why are <strong>mice still used</strong>?', a:'Short life cycle, defined genetic lines, can be germ-free (good for antibiotic/diet/transplant studies).'}
+    ],
+    'm6l4-q6':[
+      {q:'Three <strong>skin microenvironments</strong>?', a:'Dry, moist, and sebaceous.'},
+      {q:'<strong>Environmental</strong> factor shaping skin microbiota?', a:'Weather.'},
+      {q:'<strong>Host</strong> factors shaping skin microbiota?', a:'Age, personal hygiene, sex.'},
+      {q:'Signature <strong>skin genera</strong>?', a:'Staphylococcus, Propionibacterium, Corynebacterium.'}
+    ],
+    'm6l4-q7':[
+      {q:'What is <strong>dental plaque</strong>?', a:'A biofilm on teeth (Streptococcus + other fermenters).'},
+      {q:'How does plaque <strong>damage teeth</strong>?', a:'Fermenters produce acid that wears down enamel (dental caries).'},
+      {q:'Periodontitis &amp; oral <strong>diversity</strong>?', a:'An increase in species diversity <em>[deck doesn&rsquo;t state direction; textbook &mdash; confirm vs video]</em>.'},
+      {q:'Periodontal disease <strong>systemic links</strong>?', a:'Cardiovascular disease and arthritis.'}
+    ],
+    'm6l4-q8':[
+      {q:'<strong>Lower respiratory tract</strong> in a healthy adult?', a:'Essentially sterile &mdash; no normal microbiota (the deck&rsquo;s position).'},
+      {q:'What <strong>reaches the lungs</strong>?', a:'Only very small particles (&lt;10 &micro;m).'},
+      {q:'What do <strong>pathogens in the lungs</strong> cause?', a:'Pneumonia.'},
+      {q:'<strong>Upper RT</strong> &mdash; fate of inhaled microbes?', a:'Trapped in mucus, then expelled in nasal secretions or swallowed and killed in the stomach.'}
+    ],
+    'm6l4-q9':[
+      {q:'Healthy <strong>vaginal environment</strong>?', a:'Weakly acidic + glycogen-rich.'},
+      {q:'Dominant <strong>vaginal microbe</strong>?', a:'<em>Lactobacillus acidophilus</em>.'},
+      {q:'How does <strong>Lactobacillus protect</strong>?', a:'Ferments glucose &rarr; lactic acid &rarr; low, protective pH.'},
+      {q:'Effect of <strong>antibiotics</strong> on the vaginal tract?', a:'Kill Lactobacillus &rarr; yeast overgrowth.'}
+    ],
+    'm6l4-q10':[
+      {q:'A <strong>benefit of the virome</strong>?', a:'Bacteriophages are a first line of defense against pathogens.'},
+      {q:'What do <strong>bacteriophages</strong> infect?', a:'Bacteria &mdash; so they keep bacterial pathogens in check.'}
+    ],
+    'm6l4-q11':[
+      {q:'Hallmark of the <strong>IBD</strong> microbiome?', a:'Lower gut microbiome diversity (dysbiosis) with chronic inflammation.'},
+      {q:'<strong>IBD risk factors</strong> (deck)?', a:'Antibiotic use, western diet; transmissible between family members.'}
+    ],
+    'm6l4-q12':[
+      {q:'Effect of oral <strong>antibiotics</strong> on the gut?', a:'Decrease ALL microbes &mdash; target and non-target.'},
+      {q:'Risk of antibiotics in the <strong>first months of life</strong>?', a:'Increased IBD and other dysbiosis-related disorders.'},
+      {q:'Which <strong>antibiotic-associated infection</strong>?', a:'<em>Clostridium difficile</em> (a spore-former, generally antibiotic-resistant).'}
+    ],
+    'm6l4-q13':[
+      {q:'What is a <strong>probiotic</strong>?', a:'Live organisms that confer a health benefit (Bifidobacterium, Lactobacillus).'},
+      {q:'What is a <strong>prebiotic</strong>?', a:'Indigestible food (typically carbs) that feeds fermentative gut bacteria.'},
+      {q:'Probiotic + prebiotic = ?', a:'A <span class="mem">synbiotic</span>.'},
+      {q:'How do <strong>probiotics</strong> work?', a:'By limiting pathogens&rsquo; ability to colonize the gut.'}
     ]
   };
 
