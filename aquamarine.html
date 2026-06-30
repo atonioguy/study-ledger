@@ -529,7 +529,9 @@
 
   /* ===== exam-campaign window — one consistent pixel design (phone palette), skin-independent ===== */
   .cw-win{ --hi:#6a58a0; --lo:#241d3c; --frame:#3b3060; --bar:#5b4a96; --barhi:#8068c4; --bartx:#f5eeff; --outline:#140f24; --body:#130e26; --spot:#241c44; --tx:#e3dbff; --card:#372d5e; --cardtx:#f1ecff; --inset:#0f0a22;
-    max-height:none; max-width:484px; margin:0; justify-self:start; background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.5); image-rendering:pixelated; font-family:var(--pixfont); color:var(--tx); }
+    max-height:none; max-width:484px; margin:0; justify-self:start; order:1; background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.5); image-rendering:pixelated; font-family:var(--pixfont); color:var(--tx); }
+  /* keep campaign right under the notion window; board + antfarm flow below it */
+  .cl-grid .cwin[data-win="board"], .cl-grid .cwin[data-win="feed"]{ order:2; }
   .cwbar{ display:flex; align-items:center; gap:7px; flex:none; background:linear-gradient(180deg,var(--barhi) 0 38%,var(--bar) 38%); color:var(--bartx); padding:6px 9px; border-bottom:2px solid var(--outline); font-size:11px; letter-spacing:.5px; text-shadow:1px 1px 0 rgba(40,35,55,.45); }
   .cwico{ font-size:13px; text-shadow:none; flex:none; } .cwtitle{ text-transform:lowercase; white-space:nowrap; flex:none; } .cwsub{ margin-left:8px; font-family:var(--pixfont2); font-size:13px; opacity:.8; letter-spacing:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .cwreset{ margin-left:auto; background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); font-family:var(--pixfont); font-size:9px; padding:5px 9px; cursor:pointer; } .cwreset:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
