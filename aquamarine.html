@@ -539,15 +539,19 @@
   .cw-xpfloat{ position:absolute; font-family:var(--pixfont); font-size:13px; color:#ffce6a; text-shadow:1.5px 1.5px 0 #5a3a1a; transform:translate(-50%,0); white-space:nowrap; }
   .cw-banner{ position:absolute; left:50%; top:16px; transform:translate(-50%,-20px); background:linear-gradient(180deg,#8068c4,#5b4a96); color:#fff3d6; border:2px solid #ffce6a; padding:9px 18px; font-family:var(--pixfont); font-size:12px; letter-spacing:1px; opacity:0; pointer-events:none; z-index:12; box-shadow:0 0 26px rgba(255,200,100,.8); white-space:nowrap; text-shadow:1px 1px 0 rgba(20,15,36,.6); }
   .cw-banner.show{ animation:cwBanner 2.2s cubic-bezier(.2,.8,.2,1); }
-  .cw-hero{ display:flex; align-items:center; gap:16px; background:var(--card); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:12px 14px; margin-bottom:12px; }
+  .cw-hero{ position:relative; overflow:hidden; display:flex; align-items:center; gap:16px; background:linear-gradient(160deg,#3a3060,#272050); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:12px 14px; margin-bottom:12px; }
+  .cw-hero::before{ content:''; position:absolute; top:0; bottom:0; left:-55%; width:50%; pointer-events:none; z-index:3; background:linear-gradient(105deg,transparent,rgba(185,165,255,.16) 48%,transparent 58%); animation:cwSweep 5.5s linear infinite; }
+  .cw-hero::after{ content:''; position:absolute; inset:0; pointer-events:none; z-index:4; background:repeating-linear-gradient(0deg,rgba(8,5,20,.26) 0 1px,transparent 1px 3px); }
+  .cw-buddies,.cw-level{ position:relative; z-index:5; }
   .cw-buddies{ display:flex; align-items:flex-end; gap:6px; flex:none; }
   .cw-slime{ width:48px; height:35px; animation:cwBob 2.4s ease-in-out infinite; transform-origin:50% 100%; } .cw-tom{ width:34px; height:30px; animation:cwBob 2.4s ease-in-out infinite .6s; transform-origin:50% 100%; }
   .cw-slime.cheer,.cw-tom.cheer{ animation:cwHop .7s ease; }
   .cw-level{ flex:1; min-width:0; }
   .cw-lvrow{ display:flex; align-items:center; gap:9px; margin-bottom:7px; }
-  .cw-lv{ font-family:var(--pixfont); font-size:11px; background:var(--bar); color:var(--bartx); padding:3px 8px; border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); text-transform:lowercase; }
+  .cw-lv{ font-family:var(--pixfont); font-size:11px; background:var(--bar); color:var(--bartx); padding:3px 8px; border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); text-transform:lowercase; animation:cwLvPulse 2.2s ease-in-out infinite; }
   .cw-rank{ font-family:var(--pixfont2); font-size:17px; color:var(--cardtx); text-transform:lowercase; flex:1; } .cw-streak{ font-family:var(--pixfont2); font-size:16px; color:var(--cardtx); }
-  .cw-xptrack{ height:15px; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); overflow:hidden; }
+  .cw-xptrack{ position:relative; height:16px; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); overflow:hidden; }
+  .cw-xptrack::after{ content:''; position:absolute; inset:0; pointer-events:none; z-index:2; background:repeating-linear-gradient(90deg,transparent 0 calc(5% - 2px),rgba(12,8,26,.85) calc(5% - 2px) 5%); }
   .cw-xpfill{ height:100%; width:0%; background:linear-gradient(90deg,#ffd96b,#ff9e5a 55%,#ff7aa8); box-shadow:0 0 14px rgba(255,180,90,.9); transition:width .6s cubic-bezier(.2,.8,.2,1); position:relative; overflow:hidden; }
   .cw-xpfill:after{ content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent); animation:cwShine 2s linear infinite; }
   .cw-xpnum{ font-family:var(--pixfont2); font-size:15px; color:var(--cardtx); margin-top:3px; text-align:right; }
@@ -584,7 +588,37 @@
   .cw-row.done .cw-task{ opacity:.55; text-decoration:line-through; }
   .cw-xp{ flex:none; font-family:var(--pixfont2); font-size:16px; color:#ffcf6e; text-shadow:0 0 7px rgba(255,200,100,.35); }
   .cw-pill{ flex:none; font-family:var(--pixfont); font-size:8px; padding:3px 7px; background:#5fe0c8; color:#0c2620; } .cw-pill.rev{ background:#b7a6ef; color:#241a40; }
-  .cw-note{ font-family:var(--pixfont2); font-size:14px; color:var(--cardtx); margin-top:12px; background:var(--card); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:9px 11px; } .cw-note b{ color:#6fe0cc; }
+  .cw-note{ font-family:var(--pixfont2); font-size:14px; color:var(--cardtx); margin-top:14px; background:var(--card); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:9px 11px; } .cw-note b{ color:#6fe0cc; }
+  /* subtle arcade scanlines over the whole console body */
+  .cwbody::after{ content:''; position:absolute; inset:0; pointer-events:none; z-index:6; background:repeating-linear-gradient(0deg,rgba(8,5,20,.13) 0 1px,transparent 1px 3px); }
+  /* lesson header diamond pip */
+  .cw-ldot{ width:8px; height:8px; flex:none; background:var(--barhi); transform:rotate(45deg); box-shadow:0 0 7px rgba(128,104,196,.6); } .cw-les.done .cw-ldot{ background:#5fe0c8; box-shadow:0 0 9px rgba(95,224,200,.85); }
+  /* ===== part nodes — chunky game-button grid (level select) ===== */
+  .cw-nodes{ display:flex; flex-wrap:wrap; gap:9px; margin:2px 0 6px; }
+  .cw-node{ position:relative; width:108px; height:94px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; padding:0; image-rendering:pixelated;
+    background:linear-gradient(180deg,#403568,#2b2450); border:3px solid; border-color:#6a58a0 #221b3a #221b3a #6a58a0; box-shadow:0 4px 0 #160f28, inset 0 0 0 1px rgba(255,255,255,.05); transition:transform .08s, box-shadow .12s, background .2s; }
+  .cw-node:hover{ transform:translateY(-2px); box-shadow:0 6px 0 #160f28, 0 0 16px rgba(140,112,210,.55); }
+  .cw-node:active{ transform:translateY(2px); box-shadow:0 2px 0 #160f28; }
+  .cw-node .cw-ntop{ position:absolute; top:6px; left:7px; right:7px; display:flex; justify-content:space-between; }
+  .cw-np{ font-family:var(--pixfont); font-size:9px; color:#b7a6ef; } .cw-nxp{ font-family:var(--pixfont); font-size:9px; color:#ffcf6e; }
+  .cw-nicon{ font-size:24px; line-height:1; margin-top:8px; } .cw-nicon::before{ content:'▶'; color:#8b76d2; text-shadow:0 0 6px rgba(139,118,210,.5); }
+  .cw-ntime{ font-family:var(--pixfont2); font-size:17px; color:var(--cardtx); }
+  .cw-node.done{ background:linear-gradient(180deg,#1f7a6a,#125249); border-color:#5fe0c8 #0c3a32 #0c3a32 #5fe0c8; box-shadow:0 4px 0 #08241f, 0 0 18px rgba(95,224,200,.6); }
+  .cw-node.done .cw-nicon::before{ content:'★'; color:#fff4c2; text-shadow:0 0 9px rgba(255,222,120,.95); }
+  .cw-node.done .cw-ntime{ color:#dafff7; } .cw-node.done .cw-np{ color:#aef0e2; } .cw-node.done .cw-nxp{ color:#ffe08a; }
+  .cw-node.pop,.cw-quest.pop{ animation:cwPop .34s ease; }
+  /* ===== review quests — bigger feature buttons ===== */
+  .cw-quests{ display:flex; flex-wrap:wrap; gap:10px; margin-top:2px; }
+  .cw-quest{ position:relative; flex:1 1 250px; min-height:70px; display:flex; align-items:center; gap:12px; padding:12px 14px; cursor:pointer; text-align:left;
+    background:linear-gradient(180deg,#443868,#2e2756); border:3px solid; border-color:#6a58a0 #221b3a #221b3a #6a58a0; box-shadow:0 4px 0 #160f28; transition:transform .08s, box-shadow .12s, background .2s; }
+  .cw-quest:hover{ transform:translateY(-2px); box-shadow:0 6px 0 #160f28, 0 0 16px rgba(140,112,210,.5); } .cw-quest:active{ transform:translateY(2px); box-shadow:0 2px 0 #160f28; }
+  .cw-qicon{ font-size:26px; flex:none; filter:drop-shadow(0 0 6px rgba(180,160,255,.5)); }
+  .cw-qbody{ flex:1; min-width:0; } .cw-qtask{ display:block; font-family:var(--pixfont2); font-size:18px; color:var(--cardtx); } .cw-qmeta{ display:block; font-family:var(--pixfont2); font-size:13px; color:var(--cardtx); opacity:.7; }
+  .cw-qxp{ flex:none; font-family:var(--pixfont2); font-size:17px; color:#ffcf6e; text-shadow:0 0 7px rgba(255,200,100,.35); }
+  .cw-quest.done{ background:linear-gradient(180deg,#1f7a6a,#125249); border-color:#5fe0c8 #0c3a32 #0c3a32 #5fe0c8; box-shadow:0 4px 0 #08241f, 0 0 18px rgba(95,224,200,.55); }
+  .cw-quest.done .cw-qtask{ text-decoration:line-through; opacity:.7; } .cw-quest.done .cw-qicon{ filter:drop-shadow(0 0 8px rgba(95,224,200,.8)); }
+  @keyframes cwSweep{ 0%{ left:-55% } 60%,100%{ left:120% } }
+  @keyframes cwLvPulse{ 0%,100%{ box-shadow:0 0 2px rgba(128,104,196,.4) } 50%{ box-shadow:0 0 13px rgba(150,120,235,.95) } }
   @keyframes cwBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
   @keyframes cwHop{ 0%{transform:translateY(0) scaleY(1)} 25%{transform:translateY(-16px) scaleY(1.08)} 50%{transform:translateY(0) scaleY(.88)} 68%{transform:translateY(-6px)} 100%{transform:translateY(0)} }
   @keyframes cwPop{ 0%{transform:scale(1)} 45%{transform:scale(1.4)} 100%{transform:scale(1)} }
@@ -1132,7 +1166,7 @@ function cwBigCelebrate(){ const fx=document.getElementById('cwFx'); if(!fx)retu
 function cwToggle(row){ const id=row.dataset.id, item=CAMP_ITEMS.find(c=>c.id===id); if(!item)return; const before=campStats();
   const lkey=row.dataset.les; let lesObj=null, lesWasDone=false; if(lkey){ const k=lkey.split('-'); lesObj=CAMP_MODS[+k[0]].lessons[+k[1]]; lesWasDone=lesObj.parts.every(p=>campDone[p.id]); }
   campDone[id]=!campDone[id]; saveCampaign(); row.classList.toggle('done',!!campDone[id]); const after=campStats(); campUpdate(before.xp);
-  if(campDone[id]){ const ck=row.querySelector('.cw-check'); if(ck){ ck.classList.remove('pop'); void ck.offsetWidth; ck.classList.add('pop'); const b=ck.getBoundingClientRect(); cwBurst(b.left+b.width/2,b.top+b.height/2,false); cwXpFloat(b.left+b.width/2,b.top,item.xp); }
+  if(campDone[id]){ row.classList.remove('pop'); void row.offsetWidth; row.classList.add('pop'); const b=row.getBoundingClientRect(); cwBurst(b.left+b.width/2,b.top+b.height/2,false); cwXpFloat(b.left+b.width/2,b.top+6,item.xp);
     cwCheer(); cwBuzz(16); cwSfx('check'); setTimeout(()=>cwSfx('xp'),70);
     const lesDone=lesObj&&!lesWasDone&&lesObj.parts.every(p=>campDone[p.id]); let big=false;
     if(before.m5<M5_PARTS&&after.m5>=M5_PARTS){ cwBanner('★ module 5 cleared ★'); big=true; }
@@ -1147,15 +1181,15 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     h+=`<div class="cw-mod"><span class="cw-modlabel">${esc(m.label)}</span><span class="cw-modmeta" id="cwModCnt${m.mod}">0 / ${np} videos</span><span class="cw-modtime">${esc(m.time)}</span></div>`;
     h+=`<div class="cw-track cw-modtrack" id="cwModTrack${m.mod}"><div class="cw-fill" id="cwModFill${m.mod}"></div></div>`;
     m.lessons.forEach((les,li)=>{ const lid=mi+'-'+li;
-      h+=`<div class="cw-les" id="cwLesH${lid}"><span class="cw-leslabel">${esc(les.l)}</span><span class="cw-lesday">${les.day} ${les.date}</span><span class="cw-lestime">${les.time}</span><span class="cw-lescount" id="cwLes${lid}">0/${les.parts.length}</span></div>`;
-      les.parts.forEach((pt,pi)=>{ h+=`<div class="cw-row cw-part${campDone[pt.id]?' done':''}" data-id="${pt.id}" data-les="${lid}"><span class="cw-check"><svg viewBox="0 0 18 18"><polyline points="3,9 7,13 15,4"/></svg></span><span class="cw-pnum">p${pi+1}</span><span class="cw-ptime">${pt.t}</span><span class="cw-xp">+${pt.xp}</span></div>`; });
+      h+=`<div class="cw-les" id="cwLesH${lid}"><span class="cw-ldot"></span><span class="cw-leslabel">${esc(les.l)}</span><span class="cw-lesday">${les.day} ${les.date}</span><span class="cw-lestime">${les.time}</span><span class="cw-lescount" id="cwLes${lid}">0/${les.parts.length}</span></div>`;
+      h+=`<div class="cw-nodes">`+les.parts.map((pt,pi)=>`<button class="cw-node${campDone[pt.id]?' done':''}" data-id="${pt.id}" data-les="${lid}"><span class="cw-ntop"><span class="cw-np">p${pi+1}</span><span class="cw-nxp">+${pt.xp}</span></span><span class="cw-nicon"></span><span class="cw-ntime">${pt.t}</span></button>`).join('')+`</div>`;
     });
   });
   h+=`<div class="cw-mod"><span class="cw-modlabel">review</span><span class="cw-modmeta">recall, not rewatching</span></div>`;
-  CAMP_REVIEW.forEach(r=>{ h+=`<div class="cw-row${campDone[r.id]?' done':''}" data-id="${r.id}"><span class="cw-check"><svg viewBox="0 0 18 18"><polyline points="3,9 7,13 15,4"/></svg></span><span class="cw-day"><b>${r.day}</b><i>${r.date}</i></span><span class="cw-body2"><span class="cw-task">${esc(r.task)}</span><span class="cw-meta">${esc(r.meta)}</span></span><span class="cw-xp">+${r.xp}</span><span class="cw-pill rev">review</span></div>`; });
+  h+=`<div class="cw-quests">`+CAMP_REVIEW.map(r=>`<button class="cw-quest${campDone[r.id]?' done':''}" data-id="${r.id}"><span class="cw-qicon">${r.id==='sat'?'🧠':'🌙'}</span><span class="cw-qbody"><span class="cw-qtask">${esc(r.task)}</span><span class="cw-qmeta">${r.day} ${r.date} · ${esc(r.meta)}</span></span><span class="cw-qxp">+${r.xp}</span></button>`).join('')+`</div>`;
   list.innerHTML=h;
-  list.querySelectorAll('.cw-row').forEach(r=>r.onclick=()=>cwToggle(r));
-  const rs=document.getElementById('cwReset'); if(rs)rs.onclick=e=>{ e.stopPropagation(); campDone={}; saveCampaign(); list.querySelectorAll('.cw-row').forEach(r=>r.classList.remove('done')); list.querySelectorAll('.cw-les').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-modtrack').forEach(x=>x.classList.remove('full')); campUpdate(); cwSfx('reset'); cwBuzz(12); };
+  list.querySelectorAll('.cw-node,.cw-quest').forEach(el=>el.onclick=()=>cwToggle(el));
+  const rs=document.getElementById('cwReset'); if(rs)rs.onclick=e=>{ e.stopPropagation(); campDone={}; saveCampaign(); list.querySelectorAll('.cw-node,.cw-quest').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-les').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-modtrack').forEach(x=>x.classList.remove('full')); campUpdate(); cwSfx('reset'); cwBuzz(12); };
   campUpdate(); }
 // per-window refresh — re-pull that one source from the worker so native-app edits show without a full reload
 function clRefresh(kind,btn){ if(btn&&btn.classList.contains('spin'))return; if(btn)btn.classList.add('spin');
