@@ -826,7 +826,7 @@ const FLARES=[{x:.345,y:.485,r:.14,c:'255,206,140',i:1.1},{x:.205,y:.55,r:.06,c:
   {x:.655,y:.10,r:.05,c:'255,214,150',i:.7},{x:.78,y:.075,r:.045,c:'255,214,150',i:.7},{x:.90,y:.105,r:.045,c:'255,214,150',i:.7},
   {x:.18,y:.95,r:.08,c:'255,206,140',i:.55},{x:.80,y:.95,r:.08,c:'255,206,140',i:.55}];
 // window scene images (per time of day) — fall back to the drawn pixel city if absent
-const WSRC={night:'window-night.png',dusk:'window-dusk.png',day:'window-day.png',dawn:'window-dawn.png'}; const WIMG={},wReady={};
+const WSRC={night:'images/window-night.png',dusk:'images/window-dusk.png',day:'images/window-day.png',dawn:'images/window-dawn.png'}; const WIMG={},wReady={};
 for(const k in WSRC){ const im=new Image(); im.onload=()=>wReady[k]=true; im.onerror=()=>wReady[k]=false; im.src=WSRC[k]; WIMG[k]=im; }
 /* low-res pixel buffer for the window scene */
 const LW=150, LH=Math.round(LW/ASPECT); const skyBuf=document.createElement('canvas'); skyBuf.width=LW; skyBuf.height=LH; const sb=skyBuf.getContext('2d');
@@ -1607,7 +1607,7 @@ function loop(){ requestAnimationFrame(loop); if(document.body.classList.contain
 }
 
 /* boot */
-const img=new Image(); img.crossOrigin='anonymous'; img.src='room.png';
+const img=new Image(); img.crossOrigin='anonymous'; img.src='images/room.png';
 img.onload=()=>{ roomCanvas=keyGreen(img); const rs=document.documentElement.style; rs.setProperty('--slime',`url("${drawSlime()}")`); rs.setProperty('--tomato',`url("${drawTomato()}")`); buildEls(); drawCatBlob(); renderBig(); renderFeed(); renderBoard(); renderCal(); buildCampaign(); fit(); tick(); setInterval(tick,5000); tickAuto(); setInterval(()=>{if(auto)tickAuto();},60000); applyGrade(); loadWx(); setInterval(loadWx,600000); tickTickTick(); setInterval(tickTickTick,300000); if(monSource!=='ticktick') refreshNotionActive(); setInterval(refreshNotionActive,300000); loop(); if(view2d) setView2d(true);
   const L=document.getElementById('loading'); L.style.opacity=0; setTimeout(()=>L.remove(),700); };
 img.onerror=()=>{ document.getElementById('loading').textContent='could not load room.png'; };
