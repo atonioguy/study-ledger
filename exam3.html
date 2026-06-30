@@ -1,4 +1,4 @@
-<!-- build log: v2.12 live · next: build M6L3 (Microbe–Animal Symbiosis) blocks with real content + reinforcement quiz -->
+<!-- build log: v2.13 live · next: build M6L4 (Human Microbiome) blocks with real content + reinforcement quiz -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,7 +83,7 @@
   .ex-lab{ display:inline-block; font-family:var(--font-sans); font-size:10px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; opacity:.8; margin-right:7px; }
   .ex-why .ex-lab{ color:var(--accent); } .ex-exam .ex-lab{ color:var(--mem); }
   /* quick-review mode: show just the question + core takeaway */
-  body.quick-active .explain, body.quick-active article.q .fc{ display:none; }
+  body.quick-active .explain, body.quick-active article.q .fc, body.quick-active article.q .sorter{ display:none; }
 
   /* flashcards */
   .fc{ background:var(--fc-bg); border:1px solid var(--border-soft); border-left:3px solid var(--fc-accent); border-radius:8px; padding:13px 15px; margin:14px 0 4px; }
@@ -116,6 +116,22 @@
   .fc-print ol{ margin:6px 0 0; padding-left:20px; }
   .fc-print li{ margin:0 0 8px; }
   .fc-print .pq{ font-weight:600; }
+
+  /* drag-to-sort practice widget */
+  .sorter{ background:var(--fc-bg); border:1px solid var(--border-soft); border-left:3px solid var(--fc-accent); border-radius:8px; padding:13px 15px; margin:14px 0 4px; -webkit-user-select:none; user-select:none; }
+  .sorter-tag{ font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--fc-accent); }
+  .sorter-prompt{ font-size:.95em; margin:4px 0 10px; }
+  .sorter-list{ display:flex; flex-direction:column; gap:7px; }
+  .sorter-row{ display:flex; align-items:center; gap:10px; background:var(--card); border:1px solid var(--border); border-radius:7px; padding:9px 12px; font-size:.95em; cursor:grab; touch-action:none; transition:box-shadow .12s ease, border-color .12s ease; }
+  .sorter-grip{ flex:none; color:var(--ink-soft); font-size:1.05em; line-height:1; }
+  .sorter-label{ flex:1; min-width:0; }
+  .sorter-row.lifted{ cursor:grabbing; box-shadow:0 6px 18px rgba(0,0,0,.18); border-color:var(--fc-accent); position:relative; z-index:3; }
+  .sorter-row.correct{ border-color:var(--ok); color:var(--ok); }
+  .sorter-row.wrong{ border-color:var(--bad); color:var(--bad); }
+  .sorter-row.locked{ cursor:default; border-color:var(--ok); color:var(--ok); }
+  .sorter-controls{ display:flex; gap:7px; margin-top:11px; flex-wrap:wrap; }
+  .sorter-msg{ margin-top:9px; font-size:.88em; min-height:1.05em; }
+  .sorter-msg.ok{ color:var(--ok); } .sorter-msg.bad{ color:var(--bad); }
 
   /* quiz shell + (future) engine styles */
   .quiz-shell{ margin-top:28px; }
@@ -269,7 +285,7 @@
   .sb-tdtally .td.hard{ color:var(--bad); background:color-mix(in srgb, var(--bad) 15%, transparent); }
   .sb-tdtally .td.unsure{ color:var(--flag); background:color-mix(in srgb, var(--flag) 15%, transparent); }
   @media print{
-    #tbstack, #bar-tab, #study-tab, #progress, #sidebar, #overlay, #book-dock, #confetti-layer, #kudos-toast, .flag-btn, .les-caret, .conf, .recall-hint, .fc-btn, .quiz-shell{ display:none !important; }
+    #tbstack, #bar-tab, #study-tab, #progress, #sidebar, #overlay, #book-dock, #confetti-layer, #kudos-toast, .flag-btn, .les-caret, .conf, .recall-hint, .fc-btn, .quiz-shell, .sorter{ display:none !important; }
     html, body, body.paper, body.dark{ background:#fff !important; }
     body{ color:#000 !important; }
     main{ max-width:100% !important; margin:0 !important; padding:0 14px !important; }
@@ -337,7 +353,7 @@
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
-  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.12</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.13</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
   <div class="sb-focus">
     <div class="sb-focus-label">Focus</div>
     <div class="sb-focus-row">
@@ -382,6 +398,7 @@
         <div class="ex-exam"><span class="ex-lab">On the exam</span>A question might scramble the five terms to rank, or hand you a one-line definition to match. Anchor the two ends first &mdash; ecosystem = everything, population = one species &mdash; and the confusable middle falls into place.</div>
       </div>
       <div class="fc" data-deck="m5l1-q1"></div>
+      <div class="sorter" data-sorter="m5l1-q1"></div>
     </article>
     <article class="q" id="m5l1-q2" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q2</span><span class="q-text">Contrast species richness and species abundance — how would you explain each with an example, and what does each tell you about an environment?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
@@ -408,7 +425,7 @@
         <div class="takeaway">
           <ul>
             <li><span class="mem">Fundamental niche</span> = everywhere it <em>could</em> survive (full <span class="concept">tolerance range</span>).</li>
-            <li><span class="mem">Realized / prime niche</span> = where it <em>actually</em> thrives once competition applies.</li>
+            <li><span class="mem">Realized / prime niche</span> = where it <em>actually</em> thrives once competition applies.<ul><li>Doesn&rsquo;t mean it can&rsquo;t live elsewhere &mdash; it can still survive anywhere in its <span class="concept">fundamental niche</span>, just less successfully; this is simply where it does best.</li></ul></li>
           </ul>
         </div>
         <div class="support">
@@ -429,6 +446,23 @@
             <li><span class="concept">aerobes</span> &mdash; oxygenated surface</li>
             <li><span class="concept">obligate anaerobes</span> &mdash; anoxic core (after surface microbes use up the O<sub>2</sub>)</li>
           </ul>
+          <figure style="margin:10px 0 4px;">
+  <svg viewBox="0 0 300 240" role="img" aria-label="Oxygen gradient across a single soil particle, from an oxic surface to an anoxic core" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto;">
+    <ellipse cx="150" cy="116" rx="128" ry="100" fill="#C49A63"/>
+    <ellipse cx="150" cy="116" rx="108" ry="84" fill="#D9B985"/>
+    <ellipse cx="150" cy="116" rx="88" ry="68" fill="#ECD8A6"/>
+    <ellipse cx="150" cy="116" rx="66" ry="51" fill="#D6D3CC"/>
+    <ellipse cx="150" cy="116" rx="44" ry="34" fill="#BDBBDA"/>
+    <ellipse cx="150" cy="116" rx="22" ry="18" fill="#6E5A93"/>
+    <g font-family="system-ui,-apple-system,sans-serif" font-size="12.5" font-weight="700" fill="#3a2f22" paint-order="stroke" stroke="#fdf6e3" stroke-width="3" stroke-linejoin="round">
+      <text x="74" y="60">21</text><text x="92" y="78">15</text><text x="108" y="94">10</text><text x="122" y="106">5</text><text x="135" y="116">1</text><text x="146" y="120" fill="#ffffff" stroke="none">0</text>
+    </g>
+    <g font-family="system-ui,-apple-system,sans-serif" font-size="11.5" fill="currentColor" text-anchor="middle">
+      <text x="150" y="13">Oxic surface → aerobes</text><text x="150" y="232">Anoxic core → obligate anaerobes</text>
+    </g>
+  </svg>
+  <figcaption style="font-size:.82em;color:var(--ink-soft);font-style:italic;text-align:center;margin-top:2px;">O₂ (%) across one soil particle — surface microbes consume the O₂, so the core turns anoxic.</figcaption>
+</figure>
         </div>
       </div>
       <div class="explain bl"><span class="lbl">Explanation</span><br>The soil aggregate is the classic proof that &ldquo;the environment&rdquo; is never uniform &mdash; a gradient across a few millimeters creates totally different niches on one grain. A question might ask where on a particle you&rsquo;d find the anaerobes: the anoxic core, after the surface microbes have used up the oxygen. Keep this distinct from a niche, which is a guild&rsquo;s shared habitat rather than one cell&rsquo;s surroundings.</div>
@@ -1110,87 +1144,148 @@
 
   <section class="lesson" id="m6l3" data-module="Module 6 — Symbiosis">
     <h2 class="lesson-title">Module 6 · Lesson 3 — Microbe–Animal Symbiosis</h2>
-    <p class="lesson-meta">6 topics · filler content shown for layout testing.</p>
+    <p class="lesson-meta">Built from the M6L3 review doc + lecture deck · 6 of Exam 3’s questions come from this lesson.</p>
     <div class="topic-divider" id="m6l3-d17" data-topic="Insect Symbionts"><div class="td-inner"><span>Insect Symbionts</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l3-q1" data-lesson="m6l3">
       <div class="q-head"><span class="q-num">M6L3 Q1</span><span class="q-text">What is the difference between horizontal and vertical transmission in insect symbionts, and can you identify each from examples or descriptions?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway"><span class="mem">Vertical (heritable) transmission</span> = the symbiont is passed <span class="concept">from parent to offspring</span> (e.g., packaged in the egg); <span class="mem">horizontal transmission</span> = the host <span class="concept">acquires it fresh from the environment</span> each generation.</div>
+        <div class="support">
+          <div class="sub">Tell them apart</div>
+          <table>
+            <tr><th>Route</th><th>Source</th><th>Deck example</th></tr>
+            <tr><td><span class="mem">Vertical</span> (heritable)</td><td>from parents (carried in the egg)</td><td>coral &rarr; <em>Symbiodinium</em> (algal symbionts in the egg)</td></tr>
+            <tr><td><span class="mem">Horizontal</span></td><td>from environmental reservoirs</td><td>bobtail squid &rarr; <em>Aliivibrio fischeri</em> (from seawater)</td></tr>
+          </table>
+          <div class="sub">Why it matters</div>
+          <p>Heritable (vertical) insect symbionts are <span class="mem">obligate</span> <span class="mem">primary symbionts</span> &mdash; they <span class="concept">lack a free-living replicative stage</span>.</p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>The split is simply <em>inherited vs. picked up</em>. When a symbiont rides along inside the egg, parent and microbe are locked together generation after generation &mdash; that tight coupling is why heritable insect symbionts become obligate primary symbionts with no free-living stage. A horizontally transmitted partner is re-recruited from the environment each generation, so it keeps the ability to live outside the host.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>This is an identify-from-description item. &ldquo;Acquired from seawater each generation&rdquo; &rarr; horizontal (the squid&ndash;<em>Aliivibrio</em> case). &ldquo;Found in the egg / passed from the mother&rdquo; &rarr; vertical (coral&rsquo;s dinoflagellates). A distractor swaps the two, or calls an environmentally acquired microbe &ldquo;inherited.&rdquo;</div>
       </div>
+      <div class="fc" data-deck="m6l3-q1"></div>
     </article>
     <article class="q" id="m6l3-q2" data-lesson="m6l3">
       <div class="q-head"><span class="q-num">M6L3 Q2–Q3</span><span class="q-text">What is the difference between a primary and a secondary symbiont, which is required for host reproduction, and what benefit could Wolbachia provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway"><span class="mem">Primary symbionts</span> are <span class="concept">required for the host to reproduce</span> (obligate, housed in <span class="mem">bacteriocytes</span>); <span class="mem">secondary symbionts</span> are <span class="concept">not required</span> but add benefits (nutrition, protection). <span class="mem">Wolbachia</span> manipulates host reproduction to favor infected females.</div>
+        <div class="support">
+          <div class="sub">Primary vs. secondary</div>
+          <table>
+            <tr><th>Feature</th><th>Primary</th><th>Secondary</th></tr>
+            <tr><td>Required to reproduce?</td><td><span class="mem">Yes</span> (obligate)</td><td><span class="mem">No</span> (facultative)</td></tr>
+            <tr><td>Location</td><td>restricted to the bacteriome (<span class="concept">bacteriocytes</span>)</td><td>not always present; other cells or extracellular</td></tr>
+            <tr><td>Role</td><td>host fitness; <span class="concept">extreme gene reduction</span></td><td>provide a benefit &mdash; nutrition, protection, etc.</td></tr>
+          </table>
+          <div class="sub">Primary symbiont genomes</div>
+          <p>Extreme gene reduction &mdash; <span class="concept">~160&ndash;800 kbp</span> vs. ~2&ndash;8 Mbp in free-living bacteria; they keep only genes needed for host fitness (lose catabolic genes).</p>
+          <div class="sub">Wolbachia</div>
+          <p>A heritable reproductive manipulator: sperm of <span class="mem">Wolbachia</span>-infected males <span class="concept">sterilize uninfected females</span>, so infected females out-reproduce uninfected ones &mdash; spreading the symbiont (compare the deck&rsquo;s <em>Rickettsia</em> case: infected whiteflies make 2&times; the offspring).</p>
+          <p><em>[Flag: the deck states the &ldquo;infected-male sperm sterilize uninfected females&rdquo; effect (cytoplasmic incompatibility) and the Rickettsia 2&times;-offspring parallel; broader Wolbachia benefits &mdash; antiviral protection and use in suppressing dengue-transmitting mosquitoes &mdash; are standard textbook (no textbook available to cross-check) &mdash; confirm against the lecture video.]</em></p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Primary = the can&rsquo;t-live-without-it partner: ancient, obligate, tucked inside bacteriocytes, and so dependent that its genome has eroded to a fraction of a free-living one. Secondary = the optional roommate: helpful (defense, extra nutrition) but the host reproduces fine without it. Wolbachia is the famous reproductive puppeteer &mdash; instead of feeding the host it rigs reproduction so infected females are favored, which is exactly how a maternally inherited symbiont spreads through a population.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>&ldquo;Which is required for reproduction?&rdquo; &rarr; the primary symbiont; the <em>bacteriocyte / bacteriome</em> cue points to primary. For Wolbachia, the deck&rsquo;s hook is that infected males&rsquo; sperm sterilize uninfected females. A distractor labels the optional, protective microbe &ldquo;primary,&rdquo; or says secondary symbionts are always present.</div>
       </div>
+      <div class="fc" data-deck="m6l3-q2"></div>
     </article>
     <article class="q" id="m6l3-q4" data-lesson="m6l3">
       <div class="q-head"><span class="q-num">M6L3 Q4</span><span class="q-text">What is an example of a defensive symbiont, and how would you describe the relationship?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">A <span class="mem">defensive symbiont</span> protects its host with <span class="concept">toxic / antimicrobial chemicals</span>. Deck example: the <span class="mem">Paederus beetle</span> + a <span class="mem">Pseudomonas</span> symbiont that makes <span class="mem">pederin</span> &mdash; a defensive mutualism.</div>
+        <div class="support">
+          <div class="sub">The relationship</div>
+          <ul>
+            <li><span class="mem">Pseudomonas</span> synthesizes <span class="mem">pederin</span>, a <span class="concept">cytotoxic</span> chemical that inhibits mitosis in eukaryotes.</li>
+            <li>Pederin accumulates in the beetle&rsquo;s <span class="concept">hemolymph</span> &rarr; deposited in the <span class="mem">eggs</span> &rarr; deters arthropod predation of the eggs.</li>
+            <li>The trade: the beetle houses/carries the bacterium; the bacterium supplies <span class="concept">chemical defense</span>.</li>
+          </ul>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Defensive symbiosis is chemical bodyguarding: the host can&rsquo;t make a good toxin, so it outsources the chemistry to a microbe. In the Paederus beetle, Pseudomonas makes pederin and the beetle routes it into its eggs, so predators that would eat the eggs are deterred. Both sides win &mdash; room and board for a weapon &mdash; which makes it a defensive mutualism.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>Recognize the pattern (a microbe-made toxin protecting the host or its offspring) and the deck&rsquo;s specific case: Paederus beetle / Pseudomonas / pederin / inhibits mitosis / protects eggs. The classic distractor credits the toxin to the beetle itself rather than its bacterial symbiont.</div>
       </div>
+      <div class="fc" data-deck="m6l3-q4"></div>
     </article>
     <div class="topic-divider" id="m6l3-d18" data-topic="Marine Symbioses"><div class="td-inner"><span>Marine Symbioses</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l3-q5" data-lesson="m6l3">
       <div class="q-head"><span class="q-num">M6L3 Q5</span><span class="q-text">What is the relationship between Aliivibrio fischeri and the bobtail squid, and what does each provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">A <span class="mem">mutualism</span>: the <span class="mem">Hawaiian bobtail squid</span> houses <span class="mem">Aliivibrio fischeri</span> in a <span class="mem">light organ</span>. Squid &rarr; <span class="concept">nutrients</span>; bacteria &rarr; <span class="concept">camouflage by bioluminescence</span> (light like moonlight).</div>
+        <div class="support">
+          <div class="sub">What each provides</div>
+          <ul>
+            <li><span class="mem">Squid</span> &rarr; nutrients (and a protected home, the <span class="concept">light organ</span>).</li>
+            <li><span class="mem">A. fischeri</span> &rarr; camouflage: emits light that <span class="concept">resembles moonlight</span> penetrating the water.</li>
+          </ul>
+          <div class="sub">Key facts</div>
+          <ul>
+            <li>Bacteria colonize the light organ <span class="concept">just after the squid hatches</span>.</li>
+            <li>Transmission is <span class="mem">horizontal</span> (from seawater &mdash; ties to Q1).</li>
+            <li>A model system for animal&ndash;bacteria symbiosis: both can be grown in the lab; a single microsymbiont.</li>
+          </ul>
+          <p><em>[Flag: the camouflage mechanism (counter-illumination &mdash; matching downwelling light to erase the squid&rsquo;s silhouette) and quorum-sensing control of the light are standard textbook (no textbook available to cross-check); the deck states only &ldquo;emit light that resembles moonlight penetrating the water&rdquo; &mdash; confirm against the lecture video.]</em></p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>The point of the glow is camouflage from below: a predator looking up sees faint moonlight, and a normal squid would cast a dark silhouette against it. By emitting light that matches the moonlight, <em>A. fischeri</em> erases that silhouette. The squid pays in nutrients and a safe light organ; the bacteria pay in light. It&rsquo;s the textbook model for how an animal recruits one specific bacterial partner.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>Match the exchange (squid &rarr; nutrients/home; bacteria &rarr; light/camouflage) and remember transmission is horizontal &mdash; acquired from seawater, colonizing the light organ after hatching (a favorite tie-in to Q1). A distractor flips who provides the light, or calls the transmission vertical.</div>
       </div>
+      <div class="fc" data-deck="m6l3-q5"></div>
     </article>
     <article class="q" id="m6l3-q6" data-lesson="m6l3">
       <div class="q-head"><span class="q-num">M6L3 Q6</span><span class="q-text">What is an example of a phototrophic symbiotic relationship (what does each organism provide), and what causes coral bleaching?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway">A <span class="mem">phototrophic mutualism</span>: <span class="mem">stony coral</span> + <span class="mem">Symbiodinium</span> (a <span class="concept">dinoflagellate</span>). The dinoflagellate &rarr; <span class="concept">organic nutrients</span> via photosynthesis; the coral &rarr; improved <span class="concept">light-gathering</span>. <span class="mem">Coral bleaching</span> = loss of the symbionts (and color) under <span class="mem">high temperature / high light</span>.</div>
+        <div class="support">
+          <div class="sub">What each provides</div>
+          <ul>
+            <li><span class="mem">Symbiodinium</span> (dinoflagellate) &rarr; performs photosynthesis and provides <span class="concept">organic nutrients</span> (stored in <span class="concept">symbiosomes</span>).</li>
+            <li><span class="mem">Coral</span> &rarr; improves the dinoflagellate&rsquo;s <span class="concept">light-gathering capacity</span> (the skeleton is an efficient light-gathering structure).</li>
+          </ul>
+          <div class="sub">Coral bleaching</div>
+          <ul>
+            <li><span class="mem">High temperatures and high light</span> impair the dinoflagellate&rsquo;s photosynthesis.</li>
+            <li>Lysis / loss of the symbiont &rarr; <span class="mem">loss of color</span> = bleaching.</li>
+          </ul>
+          <p><em>[Flag: &ldquo;zooxanthellae&rdquo; (the common name for these symbiotic dinoflagellates) and the detail that bleaching exposes the white CaCO<sub>3</sub> skeleton / starves the coral are standard textbook (no textbook available to cross-check); the deck states &ldquo;Symbiodinium,&rdquo; &ldquo;lysis of symbiont &rarr; loss of color,&rdquo; and &ldquo;high temps and high light impair&hellip; photosynthesis&rdquo; &mdash; confirm against the lecture video.]</em></p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>The coral&rsquo;s stony skeleton is essentially a light trap: it concentrates light for its dinoflagellate tenants, which photosynthesize and hand organic carbon back to the coral. The whole partnership runs on light &mdash; so anything that wrecks the algae&rsquo;s photosynthesis, chiefly heat and intense light, breaks the deal. The coral loses its colored dinoflagellates and turns pale: that&rsquo;s bleaching.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>&ldquo;Loss of the symbiont / color under heat stress is called ___&rdquo; &rarr; coral bleaching. Know the partners (stony coral + <em>Symbiodinium</em> dinoflagellate) and the exchange (algae &rarr; organic nutrients; coral &rarr; light-gathering). A distractor blames &ldquo;cold water&rdquo; or calls bleaching an infection rather than loss of the photosynthetic symbiont.</div>
       </div>
+      <div class="fc" data-deck="m6l3-q6"></div>
     </article>
     <div class="topic-divider" id="m6l3-d19" data-topic="Herbivore Digestion"><div class="td-inner"><span>Herbivore Digestion</span><span class="td-line"></span></div></div>
     <article class="q" id="m6l3-q7" data-lesson="m6l3">
       <div class="q-head"><span class="q-num">M6L3 Q7</span><span class="q-text">What types of mammals consume high levels of plants, what organ assists with digestion, what environment is within it, what microbes are found there, and what nutrition do these microbes provide?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <p><em>(Filler answer — replace when you build this block.)</em> The literal answer lives here, with <span class="mem">key exam terms in blue</span> and <span class="concept">supporting ideas in orange</span> so you can see how both colors read in the current font.</p>
-        <ul><li><em>Filler bullet — answers can include lists like this.</em></li><li><em>Filler bullet — <span class="mem">blue term</span> vs. <span class="concept">orange term</span>.</em></li></ul>
+        <div class="takeaway"><span class="mem">Herbivores</span> &mdash; especially <span class="mem">ruminants</span> (cows, sheep, goats) &mdash; digest plants with help from the <span class="mem">rumen</span>, an <span class="concept">anaerobic</span> fermentation chamber packed with microbes that break down <span class="mem">cellulose</span> the mammal can&rsquo;t digest itself.</div>
+        <div class="support">
+          <div class="sub">The setup</div>
+          <ul>
+            <li>Mammals: <span class="mem">herbivores</span>; ruminants are <span class="concept">foregut fermenters</span> (chamber before the small intestine). Hindgut fermenters use the cecum/large intestine (e.g., humans).</li>
+            <li>Organ: the <span class="mem">rumen</span> &mdash; where cellulose and other plant polysaccharides are digested.</li>
+            <li>Environment: <span class="mem">anaerobic</span> &mdash; anaerobic bacteria dominate; ~10<sup>10</sup>&ndash;10<sup>11</sup> microbes/gram, 300&ndash;400 bacterial species.</li>
+          </ul>
+          <div class="sub">What the microbes do</div>
+          <ul>
+            <li>Hydrolyze <span class="concept">cellulose &rarr; glucose</span>, then ferment glucose &rarr; <span class="mem">fatty acids</span> + methane + CO<sub>2</sub>.</li>
+            <li>Nutrition: <span class="mem">fatty acids = the host&rsquo;s main energy source</span>; microbes also make <span class="concept">amino acids and vitamins</span>, and serve as a <span class="concept">protein source</span> when the host digests them.</li>
+          </ul>
+          <p><em>[Flag: the deck says &ldquo;anaerobic bacteria dominate&rdquo; and lists methane production (implying methanogenic archaea); further textbook specifics &mdash; rumen protozoa and anaerobic fungi, the named volatile fatty acids (acetate/propionate/butyrate), and the ~39&deg;C/near-neutral pH &mdash; are standard textbook (no textbook available to cross-check) &mdash; confirm against the lecture video.]</em></p>
+        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br><em>(Filler explanation — placeholder text.)</em> This paragraph exists so you can preview how the per-line color gradient flows across the explanation, how the chosen reading font looks at the current size, and how a drag-to-select <span class="mem">highlight</span> sits on top of the text. Replace it with the real exam-framed reasoning when you build the block, and the gradient will re-flow to fit whatever you write.</div>
-      <div class="fc"><span class="fc-tag">Flashcard</span>
-        <div class="fc-q"><em>(Filler flashcard prompt — replace later.)</em></div>
-        <button class="fc-btn" aria-expanded="false">Reveal answer</button>
-        <div class="fc-a" hidden><em>Filler reveal text.</em></div>
+      <div class="explain bl"><span class="lbl">Explanation</span>
+        <div class="ex-why"><span class="ex-lab">Concept</span>Mammals can&rsquo;t make cellulases, so herbivores &ldquo;rent&rdquo; them from microbes. Ruminants evolved a foregut chamber &mdash; the rumen &mdash; kept anaerobic so fermentation can run: microbes hydrolyze cellulose to glucose and ferment it, and the fatty acids they release become the animal&rsquo;s main energy source. The microbes are later digested for protein and supply vitamins, so the cow effectively farms its own food.</div>
+        <div class="ex-exam"><span class="ex-lab">On the exam</span>Chain the five parts: herbivore/ruminant &rarr; rumen &rarr; anaerobic &rarr; cellulolytic microbes &rarr; fatty acids (main energy) + microbial protein/vitamins. The classic distractor is that the cow&rsquo;s own enzymes digest cellulose (they don&rsquo;t &mdash; the microbes do), or that the rumen is aerobic.</div>
       </div>
+      <div class="fc" data-deck="m6l3-q7"></div>
     </article>
     <div class="topic-divider" id="m6l3-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
     <div id="m6l3-quiz" class="quiz-shell" style="scroll-margin-top:var(--stack-h);">
@@ -2232,6 +2327,42 @@ window.smoothScrollTo=function(el){
      a:1, fb:'Crown gall = Agrobacterium tumefaciens; it enters a wound and transfers part of the tumor-inducing (Ti) plasmid into plant cells via vir proteins.'}
   ];
 
+  QUIZZES.m6l3=[
+    {p:'A bacterial symbiont is acquired anew from seawater by each generation of host. This is transmitted:',
+     o:['vertically','horizontally','transovarially','not at all'],
+     a:1, fb:'Acquired from the environment each generation = horizontal transmission (the bobtail squid–Aliivibrio case).'},
+    {p:'A coral&rsquo;s algal symbionts are found packaged in its eggs. This is an example of:',
+     o:['horizontal transmission','vertical (heritable) transmission','defensive symbiosis','parasitism'],
+     a:1, fb:'Passed from parent to offspring (in the egg) = vertical/heritable transmission.'},
+    {p:'Heritable (vertically transmitted) insect symbionts are best described as:',
+     o:['facultative secondary symbionts with large genomes','obligate primary symbionts that lack a free-living replicative stage','free-living environmental bacteria','horizontally acquired each generation'],
+     a:1, fb:'The deck states heritable insect symbionts are obligate primary symbionts lacking a free-living replicative stage.'},
+    {p:'A symbiont is found only inside bacteriocytes and is required for the host to reproduce. It is a:',
+     o:['secondary symbiont','primary symbiont','defensive symbiont','horizontally transmitted symbiont'],
+     a:1, fb:'Required for reproduction + restricted to the bacteriome (bacteriocytes) = primary symbiont.'},
+    {p:'Which statement about Wolbachia matches the deck?',
+     o:['it is required for host reproduction','sperm of infected males sterilize uninfected females, favoring infected females','it photosynthesizes for its host','it digests cellulose in the rumen'],
+     a:1, fb:'Wolbachia manipulates reproduction: infected males&rsquo; sperm sterilize uninfected females (cytoplasmic incompatibility), spreading the symbiont.'},
+    {p:'In the Paederus beetle, the toxin pederin that protects the eggs is actually made by:',
+     o:['the beetle itself','a Pseudomonas bacterial symbiont','a dinoflagellate','the rumen microbiota'],
+     a:1, fb:'Pederin is synthesized by a Pseudomonas symbiont; it is cytotoxic (inhibits mitosis) and deposited in the eggs to deter predators — a defensive symbiosis.'},
+    {p:'In the bobtail squid mutualism, what does Aliivibrio fischeri provide?',
+     o:['nutrients','camouflage via bioluminescence (light like moonlight)','nitrogen fixation','cellulose digestion'],
+     a:1, fb:'The squid provides nutrients/a light organ; A. fischeri provides camouflage by emitting light resembling moonlight.'},
+    {p:'In the reef-coral phototrophic mutualism, the Symbiodinium dinoflagellate provides ___ while the coral provides ___:',
+     o:['light-gathering; organic nutrients','organic nutrients from photosynthesis; improved light-gathering','nitrogen; oxygen','camouflage; toxins'],
+     a:1, fb:'Dinoflagellate → organic nutrients via photosynthesis (stored in symbiosomes); coral → improves the dinoflagellate&rsquo;s light-gathering capacity.'},
+    {p:'A reef turns white after a marine heat wave. This loss of color is called ___, and is caused by ___:',
+     o:['bleaching; high temperature and high light impairing the dinoflagellates','bleaching; cold-water infection','eutrophication; nutrient runoff','calcification; low CO<sub>2</sub>'],
+     a:0, fb:'Coral bleaching = lysis/loss of the dinoflagellate symbionts (loss of color); high temps and high light impair their photosynthesis.'},
+    {p:'A cow digests grass it could never break down with its own enzymes. The organ and environment responsible are:',
+     o:['the stomach; acidic and aerobic','the rumen; anaerobic fermentation chamber','the cecum; aerobic','the small intestine; oxic'],
+     a:1, fb:'Ruminants use the rumen — an anaerobic foregut fermentation chamber where microbes digest cellulose.'},
+    {p:'What do rumen microbes provide that serves as the host&rsquo;s main energy source?',
+     o:['glucose absorbed directly','fatty acids from fermentation','methane','cellulose'],
+     a:1, fb:'Microbes hydrolyze cellulose to glucose and ferment it to fatty acids — the ruminant&rsquo;s main energy source (plus microbial protein and vitamins).'}
+  ];
+
   function render(shell,title,data){
     while(shell.firstChild) shell.removeChild(shell.firstChild);
     if(title) shell.appendChild(title);
@@ -2503,6 +2634,49 @@ window.smoothScrollTo=function(el){
       {q:'Which <strong>plasmid</strong> drives crown gall?', a:'The tumor-inducing (Ti) plasmid.'},
       {q:'How does <em>A. tumefaciens</em> <strong>infect</strong>?', a:'Enters a wound site and makes cellulose microfibrils to anchor to the plant.'},
       {q:'How does it <strong>transform</strong> the plant?', a:'Transfers part of the Ti plasmid into plant cells via vir-encoded proteins &rarr; uncontrolled growth.'}
+    ],
+    'm6l3-q1':[
+      {q:'What is <strong>vertical (heritable) transmission</strong>?', a:'The symbiont is passed from parent to offspring &mdash; e.g., carried in the egg.'},
+      {q:'What is <strong>horizontal transmission</strong>?', a:'The host acquires the symbiont fresh from environmental reservoirs each generation.'},
+      {q:'Deck example of <strong>horizontal</strong> transmission?', a:'The bobtail squid acquiring <em>Aliivibrio fischeri</em> from seawater.'},
+      {q:'Deck example of <strong>vertical</strong> transmission?', a:'Coral&rsquo;s algal symbionts (<em>Symbiodinium</em>) carried in the egg.'},
+      {q:'Heritable (vertical) insect symbionts are also what?', a:'Obligate primary symbionts that lack a free-living replicative stage.'}
+    ],
+    'm6l3-q2':[
+      {q:'What is a <strong>primary symbiont</strong>?', a:'Required for host reproduction; obligate; housed in bacteriocytes (the bacteriome).'},
+      {q:'What is a <strong>secondary symbiont</strong>?', a:'Not required for reproduction; not always present; provides benefits (nutrition, protection).'},
+      {q:'Which symbiont is <strong>required for reproduction</strong>?', a:'The primary symbiont.'},
+      {q:'What is a <strong>bacteriocyte / bacteriome</strong>?', a:'Specialized host cells (the bacteriome) that house primary symbionts.'},
+      {q:'Primary symbiont <strong>genome</strong> feature?', a:'Extreme gene reduction &mdash; ~160&ndash;800 kbp vs. ~2&ndash;8 Mbp in free-living bacteria.'},
+      {q:'What does <strong>Wolbachia</strong> do?', a:'Manipulates host reproduction &mdash; infected males&rsquo; sperm sterilize uninfected females, favoring infected females.'}
+    ],
+    'm6l3-q4':[
+      {q:'What is a <strong>defensive symbiont</strong>?', a:'A symbiont that protects its host using toxic / antimicrobial chemicals.'},
+      {q:'Deck&rsquo;s <strong>defensive symbiont</strong> example?', a:'The Paederus beetle + a <em>Pseudomonas</em> symbiont.'},
+      {q:'What is <strong>pederin</strong>?', a:'The cytotoxic chemical (made by <em>Pseudomonas</em>) that inhibits mitosis in eukaryotes.'},
+      {q:'How does pederin <strong>protect</strong> the beetle?', a:'Accumulates in the hemolymph &rarr; deposited in eggs &rarr; deters predators from eating the eggs.'}
+    ],
+    'm6l3-q5':[
+      {q:'<em>A. fischeri</em> + bobtail squid &mdash; relationship <strong>type</strong>?', a:'Mutualism.'},
+      {q:'What does the <strong>squid</strong> provide?', a:'Nutrients (and a light-organ home).'},
+      {q:'What does <strong>A. fischeri</strong> provide?', a:'Camouflage via bioluminescence &mdash; light resembling moonlight.'},
+      {q:'Where do the bacteria live, and <strong>when</strong> colonized?', a:'The light organ, colonized just after the squid hatches.'},
+      {q:'How is <em>A. fischeri</em> <strong>transmitted</strong>?', a:'Horizontally &mdash; from seawater.'}
+    ],
+    'm6l3-q6':[
+      {q:'Deck&rsquo;s <strong>phototrophic symbiosis</strong> example?', a:'Stony coral + <em>Symbiodinium</em> (a dinoflagellate).'},
+      {q:'What does the <strong>dinoflagellate</strong> provide?', a:'Organic nutrients via photosynthesis (stored in symbiosomes).'},
+      {q:'What does the <strong>coral</strong> provide?', a:'Improved light-gathering for the dinoflagellate (skeleton = light-gathering structure).'},
+      {q:'What is <strong>coral bleaching</strong>?', a:'Loss / lysis of the dinoflagellate symbionts &rarr; loss of color.'},
+      {q:'What <strong>causes</strong> coral bleaching?', a:'High temperature and high light impair the dinoflagellate&rsquo;s photosynthesis.'}
+    ],
+    'm6l3-q7':[
+      {q:'Which mammals eat <strong>high plant levels</strong>?', a:'Herbivores, especially ruminants (cows, sheep, goats).'},
+      {q:'Organ that aids <strong>plant digestion</strong>?', a:'The rumen (a foregut fermentation chamber).'},
+      {q:'Environment inside the <strong>rumen</strong>?', a:'Anaerobic &mdash; anaerobic bacteria dominate.'},
+      {q:'What do rumen microbes do to <strong>cellulose</strong>?', a:'Hydrolyze cellulose &rarr; glucose, then ferment it (&rarr; fatty acids, methane, CO<sub>2</sub>).'},
+      {q:'<strong>Main nutrition</strong> the host gets?', a:'Fatty acids &mdash; the host&rsquo;s main energy source.'},
+      {q:'Other nutrition from rumen microbes?', a:'Amino acids, vitamins, and microbial protein (the host digests the microbes).'}
     ]
   };
 
@@ -2574,6 +2748,134 @@ window.smoothScrollTo=function(el){
     var id = host.getAttribute('data-deck'), cards = FCDECKS[id];
     if(!cards || !cards.length){ host.innerHTML='<span class="fc-tag">Flashcard</span><div class="fcd-q todo">&mdash;</div>'; if(window.console) console.warn('No deck data for',id); return; }
     host.innerHTML=''; buildDeck(host, cards);
+  });
+})();
+</script>
+<script>
+/* drag-to-sort practice widget — data-driven, pointer-events, in-memory only */
+(function(){
+  var SORTERS = {
+    'm5l1-q1': {
+      prompt: 'Drag the tiers into order — most diverse (top) → least diverse (bottom):',
+      items: ['Ecosystem','Habitat','Community','Guild','Population']  // canonical CORRECT order, top→bottom
+    }
+  };
+
+  function shuffled(arr){
+    var a = arr.slice();
+    for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+    return a;
+  }
+  function sameOrder(a,b){ if(a.length!==b.length) return false; for(var i=0;i<a.length;i++){ if(a[i]!==b[i]) return false; } return true; }
+
+  function build(host, cfg){
+    var correct = cfg.items.slice();
+    var list, msg, dragEl=null, startY=0, locked=false;
+
+    host.innerHTML='';
+    var tag=document.createElement('div'); tag.className='sorter-tag'; tag.textContent='Practice — drag to sort'; host.appendChild(tag);
+    var prompt=document.createElement('div'); prompt.className='sorter-prompt'; prompt.textContent=cfg.prompt; host.appendChild(prompt);
+    list=document.createElement('div'); list.className='sorter-list'; host.appendChild(list);
+
+    function makeRow(item){
+      var row=document.createElement('div'); row.className='sorter-row'; row.setAttribute('data-item',item);
+      var grip=document.createElement('span'); grip.className='sorter-grip'; grip.setAttribute('aria-hidden','true'); grip.textContent='≡';
+      var label=document.createElement('span'); label.className='sorter-label'; label.textContent=item;
+      row.appendChild(grip); row.appendChild(label);
+      row.addEventListener('pointerdown', function(e){ onDown(e,row); });
+      return row;
+    }
+
+    function renderDraggable(order){
+      locked=false; list.innerHTML='';
+      order.forEach(function(item){ list.appendChild(makeRow(item)); });
+    }
+    function renderLocked(order){
+      locked=true; list.innerHTML='';
+      order.forEach(function(item){
+        var row=document.createElement('div'); row.className='sorter-row locked';
+        var grip=document.createElement('span'); grip.className='sorter-grip'; grip.setAttribute('aria-hidden','true'); grip.textContent='✓';
+        var label=document.createElement('span'); label.className='sorter-label'; label.textContent=item;
+        row.appendChild(grip); row.appendChild(label); list.appendChild(row);
+      });
+    }
+
+    function onDown(e, row){
+      if(locked) return;
+      if(e.pointerType==='mouse' && e.button!==0) return;
+      if(e.isPrimary===false) return;
+      clearColors();
+      dragEl=row; startY=e.clientY;
+      row.classList.add('lifted'); row.style.transform='translateY(0px)';
+      try{ row.setPointerCapture(e.pointerId); }catch(err){}
+      document.addEventListener('pointermove', onMove, {passive:false});
+      document.addEventListener('pointerup', onUp);
+      document.addEventListener('pointercancel', onUp);
+    }
+    function onMove(e){
+      if(!dragEl) return;
+      e.preventDefault();
+      dragEl.style.transform='translateY('+(e.clientY-startY)+'px)';
+      var rows=Array.prototype.slice.call(list.children).filter(function(x){ return x!==dragEl; });
+      var moved=false, placed=false;
+      for(var k=0;k<rows.length;k++){
+        var rect=rows[k].getBoundingClientRect();
+        if(e.clientY < rect.top + rect.height/2){
+          if(dragEl.nextSibling!==rows[k]){ list.insertBefore(dragEl, rows[k]); moved=true; }
+          placed=true; break;
+        }
+      }
+      if(!placed && list.lastChild!==dragEl){ list.appendChild(dragEl); moved=true; }
+      if(moved){ startY=e.clientY; dragEl.style.transform='translateY(0px)'; }
+    }
+    function onUp(e){
+      if(!dragEl) return;
+      dragEl.style.transform=''; dragEl.classList.remove('lifted');
+      try{ dragEl.releasePointerCapture(e.pointerId); }catch(err){}
+      dragEl=null;
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      document.removeEventListener('pointercancel', onUp);
+    }
+
+    function currentOrder(){ return Array.prototype.slice.call(list.querySelectorAll('.sorter-row')).map(function(r){ return r.getAttribute('data-item'); }); }
+    function clearColors(){ list.querySelectorAll('.sorter-row').forEach(function(r){ r.classList.remove('correct','wrong'); }); if(msg){ msg.textContent=''; msg.className='sorter-msg'; } }
+
+    function check(){
+      if(locked) return;
+      var rows=Array.prototype.slice.call(list.querySelectorAll('.sorter-row'));
+      var nCorrect=0;
+      rows.forEach(function(r,i){
+        r.classList.remove('correct','wrong');
+        if(r.getAttribute('data-item')===correct[i]){ r.classList.add('correct'); nCorrect++; }
+        else { r.classList.add('wrong'); }
+      });
+      var all=nCorrect===correct.length;
+      msg.textContent = all ? 'Correct — all '+correct.length+' in order.' : (nCorrect+' of '+correct.length+' in the right place.');
+      msg.className = 'sorter-msg ' + (all?'ok':'bad');
+    }
+    function showCorrect(){ renderLocked(correct); msg.textContent='Correct order shown.'; msg.className='sorter-msg ok'; }
+    function reset(){
+      var order=shuffled(correct);
+      while(sameOrder(order,correct)) order=shuffled(correct);
+      renderDraggable(order); clearColors();
+    }
+
+    var controls=document.createElement('div'); controls.className='sorter-controls';
+    var bCheck=document.createElement('button'); bCheck.type='button'; bCheck.className='qbtn'; bCheck.textContent='Check'; bCheck.onclick=check;
+    var bShow=document.createElement('button'); bShow.type='button'; bShow.className='qbtn'; bShow.textContent='Show correct order'; bShow.onclick=showCorrect;
+    var bReset=document.createElement('button'); bReset.type='button'; bReset.className='qbtn'; bReset.textContent='Reset'; bReset.onclick=reset;
+    controls.appendChild(bCheck); controls.appendChild(bShow); controls.appendChild(bReset);
+    host.appendChild(controls);
+    msg=document.createElement('div'); msg.className='sorter-msg'; host.appendChild(msg);
+
+    reset();
+  }
+
+  document.querySelectorAll('.sorter[data-sorter]').forEach(function(host){
+    var cfg=SORTERS[host.getAttribute('data-sorter')];
+    if(!cfg){ if(window.console) console.warn('No sorter config for',host.getAttribute('data-sorter')); return; }
+    build(host, cfg);
   });
 })();
 </script>
