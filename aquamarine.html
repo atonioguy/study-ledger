@@ -418,6 +418,18 @@
   /* antfarm feed inside the default forget.me.not window */
   .cl-feed{ padding:12px; } .cl-feed .fp{ padding:8px 2px; border-bottom:1px solid rgba(0,0,0,.18); font-family:var(--pixfont2); } .cl-feed .fp:last-child{ border-bottom:none; }
   .cl-feed .fp .fh{ font-size:11px; color:var(--lo); margin-bottom:2px; } .cl-feed .fp .fb{ font-size:14px; color:var(--tx); line-height:1.4; } .cl-feed .fp img{ max-width:100%; max-height:190px; margin-top:6px; display:block; border:2px solid var(--lo); image-rendering:pixelated; }
+  /* clean-view antfarm compose — same posting as the room phone */
+  .cl-compose{ padding:11px 12px 9px; display:flex; flex-direction:column; gap:7px; border-bottom:2px solid var(--lo); }
+  .cl-compose textarea#clTwIn{ width:100%; box-sizing:border-box; height:44px; resize:none; background:var(--hi); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); border-radius:0; color:var(--tx); font-family:var(--pixfont2); font-size:13px; line-height:1.5; padding:7px; }
+  .cl-compose textarea#clTwIn::placeholder{ color:#8a7d79; }
+  .cl-comprow{ display:flex; gap:6px; align-items:stretch; }
+  .cl-comprow button{ border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; font-family:var(--pixfont); cursor:pointer; padding:0 11px; }
+  .cl-comprow #clTwAttach,.cl-comprow #clTwLink{ background:var(--frame); color:var(--cardtx); font-size:14px; }
+  .cl-comprow #clTwPost{ margin-left:auto; background:var(--bar); color:var(--bartx); font-weight:700; font-size:11px; padding:0 18px; }
+  .cl-comprow button:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
+  .cl-twprev{ position:relative; display:none; }
+  .cl-twprev img{ max-width:100%; max-height:120px; display:block; border:2px solid var(--lo); image-rendering:pixelated; }
+  .cl-twprev #clTwPreviewX{ position:absolute; top:4px; right:4px; background:var(--bar); color:var(--bartx); width:21px; height:21px; line-height:18px; text-align:center; cursor:pointer; border:2px solid var(--lo); font-size:11px; }
 
   /* corkboard window = the same scatter board as the expanded 3D corkboard */
   #clBoard{ width:100%; height:min(460px,60vh); max-width:none; margin:0; border-radius:0; }
@@ -512,6 +524,15 @@
   .cl-keep .knote .kdel{ position:absolute; top:5px; right:7px; cursor:pointer; opacity:0; color:#555; font-style:normal; font-size:12px; transition:.15s; } .cl-keep .knote:hover .kdel{ opacity:.55; } .cl-keep .knote .kdel:hover{ opacity:1; color:#c0392b; }
   /* Twitter/X-style feed */
   #clean.og .cl-feed{ padding:6px 12px; } #clean.og .cl-feed .fp{ border-bottom:1px solid var(--ogline); font-family:inherit; padding:11px 4px 11px 46px; position:relative; }
+  #clean.og .cl-compose{ padding:12px 14px; gap:9px; border-bottom:1px solid var(--ogline); }
+  #clean.og .cl-compose textarea#clTwIn{ border:1px solid #d4d4d2; border-radius:13px; background:#fff; color:var(--ogtx); font-family:inherit; font-size:15px; height:48px; padding:10px 12px; }
+  #clean.og .cl-compose textarea#clTwIn::placeholder{ color:var(--ogsub); }
+  #clean.og .cl-comprow button{ border:none; border-radius:999px; font-family:inherit; }
+  #clean.og .cl-comprow #clTwAttach,#clean.og .cl-comprow #clTwLink{ background:transparent; color:var(--ogblue); font-size:16px; padding:0 6px; }
+  #clean.og .cl-comprow #clTwPost{ background:var(--ogblue); color:#fff; font-weight:700; font-size:14px; padding:7px 20px; }
+  #clean.og .cl-comprow button:active{ filter:brightness(.92); }
+  #clean.og .cl-twprev img{ border:1px solid var(--ogline); border-radius:13px; image-rendering:auto; }
+  #clean.og .cl-twprev #clTwPreviewX{ background:rgba(0,0,0,.7); color:#fff; border:none; border-radius:50%; }
   #clean.og .cl-feed .fp:before{ content:''; position:absolute; left:2px; top:11px; width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#cfe3ff,#a7c4e6); box-shadow:inset 0 0 0 1px rgba(0,0,0,.05); }
   #clean.og .cl-feed .fp:after{ content:'🌙'; position:absolute; left:9px; top:16px; font-size:16px; }
   #clean.og .cl-feed .fp .fh{ color:var(--ogsub); font-size:12.5px; } #clean.og .cl-feed .fp .fh:first-letter{ color:var(--ogtx); }
@@ -697,7 +718,7 @@
       <div class="cl-bottom">
         <div class="cwin cw-win cw-embed"><iframe class="cw-frame" src="quest.html?embed=1&v=19" title="Side Quest"></iframe></div>
         <div class="cl-rcol">
-          <div class="cwin pxwin matte" data-win="feed"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
+          <div class="cwin pxwin matte" data-win="feed"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-compose"><textarea id="clTwIn" placeholder="say something..."></textarea><div id="clTwPreview" class="cl-twprev"><img id="clTwPreviewImg"><span id="clTwPreviewX">✕</span></div><div class="cl-comprow"><button id="clTwAttach" title="attach image file">📎</button><button id="clTwLink" title="image url">🔗</button><button id="clTwPost">post</button><input id="clTwFile" type="file" accept="image/*" hidden></div></div><div class="cl-feed" id="clFeed"></div></div></div>
           <div class="cwin pxwin matte" data-win="board"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div><div class="cl-keep" id="clKeep"></div></div></div>
         </div>
       </div>
@@ -1073,6 +1094,24 @@ document.getElementById('twPreviewX').onclick=clearPending;
 document.getElementById('twPost').onclick=()=>{ const v=twIn.value.trim(); if(!v&&!pendingImg)return;
   const post={t:v,ts:Date.now()}; if(pendingImg)post.img=pendingImg; feed.unshift(post); if(feed.length>50)feed.pop(); feedPage=0; saveFeed(); renderFeed(); twIn.value=''; clearPending(); };
 document.getElementById('phoneFeed').addEventListener('click',e=>{ const d=e.target.closest('[data-del]'); if(!d)return; feed.splice(+d.dataset.del,1); saveFeed(); renderFeed(); });
+// clean-view antfarm compose — posts into the same `feed` as the room phone, both views stay in sync
+(function(){ const inp=document.getElementById('clTwIn'); if(!inp)return;
+  const fileEl=document.getElementById('clTwFile'), prev=document.getElementById('clTwPreview'), prevImg=document.getElementById('clTwPreviewImg');
+  let clPending=null;
+  const clClear=()=>{ clPending=null; if(prev)prev.style.display='none'; };
+  const clSet=src=>{ clPending=src; if(prevImg)prevImg.src=src; if(prev)prev.style.display='block'; };
+  const aB=document.getElementById('clTwAttach'); if(aB)aB.onclick=()=>fileEl&&fileEl.click();
+  if(fileEl) fileEl.onchange=()=>{ const f=fileEl.files&&fileEl.files[0]; fileEl.value=''; if(!f)return;
+    resizeImage(f,640,0.72).then(clSet).catch(()=>toast('couldn’t read that image')); };
+  const lB=document.getElementById('clTwLink'); if(lB)lB.onclick=()=>{ const u=(prompt('paste an image URL')||'').trim(); if(!u)return;
+    const im=new Image(); im.onload=()=>clSet(u); im.onerror=()=>toast('couldn’t load that image url'); im.src=u; };
+  const xB=document.getElementById('clTwPreviewX'); if(xB)xB.onclick=clClear;
+  function clPost(){ const v=inp.value.trim(); if(!v&&!clPending)return;
+    const post={t:v,ts:Date.now()}; if(clPending)post.img=clPending; feed.unshift(post); if(feed.length>50)feed.pop(); feedPage=0;
+    saveFeed(); inp.value=''; clClear(); clRenderFeed(); renderFeed(); }   // clRenderFeed updates this window; renderFeed keeps the room phone in sync
+  const pB=document.getElementById('clTwPost'); if(pB)pB.onclick=clPost;
+  inp.addEventListener('keydown',e=>{ if((e.metaKey||e.ctrlKey)&&e.key==='Enter') clPost(); });
+})();
 const NCOL=['#cba9b0','#aebda3','#b3aac2','#cabd9f','#ccac90','#a6b6c0']; // muted dusty pastels
 const OLDNCOL=['#f3dbe2','#dfeadb','#e2dff2','#f5ead3','#f7e0c4','#d9e8f0']; // migrate old bright notes → muted
 const brainIn=document.getElementById('brainIn'); const MAXNOTES=11;
