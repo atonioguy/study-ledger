@@ -638,6 +638,16 @@
   @keyframes cwShine{ 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
   @keyframes cwBanner{ 0%{opacity:0;transform:translate(-50%,-22px) scale(.82)} 13%{opacity:1;transform:translate(-50%,0) scale(1)} 82%{opacity:1} 100%{opacity:0;transform:translate(-50%,-8px)} }
   @media(max-width:560px){ .cw-bars{ grid-template-columns:1fr; } .cw-hero{ flex-wrap:wrap; } }
+  /* post-it focus overlay — tap a note to read it in full (every corkboard) */
+  #noteFocus{ position:fixed; inset:0; z-index:60; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(6,9,16,.72); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+  #noteFocus.on{ display:flex; }
+  #noteFocus .nf-card{ position:relative; max-width:min(460px,88vw); max-height:80vh; overflow:auto; padding:38px 30px 30px; transform:rotate(-1.4deg);
+    font-family:var(--pixfont); font-size:18px; line-height:1.75; color:#2a2418; word-break:break-word; white-space:pre-wrap; user-select:text;
+    border:3px solid; border-color:rgba(255,255,255,.5) rgba(0,0,0,.22) rgba(0,0,0,.22) rgba(255,255,255,.5); box-shadow:0 24px 64px rgba(0,0,0,.6); animation:nfIn .22s cubic-bezier(.2,.9,.3,1.25); }
+  #noteFocus .nf-pin{ position:absolute; top:-15px; left:50%; transform:translateX(-50%); width:30px; height:30px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#c79aa2,#8c5d68); box-shadow:1px 3px 0 rgba(40,35,55,.4); }
+  #noteFocus .nf-close{ position:absolute; top:7px; right:9px; width:26px; height:26px; border-radius:50%; border:none; cursor:pointer; background:rgba(40,30,25,.4); color:#fff; font-size:12px; line-height:1; display:grid; place-items:center; }
+  #noteFocus .nf-close:hover{ background:#c0392b; }
+  @keyframes nfIn{ 0%{ transform:rotate(-1.4deg) scale(.85); opacity:0; } 100%{ transform:rotate(-1.4deg) scale(1); opacity:1; } }
 </style>
 </head>
 <body>
@@ -718,6 +728,7 @@
   <div class="tip" id="tip">click the monitor, phone, board, calendar, or 🍅 ✦ · ⊹ to align</div>
 
   <div class="scrim" id="scrim"></div>
+  <div id="noteFocus"><div class="nf-card"><span class="nf-pin"></span><button class="nf-close" data-nfclose title="close">✕</button><span class="nf-text"></span></div></div>
   <div class="pop" id="dashP"><div class="pc pxwin koi matte" style="width:min(900px,94vw);max-height:86vh;padding:0;display:flex;flex-direction:column;overflow:hidden">
     <div class="pxbar"><span class="pxico">🖥</span><span class="pxtitle">tasks</span><span class="pxbtns"><b class="pxref" title="refresh">↻</b><b>⤢</b><b>▭</b><b data-close>✕</b></span></div>
     <div class="pxbody monbody">
@@ -1093,18 +1104,23 @@ function renderPile(){ const el=document.getElementById('brainPile'); el.innerHT
 function trashNote(n){ const i=notes.indexOf(n); if(i<0)return; notes.splice(i,1); saveNotes(); renderPile(); reRenderBoards(); }
 function bringFront(n){ const i=notes.indexOf(n); if(i>0){ notes.splice(i,1); notes.unshift(n); } }
 // one draggable sticky — pin = move handle, click anywhere = bring to forefront; positions are % of host
-function makeNoteEl(n,i,host){ const d=document.createElement('div'); d.className='note';
+function makeNoteEl(n,i,host){ const d=document.createElement('div'); d.className='note'; let dragMoved=false;
   d.style.cssText=`left:${n.x}%;top:${n.y}%;background:${n.c};z-index:${50-i};--r:${n.r}deg`;
   d.innerHTML=`<b></b><i class="del" title="trash">✕</i><span>${n.t.replace(/</g,'&lt;')}</span>`;
-  d.addEventListener('click',ev=>ev.stopPropagation());
+  d.addEventListener('click',ev=>{ ev.stopPropagation(); if(ev.target.closest('.del')||ev.target.closest('b'))return; if(dragMoved){ dragMoved=false; return; } focusNote(n); });   // click a post-it → read it in full
   d.querySelector('.del').addEventListener('pointerdown',ev=>{ ev.stopPropagation(); ev.preventDefault(); trashNote(n); });
   d.addEventListener('pointerdown',ev=>{ ev.stopPropagation(); bringFront(n); d.style.zIndex=999; saveNotes(); });
   const pin=d.querySelector('b');
   pin.addEventListener('pointerdown',ev=>{ ev.preventDefault(); const r=host.getBoundingClientRect(), sx=ev.clientX, sy=ev.clientY, ox=n.x, oy=n.y; d.classList.add('grab'); try{pin.setPointerCapture(ev.pointerId);}catch(e){}
-    const mv=e2=>{ n.x=Math.max(0,Math.min(80, ox+(e2.clientX-sx)/r.width*100)); n.y=Math.max(0,Math.min(82, oy+(e2.clientY-sy)/r.height*100)); d.style.left=n.x+'%'; d.style.top=n.y+'%'; };
+    const mv=e2=>{ dragMoved=true; n.x=Math.max(0,Math.min(80, ox+(e2.clientX-sx)/r.width*100)); n.y=Math.max(0,Math.min(82, oy+(e2.clientY-sy)/r.height*100)); d.style.left=n.x+'%'; d.style.top=n.y+'%'; };
     const up=()=>{ pin.removeEventListener('pointermove',mv); pin.removeEventListener('pointerup',up); pin.removeEventListener('pointercancel',up); try{pin.releasePointerCapture(ev.pointerId);}catch(e){} d.classList.remove('grab'); saveNotes(); reRenderBoards(); };
     pin.addEventListener('pointermove',mv); pin.addEventListener('pointerup',up); pin.addEventListener('pointercancel',up); });
   host.appendChild(d); }
+// click-to-focus: pop a post-it up large so long text isn't cut off (works on every board)
+function focusNote(n){ const o=document.getElementById('noteFocus'); if(!o)return; o.querySelector('.nf-card').style.background=n.c; o.querySelector('.nf-text').textContent=n.t; o.classList.add('on'); }
+function closeNoteFocus(){ const o=document.getElementById('noteFocus'); if(o)o.classList.remove('on'); }
+{ const o=document.getElementById('noteFocus'); if(o){ o.addEventListener('click',closeNoteFocus); const card=o.querySelector('.nf-card'); if(card)card.addEventListener('click',e=>e.stopPropagation()); const cx=o.querySelector('[data-nfclose]'); if(cx)cx.addEventListener('click',closeNoteFocus); }
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeNoteFocus(); }); }
 function renderBoard(){ const b=E.corkboard; if(!b)return; b.querySelectorAll('.note').forEach(n=>n.remove()); notes.slice(0,MAXNOTES).forEach((n,i)=>makeNoteEl(n,i,b)); }
 function renderBigBoard(){ const b=document.getElementById('bigBoard'); if(!b)return; const cb=BOX.corkboard; if(cb&&SW&&SH) b.style.aspectRatio=((cb.w*SW)/(cb.h*SH)).toFixed(3); b.querySelectorAll('.note').forEach(n=>n.remove()); notes.slice(0,MAXNOTES).forEach((n,i)=>makeNoteEl(n,i,b)); }
 function reRenderBoards(){ renderBoard(); if(openId==='boardP') renderBigBoard(); cleanSync(); }
