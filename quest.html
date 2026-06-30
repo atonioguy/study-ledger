@@ -149,9 +149,9 @@
   .screen.on{ display:block; }
 
   /* ===== map / questline ===== */
-  .sq-questhd{ display:flex; align-items:center; gap:9px; margin:0 2px 12px; }
-  .sq-questhd .qt{ font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.45); }
-  .sq-questhd .qm{ font-family:var(--pixfont2); font-size:15px; color:var(--tx); opacity:.7; margin-left:auto; }
+  .sq-questhd{ display:flex; align-items:center; flex-wrap:nowrap; gap:9px; margin:0 2px 12px; }
+  .sq-questhd .qt{ font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.45); white-space:nowrap; flex:none; }
+  .sq-questhd .qm{ font-family:var(--pixfont2); font-size:15px; color:var(--tx); opacity:.7; flex:1; min-width:0; text-align:right; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .sq-reset{ flex:none; margin-left:9px; background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); font-family:var(--pixfont2); font-size:15px; line-height:1; padding:3px 9px; cursor:pointer; } .sq-reset:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
   /* the list rendered by buildCampaign() becomes a trail */
   #cwList{ position:relative; padding-left:30px; }
@@ -186,6 +186,18 @@
   #nav button.on{ opacity:1; color:var(--gold); text-shadow:0 0 8px rgba(255,210,110,.5); }
   #nav button.on .ni{ filter:drop-shadow(0 0 7px rgba(255,210,110,.6)); }
 
+  /* ===== cloud-sync panel ===== */
+  .sq-modal{ position:fixed; inset:0; z-index:60; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(6,9,16,.74); }
+  .sq-modal.on{ display:flex; }
+  .sq-card{ width:100%; max-width:340px; background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.55); padding:16px; }
+  .sq-card h3{ font-family:var(--pixfont); font-size:13px; letter-spacing:1px; text-transform:lowercase; color:var(--gold); margin:0 0 8px; }
+  .sq-syncnote{ font-family:var(--pixfont2); font-size:15px; color:var(--cardtx); opacity:.8; margin:0 0 6px; line-height:1.35; }
+  .sq-card label{ display:block; font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; text-transform:uppercase; color:var(--tx); opacity:.7; margin:11px 0 4px; }
+  .sq-card input{ width:100%; box-sizing:border-box; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); color:var(--cardtx); font-family:var(--pixfont2); font-size:16px; padding:9px 10px; }
+  .sq-syncstatus{ font-family:var(--pixfont2); font-size:14px; color:var(--teal); margin:12px 2px 0; min-height:18px; }
+  .sq-modrow{ display:flex; gap:9px; margin-top:14px; }
+  .sq-mbtn{ flex:1; background:var(--card); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); font-family:var(--pixfont); font-size:10px; padding:11px; cursor:pointer; text-transform:lowercase; } .sq-mbtn:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
+  .sq-mbtn.primary{ background:var(--bar); color:var(--bartx); }
   /* effects layer spans the whole app */
   #cwFx{ position:fixed; inset:0; z-index:40; pointer-events:none; }
   #cwBanner{ position:fixed; left:50%; top:88px; z-index:42; }
@@ -209,7 +221,7 @@
 
     <div id="screens">
       <section class="screen on" id="screen-map" data-screen="map">
-        <div class="sq-questhd"><span class="qt">✦ exam 3 quest</span><span class="qm">modules 5 + 6 · exam sun</span><button id="cwReset" class="sq-reset" title="reset progress">⟲</button></div>
+        <div class="sq-questhd"><span class="qt">✦ exam 3 quest</span><span class="qm">modules 5 + 6 · exam sun</span><button id="cwReset" class="sq-reset" title="reset progress">⟲</button><button id="sqGear" class="sq-reset" title="cloud sync">⚙</button></div>
         <div class="cw-list" id="cwList"></div>
         <div class="sq-note"><b>content done by friday.</b> weekend is recall, not rewatching — a slipped day rolls forward, the buffer absorbs it.</div>
       </section>
@@ -240,6 +252,16 @@
       <button data-go="shop"><span class="ni">🎰</span>shop</button>
     </nav>
 
+    <div id="sqSync" class="sq-modal"><div class="sq-card">
+      <h3>☁ cloud sync</h3>
+      <p class="sq-syncnote">paste your worker URL + key so progress follows you across devices.</p>
+      <label>worker URL</label>
+      <input id="syncUrl" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://aquamarine-data.you.workers.dev">
+      <label>AQ key</label>
+      <input id="syncKey" type="text" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="your AQ_KEY">
+      <div class="sq-syncstatus" id="syncStatus"></div>
+      <div class="sq-modrow"><button id="syncCancel" class="sq-mbtn">close</button><button id="syncSave" class="sq-mbtn primary">save</button></div>
+    </div></div>
     <div id="cwFx"></div>
     <div class="cw-banner" id="cwBanner"></div>
   </div>
@@ -406,7 +428,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   }
   function coinFloat(x,y,amt){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); const e=document.createElement('span'); e.className='sq-coinfloat'; e.textContent='+'+amt+' 🪙'; e.style.left=(x-r.left)+'px'; e.style.top=(y-r.top+12)+'px'; fx.appendChild(e); e.animate([{transform:'translate(-50%,0)',opacity:1},{transform:'translate(-50%,-34px)',opacity:0}],{duration:900,easing:'ease-out'}).onfinish=()=>e.remove(); }
 
-  // ---- cloud sync (reuses the dashboard's saved worker config; same-origin localStorage) ----
+  // ---- cloud sync (reads the dashboard's saved worker config; editable via the ⚙ panel) ----
   const API={ url:(localStorage.getItem('aq_api_url')||'').replace(/\/+$/,''), key:localStorage.getItem('aq_api_key')||'' };
   const syncOn=()=>!!(API.url&&API.key);
   const stamp=()=>parseInt(localStorage.getItem('aq_save_t')||'0',10);
@@ -434,6 +456,13 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     refreshEcon(); placeAvatar(); markChanged();
   };
 
+  // ---- render (re-wires reset each time, since buildCampaign resets its onclick) ----
+  function rebuild(){
+    buildCampaign();
+    const rsb=document.getElementById('cwReset'); if(rsb){ const orig=rsb.onclick; rsb.onclick=(e)=>{ if(orig)orig(e); refreshEcon(); placeAvatar(); markChanged(); }; }
+    refreshEcon(); placeAvatar();
+  }
+
   // ---- bottom nav ----
   document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
     const go=b.dataset.go;
@@ -442,12 +471,36 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     cwSfx('check'); cwBuzz(8);
   });
 
+  // ---- ⚙ cloud-sync setup panel ----
+  function syncStatusText(){ return syncOn() ? '✓ sync on · '+API.url.replace(/^https?:\/\//,'') : 'not connected — local only'; }
+  function openSync(){ document.getElementById('syncUrl').value=API.url; document.getElementById('syncKey').value=API.key; document.getElementById('syncStatus').textContent=syncStatusText(); document.getElementById('sqSync').classList.add('on'); }
+  function closeSync(){ document.getElementById('sqSync').classList.remove('on'); }
+  document.getElementById('sqGear').onclick=openSync;
+  document.getElementById('syncCancel').onclick=closeSync;
+  document.getElementById('sqSync').onclick=(e)=>{ if(e.target.id==='sqSync') closeSync(); };
+  document.getElementById('syncSave').onclick=async ()=>{
+    const url=((document.getElementById('syncUrl').value)||'').trim().replace(/\/+$/,'');
+    const key=((document.getElementById('syncKey').value)||'').trim();
+    API.url=url; API.key=key;
+    if(url) localStorage.setItem('aq_api_url',url); else localStorage.removeItem('aq_api_url');
+    if(key) localStorage.setItem('aq_api_key',key); else localStorage.removeItem('aq_api_key');
+    const st=document.getElementById('syncStatus');
+    if(!syncOn()){ st.textContent='cleared — local only'; return; }
+    st.textContent='connecting…';
+    try{
+      const r=await fetch(API.url+'/save?slot=sidequest',{headers:{'x-aq-key':API.key}});
+      if(r.status===401){ st.textContent='✕ wrong key'; return; }
+      if(!r.ok){ st.textContent='✕ worker error ('+r.status+') — KV bound?'; return; }
+      const adopted=await pullCloud(); rebuild(); if(!adopted) pushCloud();
+      st.textContent='✓ connected — synced'; cwSfx('levelup'); cwBuzz(16);
+      setTimeout(closeSync,800);
+    }catch(e){ st.textContent='✕ cannot reach worker'; }
+  };
+
   // ---- boot ----
   if(new URLSearchParams(location.search).has('embed')){ document.documentElement.classList.add('embed'); document.body.classList.add('embed'); }
   const adopted=await pullCloud();                    // adopt newer cloud save before first render
-  buildCampaign();                                    // renders structure + wires clicks + campUpdate (HUD level/xp)
-  const rsb=document.getElementById('cwReset'); if(rsb){ const orig=rsb.onclick; rsb.onclick=(e)=>{ if(orig)orig(e); refreshEcon(); placeAvatar(); markChanged(); }; }
-  refreshEcon(); placeAvatar();
+  rebuild();
   if(syncOn() && !adopted) pushCloud();               // seed cloud from this device on first run
 })();
 
