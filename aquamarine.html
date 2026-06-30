@@ -500,7 +500,14 @@
   #clean.og .cg .chip{ background:rgba(35,131,226,.13); color:#1a6dc4; border-radius:4px; font-family:inherit; font-size:11px; } #clean.og .cg .more{ color:var(--ogsub); }
   #clean.og #clCalDay{ background:none; border:none; border-top:1px solid var(--ogline); margin-top:12px; padding:11px 8px 0; } #clean.og #clCalDay .cdh{ color:var(--ogtx); font-family:inherit; }
   /* Keep-style note grid (replaces the cork scatter in og) */
-  #clean.og #clBoard{ display:none; } #clean.og .cl-keep{ display:flex; flex-wrap:wrap; gap:10px; padding:12px; align-content:flex-start; } #clean.og .bhd .sp{ display:none; } #clean.og .mkbtn{ background:var(--ogblue); color:#fff; border:none; border-radius:8px; font-family:inherit; font-size:13px; }
+  /* corkboard keeps its pixel cork-board look in BOTH skins (post-its on a board, never a keep grid) */
+  #clean.og .cwin[data-win="board"].pxwin{ background:var(--frame) !important; border:3px solid !important; border-color:var(--hi) var(--lo) var(--lo) var(--hi) !important; border-radius:0 !important; box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.55) !important; color:var(--tx); font-family:var(--pixfont) !important; image-rendering:pixelated; }
+  #clean.og .cwin[data-win="board"] .pxbar{ background:linear-gradient(180deg,var(--barhi) 0 38%,var(--bar) 38%); color:var(--bartx); font-family:var(--pixfont); font-size:11px; letter-spacing:.5px; text-transform:lowercase; border-bottom:2px solid var(--outline); text-shadow:1px 1px 0 rgba(40,35,55,.45); }
+  #clean.og .cwin[data-win="board"] .pxbar .cwn{ background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; font-family:var(--pixfont2); }
+  #clean.og .cwin[data-win="board"] .cdark{ display:none; }
+  #clean.og .cwin[data-win="board"] .pxbody{ background-color:var(--body) !important; background-image:radial-gradient(var(--spot) 1px,transparent 1.5px) !important; background-size:4px 4px !important; margin:9px; box-shadow:0 0 0 2px var(--outline); color:var(--tx); }
+  #clean.og .cwin[data-win="board"] .mkbtn{ background:var(--bar); color:var(--bartx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); border-radius:0; font-family:var(--pixfont); font-size:11px; }
+  #clean.og .cwin[data-win="board"] .bhd .sp{ display:inline; color:var(--tx); font-family:var(--pixfont2); font-size:11px; }
   .cl-keep .knote{ width:150px; min-height:58px; padding:11px 12px; border-radius:11px; font-size:13px; color:#3a3a36; line-height:1.4; word-break:break-word; box-shadow:0 1px 4px rgba(0,0,0,.13); border:1px solid rgba(0,0,0,.05); position:relative; }
   .cl-keep .knote .kdel{ position:absolute; top:5px; right:7px; cursor:pointer; opacity:0; color:#555; font-style:normal; font-size:12px; transition:.15s; } .cl-keep .knote:hover .kdel{ opacity:.55; } .cl-keep .knote .kdel:hover{ opacity:1; color:#c0392b; }
   /* Twitter/X-style feed */
@@ -529,9 +536,12 @@
 
   /* ===== exam-campaign window — one consistent pixel design (phone palette), skin-independent ===== */
   .cw-win{ --hi:#6a58a0; --lo:#241d3c; --frame:#3b3060; --bar:#5b4a96; --barhi:#8068c4; --bartx:#f5eeff; --outline:#140f24; --body:#130e26; --spot:#241c44; --tx:#e3dbff; --card:#372d5e; --cardtx:#f1ecff; --inset:#0f0a22;
-    max-height:none; max-width:484px; margin:0; justify-self:start; order:1; background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.5); image-rendering:pixelated; font-family:var(--pixfont); color:var(--tx); }
-  /* keep campaign right under the notion window; board + antfarm flow below it */
-  .cl-grid .cwin[data-win="board"], .cl-grid .cwin[data-win="feed"]{ order:2; }
+    max-height:none; background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.5); image-rendering:pixelated; font-family:var(--pixfont); color:var(--tx); }
+  /* bottom row: campaign (game) left · antfarm (phone) over corkboard right */
+  .cl-bottom{ display:flex; gap:18px; align-items:flex-start; margin-top:18px; }
+  .cl-bottom .cw-win{ flex:0 0 484px; max-width:484px; }
+  .cl-rcol{ flex:1; min-width:0; display:flex; flex-direction:column; gap:18px; }
+  @media(max-width:820px){ .cl-bottom{ flex-direction:column; } .cl-bottom .cw-win{ flex:none; width:100%; max-width:none; } }
   .cwbar{ display:flex; align-items:center; gap:7px; flex:none; background:linear-gradient(180deg,var(--barhi) 0 38%,var(--bar) 38%); color:var(--bartx); padding:6px 9px; border-bottom:2px solid var(--outline); font-size:11px; letter-spacing:.5px; text-shadow:1px 1px 0 rgba(40,35,55,.45); }
   .cwico{ font-size:13px; text-shadow:none; flex:none; } .cwtitle{ text-transform:lowercase; white-space:nowrap; flex:none; } .cwsub{ margin-left:8px; font-family:var(--pixfont2); font-size:13px; opacity:.8; letter-spacing:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .cwreset{ margin-left:auto; background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); font-family:var(--pixfont); font-size:9px; padding:5px 9px; cursor:pointer; } .cwreset:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
@@ -672,9 +682,9 @@
         <div class="cwin col7 pxwin koi matte" data-win="today"><div class="pxbar"><span class="pxico">✓</span><span class="pxtitle">today</span><b class="cdark" title="dark mode">☾</b><b class="crefresh" data-r="tasks" title="refresh from TickTick">↻</b><span class="cwn" id="clTaskN"></span></div><div class="pxbody monbody"><div class="dgrp" id="clGroupBar"></div><div class="cpanel" id="clTasks"></div></div></div>
         <div class="cwin col5 pxwin brown matte" data-win="cal"><div class="pxbar"><span class="pxico">📅</span><span class="pxtitle">calendar</span><b class="cdark" title="dark mode">☾</b><b class="crefresh" data-r="tasks" title="refresh from TickTick">↻</b></div><div class="pxbody monbody"><div class="calhd"><button class="nav" id="clCalPrev">‹</button><h3 id="clCalTitle">📅 calendar</h3><button class="calt" id="clCalToday">today</button><button class="nav" id="clCalNext">›</button></div><div class="cg" id="clCalGrid"></div><div id="clCalDay"></div></div></div>
         <div class="cwin col12 pxwin koi matte" id="clCard-notion" data-win="notion" style="display:none"><div class="pxbar"><span class="pxico">📓</span><span class="pxtitle" id="clNotionTtl">notion</span><b class="cdark" title="dark mode">☾</b><b class="crefresh" data-r="notion" title="refresh from Notion">↻</b></div><div class="pxbody monbody"><div id="clNotion"></div></div></div>
-        <div class="cwin col8 pxwin matte" data-win="board"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div><div class="cl-keep" id="clKeep"></div></div></div>
-        <div class="cwin col4 pxwin matte" data-win="feed"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
-        <div class="cwin col8 cw-win">
+      </div>
+      <div class="cl-bottom">
+        <div class="cwin cw-win">
           <div class="cwbar"><span class="cwico">✦</span><span class="cwtitle">exam campaign</span><span class="cwsub">m5+m6 · exam sun</span><button class="cwreset" id="cwReset">⟲ reset</button></div>
           <div class="cwbody">
             <div class="cw-fx" id="cwFx"></div>
@@ -690,6 +700,10 @@
             <div class="cw-list" id="cwList"></div>
             <div class="cw-note"><b>content done by friday.</b> weekend is recall, not rewatching — a slipped day rolls forward, the buffer absorbs it.</div>
           </div>
+        </div>
+        <div class="cl-rcol">
+          <div class="cwin pxwin matte" data-win="feed"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
+          <div class="cwin pxwin matte" data-win="board"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div><div class="cl-keep" id="clKeep"></div></div></div>
         </div>
       </div>
     </div>
@@ -1110,7 +1124,7 @@ function applyCleanSkin(s){ cleanSkin=s; localStorage.setItem('aq_clean_skin',s)
   if(document.body.classList.contains('clean2d')) renderClean(); }
 // per-window dark mode (og skin) — each clean window remembers its own light/dark
 let clDark=(()=>{ try{ return JSON.parse(localStorage.getItem('aq_cl_dark')||'{}'); }catch(e){ return {}; } })();
-function applyClDark(){ document.querySelectorAll('#clean .cwin[data-win]').forEach(w=>{ const on=!!clDark[w.dataset.win]; w.classList.toggle('dark',on); const btn=w.querySelector('.cdark'); if(btn)btn.textContent=on?'☀':'☾'; }); }
+function applyClDark(){ document.querySelectorAll('#clean .cwin[data-win]').forEach(w=>{ if(w.dataset.win==='board'){ w.classList.remove('dark'); return; } const on=!!clDark[w.dataset.win]; w.classList.toggle('dark',on); const btn=w.querySelector('.cdark'); if(btn)btn.textContent=on?'☀':'☾'; }); }
 
 /* ===== exam campaign — gamified study planner (clean view, one consistent design) ===== */
 // each video PART is a checkable unit; xp ≈ minutes of lecture (1 xp / min watched)
@@ -1237,12 +1251,9 @@ function clRenderCalDay(){ const el=document.getElementById('clCalDay'); if(!el)
     : `<div class="empty">${liveTasks?'nothing scheduled ♡':'connect TickTick to see tasks'}</div>`);
   el.querySelectorAll('.bt .ck').forEach(ck=>ck.onclick=ev=>{ ev.stopPropagation(); const r=ck.closest('.bt'); const t=liveTasks&&liveTasks.find(x=>String(x.id)===r.dataset.id); if(t)checkOff(t,r); }); }
 // corkboard — the same draggable scatter board as the expanded 3D corkboard
-function clRenderBoard(){ const b=document.getElementById('clBoard'),k=document.getElementById('clKeep'),n=document.getElementById('clNoteN');
+function clRenderBoard(){ const b=document.getElementById('clBoard'),n=document.getElementById('clNoteN'); if(!b)return;   // draggable cork scatter in BOTH skins (post-its on a board)
   if(n)n.textContent=notes.length;
-  if(cleanSkin==='og'){ if(!k)return;   // Keep-style flat grid of note cards
-    k.innerHTML=notes.length?notes.map((nt,i)=>`<div class="knote" style="background:${nt.c}">${esc(nt.t)}<u class="kdel" data-i="${i}" title="trash">✕</u></div>`).join(''):`<div class="cl-empty">no notes pinned yet ♡</div>`;
-    k.querySelectorAll('.kdel').forEach(x=>x.onclick=e=>{ e.stopPropagation(); trashNote(notes[+x.dataset.i]); }); return; }
-  if(!b)return; b.querySelectorAll('.note').forEach(x=>x.remove()); notes.slice(0,MAXNOTES).forEach((nn,i)=>makeNoteEl(nn,i,b)); }   // pixel: draggable cork scatter
+  b.querySelectorAll('.note').forEach(x=>x.remove()); notes.slice(0,MAXNOTES).forEach((nn,i)=>makeNoteEl(nn,i,b)); }
 function clRenderFeed(){ const el=document.getElementById('clFeed'),n=document.getElementById('clFeedN'); if(!el)return;
   if(n)n.textContent=feed.length;
   el.innerHTML=feed.length?feed.slice(0,8).map(p=>{ const t=esc(ptext(p)),im=pimg(p),ago=fmtAgo(ptime(p)); return `<div class="fp"><div class="fh">me${ago?` · ${ago}`:''}</div>${t?`<div class="fb">${t}</div>`:''}${im?`<img src="${im}">`:''}</div>`; }).join(''):`<div class="cl-empty">no posts yet ♡</div>`; }
