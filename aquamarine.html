@@ -1130,8 +1130,17 @@ let lastWx=null;
 let view2d=localStorage.getItem('aq_view')==='clean';
 function setView2d(on){ view2d=on; document.body.classList.toggle('clean2d',on); localStorage.setItem('aq_view',on?'clean':'room');
   const b=document.getElementById('viewToggle'); if(b){ b.querySelector('.ic').textContent=on?'🪟':'▦'; b.querySelector('.lbl').textContent=on?'room':'clean'; }
-  if(on) renderClean(); else fit(); }
+  if(on){ renderClean(); clRestoreScroll(); } else fit(); }
 function cleanSync(){ if(document.body.classList.contains('clean2d')) renderClean(); }
+// clean view: remember scroll position across refreshes / view toggles
+let _clRestoring=false, _clScrollRaf=0;
+function clRestoreScroll(){ const c=document.getElementById('clean'); if(!c)return;
+  const v=parseInt(localStorage.getItem('aq_clean_scroll')||'0',10); if(!(v>0))return;
+  _clRestoring=true; const apply=()=>{ if(_clRestoring) c.scrollTop=v; };          // hold position while async content (notion/tasks) settles
+  requestAnimationFrame(()=>requestAnimationFrame(apply)); [70,160,300,480,650].forEach(t=>setTimeout(apply,t)); setTimeout(()=>{ _clRestoring=false; },720); }
+(function(){ const c=document.getElementById('clean'); if(!c)return;
+  ['wheel','touchstart','keydown','mousedown'].forEach(ev=>c.addEventListener(ev,()=>{ _clRestoring=false; },{passive:true}));  // any real input cancels the restore so we never fight the user
+  c.addEventListener('scroll',()=>{ if(_clRestoring||_clScrollRaf)return; _clScrollRaf=requestAnimationFrame(()=>{ _clScrollRaf=0; try{ localStorage.setItem('aq_clean_scroll',String(c.scrollTop)); }catch(e){} }); }); })();
 // clean view skin: 'pixel' (the pixel windows) or 'og' (native-app imitations)
 let cleanSkin=localStorage.getItem('aq_clean_skin')||'pixel';
 function applyCleanSkin(s){ cleanSkin=s; localStorage.setItem('aq_clean_skin',s); const c=document.getElementById('clean');
