@@ -273,6 +273,20 @@
   .slot-left{ font-family:var(--pixfont2); font-size:13px; color:var(--tx); opacity:.6; }
   .slot-odds{ font-family:var(--pixfont2); font-size:12px; color:var(--cardtx); opacity:.55; text-align:center; line-height:1.6; }
   .shop-soon{ text-align:center; margin-top:18px; }
+  /* ===== cosmetics / outfits ===== */
+  .cos-section{ margin-top:22px; background:linear-gradient(180deg,#332a59,#241d3c); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:14px; }
+  .cos-hd{ font-family:var(--pixfont); font-size:12px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
+  .cos-preview{ display:flex; align-items:flex-end; justify-content:center; gap:16px; background:radial-gradient(circle at 50% 60%, #3a3060, #1b1536); border:2px solid var(--lo); padding:16px 14px; margin-bottom:12px; min-height:96px; }
+  .cos-mascot{ background:center bottom/contain no-repeat; image-rendering:pixelated; }
+  .cos-slime{ width:86px; height:86px; } .cos-tom{ width:64px; height:64px; }
+  #cosAction{ width:100%; margin-bottom:12px; }
+  .cos-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:9px; }
+  .cos-cell{ position:relative; display:flex; align-items:center; gap:9px; padding:9px 10px; background:var(--card); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); cursor:pointer; text-align:left; }
+  .cos-cell.sel{ outline:2px solid var(--gold); outline-offset:-3px; }
+  .cos-ic{ width:34px; height:34px; flex:none; background:center/contain no-repeat; image-rendering:pixelated; }
+  .cos-nm{ font-family:var(--pixfont2); font-size:15px; color:var(--cardtx); flex:1; }
+  .cos-tag{ font-family:var(--pixfont2); font-size:12px; color:var(--gold); opacity:.85; }
+  .cos-tag.eq{ color:var(--teal); }
   /* effects layer spans the whole app */
   #cwFx{ position:fixed; inset:0; z-index:70; pointer-events:none; }
   #cwBanner{ position:fixed; left:50%; top:88px; z-index:72; }
@@ -322,7 +336,13 @@
           <div class="slot-left" id="slotLeft"></div>
           <div class="slot-odds">7️⃣7️⃣7️⃣ jackpot &middot; ⭐⭐⭐ +3⭐ &middot; 💎💎💎 +1⭐ &middot; 🍀🍀🍀 +35🪙</div>
         </div>
-        <div class="shop-soon"><span class="sq-soon">mascot outfits &amp; charms — next update</span></div>
+        <div class="cos-section">
+          <div class="cos-hd">✦ outfits</div>
+          <div class="cos-preview" id="cosPrev"><span class="cos-mascot cos-slime"></span><span class="cos-mascot cos-tom"></span></div>
+          <button id="cosAction" class="sq-bigbtn">equip</button>
+          <div class="cos-grid" id="cosGrid"></div>
+        </div>
+        <div class="shop-soon"><span class="sq-soon">charms — next update</span></div>
       </section>
     </div>
 
@@ -469,7 +489,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v1.3';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v1.4';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -671,6 +691,70 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     const cm=document.getElementById('cardModal'); if(cm)cm.onclick=(e)=>{ if(e.target.id==='cardModal')cm.classList.remove('on'); };
   }
 
+  // ===== cosmetics: mascot outfits (slime + matching tomato) =====
+  // hat drawn in unit coords around a head-top anchor; one routine serves small (s=1) and big (s=2)
+  function drawHat(c,id,cx,topY,s){
+    if(!id||id==='none')return;
+    const P=(px,py,w,h,cc)=>{ c.fillStyle=cc; c.fillRect(Math.round(cx+px*s),Math.round(topY+py*s),Math.round(w*s),Math.round(h*s)); };
+    if(id==='grad'){ P(-3,-2,6,2,'#2a2040'); P(-7,-1,14,1,'#1c1530'); P(5,-1,1,5,'#ffd96b'); P(5,4,2,1,'#ffd96b'); }
+    else if(id==='party'){ P(-1,-9,2,9,'#ff7aa8'); P(-2,-6,4,1,'#ffd96b'); P(-3,-3,6,3,'#7fd0ff'); P(-3,0,6,1,'#5f91e0'); P(-1,-10,2,2,'#fff4c2'); }
+    else if(id==='crown'){ P(-4,-3,2,3,'#ffd05f'); P(-1,-4,2,4,'#ffd05f'); P(2,-3,2,3,'#ffd05f'); P(-4,0,8,2,'#ffd05f'); P(-3,1,6,1,'#d99a32'); P(-1,-1,1,1,'#fff4c2'); }
+    else if(id==='flower'){ P(-1,-4,2,2,'#ffb0c8'); P(-3,-2,2,2,'#ff8fb4'); P(1,-2,2,2,'#ff8fb4'); P(-1,0,2,2,'#ff8fb4'); P(-1,-2,2,2,'#ffd96b'); }
+  }
+  function drawMascot(kind,cosId,big){
+    const s=big?2:1, W=big?60:30, H=big?60:30, cx=W/2;
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const c=cv.getContext('2d'); c.imageSmoothingEnabled=false;
+    const col = kind==='tomato' ? '#e8584a' : '#f3e9d2';
+    const dk=shade(col,-30), lt=shade(col,22), pink='rgba(255,140,170,.6)';
+    const P=(px,py,w,h,cc)=>{ c.fillStyle=cc; c.fillRect(Math.round(cx+px*s),Math.round(py*s),Math.round(w*s),Math.round(h*s)); };
+    P(-7,23,14,1,'rgba(0,0,0,.18)');                                   // shadow
+    const hw=[3,5,7,8,8,8,8,8,8,8,8,7,5,3];                            // body blob y8..21
+    hw.forEach((w,i)=>P(-w,8+i,w*2,1,col));
+    if(big){ P(-6,11,12,4,lt); P(-8,18,16,2,dk); }                     // big-only shading
+    if(kind==='tomato'){ P(-1,5,2,3,'#4fa84f'); P(-4,6,3,1,'#74c86a'); P(2,6,3,1,'#74c86a'); }  // stem
+    P(-4,13,2,3,'#1a1330'); P(2,13,2,3,'#1a1330'); P(-4,13,1,1,'#fff'); P(2,13,1,1,'#fff'); // eyes
+    P(-7,16,2,1,pink); P(5,16,2,1,pink);                              // blush
+    P(-1,17,2,1,dk);                                                  // mouth
+    drawHat(c,cosId,cx, (kind==='tomato'?6:7)*s, s);
+    return cv.toDataURL();
+  }
+  const COSMETICS=[
+    {id:'none',  name:'none',        price:0},
+    {id:'grad',  name:'scholar cap', price:60},
+    {id:'party', name:'party hat',   price:50},
+    {id:'flower',name:'bloom',       price:80},
+    {id:'crown', name:'royal crown', price:140},
+  ];
+  let COS={owned:{none:1},eq:'none'}, cosSel='none';
+  function loadCos(){ try{ const d=JSON.parse(localStorage.getItem('aq_cos')||'{}'); COS={owned:Object.assign({none:1},d.owned||{}),eq:d.eq||'none'}; }catch(e){ COS={owned:{none:1},eq:'none'}; } cosSel=COS.eq; }
+  function saveCos(){ localStorage.setItem('aq_cos',JSON.stringify(COS)); }
+  function applyCos(){ rs.setProperty('--slime','url("'+drawMascot('slime',COS.eq,false)+'")'); rs.setProperty('--tomato','url("'+drawMascot('tomato',COS.eq,false)+'")'); }
+
+  function renderShopOutfits(){
+    const prev=document.getElementById('cosPrev'); if(!prev)return;
+    prev.querySelector('.cos-slime').style.backgroundImage='url("'+drawMascot('slime',cosSel,true)+'")';
+    prev.querySelector('.cos-tom').style.backgroundImage='url("'+drawMascot('tomato',cosSel,true)+'")';
+    const sel=COSMETICS.find(o=>o.id===cosSel);
+    const btn=document.getElementById('cosAction');
+    if(COS.eq===cosSel){ btn.textContent='equipped ✓'; btn.disabled=true; btn.className='sq-bigbtn off'; }
+    else if(COS.owned[cosSel]){ btn.textContent='equip'; btn.disabled=false; btn.className='sq-bigbtn'; }
+    else { const can=coinBal()>=sel.price; btn.textContent='buy · '+sel.price+'🪙'; btn.disabled=!can; btn.className='sq-bigbtn'+(can?'':' off'); }
+    const grid=document.getElementById('cosGrid');
+    grid.innerHTML=COSMETICS.filter(o=>o.id!=='none').map(o=>{
+      const owned=!!COS.owned[o.id], eq=COS.eq===o.id, selc=cosSel===o.id;
+      const tag = eq?'<span class="cos-tag eq">equipped</span>' : (owned?'<span class="cos-tag">owned</span>':'<span class="cos-tag">'+o.price+'🪙</span>');
+      return '<button class="cos-cell'+(selc?' sel':'')+'" data-cos="'+o.id+'"><span class="cos-ic" style="background-image:url(\''+drawMascot('slime',o.id,false)+'\')"></span><span class="cos-nm">'+o.name+'</span>'+tag+'</button>';
+    }).join('');
+    grid.querySelectorAll('.cos-cell').forEach(el=>el.onclick=()=>{ cosSel=el.dataset.cos; cwSfx('check'); cwBuzz(6); renderShopOutfits(); });
+    // also include a 'none' option to remove
+  }
+  function cosAction(){
+    const sel=COSMETICS.find(o=>o.id===cosSel); if(!sel)return;
+    if(COS.eq===cosSel) return;
+    if(COS.owned[cosSel]){ COS.eq=cosSel; saveCos(); applyCos(); renderActiveBuddy(); placeAvatar(); cwSfx('levelup'); cwBuzz(14); markChanged(); renderShopOutfits(); }
+    else { if(coinBal()<sel.price)return; adjustBalance(-sel.price,0); COS.owned[cosSel]=1; COS.eq=cosSel; saveCos(); applyCos(); renderActiveBuddy(); placeAvatar(); refreshEcon(); cwSfx('fanfare'); cwBuzz([16,30]); const fx=document.getElementById('cwFx'); if(fx){const r=fx.getBoundingClientRect(); cwBurst(r.left+r.width/2,r.top+r.height*0.4,false);} markChanged(); renderShopOutfits(); }
+  }
+
   // ===== slot machine (gamble coins for stars) =====
   const SLOT_SYMS=[{s:'🍒',w:30},{s:'🔔',w:24},{s:'🍀',w:18},{s:'💎',w:12},{s:'⭐',w:12},{s:'7️⃣',w:4}];
   const SLOT_COST=8, SLOT_CAP=40;
@@ -715,14 +799,14 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
       }
     }, 520*(i+1)));
   }
-  function initShop(){ const b=document.getElementById('slotSpin'); if(b)b.onclick=slotSpin; updateSlotInfo(); }
+  function initShop(){ const b=document.getElementById('slotSpin'); if(b)b.onclick=slotSpin; const a=document.getElementById('cosAction'); if(a)a.onclick=cosAction; updateSlotInfo(); renderShopOutfits(); }
 
   // ---- cloud sync ----
   const API={ url:(localStorage.getItem('aq_api_url')||'').replace(/\/+$/,''), key:localStorage.getItem('aq_api_key')||'' };
   const syncOn=()=>!!(API.url&&API.key);
   const stamp=()=>parseInt(localStorage.getItem('aq_save_t')||'0',10);
   function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
-  function snapshot(){ return { v:2, t:stamp(), campDone:campDone, econ:readEcon(), buddies:lsGet('aq_buddies') }; }
+  function snapshot(){ return { v:2, t:stamp(), campDone:campDone, econ:readEcon(), buddies:lsGet('aq_buddies'), cos:lsGet('aq_cos') }; }
   let pushTimer=0;
   function pushCloud(){ if(!syncOn())return; clearTimeout(pushTimer); pushTimer=setTimeout(()=>{
     fetch(API.url+'/save?slot=sidequest',{method:'POST',headers:{'x-aq-key':API.key,'content-type':'application/json'},body:JSON.stringify(snapshot())}).catch(()=>{});
@@ -734,6 +818,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
       campDone=d.campDone; saveCampaign();
       if(d.econ)localStorage.setItem('aq_econ',JSON.stringify(d.econ));
       if(d.buddies)localStorage.setItem('aq_buddies',JSON.stringify(d.buddies));
+      if(d.cos)localStorage.setItem('aq_cos',JSON.stringify(d.cos));
       localStorage.setItem('aq_save_t',String(d.t||0)); return true;
     }
     return false;
@@ -762,6 +847,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     const go=b.dataset.go;
     document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x===b));
     document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.dataset.screen===go));
+    if(go==='shop'){ renderShopOutfits(); updateSlotInfo(); }
     cwSfx('check'); cwBuzz(8);
   });
 
@@ -785,7 +871,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
       const r=await fetch(API.url+'/save?slot=sidequest',{headers:{'x-aq-key':API.key}});
       if(r.status===401){ st.textContent='✕ wrong key'; return; }
       if(!r.ok){ st.textContent='✕ worker error ('+r.status+') — KV bound?'; return; }
-      const adopted=await pullCloud(); loadBud(); rebuild(); renderDex(); renderActiveBuddy(); if(!adopted) pushCloud();
+      const adopted=await pullCloud(); loadBud(); loadCos(); applyCos(); rebuild(); renderDex(); renderActiveBuddy(); renderShopOutfits(); if(!adopted) pushCloud();
       st.textContent='✓ connected — synced'; cwSfx('levelup'); cwBuzz(16);
       setTimeout(closeSync,800);
     }catch(e){ st.textContent='✕ cannot reach worker'; }
@@ -798,6 +884,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   if(new URLSearchParams(location.search).has('embed')){ document.documentElement.classList.add('embed'); document.body.classList.add('embed'); }
   const vEl=document.getElementById('sqVer'); if(vEl) vEl.textContent='side quest '+SQ_VER;
   const adopted=await pullCloud();
+  loadCos(); applyCos();
   initBuddies();
   initShop();
   rebuild();
