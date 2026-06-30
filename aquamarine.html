@@ -540,6 +540,8 @@
   /* bottom row: campaign (game) left · antfarm (phone) over corkboard right */
   .cl-bottom{ display:flex; gap:18px; align-items:flex-start; margin-top:18px; }
   .cl-bottom .cw-win{ flex:0 0 484px; max-width:484px; }
+  .cl-bottom .cw-win.cw-embed{ display:block; height:min(840px,82vh); padding:0; overflow:hidden; }
+  .cw-frame{ width:100%; height:100%; border:0; display:block; background:var(--body); }
   .cl-rcol{ flex:1; min-width:0; display:flex; flex-direction:column; gap:18px; }
   @media(max-width:820px){ .cl-bottom{ flex-direction:column; } .cl-bottom .cw-win{ flex:none; width:100%; max-width:none; } }
   .cwbar{ display:flex; align-items:center; gap:7px; flex:none; background:linear-gradient(180deg,var(--barhi) 0 38%,var(--bar) 38%); color:var(--bartx); padding:6px 9px; border-bottom:2px solid var(--outline); font-size:11px; letter-spacing:.5px; text-shadow:1px 1px 0 rgba(40,35,55,.45); }
@@ -693,23 +695,7 @@
         <div class="cwin col12 pxwin koi matte" id="clCard-notion" data-win="notion" style="display:none"><div class="pxbar"><span class="pxico">📓</span><span class="pxtitle" id="clNotionTtl">notion</span><b class="cdark" title="dark mode">☾</b><b class="crefresh" data-r="notion" title="refresh from Notion">↻</b></div><div class="pxbody monbody"><div id="clNotion"></div></div></div>
       </div>
       <div class="cl-bottom">
-        <div class="cwin cw-win">
-          <div class="cwbar"><span class="cwico">✦</span><span class="cwtitle">exam campaign</span><span class="cwsub">m5+m6 · exam sun · b46</span><button class="cwreset" id="cwReset">⟲ reset</button></div>
-          <div class="cwbody">
-            <div class="cw-fx" id="cwFx"></div>
-            <div class="cw-banner" id="cwBanner"></div>
-            <div class="cw-hero">
-              <div class="cw-buddies"><span class="cw-slime slimeic" id="cwSlime"></span><span class="cw-tom tomatoic" id="cwTom"></span></div>
-              <div class="cw-level">
-                <div class="cw-lvrow"><span class="cw-lv" id="cwLv">lv 1</span><span class="cw-rank" id="cwRank">fresh start</span><span class="cw-streak" id="cwStreak">🔥 0/7</span></div>
-                <div class="cw-xptrack"><div class="cw-xpfill" id="cwXpFill"></div></div>
-                <div class="cw-xpnum" id="cwXpTotal">0 / 250 xp</div>
-              </div>
-            </div>
-            <div class="cw-list" id="cwList"></div>
-            <div class="cw-note"><b>content done by friday.</b> weekend is recall, not rewatching — a slipped day rolls forward, the buffer absorbs it.</div>
-          </div>
-        </div>
+        <div class="cwin cw-win cw-embed"><iframe class="cw-frame" src="quest.html?embed=1&v=19" title="Side Quest"></iframe></div>
         <div class="cl-rcol">
           <div class="cwin pxwin matte" data-win="feed"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
           <div class="cwin pxwin matte" data-win="board"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div><div class="cl-keep" id="clKeep"></div></div></div>

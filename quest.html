@@ -330,6 +330,9 @@
   .ms-bubble::before{ content:''; position:absolute; left:50%; bottom:-5px; transform:translateX(-50%); width:0; height:0; border:4px solid transparent; border-top-color:#fbf3e0; z-index:1; }
   .ms-bubble.show{ animation:msBubble 2s ease forwards; }
   @keyframes msBubble{ 0%{opacity:0; transform:translate(-50%,7px) scale(.9)} 12%{opacity:1; transform:translate(-50%,0) scale(1)} 80%{opacity:1; transform:translate(-50%,0) scale(1)} 100%{opacity:0; transform:translate(-50%,-5px) scale(1)} }
+  /* ===== embed mode (iframed into the dashboard) ===== */
+  html.embed,body.embed{ height:100%; background:transparent; }
+  body.embed #app{ height:100%; min-height:0; max-width:none; margin:0; border:none; box-shadow:none; }
   /* effects layer spans the whole app */
   #cwFx{ position:fixed; inset:0; z-index:70; pointer-events:none; }
   #cwBanner{ position:fixed; left:50%; top:88px; z-index:72; }
@@ -539,7 +542,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v1.8';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v1.9';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
