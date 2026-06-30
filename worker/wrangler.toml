@@ -10,3 +10,10 @@ compatibility_date = "2024-11-01"
 #   ALLOW_ORIGIN = "https://atonioguy.github.io"
 [vars]
 ALLOW_ORIGIN = "*"
+
+# Side Quest cross-device saves. Create the namespace once, then paste its id:
+#   wrangler kv namespace create SAVES
+# It prints something like  id = "abc123..."  — put that below, then `wrangler deploy`.
+[[kv_namespaces]]
+binding = "SAVES"
+id = "PASTE_KV_NAMESPACE_ID_HERE"

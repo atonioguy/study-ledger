@@ -15,7 +15,7 @@
     --hi:#6a58a0; --lo:#241d3c; --frame:#3b3060; --bar:#5b4a96; --barhi:#8068c4; --bartx:#f5eeff; --outline:#140f24; --body:#130e26; --spot:#241c44; --tx:#e3dbff; --card:#372d5e; --cardtx:#f1ecff; --inset:#0f0a22;
     --gold:#ffd96b; --teal:#5fe0c8; }
   *{ box-sizing:border-box; }
-  html,body{ margin:0; height:100%; background:#0a0718; color:var(--tx); font-family:var(--pixfont); overflow:hidden; -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; height:100%; background:#161029; color:var(--tx); font-family:var(--pixfont); overflow:hidden; -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent; }
 
   .cw-win{ --hi:#6a58a0; --lo:#241d3c; --frame:#3b3060; --bar:#5b4a96; --barhi:#8068c4; --bartx:#f5eeff; --outline:#140f24; --body:#130e26; --spot:#241c44; --tx:#e3dbff; --card:#372d5e; --cardtx:#f1ecff; --inset:#0f0a22;
     max-height:none; background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.5); image-rendering:pixelated; font-family:var(--pixfont); color:var(--tx); }
@@ -121,7 +121,7 @@
   @media(max-width:560px){ .cw-bars{ grid-template-columns:1fr; } .cw-hero{ flex-wrap:wrap; } }
 
   /* ===== app shell ===== */
-  #app{ position:relative; width:100%; max-width:560px; margin:0 auto; height:100dvh; height:100vh; display:flex; flex-direction:column; background:var(--body); background-image:radial-gradient(var(--spot) 1px,transparent 1.5px); background-size:4px 4px; overflow:hidden; }
+  #app{ position:relative; width:100%; max-width:560px; margin:0 auto; height:100vh; height:100dvh; display:flex; flex-direction:column; background:var(--body); background-image:radial-gradient(var(--spot) 1px,transparent 1.5px); background-size:4px 4px; overflow:hidden; }
   @media(min-width:600px){ #app{ border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 18px 50px rgba(0,0,0,.55); } }
 
   /* ===== HUD ===== */
@@ -149,9 +149,10 @@
   .screen.on{ display:block; }
 
   /* ===== map / questline ===== */
-  .sq-questhd{ display:flex; align-items:baseline; gap:9px; margin:0 2px 12px; }
+  .sq-questhd{ display:flex; align-items:center; gap:9px; margin:0 2px 12px; }
   .sq-questhd .qt{ font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.45); }
   .sq-questhd .qm{ font-family:var(--pixfont2); font-size:15px; color:var(--tx); opacity:.7; margin-left:auto; }
+  .sq-reset{ flex:none; margin-left:9px; background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); font-family:var(--pixfont2); font-size:15px; line-height:1; padding:3px 9px; cursor:pointer; } .sq-reset:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
   /* the list rendered by buildCampaign() becomes a trail */
   #cwList{ position:relative; padding-left:30px; }
   #cwList::before{ content:''; position:absolute; left:13px; top:8px; bottom:8px; width:4px; background:repeating-linear-gradient(180deg,var(--barhi) 0 9px,transparent 9px 17px); opacity:.5; }
@@ -208,7 +209,7 @@
 
     <div id="screens">
       <section class="screen on" id="screen-map" data-screen="map">
-        <div class="sq-questhd"><span class="qt">✦ exam 3 quest</span><span class="qm">modules 5 + 6 · exam sun</span></div>
+        <div class="sq-questhd"><span class="qt">✦ exam 3 quest</span><span class="qm">modules 5 + 6 · exam sun</span><button id="cwReset" class="sq-reset" title="reset progress">⟲</button></div>
         <div class="cw-list" id="cwList"></div>
         <div class="sq-note"><b>content done by friday.</b> weekend is recall, not rewatching — a slipped day rolls forward, the buffer absorbs it.</div>
       </section>
@@ -360,48 +361,77 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   const rs=document.getElementById('cwReset'); if(rs)rs.onclick=e=>{ e.stopPropagation(); campDone={}; saveCampaign(); list.querySelectorAll('.cw-node,.cw-quest').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-node').forEach(x=>cwSetIcon(x,false)); list.querySelectorAll('.cw-les').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-modtrack').forEach(x=>x.classList.remove('full')); campUpdate(); cwSfx('reset'); cwBuzz(12); };
   campUpdate(); }
 
-// ===== Side Quest shell: economy, HUD, nav, questline =====
-(function(){
+// ===== Side Quest shell: economy, HUD, nav, questline, cloud sync =====
+(async function(){
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
 
+  // ---- low-latency audio: decode the embedded sfx into Web Audio buffers (HTMLAudio has tap delay on iOS) ----
+  let _actx=null; const _buf={}; const _vol={check:.5,xp:.55,levelup:.7,reset:.6};
+  function unlockAudio(){
+    if(!_actx){ try{ _actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
+      Object.keys(CW_SFX).forEach(k=>{ const src=CW_SFX[k]&&CW_SFX[k].src; if(!src)return;
+        fetch(src).then(r=>r.arrayBuffer()).then(b=>_actx.decodeAudioData(b)).then(buf=>{_buf[k]=buf;}).catch(()=>{}); });
+    }
+    if(_actx.state==='suspended') _actx.resume();
+  }
+  cwSfx=function(n){
+    if(_actx && _buf[n]){ try{ const s=_actx.createBufferSource(); s.buffer=_buf[n]; const g=_actx.createGain(); g.gain.value=_vol[n]||.6; s.connect(g); g.connect(_actx.destination); s.start(0); return; }catch(e){} }
+    const a=CW_SFX[n]; if(a){ try{ a.currentTime=0; a.play(); }catch(e){} }   // fallback until buffers decode
+  };
+  ['pointerdown','touchstart','mousedown'].forEach(ev=>window.addEventListener(ev,unlockAudio,{passive:true}));
+
   // ---- economy: earned is derived from progress; spent is stored (0 for now) ----
   function lessonsCleared(){ let n=0; CAMP_MODS.forEach(m=>m.lessons.forEach(les=>{ if(les.parts.every(p=>campDone[p.id])) n++; })); return n; }
   function modulesCleared(){ let n=0; CAMP_MODS.forEach(m=>{ if(m.lessons.every(les=>les.parts.every(p=>campDone[p.id]))) n++; }); return n; }
-  function coinsEarned(){ return campStats().xp; }                                  // 1 coin per xp (≈ per minute of video)
-  function starsEarned(){ return lessonsCleared() + modulesCleared()*3; }           // rare: per lesson + bonus per module
-  let coinSpent=0, starSpent=0; try{ const e=JSON.parse(localStorage.getItem('aq_econ')||'{}'); coinSpent=e.c||0; starSpent=e.s||0; }catch(e){}
-  function coinBal(){ return Math.max(0,coinsEarned()-coinSpent); }
-  function starBal(){ return Math.max(0,starsEarned()-starSpent); }
-
+  function coinsEarned(){ return campStats().xp; }                                  // 1 coin per xp
+  function starsEarned(){ return lessonsCleared() + modulesCleared()*3; }           // rare
+  function readEcon(){ try{ return JSON.parse(localStorage.getItem('aq_econ')||'{}'); }catch(e){ return {}; } }
+  function coinBal(){ const e=readEcon(); return Math.max(0,coinsEarned()-(e.c||0)); }
+  function starBal(){ const e=readEcon(); return Math.max(0,starsEarned()-(e.s||0)); }
   let shownCoins=coinBal(), shownStars=starBal();
   function countChip(el,from,to){ if(!el)return; if(from===to){ el.textContent=to; return; } const t0=performance.now(),dur=550; (function step(t){ const k=Math.min(1,(t-t0)/dur); el.textContent=Math.round(from+(to-from)*k); if(k<1)requestAnimationFrame(step); })(performance.now()); }
   function refreshEcon(){ const c=coinBal(), s=starBal(); countChip(document.getElementById('sqCoins'),shownCoins,c); countChip(document.getElementById('sqStars'),shownStars,s); shownCoins=c; shownStars=s; }
 
-  // ---- place the avatar token on the current (first unfinished) lesson ----
+  // ---- avatar token on the current (first unfinished) lesson ----
   function placeAvatar(){
     document.querySelectorAll('.cw-les.current').forEach(e=>e.classList.remove('current'));
     const old=document.querySelector('.sq-avatar'); if(old)old.remove();
     let target=null;
-    CAMP_MODS.forEach((m,mi)=>m.lessons.forEach((les,li)=>{ const done=les.parts.every(p=>campDone[p.id]); if(!done && !target){ target=document.getElementById('cwLesH'+(mi+'-'+li)); } }));
+    CAMP_MODS.forEach((m,mi)=>m.lessons.forEach((les,li)=>{ if(!les.parts.every(p=>campDone[p.id]) && !target) target=document.getElementById('cwLesH'+(mi+'-'+li)); }));
     const lesEls=[...document.querySelectorAll('#cwList .cw-les')];
-    if(!target) target=lesEls[lesEls.length-1];   // all done -> park at the end
+    if(!target) target=lesEls[lesEls.length-1];
     if(target){ target.classList.add('current'); const av=document.createElement('span'); av.className='sq-avatar'; target.appendChild(av); }
   }
-
-  // ---- coin reward float at the click point ----
   function coinFloat(x,y,amt){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); const e=document.createElement('span'); e.className='sq-coinfloat'; e.textContent='+'+amt+' 🪙'; e.style.left=(x-r.left)+'px'; e.style.top=(y-r.top+12)+'px'; fx.appendChild(e); e.animate([{transform:'translate(-50%,0)',opacity:1},{transform:'translate(-50%,-34px)',opacity:0}],{duration:900,easing:'ease-out'}).onfinish=()=>e.remove(); }
 
-  // ---- wrap the proven cwToggle to add economy + HUD refresh + avatar move ----
+  // ---- cloud sync (reuses the dashboard's saved worker config; same-origin localStorage) ----
+  const API={ url:(localStorage.getItem('aq_api_url')||'').replace(/\/+$/,''), key:localStorage.getItem('aq_api_key')||'' };
+  const syncOn=()=>!!(API.url&&API.key);
+  const stamp=()=>parseInt(localStorage.getItem('aq_save_t')||'0',10);
+  function snapshot(){ return { v:1, t:stamp(), campDone:campDone, econ:readEcon() }; }
+  let pushTimer=0;
+  function pushCloud(){ if(!syncOn())return; clearTimeout(pushTimer); pushTimer=setTimeout(()=>{
+    fetch(API.url+'/save?slot=sidequest',{method:'POST',headers:{'x-aq-key':API.key,'content-type':'application/json'},body:JSON.stringify(snapshot())}).catch(()=>{});
+  },900); }
+  async function pullCloud(){ if(!syncOn())return false; try{
+    const r=await fetch(API.url+'/save?slot=sidequest',{headers:{'x-aq-key':API.key}});
+    if(!r.ok)return false; const d=await r.json();
+    if(d && d.campDone && (d.t||0)>stamp()){ campDone=d.campDone; saveCampaign(); if(d.econ)localStorage.setItem('aq_econ',JSON.stringify(d.econ)); localStorage.setItem('aq_save_t',String(d.t||0)); return true; }
+    return false;
+  }catch(e){ return false; } }
+  function markChanged(){ localStorage.setItem('aq_save_t',String(Date.now())); pushCloud(); }
+
+  // ---- wrap the proven cwToggle: + economy, HUD, avatar, sync ----
   const _toggle=cwToggle;
   cwToggle=function(row,ev){
     const wasDone=!!campDone[row.dataset.id];
     const item=CAMP_ITEMS.find(c=>c.id===row.dataset.id);
-    _toggle(row,ev);                                  // does the real work + all existing juice
+    _toggle(row,ev);                                  // real work + all existing juice
     const nowDone=!!campDone[row.dataset.id];
-    if(nowDone && !wasDone && item){ const cx=(ev&&ev.clientX)||0, cy=(ev&&ev.clientY)||0; if(cx) coinFloat(cx,cy,item.xp); }
-    refreshEcon(); placeAvatar();
+    if(nowDone&&!wasDone&&item){ const cx=(ev&&ev.clientX)||0, cy=(ev&&ev.clientY)||0; if(cx)coinFloat(cx,cy,item.xp); }
+    refreshEcon(); placeAvatar(); markChanged();
   };
 
   // ---- bottom nav ----
@@ -414,9 +444,13 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
   // ---- boot ----
   if(new URLSearchParams(location.search).has('embed')){ document.documentElement.classList.add('embed'); document.body.classList.add('embed'); }
-  buildCampaign();   // renders module/lesson/node structure into #cwList + wires clicks + runs campUpdate (HUD level/xp)
+  const adopted=await pullCloud();                    // adopt newer cloud save before first render
+  buildCampaign();                                    // renders structure + wires clicks + campUpdate (HUD level/xp)
+  const rsb=document.getElementById('cwReset'); if(rsb){ const orig=rsb.onclick; rsb.onclick=(e)=>{ if(orig)orig(e); refreshEcon(); placeAvatar(); markChanged(); }; }
   refreshEcon(); placeAvatar();
+  if(syncOn() && !adopted) pushCloud();               // seed cloud from this device on first run
 })();
+
 </script>
 </body>
 </html>

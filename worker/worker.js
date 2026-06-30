@@ -49,6 +49,21 @@ export default {
         await notionCheck(env.NOTION_TOKEN, b.pageId, b.prop, !!b.value);
         return json({ ok: true }, 200, cors);
       }
+      // Side Quest cross-device save — one JSON blob per slot, stored in KV.
+      if (url.pathname === '/save' && req.method === 'GET') {
+        if (!env.SAVES) return json({ error: 'SAVES KV not bound' }, 400, cors);
+        const slot = (url.searchParams.get('slot') || 'default').slice(0, 64);
+        const v = await env.SAVES.get('save:' + slot);
+        return json(v ? JSON.parse(v) : {}, 200, cors);
+      }
+      if (url.pathname === '/save' && req.method === 'POST') {
+        if (!env.SAVES) return json({ error: 'SAVES KV not bound' }, 400, cors);
+        const slot = (url.searchParams.get('slot') || 'default').slice(0, 64);
+        const body = await req.text();
+        if (body.length > 200000) return json({ error: 'save too large' }, 413, cors);
+        await env.SAVES.put('save:' + slot, body);
+        return json({ ok: true }, 200, cors);
+      }
     } catch (e) {
       return json({ error: String((e && e.message) || e) }, 502, cors);
     }
