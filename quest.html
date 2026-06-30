@@ -11,11 +11,12 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23241d3c'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%23ffd96b'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap');
-  :root{ --pixfont:'Silkscreen','Courier New',monospace; --pixfont2:'VT323','Courier New',monospace; }
+  :root{ --pixfont:'Silkscreen','Courier New',monospace; --pixfont2:'VT323','Courier New',monospace;
+    --hi:#6a58a0; --lo:#241d3c; --frame:#3b3060; --bar:#5b4a96; --barhi:#8068c4; --bartx:#f5eeff; --outline:#140f24; --body:#130e26; --spot:#241c44; --tx:#e3dbff; --card:#372d5e; --cardtx:#f1ecff; --inset:#0f0a22;
+    --gold:#ffd96b; --teal:#5fe0c8; }
   *{ box-sizing:border-box; }
-  html,body{ margin:0; min-height:100%; background:#0a0718; color:#e3dbff; font-family:var(--pixfont); overflow-x:hidden; -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent; }
-  body{ overscroll-behavior-y:none; }
-/* ===== extracted exam-campaign styles (verbatim from dashboard) ===== */
+  html,body{ margin:0; height:100%; background:#0a0718; color:var(--tx); font-family:var(--pixfont); overflow:hidden; -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent; }
+
   .cw-win{ --hi:#6a58a0; --lo:#241d3c; --frame:#3b3060; --bar:#5b4a96; --barhi:#8068c4; --bartx:#f5eeff; --outline:#140f24; --body:#130e26; --spot:#241c44; --tx:#e3dbff; --card:#372d5e; --cardtx:#f1ecff; --inset:#0f0a22;
     max-height:none; background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.5); image-rendering:pixelated; font-family:var(--pixfont); color:var(--tx); }
   /* bottom row: campaign (game) left · antfarm (phone) over corkboard right */
@@ -118,38 +119,128 @@
   @keyframes cwShine{ 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
   @keyframes cwBanner{ 0%{opacity:0;transform:translate(-50%,-22px) scale(.82)} 13%{opacity:1;transform:translate(-50%,0) scale(1)} 82%{opacity:1} 100%{opacity:0;transform:translate(-50%,-8px)} }
   @media(max-width:560px){ .cw-bars{ grid-template-columns:1fr; } .cw-hero{ flex-wrap:wrap; } }
-/* ===== standalone app shell — mobile-first, phone-width column on desktop ===== */
-  .cw-win{ width:100%; max-width:540px; margin:0 auto; min-height:100vh; min-height:100dvh; max-height:none;
-    border-width:0; box-shadow:none; display:flex; flex-direction:column;
-    padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom); }
-  .cwbar{ position:sticky; top:0; z-index:20; padding-top:calc(6px + env(safe-area-inset-top)); }
-  .cwbody{ flex:1; margin:0; border-width:0; -webkit-overflow-scrolling:touch;
-    padding-left:max(14px,env(safe-area-inset-left)); padding-right:max(14px,env(safe-area-inset-right));
-    padding-bottom:calc(16px + env(safe-area-inset-bottom)); }
-  @media(min-width:600px){ .cw-win{ min-height:100dvh; border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 18px 50px rgba(0,0,0,.55); } body{ padding:0; } }
-/* embed mode (iframe inside the dashboard window): drop the standalone titlebar + framing */
-  html.embed,body.embed{ min-height:0; height:100%; background:transparent; }
-  body.embed .cwbar{ display:none; }
-  body.embed .cw-win{ min-height:100%; height:100%; max-width:none; border:none; box-shadow:none; padding-top:0; padding-bottom:0; }
+
+  /* ===== app shell ===== */
+  #app{ position:relative; width:100%; max-width:560px; margin:0 auto; height:100dvh; height:100vh; display:flex; flex-direction:column; background:var(--body); background-image:radial-gradient(var(--spot) 1px,transparent 1.5px); background-size:4px 4px; overflow:hidden; }
+  @media(min-width:600px){ #app{ border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 18px 50px rgba(0,0,0,.55); } }
+
+  /* ===== HUD ===== */
+  #hud{ flex:none; z-index:18; display:flex; align-items:center; gap:10px; padding:calc(9px + env(safe-area-inset-top)) 12px 9px; background:linear-gradient(180deg,#332a59,#241d3c); border-bottom:2px solid var(--outline); box-shadow:0 3px 0 rgba(0,0,0,.3); }
+  .hud-buds{ flex:none; display:flex; align-items:flex-end; gap:3px; }
+  .hud-buds .cw-slime{ width:46px; height:34px; background:var(--slime) center/contain no-repeat; image-rendering:pixelated; }
+  .hud-buds .cw-tom{ width:31px; height:28px; background:var(--tomato) center/contain no-repeat; image-rendering:pixelated; }
+  #hud .hud-mid{ flex:1; min-width:0; }
+  #hud .hud-lvrow{ display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+  #hud .cw-lv{ animation:cwLvPulse 2.2s ease-in-out infinite; }
+  #hud .cw-rank{ font-size:15px; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #hud .cw-streak{ font-size:14px; }
+  #hud .hud-xptrack{ position:relative; height:13px; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); overflow:hidden; }
+  #hud .hud-xptrack::after{ content:''; position:absolute; inset:0; pointer-events:none; z-index:2; background:repeating-linear-gradient(90deg,transparent 0 calc(5% - 2px),rgba(12,8,26,.85) calc(5% - 2px) 5%); }
+  #hud .cw-xpfill{ height:100%; }
+  #hud .hud-xpnum{ font-family:var(--pixfont2); font-size:12px; color:var(--cardtx); opacity:.75; text-align:right; margin-top:1px; }
+  #hud .hud-cur{ flex:none; display:flex; flex-direction:column; gap:5px; }
+  .sq-chip{ display:flex; align-items:center; gap:5px; font-family:var(--pixfont2); font-size:17px; padding:3px 9px; background:var(--card); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); min-width:72px; }
+  .sq-chip b{ font-weight:400; margin-left:auto; }
+  .sq-chip.coin{ color:var(--gold); } .sq-chip.star{ color:#c3acff; }
+
+  /* ===== screens ===== */
+  #screens{ flex:1; min-height:0; position:relative; }
+  .screen{ position:absolute; inset:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px max(14px,env(safe-area-inset-left)) calc(20px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-right)); display:none; }
+  .screen.on{ display:block; }
+
+  /* ===== map / questline ===== */
+  .sq-questhd{ display:flex; align-items:baseline; gap:9px; margin:0 2px 12px; }
+  .sq-questhd .qt{ font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.45); }
+  .sq-questhd .qm{ font-family:var(--pixfont2); font-size:15px; color:var(--tx); opacity:.7; margin-left:auto; }
+  /* the list rendered by buildCampaign() becomes a trail */
+  #cwList{ position:relative; padding-left:30px; }
+  #cwList::before{ content:''; position:absolute; left:13px; top:8px; bottom:8px; width:4px; background:repeating-linear-gradient(180deg,var(--barhi) 0 9px,transparent 9px 17px); opacity:.5; }
+  /* module = zone banner */
+  .cw-mod{ position:relative; margin:20px -8px 10px -22px !important; padding:9px 12px !important; border-top:none !important; background:linear-gradient(90deg,rgba(128,104,196,.32),transparent); border-left:4px solid var(--gold); }
+  .cw-mod:first-child{ margin-top:2px !important; }
+  .cw-modtrack{ margin-left:-22px !important; }
+  /* lesson = checkpoint stop on the trail */
+  .cw-les{ position:relative; margin:16px 4px 6px !important; }
+  .cw-ldot{ position:absolute; left:-23px; width:13px; height:13px; box-shadow:0 0 0 3px var(--body),0 0 9px rgba(128,104,196,.7); }
+  .cw-les.done .cw-ldot{ box-shadow:0 0 0 3px var(--body),0 0 11px rgba(95,224,200,.95); }
+  .cw-les.current::after{ content:''; position:absolute; left:-26px; top:-3px; width:19px; height:19px; border:2px solid var(--gold); border-radius:2px; animation:sqPulse 1.6s ease-in-out infinite; }
+  .sq-avatar{ position:absolute; left:-37px; top:-31px; width:38px; height:28px; background:var(--slime) center/contain no-repeat; image-rendering:pixelated; z-index:6; filter:drop-shadow(0 0 6px rgba(255,217,107,.5)); animation:cwBob 2.2s ease-in-out infinite; }
+  .cw-nodes{ justify-content:flex-start !important; }
+  @keyframes sqPulse{ 0%,100%{ transform:scale(1); opacity:.9 } 50%{ transform:scale(1.18); opacity:.4 } }
+  .sq-note{ font-family:var(--pixfont2); font-size:14px; color:var(--cardtx); margin:18px 2px 4px; background:var(--card); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:9px 11px; } .sq-note b{ color:var(--teal); }
+
+  /* ===== stub screens (buddies / shop) ===== */
+  .sq-stub{ min-height:64vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:14px; color:var(--tx); }
+  .sq-stub .em{ font-size:54px; filter:drop-shadow(0 0 12px rgba(150,120,235,.5)); }
+  .sq-stub h2{ font-family:var(--pixfont); font-size:16px; letter-spacing:1px; color:var(--cardtx); margin:0; text-transform:lowercase; }
+  .sq-stub p{ font-family:var(--pixfont2); font-size:17px; opacity:.7; margin:0; max-width:250px; line-height:1.35; }
+  .sq-soon{ font-family:var(--pixfont); font-size:9px; letter-spacing:1px; color:var(--gold); border:2px solid var(--gold); padding:5px 10px; text-transform:uppercase; opacity:.8; }
+  .sq-vault{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; max-width:300px; }
+  .sq-vault .slot{ width:62px; height:62px; background:var(--card); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); display:grid; place-items:center; font-size:26px; opacity:.5; }
+
+  /* ===== bottom nav ===== */
+  #nav{ flex:none; z-index:18; display:flex; background:linear-gradient(180deg,#2a2350,#1c1636); border-top:2px solid var(--outline); padding-bottom:env(safe-area-inset-bottom); }
+  #nav button{ flex:1; background:none; border:none; cursor:pointer; padding:9px 4px 10px; display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--tx); opacity:.55; font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; text-transform:lowercase; }
+  #nav button .ni{ font-size:20px; line-height:1; }
+  #nav button.on{ opacity:1; color:var(--gold); text-shadow:0 0 8px rgba(255,210,110,.5); }
+  #nav button.on .ni{ filter:drop-shadow(0 0 7px rgba(255,210,110,.6)); }
+
+  /* effects layer spans the whole app */
+  #cwFx{ position:fixed; inset:0; z-index:40; pointer-events:none; }
+  #cwBanner{ position:fixed; left:50%; top:88px; z-index:42; }
+  .sq-coinfloat{ position:absolute; font-family:var(--pixfont); font-size:13px; color:var(--gold); text-shadow:1.5px 1.5px 0 #5a3a1a; transform:translate(-50%,0); white-space:nowrap; z-index:41; }
 </style>
 </head>
 <body>
-  <div class="cwin cw-win">
-    <div class="cwbar"><span class="cwico">✦</span><span class="cwtitle">side quest</span><span class="cwsub">exam 3 · m5+m6 · p0</span><button class="cwreset" id="cwReset">⟲ reset</button></div>
-    <div class="cwbody">
-      <div class="cw-fx" id="cwFx"></div>
-      <div class="cw-banner" id="cwBanner"></div>
-      <div class="cw-hero">
-        <div class="cw-buddies"><span class="cw-slime slimeic" id="cwSlime"></span><span class="cw-tom tomatoic" id="cwTom"></span></div>
-        <div class="cw-level">
-          <div class="cw-lvrow"><span class="cw-lv" id="cwLv">lv 1</span><span class="cw-rank" id="cwRank">fresh start</span><span class="cw-streak" id="cwStreak">🔥 0/7</span></div>
-          <div class="cw-xptrack"><div class="cw-xpfill" id="cwXpFill"></div></div>
-          <div class="cw-xpnum" id="cwXpTotal">0 / 250 xp</div>
-        </div>
+  <div id="app">
+    <header id="hud">
+      <span class="hud-buds"><span class="cw-slime" id="cwSlime"></span><span class="cw-tom" id="cwTom"></span></span>
+      <div class="hud-mid">
+        <div class="hud-lvrow"><span class="cw-lv" id="cwLv">lv 1</span><span class="cw-rank" id="cwRank">fresh start</span><span class="cw-streak" id="cwStreak">🔥 0/7</span></div>
+        <div class="hud-xptrack"><div class="cw-xpfill" id="cwXpFill"></div></div>
+        <div class="hud-xpnum" id="cwXpTotal">0 / 250 xp</div>
       </div>
-      <div class="cw-list" id="cwList"></div>
-      <div class="cw-note"><b>content done by friday.</b> weekend is recall, not rewatching — a slipped day rolls forward, the buffer absorbs it.</div>
+      <div class="hud-cur">
+        <span class="sq-chip coin">🪙 <b id="sqCoins">0</b></span>
+        <span class="sq-chip star">⭐ <b id="sqStars">0</b></span>
+      </div>
+    </header>
+
+    <div id="screens">
+      <section class="screen on" id="screen-map" data-screen="map">
+        <div class="sq-questhd"><span class="qt">✦ exam 3 quest</span><span class="qm">modules 5 + 6 · exam sun</span></div>
+        <div class="cw-list" id="cwList"></div>
+        <div class="sq-note"><b>content done by friday.</b> weekend is recall, not rewatching — a slipped day rolls forward, the buffer absorbs it.</div>
+      </section>
+
+      <section class="screen" id="screen-buddies" data-screen="buddies">
+        <div class="sq-stub">
+          <div class="em">🥚</div>
+          <h2>buddy collection</h2>
+          <p>hatch friends with ⭐ stars — each one has a rarity, common to legendary.</p>
+          <div class="sq-vault"><span class="slot">❔</span><span class="slot">❔</span><span class="slot">❔</span><span class="slot">❔</span><span class="slot">❔</span><span class="slot">❔</span></div>
+          <span class="sq-soon">coming soon</span>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-shop" data-screen="shop">
+        <div class="sq-stub">
+          <div class="em">🎰</div>
+          <h2>the shop</h2>
+          <p>spend 🪙 coins on mascot outfits &amp; charms — or gamble for ⭐ at the slot.</p>
+          <span class="sq-soon">coming soon</span>
+        </div>
+      </section>
     </div>
+
+    <nav id="nav">
+      <button class="on" data-go="map"><span class="ni">🗺️</span>map</button>
+      <button data-go="buddies"><span class="ni">🥚</span>buddies</button>
+      <button data-go="shop"><span class="ni">🎰</span>shop</button>
+    </nav>
+
+    <div id="cwFx"></div>
+    <div class="cw-banner" id="cwBanner"></div>
   </div>
 <script>
 // ---- shared helper ----
@@ -180,7 +271,7 @@ function drawTomato(){ const cv=document.createElement('canvas'); cv.width=26; c
   c.fillStyle=LEAF; c.fillRect(cx-1,0,3,5); c.fillRect(cx-6,2,5,2); c.fillRect(cx+2,2,5,2); c.fillRect(cx-4,1,3,2); c.fillRect(cx+2,1,3,2);
   c.fillStyle=LEAFD; c.fillRect(cx-6,3,2,1); c.fillRect(cx+5,3,2,1); c.fillRect(cx-1,4,3,1);
   return cv.toDataURL(); }
-// ---- exam-campaign game (verbatim from dashboard) ----
+// ---- exam-campaign game logic + data + effects (verbatim from dashboard) ----
 /* ===== exam campaign — gamified study planner (clean view, one consistent design) ===== */
 // each video PART is a checkable unit; xp ≈ minutes of lecture (1 xp / min watched)
 const CAMP_MODS=[
@@ -268,13 +359,63 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   list.querySelectorAll('.cw-node,.cw-quest').forEach(el=>el.onclick=(e)=>cwToggle(el,e));
   const rs=document.getElementById('cwReset'); if(rs)rs.onclick=e=>{ e.stopPropagation(); campDone={}; saveCampaign(); list.querySelectorAll('.cw-node,.cw-quest').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-node').forEach(x=>cwSetIcon(x,false)); list.querySelectorAll('.cw-les').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-modtrack').forEach(x=>x.classList.remove('full')); campUpdate(); cwSfx('reset'); cwBuzz(12); };
   campUpdate(); }
-// ---- standalone boot ----
+
+// ===== Side Quest shell: economy, HUD, nav, questline =====
 (function(){
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
+
+  // ---- economy: earned is derived from progress; spent is stored (0 for now) ----
+  function lessonsCleared(){ let n=0; CAMP_MODS.forEach(m=>m.lessons.forEach(les=>{ if(les.parts.every(p=>campDone[p.id])) n++; })); return n; }
+  function modulesCleared(){ let n=0; CAMP_MODS.forEach(m=>{ if(m.lessons.every(les=>les.parts.every(p=>campDone[p.id]))) n++; }); return n; }
+  function coinsEarned(){ return campStats().xp; }                                  // 1 coin per xp (≈ per minute of video)
+  function starsEarned(){ return lessonsCleared() + modulesCleared()*3; }           // rare: per lesson + bonus per module
+  let coinSpent=0, starSpent=0; try{ const e=JSON.parse(localStorage.getItem('aq_econ')||'{}'); coinSpent=e.c||0; starSpent=e.s||0; }catch(e){}
+  function coinBal(){ return Math.max(0,coinsEarned()-coinSpent); }
+  function starBal(){ return Math.max(0,starsEarned()-starSpent); }
+
+  let shownCoins=coinBal(), shownStars=starBal();
+  function countChip(el,from,to){ if(!el)return; if(from===to){ el.textContent=to; return; } const t0=performance.now(),dur=550; (function step(t){ const k=Math.min(1,(t-t0)/dur); el.textContent=Math.round(from+(to-from)*k); if(k<1)requestAnimationFrame(step); })(performance.now()); }
+  function refreshEcon(){ const c=coinBal(), s=starBal(); countChip(document.getElementById('sqCoins'),shownCoins,c); countChip(document.getElementById('sqStars'),shownStars,s); shownCoins=c; shownStars=s; }
+
+  // ---- place the avatar token on the current (first unfinished) lesson ----
+  function placeAvatar(){
+    document.querySelectorAll('.cw-les.current').forEach(e=>e.classList.remove('current'));
+    const old=document.querySelector('.sq-avatar'); if(old)old.remove();
+    let target=null;
+    CAMP_MODS.forEach((m,mi)=>m.lessons.forEach((les,li)=>{ const done=les.parts.every(p=>campDone[p.id]); if(!done && !target){ target=document.getElementById('cwLesH'+(mi+'-'+li)); } }));
+    const lesEls=[...document.querySelectorAll('#cwList .cw-les')];
+    if(!target) target=lesEls[lesEls.length-1];   // all done -> park at the end
+    if(target){ target.classList.add('current'); const av=document.createElement('span'); av.className='sq-avatar'; target.appendChild(av); }
+  }
+
+  // ---- coin reward float at the click point ----
+  function coinFloat(x,y,amt){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); const e=document.createElement('span'); e.className='sq-coinfloat'; e.textContent='+'+amt+' 🪙'; e.style.left=(x-r.left)+'px'; e.style.top=(y-r.top+12)+'px'; fx.appendChild(e); e.animate([{transform:'translate(-50%,0)',opacity:1},{transform:'translate(-50%,-34px)',opacity:0}],{duration:900,easing:'ease-out'}).onfinish=()=>e.remove(); }
+
+  // ---- wrap the proven cwToggle to add economy + HUD refresh + avatar move ----
+  const _toggle=cwToggle;
+  cwToggle=function(row,ev){
+    const wasDone=!!campDone[row.dataset.id];
+    const item=CAMP_ITEMS.find(c=>c.id===row.dataset.id);
+    _toggle(row,ev);                                  // does the real work + all existing juice
+    const nowDone=!!campDone[row.dataset.id];
+    if(nowDone && !wasDone && item){ const cx=(ev&&ev.clientX)||0, cy=(ev&&ev.clientY)||0; if(cx) coinFloat(cx,cy,item.xp); }
+    refreshEcon(); placeAvatar();
+  };
+
+  // ---- bottom nav ----
+  document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
+    const go=b.dataset.go;
+    document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x===b));
+    document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.dataset.screen===go));
+    cwSfx('check'); cwBuzz(8);
+  });
+
+  // ---- boot ----
   if(new URLSearchParams(location.search).has('embed')){ document.documentElement.classList.add('embed'); document.body.classList.add('embed'); }
-  buildCampaign();
+  buildCampaign();   // renders module/lesson/node structure into #cwList + wires clicks + runs campUpdate (HUD level/xp)
+  refreshEcon(); placeAvatar();
 })();
 </script>
 </body>
