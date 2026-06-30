@@ -529,9 +529,9 @@
 
   /* ===== exam-campaign window — one consistent pixel design (phone palette), skin-independent ===== */
   .cw-win{ --hi:#6a58a0; --lo:#241d3c; --frame:#3b3060; --bar:#5b4a96; --barhi:#8068c4; --bartx:#f5eeff; --outline:#140f24; --body:#1f1937; --spot:#2c2450; --tx:#dcd3f4; --card:#332a55; --cardtx:#ece6fb; --inset:#181230;
-    max-height:none; background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.5); image-rendering:pixelated; font-family:var(--pixfont); color:var(--tx); }
+    max-height:none; max-width:484px; margin:0 auto; background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.5); image-rendering:pixelated; font-family:var(--pixfont); color:var(--tx); }
   .cwbar{ display:flex; align-items:center; gap:7px; flex:none; background:linear-gradient(180deg,var(--barhi) 0 38%,var(--bar) 38%); color:var(--bartx); padding:6px 9px; border-bottom:2px solid var(--outline); font-size:11px; letter-spacing:.5px; text-shadow:1px 1px 0 rgba(40,35,55,.45); }
-  .cwico{ font-size:13px; text-shadow:none; } .cwtitle{ text-transform:lowercase; } .cwsub{ margin-left:10px; font-family:var(--pixfont2); font-size:14px; opacity:.85; letter-spacing:0; }
+  .cwico{ font-size:13px; text-shadow:none; flex:none; } .cwtitle{ text-transform:lowercase; white-space:nowrap; flex:none; } .cwsub{ margin-left:8px; font-family:var(--pixfont2); font-size:13px; opacity:.8; letter-spacing:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .cwreset{ margin-left:auto; background:var(--frame); color:var(--cardtx); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); font-family:var(--pixfont); font-size:9px; padding:5px 9px; cursor:pointer; } .cwreset:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
   .cwbody{ position:relative; flex:1; min-height:0; overflow:auto; background-color:var(--body); margin:3px; border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:14px; background-image:radial-gradient(var(--spot) 1px,transparent 1.5px); background-size:4px 4px; }
   .cw-fx{ position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:8; }
@@ -539,7 +539,7 @@
   .cw-xpfloat{ position:absolute; font-family:var(--pixfont); font-size:13px; color:#ffce6a; text-shadow:1.5px 1.5px 0 #5a3a1a; transform:translate(-50%,0); white-space:nowrap; }
   .cw-banner{ position:absolute; left:50%; top:16px; transform:translate(-50%,-20px); background:linear-gradient(180deg,#8068c4,#5b4a96); color:#fff3d6; border:2px solid #ffce6a; padding:9px 18px; font-family:var(--pixfont); font-size:12px; letter-spacing:1px; opacity:0; pointer-events:none; z-index:12; box-shadow:0 0 26px rgba(255,200,100,.8); white-space:nowrap; text-shadow:1px 1px 0 rgba(20,15,36,.6); }
   .cw-banner.show{ animation:cwBanner 2.2s cubic-bezier(.2,.8,.2,1); }
-  .cw-hero{ position:relative; overflow:hidden; display:flex; align-items:center; gap:16px; background:linear-gradient(160deg,#3a3060,#272050); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:12px 14px; margin-bottom:12px; }
+  .cw-hero{ position:relative; overflow:hidden; display:flex; align-items:center; gap:13px; background:linear-gradient(160deg,#3a3060,#272050); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); padding:11px 13px; margin-bottom:11px; }
   .cw-hero::before{ content:''; position:absolute; top:0; bottom:0; left:-55%; width:50%; pointer-events:none; z-index:3; background:linear-gradient(105deg,transparent,rgba(185,165,255,.16) 48%,transparent 58%); animation:cwSweep 5.5s linear infinite; }
   .cw-hero::after{ content:''; position:absolute; inset:0; pointer-events:none; z-index:4; background:repeating-linear-gradient(0deg,rgba(8,5,20,.26) 0 1px,transparent 1px 3px); }
   .cw-buddies,.cw-level{ position:relative; z-index:5; }
@@ -564,11 +564,11 @@
   .cw-sec{ font-family:var(--pixfont); font-size:9px; color:var(--tx); opacity:.7; letter-spacing:1px; margin:0 2px 8px; text-transform:lowercase; }
   .cw-list{ display:flex; flex-direction:column; gap:6px; }
   /* module section header + bar */
-  .cw-mod{ display:flex; align-items:center; gap:10px; margin:18px 2px 7px; padding-top:11px; border-top:2px solid rgba(0,0,0,.22); } .cw-mod:first-child{ border-top:none; margin-top:2px; padding-top:0; }
+  .cw-mod{ display:flex; align-items:center; gap:10px; margin:14px 2px 6px; padding-top:10px; border-top:2px solid rgba(0,0,0,.22); } .cw-mod:first-child{ border-top:none; margin-top:2px; padding-top:0; }
   .cw-modlabel{ font-family:var(--pixfont); font-size:12px; color:#ffd98a; letter-spacing:1.5px; text-transform:uppercase; text-shadow:0 0 8px rgba(255,200,110,.4); } .cw-modmeta{ font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.85; } .cw-modtime{ margin-left:auto; font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.6; }
   .cw-modtrack{ height:13px; margin:0 2px 4px; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); overflow:hidden; } .cw-modtrack.full{ box-shadow:0 0 14px rgba(95,224,200,.85); }
   /* lesson subheader */
-  .cw-les{ display:flex; align-items:center; gap:8px; margin:9px 2px 4px; }
+  .cw-les{ display:flex; align-items:center; gap:8px; margin:8px 4px 3px; }
   .cw-leslabel{ font-family:var(--pixfont); font-size:10px; color:var(--tx); text-transform:lowercase; } .cw-lesday{ font-family:var(--pixfont2); font-size:14px; color:var(--barhi); } .cw-lestime{ font-family:var(--pixfont2); font-size:13px; color:var(--tx); opacity:.55; } .cw-lescount{ margin-left:auto; font-family:var(--pixfont2); font-size:13px; color:var(--tx); opacity:.85; }
   .cw-les.done .cw-leslabel{ color:#6fe0cc; } .cw-les.done .cw-lescount{ color:#6fe0cc; opacity:1; }
   /* compact part row */
@@ -594,8 +594,8 @@
   /* lesson header diamond pip */
   .cw-ldot{ width:8px; height:8px; flex:none; background:var(--barhi); transform:rotate(45deg); box-shadow:0 0 7px rgba(128,104,196,.6); } .cw-les.done .cw-ldot{ background:#5fe0c8; box-shadow:0 0 9px rgba(95,224,200,.85); }
   /* ===== part nodes — chunky game-button grid (level select) ===== */
-  .cw-nodes{ display:flex; flex-wrap:wrap; gap:9px; margin:2px 0 6px; }
-  .cw-node{ position:relative; width:108px; height:94px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; padding:0; image-rendering:pixelated;
+  .cw-nodes{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:2px 0 4px; }
+  .cw-node{ position:relative; width:104px; height:86px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; padding:0; image-rendering:pixelated;
     background:linear-gradient(180deg,#403568,#2b2450); border:3px solid; border-color:#6a58a0 #221b3a #221b3a #6a58a0; box-shadow:0 4px 0 #160f28, inset 0 0 0 1px rgba(255,255,255,.05); transition:transform .08s, box-shadow .12s, background .2s; }
   .cw-node:hover{ transform:translateY(-2px); box-shadow:0 6px 0 #160f28, 0 0 16px rgba(140,112,210,.55); }
   .cw-node:active{ transform:translateY(2px); box-shadow:0 2px 0 #160f28; }
@@ -609,7 +609,7 @@
   .cw-node.pop,.cw-quest.pop{ animation:cwPop .34s ease; }
   /* ===== review quests — bigger feature buttons ===== */
   .cw-quests{ display:flex; flex-wrap:wrap; gap:10px; margin-top:2px; }
-  .cw-quest{ position:relative; flex:1 1 250px; min-height:70px; display:flex; align-items:center; gap:12px; padding:12px 14px; cursor:pointer; text-align:left;
+  .cw-quest{ position:relative; flex:1 1 188px; min-height:66px; display:flex; align-items:center; gap:10px; padding:11px 12px; cursor:pointer; text-align:left;
     background:linear-gradient(180deg,#443868,#2e2756); border:3px solid; border-color:#6a58a0 #221b3a #221b3a #6a58a0; box-shadow:0 4px 0 #160f28; transition:transform .08s, box-shadow .12s, background .2s; }
   .cw-quest:hover{ transform:translateY(-2px); box-shadow:0 6px 0 #160f28, 0 0 16px rgba(140,112,210,.5); } .cw-quest:active{ transform:translateY(2px); box-shadow:0 2px 0 #160f28; }
   .cw-qicon{ font-size:26px; flex:none; filter:drop-shadow(0 0 6px rgba(180,160,255,.5)); }
@@ -673,7 +673,7 @@
         <div class="cwin col8 pxwin matte" data-win="board"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div><div class="cl-keep" id="clKeep"></div></div></div>
         <div class="cwin col4 pxwin matte" data-win="feed"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
         <div class="cwin col12 cw-win">
-          <div class="cwbar"><span class="cwico">✦</span><span class="cwtitle">exam campaign · m5 + m6</span><span class="cwsub">~3h 7m video · exam sun/mon</span><button class="cwreset" id="cwReset">⟲ reset</button></div>
+          <div class="cwbar"><span class="cwico">✦</span><span class="cwtitle">exam campaign</span><span class="cwsub">m5+m6 · exam sun</span><button class="cwreset" id="cwReset">⟲ reset</button></div>
           <div class="cwbody">
             <div class="cw-fx" id="cwFx"></div>
             <div class="cw-banner" id="cwBanner"></div>
