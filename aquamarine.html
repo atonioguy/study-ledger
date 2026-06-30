@@ -418,6 +418,7 @@
   /* antfarm feed inside the default forget.me.not window */
   .cl-feed{ padding:12px; } .cl-feed .fp{ padding:8px 2px; border-bottom:1px solid rgba(0,0,0,.18); font-family:var(--pixfont2); } .cl-feed .fp:last-child{ border-bottom:none; }
   .cl-feed .fp .fh{ font-size:11px; color:var(--lo); margin-bottom:2px; } .cl-feed .fp .fb{ font-size:14px; color:var(--tx); line-height:1.4; } .cl-feed .fp img{ max-width:100%; max-height:190px; margin-top:6px; display:block; border:2px solid var(--lo); image-rendering:pixelated; }
+  .cl-feed .fp{ position:relative; } .cl-feed .fpx{ position:absolute; top:6px; right:2px; color:var(--lo); cursor:pointer; font-size:12px; opacity:.45; padding:2px 5px; transition:opacity .12s,color .12s; } .cl-feed .fp:hover .fpx{ opacity:.85; } .cl-feed .fpx:hover{ opacity:1; color:#c0594e; }
   /* clean-view antfarm compose — same posting as the room phone */
   .cl-compose{ padding:11px 12px 9px; display:flex; flex-direction:column; gap:7px; border-bottom:2px solid var(--lo); }
   .cl-compose textarea#clTwIn{ width:100%; box-sizing:border-box; height:44px; resize:none; background:var(--hi); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); border-radius:0; color:var(--tx); font-family:var(--pixfont2); font-size:13px; line-height:1.5; padding:7px; }
@@ -524,6 +525,7 @@
   .cl-keep .knote .kdel{ position:absolute; top:5px; right:7px; cursor:pointer; opacity:0; color:#555; font-style:normal; font-size:12px; transition:.15s; } .cl-keep .knote:hover .kdel{ opacity:.55; } .cl-keep .knote .kdel:hover{ opacity:1; color:#c0392b; }
   /* Twitter/X-style feed */
   #clean.og .cl-feed{ padding:6px 12px; } #clean.og .cl-feed .fp{ border-bottom:1px solid var(--ogline); font-family:inherit; padding:11px 4px 11px 46px; position:relative; }
+  #clean.og .cl-feed .fpx{ color:var(--ogsub); top:9px; right:4px; font-size:13px; } #clean.og .cl-feed .fpx:hover{ color:#e0245e; }
   #clean.og .cl-compose{ padding:12px 14px; gap:9px; border-bottom:1px solid var(--ogline); }
   #clean.og .cl-compose textarea#clTwIn{ border:1px solid #d4d4d2; border-radius:13px; background:#fff; color:var(--ogtx); font-family:inherit; font-size:15px; height:48px; padding:10px 12px; }
   #clean.og .cl-compose textarea#clTwIn::placeholder{ color:var(--ogsub); }
@@ -1111,6 +1113,8 @@ document.getElementById('phoneFeed').addEventListener('click',e=>{ const d=e.tar
     saveFeed(); inp.value=''; clClear(); clRenderFeed(); renderFeed(); }   // clRenderFeed updates this window; renderFeed keeps the room phone in sync
   const pB=document.getElementById('clTwPost'); if(pB)pB.onclick=clPost;
   inp.addEventListener('keydown',e=>{ if((e.metaKey||e.ctrlKey)&&e.key==='Enter') clPost(); });
+  const feedEl=document.getElementById('clFeed');   // delete a post from the clean feed (slice index == feed index)
+  if(feedEl) feedEl.addEventListener('click',e=>{ const d=e.target.closest('[data-del]'); if(!d)return; feed.splice(+d.dataset.del,1); saveFeed(); clRenderFeed(); renderFeed(); });
 })();
 const NCOL=['#cba9b0','#aebda3','#b3aac2','#cabd9f','#ccac90','#a6b6c0']; // muted dusty pastels
 const OLDNCOL=['#f3dbe2','#dfeadb','#e2dff2','#f5ead3','#f7e0c4','#d9e8f0']; // migrate old bright notes → muted
@@ -1311,7 +1315,7 @@ function clRenderBoard(){ const b=document.getElementById('clBoard'),n=document.
   b.querySelectorAll('.note').forEach(x=>x.remove()); notes.slice(0,MAXNOTES).forEach((nn,i)=>makeNoteEl(nn,i,b)); }
 function clRenderFeed(){ const el=document.getElementById('clFeed'),n=document.getElementById('clFeedN'); if(!el)return;
   if(n)n.textContent=feed.length;
-  el.innerHTML=feed.length?feed.slice(0,8).map(p=>{ const t=esc(ptext(p)),im=pimg(p),ago=fmtAgo(ptime(p)); return `<div class="fp"><div class="fh">me${ago?` · ${ago}`:''}</div>${t?`<div class="fb">${t}</div>`:''}${im?`<img src="${im}">`:''}</div>`; }).join(''):`<div class="cl-empty">no posts yet ♡</div>`; }
+  el.innerHTML=feed.length?feed.slice(0,8).map((p,i)=>{ const t=esc(ptext(p)),im=pimg(p),ago=fmtAgo(ptime(p)); return `<div class="fp"><div class="fh">me${ago?` · ${ago}`:''}<span class="fpx" data-del="${i}" title="delete">✕</span></div>${t?`<div class="fb">${t}</div>`:''}${im?`<img src="${im}">`:''}</div>`; }).join(''):`<div class="cl-empty">no posts yet ♡</div>`; }
 function clRenderNotion(){ const card=document.getElementById('clCard-notion'),el=document.getElementById('clNotion'),ttl=document.getElementById('clNotionTtl'); if(!card||!el)return;
   if(monSource==='ticktick'||!NOTION.pages.length){ card.style.display='none'; return; }
   card.style.display='';
