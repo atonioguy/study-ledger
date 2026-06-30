@@ -320,6 +320,16 @@
   /* shop preview: fill more + squish */
   .cos-preview{ min-height:120px; } .cos-slime{ width:112px; height:100px; } .cos-tom{ width:88px; height:80px; }
   .cos-mascot{ transform-origin:50% 100%; animation:cwSquish 2.6s ease-in-out infinite; } .cos-tom{ animation-delay:.4s; }
+  /* ===== tappable talking mascots (v1.8) ===== */
+  .ms-stage{ position:relative; padding-top:42px; }
+  .ms-mascot{ cursor:pointer; }
+  @keyframes msJiggle{ 0%{transform:scaleX(1) scaleY(1)} 24%{transform:scaleX(1.2) scaleY(.76)} 50%{transform:scaleX(.88) scaleY(1.14)} 72%{transform:scaleX(1.05) scaleY(.96)} 100%{transform:scaleX(1) scaleY(1)} }
+  .ms-mascot.jiggle{ animation:msJiggle .5s ease; }
+  .ms-bubble{ position:absolute; top:4px; transform:translateX(-50%); max-width:200px; width:max-content; padding:7px 12px; background:#fbf3e0; color:#3a2c52; border:2px solid #2a2040; font-family:var(--pixfont2); font-size:16px; line-height:1.2; text-align:center; box-shadow:0 3px 0 rgba(0,0,0,.32); pointer-events:none; opacity:0; z-index:6; }
+  .ms-bubble::after{ content:''; position:absolute; left:50%; bottom:-9px; transform:translateX(-50%); width:0; height:0; border:5px solid transparent; border-top-color:#2a2040; }
+  .ms-bubble::before{ content:''; position:absolute; left:50%; bottom:-5px; transform:translateX(-50%); width:0; height:0; border:4px solid transparent; border-top-color:#fbf3e0; z-index:1; }
+  .ms-bubble.show{ animation:msBubble 2s ease forwards; }
+  @keyframes msBubble{ 0%{opacity:0; transform:translate(-50%,7px) scale(.9)} 12%{opacity:1; transform:translate(-50%,0) scale(1)} 80%{opacity:1; transform:translate(-50%,0) scale(1)} 100%{opacity:0; transform:translate(-50%,-5px) scale(1)} }
   /* effects layer spans the whole app */
   #cwFx{ position:fixed; inset:0; z-index:70; pointer-events:none; }
   #cwBanner{ position:fixed; left:50%; top:88px; z-index:72; }
@@ -401,7 +411,7 @@
     <div id="cardModal" class="sq-modal"><div class="card-wrap"><div class="card-rays"></div><div class="tcg" id="tcg"></div><div class="card-foot" id="cardFoot"></div></div></div>
     <div id="mascotSheet" class="sq-modal"><div class="sq-card ms-card">
       <h3>your mascots</h3>
-      <div class="ms-stage"><span class="ms-mascot ms-slime"></span><span class="ms-mascot ms-tom"></span><span class="ms-mascot ms-bud"></span></div>
+      <div class="ms-stage"><div class="ms-bubble" id="msBubble"></div><span class="ms-mascot ms-slime"></span><span class="ms-mascot ms-tom"></span><span class="ms-mascot ms-bud"></span></div>
       <div class="ms-stats" id="msStats"></div>
       <div class="ms-charms"><span class="lbl">charms</span><p class="ms-soon">one-use boosts — coming soon</p></div>
       <button class="sq-mbtn primary" id="msClose">close</button>
@@ -529,16 +539,16 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v1.7';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v1.8';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
 
   // gacha sounds (Antonio's mp3s, loaded by URL — same origin)
-  try{ CW_SFX.buildup=new Audio('sfx-buildup.mp3'); CW_SFX.fanfare=new Audio('sfx-fanfare.mp3'); CW_SFX.legend=new Audio('sfx-legend.mp3'); CW_SFX.dice=new Audio('sfx-dice.mp3'); }catch(e){}
+  try{ CW_SFX.buildup=new Audio('sfx-buildup.mp3'); CW_SFX.fanfare=new Audio('sfx-fanfare.mp3'); CW_SFX.legend=new Audio('sfx-legend.mp3'); CW_SFX.dice=new Audio('sfx-dice.mp3'); CW_SFX.squish=new Audio('sfx-squish.mp3'); }catch(e){}
 
   // ---- low-latency audio: decode the embedded sfx into Web Audio buffers ----
-  let _actx=null; const _buf={}; const _vol={check:.5,xp:.55,levelup:.18,reset:.6,buildup:2.2,fanfare:.75,legend:.85,dice:.7};
+  let _actx=null; const _buf={}; const _vol={check:.5,xp:.55,levelup:.18,reset:.6,buildup:2.2,fanfare:.75,legend:.85,dice:.7,squish:.7};
   function unlockAudio(){
     if(!_actx){ try{ _actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
       Object.keys(CW_SFX).forEach(k=>{ const src=CW_SFX[k]&&CW_SFX[k].src; if(!src)return;
@@ -732,6 +742,12 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     const cm=document.getElementById('cardModal'); if(cm)cm.onclick=(e)=>{ if(e.target.id==='cardModal')closeCard(); };
   }
   // ---- mascot character sheet (tap the HUD mascots) ----
+  const SLIME_SAY=["you've got this!","one chunk at a time.","so proud of you.","tiny steps still count.","you're doing great.","keep going, friend.","progress over perfect.","i believe in you!","look how far you've come.","you can do hard things.","breathe — you're okay.","future you says thanks.","small wins add up.","you're braver than the doubt.","just start. that's enough.","showing up is the win.","rest is part of it too.","you're allowed to be proud.","one more, then a break.","your effort matters.","soft start, steady finish.","you're right on track.","mistakes mean you're trying.","cheering for you, always.","you've got a whole team here."];
+  const TOM_SAY=["let's lock in for 25.","one pomodoro — go!","eyes on one task.","close the extra tabs.","start the timer, now.","just this, nothing else.","focus mode: on.","25 minutes, you and me.","deep work starts now.","pick one thing. begin.","no peeking at the phone.","ride the focus wave.","set it and dive in.","first task, full send.","distractions can wait.","clock's ticking — start.","momentum loves a start.","one sprint at a time.","flow state, here we go.","quiet mind, sharp focus.","hit the hardest part first.","timer on, world off.","make this block count.","focus now, break soon.","you + one task = unstoppable."];
+  const _lastSay={};
+  function pickSay(arr,key){ let i=Math.floor(Math.random()*arr.length); if(arr.length>1&&i===_lastSay[key])i=(i+1)%arr.length; _lastSay[key]=i; return arr[i]; }
+  function jiggle(el){ if(!el)return; el.classList.remove('jiggle'); void el.offsetWidth; el.classList.add('jiggle'); el.addEventListener('animationend',function h(){ el.classList.remove('jiggle'); el.removeEventListener('animationend',h); },{once:true}); cwSfx('squish'); cwBuzz(10); }
+  function sayBubble(el,text){ const b=document.getElementById('msBubble'); const stg=document.querySelector('.ms-stage'); if(!b||!stg)return; b.textContent=text; const sc=stg.getBoundingClientRect(), ec=el.getBoundingClientRect(); b.style.left=(ec.left+ec.width/2-sc.left)+'px'; b.classList.remove('show'); void b.offsetWidth; b.classList.add('show'); }
   function statRow(k,v){ return '<div class="ms-stat"><span>'+k+'</span><b>'+v+'</b></div>'; }
   function openMascotSheet(){
     const m=document.getElementById('mascotSheet'); if(!m)return;
@@ -750,6 +766,10 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     const buds=document.querySelector('.hud-buds'); if(buds)buds.onclick=openMascotSheet;
     const m=document.getElementById('mascotSheet'); if(m)m.onclick=(e)=>{ if(e.target.id==='mascotSheet')m.classList.remove('on'); };
     const cl=document.getElementById('msClose'); if(cl)cl.onclick=()=>document.getElementById('mascotSheet').classList.remove('on');
+    const sl=document.querySelector('.ms-slime'), to=document.querySelector('.ms-tom'), bu=document.querySelector('.ms-bud');
+    if(sl)sl.onclick=()=>{ jiggle(sl); sayBubble(sl,pickSay(SLIME_SAY,'s')); };   // dumpling: encouragement
+    if(to)to.onclick=()=>{ jiggle(to); sayBubble(to,pickSay(TOM_SAY,'t')); };      // tomato: focus jumpstart
+    if(bu)bu.onclick=()=>{ jiggle(bu); };                                          // buddy: squish only, no talk
   }
 
   // ===== cosmetics: mascot outfits (slime + matching tomato) =====
