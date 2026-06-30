@@ -301,6 +301,25 @@
   .ms-charms .lbl{ font-family:var(--pixfont); font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--gold); }
   .ms-soon{ font-family:var(--pixfont2); font-size:15px; color:var(--cardtx); opacity:.6; margin:6px 0 0; }
   .ms-card .sq-mbtn{ width:100%; }
+  /* ===== squish idle + hat overlay + bigger expanded fill (v1.6) ===== */
+  @keyframes cwSquish{ 0%,100%{ transform:scaleX(1) scaleY(1) } 50%{ transform:scaleX(1.07) scaleY(.9) } 72%{ transform:scaleX(.98) scaleY(1.02) } }
+  #hud{ overflow:visible; } .hud-buds{ overflow:visible; }
+  .hud-buds .cw-slime,.hud-buds .cw-tom{ position:relative; overflow:visible; }
+  .hud-buds .cw-slime,.hud-buds .cw-tom,.hud-buds .cw-bud{ transform-origin:50% 100%; animation:cwSquish 2.3s ease-in-out infinite; }
+  .hud-buds .cw-tom{ animation-delay:.45s; } .hud-buds .cw-bud{ animation-delay:.85s; }
+  .m-hat{ position:absolute; left:50%; bottom:74%; transform:translateX(-50%); width:72%; height:74%; background:center bottom/contain no-repeat; image-rendering:pixelated; pointer-events:none; z-index:3; display:none; }
+  .sq-avatar{ animation-name:cwSquish; transform-origin:50% 100%; overflow:visible; }
+  .sq-avatar .m-hat{ display:block; bottom:70%; }
+  /* expanded mascot sheet: fill more + buddy on the right */
+  .ms-stage{ justify-content:center; gap:14px; min-height:142px; padding:16px 12px; }
+  .ms-stage.has-bud{ gap:8px; justify-content:space-evenly; }
+  .ms-slime{ width:120px; height:108px; } .ms-tom{ width:96px; height:88px; }
+  .ms-bud{ width:104px; height:104px; background:center bottom/contain no-repeat; image-rendering:pixelated; display:none; }
+  .ms-mascot{ transform-origin:50% 100%; animation:cwSquish 2.6s ease-in-out infinite; }
+  .ms-tom{ animation-delay:.4s; } .ms-bud{ animation-delay:.8s; }
+  /* shop preview: fill more + squish */
+  .cos-preview{ min-height:120px; } .cos-slime{ width:112px; height:100px; } .cos-tom{ width:88px; height:80px; }
+  .cos-mascot{ transform-origin:50% 100%; animation:cwSquish 2.6s ease-in-out infinite; } .cos-tom{ animation-delay:.4s; }
   /* effects layer spans the whole app */
   #cwFx{ position:fixed; inset:0; z-index:70; pointer-events:none; }
   #cwBanner{ position:fixed; left:50%; top:88px; z-index:72; }
@@ -310,7 +329,7 @@
 <body>
   <div id="app">
     <header id="hud">
-      <span class="hud-buds"><span class="cw-slime" id="cwSlime"></span><span class="cw-tom" id="cwTom"></span><span class="cw-bud" id="cwBud"></span></span>
+      <span class="hud-buds"><span class="cw-slime" id="cwSlime"><i class="m-hat" id="slimeHat"></i></span><span class="cw-tom" id="cwTom"><i class="m-hat" id="tomHat"></i></span><span class="cw-bud" id="cwBud"></span></span>
       <div class="hud-mid">
         <div class="hud-lvrow"><span class="cw-lv" id="cwLv">lv 1</span><span class="cw-rank" id="cwRank">fresh start</span><span class="cw-streak" id="cwStreak">🔥 0/7</span></div>
         <div class="hud-xptrack"><div class="cw-xpfill" id="cwXpFill"></div></div>
@@ -382,7 +401,7 @@
     <div id="cardModal" class="sq-modal"><div class="card-wrap"><div class="card-rays"></div><div class="tcg" id="tcg"></div><div class="card-foot" id="cardFoot"></div></div></div>
     <div id="mascotSheet" class="sq-modal"><div class="sq-card ms-card">
       <h3>your mascots</h3>
-      <div class="ms-stage"><span class="ms-mascot ms-slime"></span><span class="ms-mascot ms-tom"></span></div>
+      <div class="ms-stage"><span class="ms-mascot ms-slime"></span><span class="ms-mascot ms-tom"></span><span class="ms-mascot ms-bud"></span></div>
       <div class="ms-stats" id="msStats"></div>
       <div class="ms-charms"><span class="lbl">charms</span><p class="ms-soon">one-use boosts — coming soon</p></div>
       <button class="sq-mbtn primary" id="msClose">close</button>
@@ -510,7 +529,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v1.5';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v1.6';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -556,7 +575,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     CAMP_MODS.forEach((m,mi)=>m.lessons.forEach((les,li)=>{ if(!les.parts.every(p=>campDone[p.id]) && !target) target=document.getElementById('cwLesH'+(mi+'-'+li)); }));
     const lesEls=[...document.querySelectorAll('#cwList .cw-les')];
     if(!target) target=lesEls[lesEls.length-1];
-    if(target){ target.classList.add('current'); const av=document.createElement('span'); av.className='sq-avatar'; target.appendChild(av); }
+    if(target){ target.classList.add('current'); const av=document.createElement('span'); av.className='sq-avatar'; const u=hatIconURL(COS.eq); if(u){ const h=document.createElement('i'); h.className='m-hat'; h.style.backgroundImage='url("'+u+'")'; av.appendChild(h); } target.appendChild(av); }
   }
   function coinFloat(x,y,amt){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); const e=document.createElement('span'); e.className='sq-coinfloat'; e.textContent='+'+amt+' 🪙'; e.style.left=(x-r.left)+'px'; e.style.top=(y-r.top+12)+'px'; fx.appendChild(e); e.animate([{transform:'translate(-50%,0)',opacity:1},{transform:'translate(-50%,-34px)',opacity:0}],{duration:900,easing:'ease-out'}).onfinish=()=>e.remove(); }
 
@@ -722,6 +741,9 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     document.getElementById('msStats').innerHTML =
       statRow('level','lv '+rk.lv+' · '+rk.name)+statRow('coins','🪙 '+coinBal())+statRow('stars','⭐ '+starBal())+
       statRow('buddies',Object.keys(BUD.owned).length+' / '+BUDDIES.length)+statRow('outfit',cos?cos.name:'none');
+    const bud = BUD.active && BUDDIES.find(x=>x.id===BUD.active);
+    const be=m.querySelector('.ms-bud'); if(be){ if(bud){ be.style.display='block'; be.style.backgroundImage='url("'+drawBuddyPortrait(bud)+'")'; } else be.style.display='none'; }
+    m.querySelector('.ms-stage').classList.toggle('has-bud',!!bud);
     m.classList.add('on');
   }
   function initMascotSheet(){
@@ -760,16 +782,8 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     drawHat(c,cosId,cx, top-(tom?6:1), 3);
     return cv.toDataURL();
   }
-  // small mascot = ORIGINAL art (drawSlime/drawTomato) with a hat composited on top when an outfit is worn
-  function composeSmall(kind,cosId){
-    return new Promise(res=>{
-      const baseURL = kind==='tomato'?drawTomato():drawSlime();
-      if(!cosId||cosId==='none'){ res(baseURL); return; }
-      const img=new Image();
-      img.onload=()=>{ const pad=10, c=document.createElement('canvas'); c.width=img.width; c.height=img.height+pad; const x=c.getContext('2d'); x.imageSmoothingEnabled=false; x.drawImage(img,0,pad); drawHat(x,cosId,img.width/2, pad+(kind==='tomato'?1:2), 1); res(c.toDataURL()); };
-      img.onerror=()=>res(baseURL); img.src=baseURL;
-    });
-  }
+  // hat-only sprite (transparent), bottom-anchored — layered OVER the original mascot so the body never shrinks
+  function hatIconURL(cosId){ if(!cosId||cosId==='none')return ''; const c=document.createElement('canvas'); c.width=28; c.height=22; const x=c.getContext('2d'); x.imageSmoothingEnabled=false; drawHat(x,cosId,14,21,2); return c.toDataURL(); }
   const COSMETICS=[
     {id:'none',  name:'none',        price:0},
     {id:'grad',  name:'scholar cap', price:60},
@@ -780,7 +794,12 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   let COS={owned:{none:1},eq:'none'}, cosSel='none';
   function loadCos(){ try{ const d=JSON.parse(localStorage.getItem('aq_cos')||'{}'); COS={owned:Object.assign({none:1},d.owned||{}),eq:d.eq||'none'}; }catch(e){ COS={owned:{none:1},eq:'none'}; } cosSel=COS.eq; }
   function saveCos(){ localStorage.setItem('aq_cos',JSON.stringify(COS)); }
-  async function applyCos(){ try{ const sl=await composeSmall('slime',COS.eq); rs.setProperty('--slime','url("'+sl+'")'); const to=await composeSmall('tomato',COS.eq); rs.setProperty('--tomato','url("'+to+'")'); }catch(e){} }
+  function applyCos(){
+    rs.setProperty('--slime','url("'+drawSlime()+'")'); rs.setProperty('--tomato','url("'+drawTomato()+'")');
+    const u=hatIconURL(COS.eq);
+    ['slimeHat','tomHat'].forEach(id=>{ const e=document.getElementById(id); if(e){ e.style.backgroundImage=u?'url("'+u+'")':''; e.style.display=u?'block':'none'; } });
+    placeAvatar();
+  }
 
   function renderShopOutfits(){
     const prev=document.getElementById('cosPrev'); if(!prev)return;
