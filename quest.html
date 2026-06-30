@@ -8,7 +8,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Side Quest">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23241d3c'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%23ffd96b'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap');
   :root{ --pixfont:'Silkscreen','Courier New',monospace; --pixfont2:'VT323','Courier New',monospace;
@@ -261,6 +262,7 @@
   .card-foot{ width:100%; max-width:300px; margin-top:12px; display:flex; flex-direction:column; gap:9px; }
   .card-foot .sq-mbtn{ width:100%; }
   .tcg-note{ font-family:var(--pixfont2); font-size:17px; color:var(--gold); text-align:center; }
+  .sq-ver{ font-family:var(--pixfont); font-size:8px; letter-spacing:1px; text-transform:uppercase; color:var(--tx); opacity:.4; text-align:center; margin-top:13px; }
   /* effects layer spans the whole app */
   #cwFx{ position:fixed; inset:0; z-index:70; pointer-events:none; }
   #cwBanner{ position:fixed; left:50%; top:88px; z-index:72; }
@@ -327,6 +329,7 @@
       <div class="sq-syncstatus" id="syncStatus"></div>
       <div class="sq-dev"><span class="lbl">— testing (temporary) —</span><div class="row"><button id="devGrant">＋ 10⭐ · 60🪙</button><button id="devWipe">wipe wallet+buddies</button></div></div>
       <div class="sq-modrow"><button id="syncCancel" class="sq-mbtn">close</button><button id="syncSave" class="sq-mbtn primary">save</button></div>
+      <div class="sq-ver" id="sqVer"></div>
     </div></div>
     <div id="sqPull" class="sq-pull"><div class="pull-stage"><div class="pull-aura" id="pullAura"></div><div class="pull-egg" id="pullEgg">🥚</div></div></div>
     <div id="cardModal" class="sq-modal"><div class="card-wrap"><div class="card-rays"></div><div class="tcg" id="tcg"></div><div class="card-foot" id="cardFoot"></div></div></div>
@@ -453,6 +456,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
+  const SQ_VER='v1.1';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -733,6 +737,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
   // ---- boot ----
   if(new URLSearchParams(location.search).has('embed')){ document.documentElement.classList.add('embed'); document.body.classList.add('embed'); }
+  const vEl=document.getElementById('sqVer'); if(vEl) vEl.textContent='side quest '+SQ_VER;
   const adopted=await pullCloud();
   initBuddies();
   rebuild();
