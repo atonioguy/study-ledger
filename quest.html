@@ -461,7 +461,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   try{ CW_SFX.buildup=new Audio('sfx-buildup.mp3'); CW_SFX.fanfare=new Audio('sfx-fanfare.mp3'); CW_SFX.legend=new Audio('sfx-legend.mp3'); }catch(e){}
 
   // ---- low-latency audio: decode the embedded sfx into Web Audio buffers ----
-  let _actx=null; const _buf={}; const _vol={check:.5,xp:.55,levelup:.7,reset:.6,buildup:.5,fanfare:.75,legend:.85};
+  let _actx=null; const _buf={}; const _vol={check:.5,xp:.55,levelup:.32,reset:.6,buildup:1.45,fanfare:.75,legend:.85};
   function unlockAudio(){
     if(!_actx){ try{ _actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
       Object.keys(CW_SFX).forEach(k=>{ const src=CW_SFX[k]&&CW_SFX[k].src; if(!src)return;
