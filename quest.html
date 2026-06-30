@@ -287,6 +287,20 @@
   .cos-nm{ font-family:var(--pixfont2); font-size:15px; color:var(--cardtx); flex:1; }
   .cos-tag{ font-family:var(--pixfont2); font-size:12px; color:var(--gold); opacity:.85; }
   .cos-tag.eq{ color:var(--teal); }
+  /* ===== mascot character sheet ===== */
+  .hud-buds{ cursor:pointer; }
+  .ms-card{ width:100%; max-width:330px; }
+  .ms-card h3{ font-family:var(--pixfont); font-size:13px; letter-spacing:1px; text-transform:lowercase; color:var(--gold); margin:0 0 10px; text-align:center; }
+  .ms-stage{ display:flex; align-items:flex-end; justify-content:center; gap:18px; background:radial-gradient(circle at 50% 60%, #3a3060, #1b1536); border:2px solid var(--lo); padding:18px 14px; margin-bottom:12px; min-height:104px; }
+  .ms-mascot{ background:center bottom/contain no-repeat; image-rendering:pixelated; }
+  .ms-slime{ width:98px; height:98px; } .ms-tom{ width:76px; height:76px; }
+  .ms-stats{ display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+  .ms-stat{ display:flex; justify-content:space-between; font-family:var(--pixfont2); font-size:16px; color:var(--cardtx); border-bottom:1px solid rgba(160,135,225,.18); padding-bottom:5px; }
+  .ms-stat span{ opacity:.7; text-transform:lowercase; } .ms-stat b{ font-weight:400; color:#fff; }
+  .ms-charms{ border-top:1px dashed rgba(160,135,225,.3); padding-top:11px; margin-bottom:14px; }
+  .ms-charms .lbl{ font-family:var(--pixfont); font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--gold); }
+  .ms-soon{ font-family:var(--pixfont2); font-size:15px; color:var(--cardtx); opacity:.6; margin:6px 0 0; }
+  .ms-card .sq-mbtn{ width:100%; }
   /* effects layer spans the whole app */
   #cwFx{ position:fixed; inset:0; z-index:70; pointer-events:none; }
   #cwBanner{ position:fixed; left:50%; top:88px; z-index:72; }
@@ -366,6 +380,13 @@
     </div></div>
     <div id="sqPull" class="sq-pull"><div class="pull-stage"><div class="pull-aura" id="pullAura"></div><div class="pull-egg" id="pullEgg">🥚</div></div></div>
     <div id="cardModal" class="sq-modal"><div class="card-wrap"><div class="card-rays"></div><div class="tcg" id="tcg"></div><div class="card-foot" id="cardFoot"></div></div></div>
+    <div id="mascotSheet" class="sq-modal"><div class="sq-card ms-card">
+      <h3>your mascots</h3>
+      <div class="ms-stage"><span class="ms-mascot ms-slime"></span><span class="ms-mascot ms-tom"></span></div>
+      <div class="ms-stats" id="msStats"></div>
+      <div class="ms-charms"><span class="lbl">charms</span><p class="ms-soon">one-use boosts — coming soon</p></div>
+      <button class="sq-mbtn primary" id="msClose">close</button>
+    </div></div>
     <div id="cwFx"></div>
     <div class="cw-banner" id="cwBanner"></div>
   </div>
@@ -489,7 +510,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v1.4';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v1.5';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -627,6 +648,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   }
 
   // ---- TCG card (used by dex tap + end of a pull) ----
+  function closeCard(){ const m=document.getElementById('cardModal'); if(m)m.classList.remove('on'); renderActiveBuddy(); renderDex(); }  // buddy joins the corner only now
   function openCard(b,opts){
     opts=opts||{};
     const m=document.getElementById('cardModal'), wrap=m.querySelector('.card-wrap'), card=document.getElementById('tcg'), foot=document.getElementById('cardFoot');
@@ -642,9 +664,9 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     if(opts.fromPull){ foot.innerHTML='<div class="tcg-note">'+(opts.note||'')+'</div><button class="sq-mbtn primary" id="cardOk">nice!</button>'; }
     else { const a=BUD.active===b.id; foot.innerHTML='<button class="sq-mbtn'+(a?'':' primary')+'" id="cardSet"'+(a?' disabled':'')+'>'+(a?'★ your sidekick':'set as sidekick')+'</button><button class="sq-mbtn" id="cardClose">close</button>'; }
     m.classList.add('on');
-    const ok=document.getElementById('cardOk'); if(ok)ok.onclick=()=>m.classList.remove('on');
-    const set=document.getElementById('cardSet'); if(set)set.onclick=()=>{ BUD.active=b.id; saveBud(); renderActiveBuddy(); renderDex(); cwSfx('levelup'); cwBuzz(14); markChanged(); m.classList.remove('on'); };
-    const cl=document.getElementById('cardClose'); if(cl)cl.onclick=()=>m.classList.remove('on');
+    const ok=document.getElementById('cardOk'); if(ok)ok.onclick=closeCard;
+    const set=document.getElementById('cardSet'); if(set)set.onclick=()=>{ BUD.active=b.id; saveBud(); cwSfx('levelup'); cwBuzz(14); markChanged(); closeCard(); };
+    const cl=document.getElementById('cardClose'); if(cl)cl.onclick=closeCard;
   }
 
   // ---- the pull sequence: charge → burst → card ----
@@ -682,13 +704,30 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     const isNew=!BUD.owned[pick.id]; let note;
     if(isNew){ BUD.owned[pick.id]=1; if(!BUD.active)BUD.active=pick.id; note='✦ new buddy! ✦'; }
     else { adjustBalance(12,0); note='duplicate · +12 🪙'; }
-    saveBud(); refreshEcon(); renderDex(); renderActiveBuddy(); markChanged();
-    playPull(pick,isNew,note);
+    saveBud(); refreshEcon(); markChanged();
+    playPull(pick,isNew,note);                                 // corner buddy updates on card close, not now
   }
   function initBuddies(){
     loadBud(); renderDex(); renderActiveBuddy();
     const hb=document.getElementById('budHatch'); if(hb)hb.onclick=hatch;
-    const cm=document.getElementById('cardModal'); if(cm)cm.onclick=(e)=>{ if(e.target.id==='cardModal')cm.classList.remove('on'); };
+    const cm=document.getElementById('cardModal'); if(cm)cm.onclick=(e)=>{ if(e.target.id==='cardModal')closeCard(); };
+  }
+  // ---- mascot character sheet (tap the HUD mascots) ----
+  function statRow(k,v){ return '<div class="ms-stat"><span>'+k+'</span><b>'+v+'</b></div>'; }
+  function openMascotSheet(){
+    const m=document.getElementById('mascotSheet'); if(!m)return;
+    m.querySelector('.ms-slime').style.backgroundImage='url("'+drawMascotBig('slime',COS.eq)+'")';
+    m.querySelector('.ms-tom').style.backgroundImage='url("'+drawMascotBig('tomato',COS.eq)+'")';
+    const s=campStats(), rk=rankFor(s.xp), cos=COSMETICS.find(o=>o.id===COS.eq);
+    document.getElementById('msStats').innerHTML =
+      statRow('level','lv '+rk.lv+' · '+rk.name)+statRow('coins','🪙 '+coinBal())+statRow('stars','⭐ '+starBal())+
+      statRow('buddies',Object.keys(BUD.owned).length+' / '+BUDDIES.length)+statRow('outfit',cos?cos.name:'none');
+    m.classList.add('on');
+  }
+  function initMascotSheet(){
+    const buds=document.querySelector('.hud-buds'); if(buds)buds.onclick=openMascotSheet;
+    const m=document.getElementById('mascotSheet'); if(m)m.onclick=(e)=>{ if(e.target.id==='mascotSheet')m.classList.remove('on'); };
+    const cl=document.getElementById('msClose'); if(cl)cl.onclick=()=>document.getElementById('mascotSheet').classList.remove('on');
   }
 
   // ===== cosmetics: mascot outfits (slime + matching tomato) =====
@@ -701,22 +740,35 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     else if(id==='crown'){ P(-4,-3,2,3,'#ffd05f'); P(-1,-4,2,4,'#ffd05f'); P(2,-3,2,3,'#ffd05f'); P(-4,0,8,2,'#ffd05f'); P(-3,1,6,1,'#d99a32'); P(-1,-1,1,1,'#fff4c2'); }
     else if(id==='flower'){ P(-1,-4,2,2,'#ffb0c8'); P(-3,-2,2,2,'#ff8fb4'); P(1,-2,2,2,'#ff8fb4'); P(-1,0,2,2,'#ff8fb4'); P(-1,-2,2,2,'#ffd96b'); }
   }
-  function drawMascot(kind,cosId,big){
-    const s=big?2:1, W=big?60:30, H=big?60:30, cx=W/2;
+  // detailed, expanded mascot — keeps the original squashed dumpling shape, just bigger + richer shading
+  function drawMascotBig(kind,cosId){
+    const tom=(kind==='tomato');
+    const PAL = tom ? {OUT:'#962d28',BODY:'#df5048',SHADE:'#bf3a33',SH2:'#cf443c',HI:'#f29086',EYE:'#4a201a',BL:'#f4a59c'}
+                    : {OUT:'#94835f',BODY:'#efe6d4',SHADE:'#dccbac',SH2:'#e6d9bf',HI:'#fcf7ee',EYE:'#473d54',BL:'#e3a0aa'};
+    const W=76,H=64,cx=38, top=tom?24:22, hw=[7,11,14,17,19,21,23,25,26,27,28,29,29,30,30,31,31,31,31,31,31,31,31,31,31,31,31,30,30,29,28,26,23,18];
     const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const c=cv.getContext('2d'); c.imageSmoothingEnabled=false;
-    const col = kind==='tomato' ? '#e8584a' : '#f3e9d2';
-    const dk=shade(col,-30), lt=shade(col,22), pink='rgba(255,140,170,.6)';
-    const P=(px,py,w,h,cc)=>{ c.fillStyle=cc; c.fillRect(Math.round(cx+px*s),Math.round(py*s),Math.round(w*s),Math.round(h*s)); };
-    P(-7,23,14,1,'rgba(0,0,0,.18)');                                   // shadow
-    const hw=[3,5,7,8,8,8,8,8,8,8,8,7,5,3];                            // body blob y8..21
-    hw.forEach((w,i)=>P(-w,8+i,w*2,1,col));
-    if(big){ P(-6,11,12,4,lt); P(-8,18,16,2,dk); }                     // big-only shading
-    if(kind==='tomato'){ P(-1,5,2,3,'#4fa84f'); P(-4,6,3,1,'#74c86a'); P(2,6,3,1,'#74c86a'); }  // stem
-    P(-4,13,2,3,'#1a1330'); P(2,13,2,3,'#1a1330'); P(-4,13,1,1,'#fff'); P(2,13,1,1,'#fff'); // eyes
-    P(-7,16,2,1,pink); P(5,16,2,1,pink);                              // blush
-    P(-1,17,2,1,dk);                                                  // mouth
-    drawHat(c,cosId,cx, (kind==='tomato'?6:7)*s, s);
+    const R=(x,y,w,h,col)=>{ c.fillStyle=col; c.fillRect(x,y,w,h); };
+    R(cx-22,top+hw.length+1,44,2,'rgba(0,0,0,.16)');                                  // ground shadow
+    const n=hw.length;
+    for(let i=0;i<n;i++){ const y=top+i,w=hw[i]; R(cx-w-1,y,w*2+2,1,PAL.OUT); }        // side outline
+    R(cx-hw[0]-1,top-1,hw[0]*2+2,1,PAL.OUT); R(cx-hw[n-1]-1,top+n,hw[n-1]*2+2,2,PAL.OUT); // top/base
+    for(let i=0;i<n;i++){ const y=top+i,w=hw[i]; const col = i>=n-9?PAL.SHADE : (i>=n-15?PAL.SH2:PAL.BODY); R(cx-w,y,w*2,1,col); }
+    R(cx+8,top+5,11,5,PAL.HI); R(cx+10,top+11,8,3,PAL.HI); R(cx-10,top+7,4,2,PAL.HI);  // highlights
+    if(tom){ const L='#6faa55',LD='#4f8740'; R(cx-2,top-9,4,10,L); R(cx-13,top-4,9,3,L); R(cx+4,top-4,9,3,L); R(cx-8,top-7,5,3,L); R(cx+3,top-7,5,3,L); R(cx-13,top-2,3,2,LD); R(cx+10,top-2,3,2,LD); R(cx-2,top-1,4,2,LD); } // calyx
+    R(cx-15,top+12,5,7,PAL.EYE); R(cx+10,top+12,5,7,PAL.EYE);                          // eyes
+    R(cx-22,top+17,5,3,PAL.BL); R(cx+17,top+17,5,3,PAL.BL);                            // blush
+    drawHat(c,cosId,cx, top-(tom?6:1), 3);
     return cv.toDataURL();
+  }
+  // small mascot = ORIGINAL art (drawSlime/drawTomato) with a hat composited on top when an outfit is worn
+  function composeSmall(kind,cosId){
+    return new Promise(res=>{
+      const baseURL = kind==='tomato'?drawTomato():drawSlime();
+      if(!cosId||cosId==='none'){ res(baseURL); return; }
+      const img=new Image();
+      img.onload=()=>{ const pad=10, c=document.createElement('canvas'); c.width=img.width; c.height=img.height+pad; const x=c.getContext('2d'); x.imageSmoothingEnabled=false; x.drawImage(img,0,pad); drawHat(x,cosId,img.width/2, pad+(kind==='tomato'?1:2), 1); res(c.toDataURL()); };
+      img.onerror=()=>res(baseURL); img.src=baseURL;
+    });
   }
   const COSMETICS=[
     {id:'none',  name:'none',        price:0},
@@ -728,25 +780,25 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   let COS={owned:{none:1},eq:'none'}, cosSel='none';
   function loadCos(){ try{ const d=JSON.parse(localStorage.getItem('aq_cos')||'{}'); COS={owned:Object.assign({none:1},d.owned||{}),eq:d.eq||'none'}; }catch(e){ COS={owned:{none:1},eq:'none'}; } cosSel=COS.eq; }
   function saveCos(){ localStorage.setItem('aq_cos',JSON.stringify(COS)); }
-  function applyCos(){ rs.setProperty('--slime','url("'+drawMascot('slime',COS.eq,false)+'")'); rs.setProperty('--tomato','url("'+drawMascot('tomato',COS.eq,false)+'")'); }
+  async function applyCos(){ try{ const sl=await composeSmall('slime',COS.eq); rs.setProperty('--slime','url("'+sl+'")'); const to=await composeSmall('tomato',COS.eq); rs.setProperty('--tomato','url("'+to+'")'); }catch(e){} }
 
   function renderShopOutfits(){
     const prev=document.getElementById('cosPrev'); if(!prev)return;
-    prev.querySelector('.cos-slime').style.backgroundImage='url("'+drawMascot('slime',cosSel,true)+'")';
-    prev.querySelector('.cos-tom').style.backgroundImage='url("'+drawMascot('tomato',cosSel,true)+'")';
+    prev.querySelector('.cos-slime').style.backgroundImage='url("'+drawMascotBig('slime',cosSel)+'")';
+    prev.querySelector('.cos-tom').style.backgroundImage='url("'+drawMascotBig('tomato',cosSel)+'")';
     const sel=COSMETICS.find(o=>o.id===cosSel);
     const btn=document.getElementById('cosAction');
-    if(COS.eq===cosSel){ btn.textContent='equipped ✓'; btn.disabled=true; btn.className='sq-bigbtn off'; }
+    if(COS.eq===cosSel){ btn.textContent= cosSel==='none'?'no outfit':'equipped ✓'; btn.disabled=true; btn.className='sq-bigbtn off'; }
+    else if(cosSel==='none'){ btn.textContent='take off'; btn.disabled=false; btn.className='sq-bigbtn'; }
     else if(COS.owned[cosSel]){ btn.textContent='equip'; btn.disabled=false; btn.className='sq-bigbtn'; }
     else { const can=coinBal()>=sel.price; btn.textContent='buy · '+sel.price+'🪙'; btn.disabled=!can; btn.className='sq-bigbtn'+(can?'':' off'); }
     const grid=document.getElementById('cosGrid');
-    grid.innerHTML=COSMETICS.filter(o=>o.id!=='none').map(o=>{
+    grid.innerHTML=COSMETICS.map(o=>{
       const owned=!!COS.owned[o.id], eq=COS.eq===o.id, selc=cosSel===o.id;
-      const tag = eq?'<span class="cos-tag eq">equipped</span>' : (owned?'<span class="cos-tag">owned</span>':'<span class="cos-tag">'+o.price+'🪙</span>');
-      return '<button class="cos-cell'+(selc?' sel':'')+'" data-cos="'+o.id+'"><span class="cos-ic" style="background-image:url(\''+drawMascot('slime',o.id,false)+'\')"></span><span class="cos-nm">'+o.name+'</span>'+tag+'</button>';
+      const tag = eq?'<span class="cos-tag eq">equipped</span>' : (o.id==='none'?'<span class="cos-tag">take off</span>':(owned?'<span class="cos-tag">owned</span>':'<span class="cos-tag">'+o.price+'🪙</span>'));
+      return '<button class="cos-cell'+(selc?' sel':'')+'" data-cos="'+o.id+'"><span class="cos-ic" style="background-image:url(\''+drawMascotBig('slime',o.id)+'\')"></span><span class="cos-nm">'+o.name+'</span>'+tag+'</button>';
     }).join('');
     grid.querySelectorAll('.cos-cell').forEach(el=>el.onclick=()=>{ cosSel=el.dataset.cos; cwSfx('check'); cwBuzz(6); renderShopOutfits(); });
-    // also include a 'none' option to remove
   }
   function cosAction(){
     const sel=COSMETICS.find(o=>o.id===cosSel); if(!sel)return;
@@ -878,7 +930,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   };
   // --- TEMP testing tools (remove before final) ---
   const dg=document.getElementById('devGrant'); if(dg)dg.onclick=()=>{ adjustBalance(60,10); refreshEcon(); markChanged(); cwSfx('xp'); cwBuzz(10); document.getElementById('syncStatus').textContent='＋ granted 60🪙 · 10⭐ (test)'; };
-  const dw=document.getElementById('devWipe'); if(dw)dw.onclick=()=>{ localStorage.removeItem('aq_econ'); localStorage.removeItem('aq_buddies'); loadBud(); refreshEcon(); renderDex(); renderActiveBuddy(); markChanged(); document.getElementById('syncStatus').textContent='wiped wallet + buddies'; };
+  const dw=document.getElementById('devWipe'); if(dw)dw.onclick=()=>{ localStorage.removeItem('aq_econ'); localStorage.removeItem('aq_buddies'); localStorage.removeItem('aq_cos'); loadBud(); loadCos(); applyCos(); refreshEcon(); renderDex(); renderActiveBuddy(); renderShopOutfits(); markChanged(); document.getElementById('syncStatus').textContent='wiped wallet + buddies + outfits'; };
 
   // ---- boot ----
   if(new URLSearchParams(location.search).has('embed')){ document.documentElement.classList.add('embed'); document.body.classList.add('embed'); }
@@ -887,6 +939,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   loadCos(); applyCos();
   initBuddies();
   initShop();
+  initMascotSheet();
   rebuild();
   if(syncOn() && !adopted) pushCloud();
 })();
