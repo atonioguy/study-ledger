@@ -263,6 +263,16 @@
   .card-foot .sq-mbtn{ width:100%; }
   .tcg-note{ font-family:var(--pixfont2); font-size:17px; color:var(--gold); text-align:center; }
   .sq-ver{ font-family:var(--pixfont); font-size:8px; letter-spacing:1px; text-transform:uppercase; color:var(--tx); opacity:.4; text-align:center; margin-top:13px; }
+  /* ===== slot machine ===== */
+  .slot-cab{ background:linear-gradient(180deg,#3a3060,#241d3c); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 8px 0 #0e0820; padding:18px 16px; display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .slot-window{ display:flex; gap:8px; background:var(--inset); border:3px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); padding:12px 10px; box-shadow:inset 0 0 16px rgba(0,0,0,.65); }
+  .slot-sym{ width:62px; height:74px; display:grid; place-items:center; font-size:40px; background:linear-gradient(180deg,#1a1430,#0e0a20); border:2px solid #3a2e6e; }
+  .slot-sym.pop{ animation:slotPop .25s ease; }
+  @keyframes slotPop{ 0%{transform:scale(1)} 50%{transform:scale(1.22)} 100%{transform:scale(1)} }
+  .slot-msg{ font-family:var(--pixfont2); font-size:18px; color:var(--gold); min-height:22px; text-align:center; }
+  .slot-left{ font-family:var(--pixfont2); font-size:13px; color:var(--tx); opacity:.6; }
+  .slot-odds{ font-family:var(--pixfont2); font-size:12px; color:var(--cardtx); opacity:.55; text-align:center; line-height:1.6; }
+  .shop-soon{ text-align:center; margin-top:18px; }
   /* effects layer spans the whole app */
   #cwFx{ position:fixed; inset:0; z-index:70; pointer-events:none; }
   #cwBanner{ position:fixed; left:50%; top:88px; z-index:72; }
@@ -304,12 +314,15 @@
       </section>
 
       <section class="screen" id="screen-shop" data-screen="shop">
-        <div class="sq-stub">
-          <div class="em">🎰</div>
-          <h2>the shop</h2>
-          <p>spend 🪙 coins on mascot outfits &amp; charms — or gamble for ⭐ at the slot.</p>
-          <span class="sq-soon">coming soon</span>
+        <div class="sq-questhd"><span class="qt">✦ the shop</span><span class="qm">gamble 🪙 for ⭐</span></div>
+        <div class="slot-cab">
+          <div class="slot-window"><span class="slot-sym">🍒</span><span class="slot-sym">🔔</span><span class="slot-sym">⭐</span></div>
+          <div class="slot-msg" id="slotMsg">match 3 to win · ⭐⭐ also pays</div>
+          <button id="slotSpin" class="sq-bigbtn">spin · 8🪙</button>
+          <div class="slot-left" id="slotLeft"></div>
+          <div class="slot-odds">7️⃣7️⃣7️⃣ jackpot &middot; ⭐⭐⭐ +3⭐ &middot; 💎💎💎 +1⭐ &middot; 🍀🍀🍀 +35🪙</div>
         </div>
+        <div class="shop-soon"><span class="sq-soon">mascot outfits &amp; charms — next update</span></div>
       </section>
     </div>
 
@@ -456,16 +469,16 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v1.2';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v1.3';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
 
   // gacha sounds (Antonio's mp3s, loaded by URL — same origin)
-  try{ CW_SFX.buildup=new Audio('sfx-buildup.mp3'); CW_SFX.fanfare=new Audio('sfx-fanfare.mp3'); CW_SFX.legend=new Audio('sfx-legend.mp3'); }catch(e){}
+  try{ CW_SFX.buildup=new Audio('sfx-buildup.mp3'); CW_SFX.fanfare=new Audio('sfx-fanfare.mp3'); CW_SFX.legend=new Audio('sfx-legend.mp3'); CW_SFX.dice=new Audio('sfx-dice.mp3'); }catch(e){}
 
   // ---- low-latency audio: decode the embedded sfx into Web Audio buffers ----
-  let _actx=null; const _buf={}; const _vol={check:.5,xp:.55,levelup:.18,reset:.6,buildup:2.2,fanfare:.75,legend:.85};
+  let _actx=null; const _buf={}; const _vol={check:.5,xp:.55,levelup:.18,reset:.6,buildup:2.2,fanfare:.75,legend:.85,dice:.7};
   function unlockAudio(){
     if(!_actx){ try{ _actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
       Object.keys(CW_SFX).forEach(k=>{ const src=CW_SFX[k]&&CW_SFX[k].src; if(!src)return;
@@ -492,7 +505,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   function adjustBalance(dc,ds){ const e=readEcon(); e.c=(e.c||0)-dc; e.s=(e.s||0)-ds; localStorage.setItem('aq_econ',JSON.stringify(e)); }
   let shownCoins=coinBal(), shownStars=starBal();
   function countChip(el,from,to){ if(!el)return; if(from===to){ el.textContent=to; return; } const t0=performance.now(),dur=550; (function step(t){ const k=Math.min(1,(t-t0)/dur); el.textContent=Math.round(from+(to-from)*k); if(k<1)requestAnimationFrame(step); })(performance.now()); }
-  function refreshEcon(){ const c=coinBal(), s=starBal(); countChip(document.getElementById('sqCoins'),shownCoins,c); countChip(document.getElementById('sqStars'),shownStars,s); shownCoins=c; shownStars=s; refreshBuddies(); }
+  function refreshEcon(){ const c=coinBal(), s=starBal(); countChip(document.getElementById('sqCoins'),shownCoins,c); countChip(document.getElementById('sqStars'),shownStars,s); shownCoins=c; shownStars=s; refreshBuddies(); updateSlotInfo(); }
 
   // ---- avatar token on the current (first unfinished) lesson ----
   function placeAvatar(){
@@ -658,6 +671,52 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     const cm=document.getElementById('cardModal'); if(cm)cm.onclick=(e)=>{ if(e.target.id==='cardModal')cm.classList.remove('on'); };
   }
 
+  // ===== slot machine (gamble coins for stars) =====
+  const SLOT_SYMS=[{s:'🍒',w:30},{s:'🔔',w:24},{s:'🍀',w:18},{s:'💎',w:12},{s:'⭐',w:12},{s:'7️⃣',w:4}];
+  const SLOT_COST=8, SLOT_CAP=40;
+  function slotToday(){ const d=new Date().toISOString().slice(0,10); let s={}; try{ s=JSON.parse(localStorage.getItem('aq_slot')||'{}'); }catch(e){} return s.d===d?{d:d,n:s.n||0}:{d:d,n:0}; }
+  function slotLeft(){ return Math.max(0,SLOT_CAP-slotToday().n); }
+  function pickSym(){ const tot=SLOT_SYMS.reduce((a,b)=>a+b.w,0); let r=Math.random()*tot; for(const o of SLOT_SYMS){ if((r-=o.w)<0)return o.s; } return SLOT_SYMS[0].s; }
+  function slotPay(a,b,c){
+    const all3=(a===b&&b===c);
+    if(all3&&a==='7️⃣') return {coins:50,stars:5,label:'✦ JACKPOT ✦',big:2};
+    if(all3&&a==='⭐') return {coins:0,stars:3,label:'triple star!',big:1};
+    if(all3&&a==='💎') return {coins:15,stars:1,label:'diamonds! +1⭐',big:1};
+    if(all3&&a==='🍀') return {coins:35,stars:0,label:'lucky! +35🪙',big:0};
+    if(all3&&a==='🔔') return {coins:22,stars:0,label:'bells! +22🪙',big:0};
+    if(all3&&a==='🍒') return {coins:15,stars:0,label:'cherries! +15🪙',big:0};
+    if([a,b,c].filter(s=>s==='⭐').length===2) return {coins:0,stars:1,label:'two stars · +1⭐',big:1};
+    if([a,b,c].filter(s=>s==='🍒').length===2) return {coins:5,stars:0,label:'+5🪙',big:0};
+    return {coins:0,stars:0,label:'no luck — spin again',big:-1};
+  }
+  let slotSpinning=false;
+  function slotMsg(t){ const el=document.getElementById('slotMsg'); if(el)el.textContent=t; }
+  function updateSlotInfo(){ const l=document.getElementById('slotLeft'); if(l)l.textContent=slotLeft()+' spins left today'; const b=document.getElementById('slotSpin'); if(b)b.disabled=slotSpinning||coinBal()<SLOT_COST||slotLeft()<=0; }
+  function slotSpin(){
+    if(slotSpinning)return;
+    if(coinBal()<SLOT_COST){ slotMsg('not enough 🪙'); return; }
+    if(slotLeft()<=0){ slotMsg('come back tomorrow!'); return; }
+    slotSpinning=true; adjustBalance(-SLOT_COST,0);
+    const t=slotToday(); localStorage.setItem('aq_slot',JSON.stringify({d:t.d,n:t.n+1}));
+    refreshEcon(); markChanged(); updateSlotInfo(); slotMsg('');
+    cwSfx('dice'); cwBuzz(14);
+    const reels=[...document.querySelectorAll('.slot-sym')];
+    const finals=[pickSym(),pickSym(),pickSym()];
+    const iv=reels.map(el=>setInterval(()=>{ el.textContent=pickSym(); },70));
+    reels.forEach((el,i)=>setTimeout(()=>{
+      clearInterval(iv[i]); el.textContent=finals[i]; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); cwSfx('check'); cwBuzz(8);
+      if(i===reels.length-1){
+        const pay=slotPay(finals[0],finals[1],finals[2]);
+        if(pay.coins||pay.stars){ adjustBalance(pay.coins,pay.stars); refreshEcon(); markChanged();
+          const fx=document.getElementById('cwFx'); if(fx){ const r=fx.getBoundingClientRect(); cwBurst(r.left+r.width/2,r.top+r.height*0.5,pay.big>=1); if(pay.big>=2)setTimeout(()=>cwBurst(r.left+r.width/2,r.top+r.height*0.5,true),140); }
+          cwSfx(pay.big>=2?'legend':(pay.big>=1?'fanfare':'levelup')); cwBuzz(pay.big>=1?[20,40,30]:16);
+        }
+        slotMsg(pay.label); slotSpinning=false; updateSlotInfo();
+      }
+    }, 520*(i+1)));
+  }
+  function initShop(){ const b=document.getElementById('slotSpin'); if(b)b.onclick=slotSpin; updateSlotInfo(); }
+
   // ---- cloud sync ----
   const API={ url:(localStorage.getItem('aq_api_url')||'').replace(/\/+$/,''), key:localStorage.getItem('aq_api_key')||'' };
   const syncOn=()=>!!(API.url&&API.key);
@@ -740,6 +799,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   const vEl=document.getElementById('sqVer'); if(vEl) vEl.textContent='side quest '+SQ_VER;
   const adopted=await pullCloud();
   initBuddies();
+  initShop();
   rebuild();
   if(syncOn() && !adopted) pushCloud();
 })();
