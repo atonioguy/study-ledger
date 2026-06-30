@@ -528,7 +528,7 @@
   #clean.og .cwin.dark .cg .dy{ background:#1d1d1b; } #clean.og .cwin.dark .cg .dy.dim{ background:#181816; } #clean.og .cwin.dark .cg .dy.has{ background:#1d1d1b; } #clean.og .cwin.dark .cg .dy.td{ background:#1d1d1b; }
 
   /* ===== exam-campaign window — one consistent pixel design (phone palette), skin-independent ===== */
-  .cw-win{ --hi:#6a58a0; --lo:#241d3c; --frame:#3b3060; --bar:#5b4a96; --barhi:#8068c4; --bartx:#f5eeff; --outline:#140f24; --body:#1f1937; --spot:#2c2450; --tx:#dcd3f4; --card:#332a55; --cardtx:#ece6fb; --inset:#181230;
+  .cw-win{ --hi:#6a58a0; --lo:#241d3c; --frame:#3b3060; --bar:#5b4a96; --barhi:#8068c4; --bartx:#f5eeff; --outline:#140f24; --body:#130e26; --spot:#241c44; --tx:#e3dbff; --card:#372d5e; --cardtx:#f1ecff; --inset:#0f0a22;
     max-height:none; max-width:484px; margin:0 auto; background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.5); image-rendering:pixelated; font-family:var(--pixfont); color:var(--tx); }
   .cwbar{ display:flex; align-items:center; gap:7px; flex:none; background:linear-gradient(180deg,var(--barhi) 0 38%,var(--bar) 38%); color:var(--bartx); padding:6px 9px; border-bottom:2px solid var(--outline); font-size:11px; letter-spacing:.5px; text-shadow:1px 1px 0 rgba(40,35,55,.45); }
   .cwico{ font-size:13px; text-shadow:none; flex:none; } .cwtitle{ text-transform:lowercase; white-space:nowrap; flex:none; } .cwsub{ margin-left:8px; font-family:var(--pixfont2); font-size:13px; opacity:.8; letter-spacing:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -596,26 +596,26 @@
   /* ===== part nodes — chunky game-button grid (level select) ===== */
   .cw-nodes{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:2px 0 4px; }
   .cw-node{ position:relative; width:104px; height:86px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; padding:0; image-rendering:pixelated;
-    background:linear-gradient(180deg,#403568,#2b2450); border:3px solid; border-color:#6a58a0 #221b3a #221b3a #6a58a0; box-shadow:0 4px 0 #160f28, inset 0 0 0 1px rgba(255,255,255,.05); transition:transform .08s, box-shadow .12s, background .2s; }
-  .cw-node:hover{ transform:translateY(-2px); box-shadow:0 6px 0 #160f28, 0 0 16px rgba(140,112,210,.55); }
-  .cw-node:active{ transform:translateY(2px); box-shadow:0 2px 0 #160f28; }
+    background:linear-gradient(180deg,#5a4a96,#3a2e74); border:3px solid; border-color:#a08fe0 #1a1330 #1a1330 #a08fe0; box-shadow:0 4px 0 #0e0820, 0 0 0 1px rgba(160,135,225,.5), inset 0 1px 0 rgba(255,255,255,.12); transition:transform .08s, box-shadow .12s, background .2s; }
+  .cw-node:hover{ transform:translateY(-2px); background:linear-gradient(180deg,#6857a8,#473a85); box-shadow:0 6px 0 #0e0820, 0 0 20px rgba(165,135,255,.8); }
+  .cw-node:active{ transform:translateY(2px); box-shadow:0 2px 0 #0e0820; }
   .cw-node .cw-ntop{ position:absolute; top:6px; left:7px; right:7px; display:flex; justify-content:space-between; }
-  .cw-np{ font-family:var(--pixfont); font-size:9px; color:#b7a6ef; } .cw-nxp{ font-family:var(--pixfont); font-size:9px; color:#ffcf6e; }
-  .cw-nicon{ font-size:24px; line-height:1; margin-top:8px; } .cw-nicon::before{ content:'▶'; color:#8b76d2; text-shadow:0 0 6px rgba(139,118,210,.5); }
+  .cw-np{ font-family:var(--pixfont); font-size:9px; color:#cdbcff; } .cw-nxp{ font-family:var(--pixfont); font-size:9px; color:#ffd96b; }
+  .cw-nicon{ font-size:24px; line-height:1; margin-top:8px; } .cw-nicon::before{ content:'▶'; color:#d7c8ff; text-shadow:0 0 9px rgba(190,160,255,.9); }
   .cw-ntime{ font-family:var(--pixfont2); font-size:17px; color:var(--cardtx); }
-  .cw-node.done{ background:linear-gradient(180deg,#1f7a6a,#125249); border-color:#5fe0c8 #0c3a32 #0c3a32 #5fe0c8; box-shadow:0 4px 0 #08241f, 0 0 18px rgba(95,224,200,.6); }
+  .cw-node.done{ background:linear-gradient(180deg,#26a589,#13715f); border-color:#7df0d8 #0a3a31 #0a3a31 #7df0d8; box-shadow:0 4px 0 #062019, 0 0 0 1px rgba(125,240,216,.5), 0 0 20px rgba(95,224,200,.7); }
   .cw-node.done .cw-nicon::before{ content:'★'; color:#fff4c2; text-shadow:0 0 9px rgba(255,222,120,.95); }
   .cw-node.done .cw-ntime{ color:#dafff7; } .cw-node.done .cw-np{ color:#aef0e2; } .cw-node.done .cw-nxp{ color:#ffe08a; }
   .cw-node.pop,.cw-quest.pop{ animation:cwPop .34s ease; }
   /* ===== review quests — bigger feature buttons ===== */
   .cw-quests{ display:flex; flex-wrap:wrap; gap:10px; margin-top:2px; }
   .cw-quest{ position:relative; flex:1 1 188px; min-height:66px; display:flex; align-items:center; gap:10px; padding:11px 12px; cursor:pointer; text-align:left;
-    background:linear-gradient(180deg,#443868,#2e2756); border:3px solid; border-color:#6a58a0 #221b3a #221b3a #6a58a0; box-shadow:0 4px 0 #160f28; transition:transform .08s, box-shadow .12s, background .2s; }
+    background:linear-gradient(180deg,#564890,#392d70); border:3px solid; border-color:#a08fe0 #1a1330 #1a1330 #a08fe0; box-shadow:0 4px 0 #0e0820, 0 0 0 1px rgba(160,135,225,.45); transition:transform .08s, box-shadow .12s, background .2s; }
   .cw-quest:hover{ transform:translateY(-2px); box-shadow:0 6px 0 #160f28, 0 0 16px rgba(140,112,210,.5); } .cw-quest:active{ transform:translateY(2px); box-shadow:0 2px 0 #160f28; }
   .cw-qicon{ font-size:26px; flex:none; filter:drop-shadow(0 0 6px rgba(180,160,255,.5)); }
   .cw-qbody{ flex:1; min-width:0; } .cw-qtask{ display:block; font-family:var(--pixfont2); font-size:18px; color:var(--cardtx); } .cw-qmeta{ display:block; font-family:var(--pixfont2); font-size:13px; color:var(--cardtx); opacity:.7; }
   .cw-qxp{ flex:none; font-family:var(--pixfont2); font-size:17px; color:#ffcf6e; text-shadow:0 0 7px rgba(255,200,100,.35); }
-  .cw-quest.done{ background:linear-gradient(180deg,#1f7a6a,#125249); border-color:#5fe0c8 #0c3a32 #0c3a32 #5fe0c8; box-shadow:0 4px 0 #08241f, 0 0 18px rgba(95,224,200,.55); }
+  .cw-quest.done{ background:linear-gradient(180deg,#26a589,#13715f); border-color:#7df0d8 #0a3a31 #0a3a31 #7df0d8; box-shadow:0 4px 0 #062019, 0 0 20px rgba(95,224,200,.65); }
   .cw-quest.done .cw-qtask{ text-decoration:line-through; opacity:.7; } .cw-quest.done .cw-qicon{ filter:drop-shadow(0 0 8px rgba(95,224,200,.8)); }
   @keyframes cwSweep{ 0%{ left:-55% } 60%,100%{ left:120% } }
   @keyframes cwLvPulse{ 0%,100%{ box-shadow:0 0 2px rgba(128,104,196,.4) } 50%{ box-shadow:0 0 13px rgba(150,120,235,.95) } }
@@ -672,7 +672,7 @@
         <div class="cwin col12 pxwin koi matte" id="clCard-notion" data-win="notion" style="display:none"><div class="pxbar"><span class="pxico">📓</span><span class="pxtitle" id="clNotionTtl">notion</span><b class="cdark" title="dark mode">☾</b><b class="crefresh" data-r="notion" title="refresh from Notion">↻</b></div><div class="pxbody monbody"><div id="clNotion"></div></div></div>
         <div class="cwin col8 pxwin matte" data-win="board"><div class="pxbar"><span class="pxico">📌</span><span class="pxtitle">corkboard</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clNoteN"></span></div><div class="pxbody" style="padding:12px"><div class="bhd"><button class="mkbtn" id="clBoardNew">＋ pin a thought</button><span class="sp">drag a pin to rearrange</span></div><div class="bigboard" id="clBoard"></div><div class="cl-keep" id="clKeep"></div></div></div>
         <div class="cwin col4 pxwin matte" data-win="feed"><div class="pxbar"><span class="pxico slimeic"></span><span class="pxtitle">antfarm</span><b class="cdark" title="dark mode">☾</b><span class="cwn" id="clFeedN"></span></div><div class="pxbody"><div class="cl-feed" id="clFeed"></div></div></div>
-        <div class="cwin col12 cw-win">
+        <div class="cwin col8 cw-win">
           <div class="cwbar"><span class="cwico">✦</span><span class="cwtitle">exam campaign</span><span class="cwsub">m5+m6 · exam sun</span><button class="cwreset" id="cwReset">⟲ reset</button></div>
           <div class="cwbody">
             <div class="cw-fx" id="cwFx"></div>
