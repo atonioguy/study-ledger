@@ -613,10 +613,10 @@
   .cw-node:active{ transform:translateY(2px); box-shadow:0 2px 0 #0e0820; }
   .cw-node .cw-ntop{ position:absolute; top:6px; left:7px; right:7px; display:flex; justify-content:space-between; }
   .cw-np{ font-family:var(--pixfont); font-size:9px; color:#cdbcff; } .cw-nxp{ font-family:var(--pixfont); font-size:9px; color:#ffd96b; }
-  .cw-nicon{ font-size:24px; line-height:1; margin-top:8px; } .cw-nicon::before{ content:'▶'; color:#d7c8ff; text-shadow:0 0 9px rgba(190,160,255,.9); }
+  .cw-nicon{ font-size:24px; line-height:1; margin-top:8px; color:#d7c8ff; text-shadow:0 0 9px rgba(190,160,255,.9); }
   .cw-ntime{ font-family:var(--pixfont2); font-size:17px; color:var(--cardtx); }
   .cw-node.done{ background:linear-gradient(180deg,#26a589,#13715f); border-color:#7df0d8 #0a3a31 #0a3a31 #7df0d8; box-shadow:0 4px 0 #062019, 0 0 0 1px rgba(125,240,216,.5), 0 0 20px rgba(95,224,200,.7); }
-  .cw-node.done .cw-nicon::before{ content:'★'; color:#fff4c2; text-shadow:0 0 9px rgba(255,222,120,.95); }
+  .cw-node.done .cw-nicon{ color:#fff4c2; text-shadow:0 0 9px rgba(255,222,120,.95); }
   .cw-node.done .cw-ntime{ color:#dafff7; } .cw-node.done .cw-np{ color:#aef0e2; } .cw-node.done .cw-nxp{ color:#ffe08a; }
   .cw-node.pop,.cw-quest.pop{ animation:cwPop .34s ease; }
   /* ===== review quests — bigger feature buttons ===== */
@@ -1197,7 +1197,7 @@ function cwXpFloat(x,y,amt){ const fx=document.getElementById('cwFx'); if(!fx)re
 function cwBigCelebrate(){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); for(let i=0;i<3;i++) setTimeout(()=>cwBurst(r.left+r.width*(0.22+0.28*i),r.top+34,true),i*130); cwCheer(); cwBuzz([30,40,30,40,70]); cwSfx('levelup'); }
 function cwToggle(row,ev){ const id=row.dataset.id, item=CAMP_ITEMS.find(c=>c.id===id); if(!item)return; const before=campStats();
   const lkey=row.dataset.les; let lesObj=null, lesWasDone=false; if(lkey){ const k=lkey.split('-'); lesObj=CAMP_MODS[+k[0]].lessons[+k[1]]; lesWasDone=lesObj.parts.every(p=>campDone[p.id]); }
-  campDone[id]=!campDone[id]; saveCampaign(); row.classList.toggle('done',!!campDone[id]); const after=campStats(); campUpdate(before.xp);
+  campDone[id]=!campDone[id]; saveCampaign(); row.classList.toggle('done',!!campDone[id]); const _ic=row.querySelector('.cw-nicon'); if(_ic)_ic.textContent=campDone[id]?'★':'▶'; const after=campStats(); campUpdate(before.xp);
   if(campDone[id]){ let cx,cy; if(ev&&ev.clientX){ cx=ev.clientX; cy=ev.clientY; } else { const b=row.getBoundingClientRect(); cx=b.left+b.width/2; cy=b.top+b.height/2; }
     cwBurst(cx,cy,false); cwXpFloat(cx,cy-8,item.xp);   // effects spawn where you clicked (before the pop animation perturbs the rect)
     row.classList.remove('pop'); void row.offsetWidth; row.classList.add('pop');
@@ -1216,14 +1216,14 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     h+=`<div class="cw-track cw-modtrack" id="cwModTrack${m.mod}"><div class="cw-fill" id="cwModFill${m.mod}"></div></div>`;
     m.lessons.forEach((les,li)=>{ const lid=mi+'-'+li;
       h+=`<div class="cw-les" id="cwLesH${lid}"><span class="cw-ldot"></span><span class="cw-leslabel">${esc(les.l)}</span><span class="cw-lesday">${les.day} ${les.date}</span><span class="cw-lestime">${les.time}</span><span class="cw-lescount" id="cwLes${lid}">0/${les.parts.length}</span></div>`;
-      h+=`<div class="cw-nodes">`+les.parts.map((pt,pi)=>`<button class="cw-node${campDone[pt.id]?' done':''}" data-id="${pt.id}" data-les="${lid}"><span class="cw-ntop"><span class="cw-np">p${pi+1}</span><span class="cw-nxp">+${pt.xp}</span></span><span class="cw-nicon"></span><span class="cw-ntime">${pt.t}</span></button>`).join('')+`</div>`;
+      h+=`<div class="cw-nodes">`+les.parts.map((pt,pi)=>`<button class="cw-node${campDone[pt.id]?' done':''}" data-id="${pt.id}" data-les="${lid}"><span class="cw-ntop"><span class="cw-np">p${pi+1}</span><span class="cw-nxp">+${pt.xp}</span></span><span class="cw-nicon">${campDone[pt.id]?'★':'▶'}</span><span class="cw-ntime">${pt.t}</span></button>`).join('')+`</div>`;
     });
   });
   h+=`<div class="cw-mod"><span class="cw-modlabel">review</span><span class="cw-modmeta">recall, not rewatching</span></div>`;
   h+=`<div class="cw-quests">`+CAMP_REVIEW.map(r=>`<button class="cw-quest${campDone[r.id]?' done':''}" data-id="${r.id}"><span class="cw-qicon">${r.id==='sat'?'🧠':'🌙'}</span><span class="cw-qbody"><span class="cw-qtask">${esc(r.task)}</span><span class="cw-qmeta">${r.day} ${r.date} · ${esc(r.meta)}</span></span><span class="cw-qxp">+${r.xp}</span></button>`).join('')+`</div>`;
   list.innerHTML=h;
   list.querySelectorAll('.cw-node,.cw-quest').forEach(el=>el.onclick=(e)=>cwToggle(el,e));
-  const rs=document.getElementById('cwReset'); if(rs)rs.onclick=e=>{ e.stopPropagation(); campDone={}; saveCampaign(); list.querySelectorAll('.cw-node,.cw-quest').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-les').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-modtrack').forEach(x=>x.classList.remove('full')); campUpdate(); cwSfx('reset'); cwBuzz(12); };
+  const rs=document.getElementById('cwReset'); if(rs)rs.onclick=e=>{ e.stopPropagation(); campDone={}; saveCampaign(); list.querySelectorAll('.cw-node,.cw-quest').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-node .cw-nicon').forEach(x=>x.textContent='▶'); list.querySelectorAll('.cw-les').forEach(x=>x.classList.remove('done')); list.querySelectorAll('.cw-modtrack').forEach(x=>x.classList.remove('full')); campUpdate(); cwSfx('reset'); cwBuzz(12); };
   campUpdate(); }
 // per-window refresh — re-pull that one source from the worker so native-app edits show without a full reload
 function clRefresh(kind,btn){ if(btn&&btn.classList.contains('spin'))return; if(btn)btn.classList.add('spin');
