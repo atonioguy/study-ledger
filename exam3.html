@@ -1,4 +1,4 @@
-<!-- build log: v2.17 live · added BOD / oxygen-sag figure (bod.png) to M5L1 q9 -->
+<!-- build log: v2.18 live · M5L1 scope-cleanup: realigned q7–q12 answers/decks/quiz to slide scope -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -353,7 +353,7 @@
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
-  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.17</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.18</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
   <div class="sb-focus">
     <div class="sb-focus-label">Focus</div>
     <div class="sb-focus-row">
@@ -507,7 +507,7 @@
           </ul>
         </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Tie the depth trend to its cause: as light, oxygen, and nutrients drop off, communities thin out and specialize. The benthic-vs-planktonic split is the contrast to know &mdash; a question might describe where an organism lives (&ldquo;attached to the sides&rdquo; vs. &ldquo;freely suspended&rdquo;) and ask which category it belongs to.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Tie the depth trend to its cause: as light, oxygen, and nutrients drop off, communities thin out and specialize. Oxygen falls the hardest &mdash; photosynthetic O<sub>2</sub> generation is confined to the lit surface, and the O<sub>2</sub> that reaches depth is consumed rapidly by respiration and decomposition, so deep layers turn <em>anoxic</em>. The benthic-vs-planktonic split is the contrast to know &mdash; a question might describe where an organism lives (&ldquo;attached to the sides&rdquo; vs. &ldquo;freely suspended&rdquo;) and ask which category it belongs to.</div>
       <div class="fc" data-deck="m5l1-q7"></div>
     </article>
     <article class="q" id="m5l1-q8" data-lesson="m5l1">
@@ -515,9 +515,9 @@
       <div class="answer"><span class="lbl">Answer</span>
         <div class="takeaway">
           <ul>
-            <li><span class="mem">Epilimnion</span> &mdash; warm, oxygenated surface.</li>
-            <li><span class="mem">Thermocline</span> &mdash; the sharp temperature transition.</li>
-            <li><span class="mem">Hypolimnion</span> &mdash; cold, dense, low-oxygen bottom.</li>
+            <li><span class="mem">Epilimnion</span> &mdash; warm, less dense surface.</li>
+            <li><span class="mem">Thermocline</span> &mdash; middle layer, moderate temperature.</li>
+            <li><span class="mem">Hypolimnion</span> &mdash; cool, dense bottom.</li>
           </ul>
         </div>
         <div class="support">
@@ -537,9 +537,18 @@
     <article class="q" id="m5l1-q9" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q9</span><span class="q-text">What is biochemical oxygen demand (BOD), what alters it, and how does eutrophication impact BOD?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <div class="takeaway"><span class="mem">Eutrophication:</span> extra nutrients &rarr; algal/plant bloom &rarr; die-off &rarr; microbes decompose it &rarr; O<sub>2</sub> consumed &rarr; <span class="mem">BOD rises, dissolved O<sub>2</sub> falls</span>, water trends anoxic.</div>
+        <div class="takeaway"><span class="mem">BOD (biochemical oxygen demand)</span> &mdash; the microbial oxygen-consuming capacity of a body of water.</div>
         <div class="support">
-          <p><span class="mem">BOD</span> (biochemical oxygen demand) is the oxygen microbes need to break down organic matter &mdash; high BOD signals water headed toward oxygen depletion.</p>
+          <div class="sub">What alters it</div>
+          <ul>
+            <li>influx of organic material &rarr; <span class="concept">BOD &uarr;</span></li>
+            <li>rapid growth &rarr; rapid O<sub>2</sub> consumption &rarr; <span class="concept">BOD &darr; over time</span></li>
+          </ul>
+          <div class="sub">Eutrophication &amp; BOD</div>
+          <p><span class="mem">Eutrophication</span> = over-enrichment &rarr; increased plant &amp; algae growth.</p>
+          <ul>
+            <li>bloom dies &rarr; loss of O<sub>2</sub> production <strong>+</strong> microbes feed on dead organic material &rarr; <span class="concept">BOD &uarr;</span> <strong>+</strong> becomes <span class="mem">anoxic</span></li>
+          </ul>
           <figure style="margin:10px 0 4px;">
             <img src="images/bod.png" alt="Oxygen-sag curve downstream of an organic-waste input: bacteria, organic carbon, and BOD spike while dissolved O2 drops; released nutrients (NO3-, NH4+, PO4 3-) then fuel an algae and cyanobacteria bloom as O2 recovers" style="width:100%;max-width:440px;height:auto;display:block;margin:0 auto;border-radius:6px;" loading="lazy">
             <figcaption style="font-size:.82em;color:var(--ink-soft);font-style:italic;text-align:center;margin-top:2px;">Oxygen sag below an organic-waste input: <span class="mem">bacteria &amp; BOD</span> spike &rarr; <span class="mem">dissolved O<sub>2</sub> drops</span> &rarr; released nutrients fuel an algal/cyanobacterial bloom &rarr; O<sub>2</sub> recovers.</figcaption>
@@ -552,49 +561,66 @@
     <article class="q" id="m5l1-q10" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q10</span><span class="q-text">What types of microbes thrive in marine waters, and which are most important for photosynthetic production?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <div class="takeaway"><span class="mem">Prochlorococcus</span> &asymp; 50% of marine photosynthetic production &mdash; the dominant marine phototroph.</div>
+        <div class="takeaway">Marine waters are dominated by <span class="mem">phototrophs</span>:</div>
         <div class="support">
-          <div class="sub">Don&rsquo;t confuse with</div>
           <ul>
-            <li><span class="concept">Trichodesmium</span> &mdash; nitrogen fixation.</li>
-            <li><span class="concept">Ostreococcus</span> &mdash; a eukaryote.</li>
-            <li><span class="concept">Pelagibacter</span> &mdash; a heterotroph, <em>not</em> a phototroph.</li>
+            <li><span class="mem">Prochlorococcus</span>
+              <ul><li>&asymp; <span class="concept">50% of marine photosynthetic production</span> &mdash; the top producer.</li></ul>
+            </li>
+            <li><span class="concept">Trichodesmium</span> &mdash; plankton (filamentous cyanobacterium).</li>
+            <li><span class="concept">Ostreococcus</span> &mdash; eukaryote.</li>
+            <li><span class="concept">Anoxygenic phototrophs</span>.</li>
           </ul>
         </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>If a question says &ldquo;photosynthetic production,&rdquo; the answer is Prochlorococcus. The trap is Pelagibacter &mdash; it&rsquo;s the most abundant heterotroph out there, so it&rsquo;s a tempting pick, but a heterotroph can&rsquo;t be the photosynthesis answer.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The question has two parts. First the category: marine waters teem with <em>phototrophs</em> &mdash; the names listed are the ones to recognize. Second, the standout for photosynthetic <em>production</em> specifically: Prochlorococcus, at roughly half of it. The classic trap is Pelagibacter &mdash; the most abundant heterotroph in the ocean, tempting because it&rsquo;s everywhere, but a heterotroph can&rsquo;t be the photosynthesis answer.</div>
       <div class="fc" data-deck="m5l1-q10"></div>
     </article>
     <article class="q" id="m5l1-q11" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q11</span><span class="q-text">What is the pelagic zone, what organisms tell you that&#x27;s where you are, and what is most abundant there?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <div class="takeaway">
+        <div class="takeaway"><span class="mem">Pelagic zone</span> = open (marine) waters.</div>
+        <div class="support">
+          <div class="sub">What tells you you&rsquo;re there</div>
           <ul>
-            <li>Most abundant <span class="concept">heterotroph</span> in open ocean = <span class="mem">Pelagibacter</span> (oligotroph, proteorhodopsin).</li>
-            <li>Most abundant <span class="concept">microorganism overall</span> = <span class="mem">viruses</span> (&asymp; 10<sup>8</sup>/mL).</li>
+            <li><span class="mem">Pelagibacter</span> is found in this zone &mdash; the most abundant marine <span class="concept">heterotroph</span>.
+              <ul>
+                <li><span class="concept">oligotroph</span> &mdash; grows best at very low nutrient concentrations.</li>
+                <li>has <span class="concept">proteorhodopsin</span> &mdash; uses light to drive ATP synthesis.</li>
+              </ul>
+            </li>
+          </ul>
+          <div class="sub">Most abundant there</div>
+          <ul>
+            <li><span class="mem">Viruses</span> &mdash; the most abundant microorganisms in the oceans (&asymp; 10<sup>8</sup>/mL).</li>
           </ul>
         </div>
-        <div class="support">
-          <p>Spotting Pelagibacter tells you you&rsquo;re in open pelagic water.</p>
-        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>This one rewards reading the wording, because there are two &ldquo;most abundant&rdquo; answers. &ldquo;Most abundant heterotroph&rdquo; &rarr; Pelagibacter; &ldquo;most abundant microorganism overall&rdquo; &rarr; viruses. If it asks what organism marks open pelagic water, that&rsquo;s Pelagibacter; if it asks what&rsquo;s simply most numerous, that&rsquo;s viruses.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Answer it in order: the pelagic zone is just the open water. The organism that marks it is Pelagibacter &mdash; the most abundant marine <em>heterotroph</em>, an oligotroph suited to the low-nutrient open ocean. Then watch the wording on &ldquo;most abundant&rdquo;: the most abundant <em>microorganism overall</em> is viruses (&asymp; 10<sup>8</sup>/mL), not Pelagibacter. A question can hinge on heterotroph vs. overall.</div>
       <div class="fc" data-deck="m5l1-q11"></div>
     </article>
     <article class="q" id="m5l1-q12" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q12</span><span class="q-text">What is the typical condition of the deep sea, and what causes variations from this?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <div class="takeaway">
+        <div class="takeaway">Typical deep sea: <span class="mem">low temperature, high pressure, no light, low nutrient levels</span>.</div>
+        <div class="support">
           <ul>
-            <li><strong>Default deep sea</strong> (cold, dark, high-pressure, nutrient-poor) &rarr; <span class="mem">chemotrophic, piezophilic</span> microbes.</li>
-            <li><strong>Exception &mdash; <span class="mem">hydrothermal vents</span>:</strong> heat + reduced chemicals &rarr; thermophilic chemolithotrophs.</li>
+            <li>organisms must be <span class="mem">chemotrophic</span> and <span class="mem">piezophilic</span> or <span class="mem">piezotolerant</span>
+              <ul><li>needs to either love or tolerate high pressure.</li></ul>
+            </li>
+            <li>organisms are often <span class="mem">psychrophilic</span> or <span class="mem">psychrotolerant</span>
+              <ul><li>can be <span class="concept">thermophilic or thermotolerant</span>.</li></ul>
+            </li>
+          </ul>
+          <div class="sub">What causes variations</div>
+          <p><span class="mem">Hydrothermal vents</span> &mdash; home to thriving animal and microbial communities.</p>
+          <ul>
+            <li>mostly <span class="concept">chemolithotrophic bacteria</span>.</li>
+            <li><span class="concept">thermophiles and hyperthermophiles</span>.</li>
           </ul>
         </div>
-        <div class="support">
-          <p>&ldquo;No light&rdquo; is why deep-sea life is chemotrophic rather than phototrophic.</p>
-        </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Hold the default and the exception together. A question might ask how heat-loving thermophiles can possibly live in a freezing deep ocean &mdash; the answer is hydrothermal vents, which pump out heat and reduced chemicals that fuel chemolithotrophic communities right on the seafloor.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Hold the default and its exception together. The deep sea is cold, dark, crushing, and nutrient-poor, so its microbes are chemotrophic (no light for phototrophy) and built for pressure (piezophilic/-tolerant) and cold (psychrophilic/-tolerant). The puzzle is how anything thermophilic survives down there &mdash; the answer is hydrothermal vents, which pump out heat and reduced chemicals that fuel chemolithotrophic, thermophilic/hyperthermophilic communities right on the seafloor.</div>
       <div class="fc" data-deck="m5l1-q12"></div>
     </article>
     <div class="topic-divider" id="m5l1-quizdiv" data-topic="Reinforcement quiz"><div class="td-inner"><span>Reinforcement quiz</span><span class="td-line"></span></div></div>
@@ -2284,7 +2310,7 @@ window.smoothScrollTo=function(el){
      a:1, fb:'Small size → high surface-area-to-volume ratio → more efficient scavenging of scarce nutrients (the Module 1 SA:V idea).'},
     {p:'In a summer-stratified temperate lake, the cool, dense bottom layer is the:',
      o:['epilimnion','thermocline','hypolimnion','benthos'],
-     a:2, fb:'Epilimnion = warm surface; thermocline = transitional middle; hypolimnion = cold, dense bottom (hypo = under).'},
+     a:2, fb:'Epilimnion = warm, less dense surface; thermocline = middle, moderate; hypolimnion = cool, dense bottom (hypo = under).'},
     {p:'Heavy nutrient runoff triggers an algal bloom that then dies and decomposes. The most direct microbial result is:',
      o:['BOD falls and the water becomes oxygen-rich','BOD rises and the water can become anoxic','richness rises as oxygen increases','BOD is unchanged because rivers are well-mixed'],
      a:1, fb:'Eutrophication → more biomass → microbial decomposition consumes O<sub>2</sub> → BOD rises → water trends anoxic.'},
@@ -2616,29 +2642,34 @@ window.smoothScrollTo=function(el){
       {q:'What are <strong>planktonic</strong> species?', a:'Freely suspended (e.g., phytoplankton).'}
     ],
     'm5l1-q8':[
-      {q:'What is the <strong>epilimnion</strong>?', a:'The warm, oxygenated surface layer (<em>epi-</em> = upon).'},
-      {q:'What is the <strong>thermocline</strong>?', a:'The sharp temperature-transition middle layer.'},
-      {q:'What is the <strong>hypolimnion</strong>?', a:'The cold, dense, low-oxygen bottom layer (<em>hypo-</em> = under).'}
+      {q:'What is the <strong>epilimnion</strong>?', a:'The warm, less dense surface layer (<em>epi-</em> = upon).'},
+      {q:'What is the <strong>thermocline</strong>?', a:'The middle layer, moderate temperature.'},
+      {q:'What is the <strong>hypolimnion</strong>?', a:'The cool, dense bottom layer (<em>hypo-</em> = under).'}
     ],
     'm5l1-q9':[
-      {q:'What is <strong>biochemical oxygen demand (BOD)</strong>?', a:'The O<sub>2</sub> microbes need to break down organic matter; high BOD = water heading toward O<sub>2</sub> depletion.'},
-      {q:'What is <strong>eutrophication</strong>?', a:'Extra nutrients &rarr; algal/plant bloom &rarr; die-off &rarr; microbial decomposition.'},
-      {q:'How does eutrophication affect BOD and dissolved O<sub>2</sub>?', a:'BOD <strong>rises</strong>, dissolved O<sub>2</sub> <strong>falls</strong>, water trends anoxic.'}
+      {q:'What is <strong>biochemical oxygen demand (BOD)</strong>?', a:'The microbial oxygen-consuming capacity of a body of water.'},
+      {q:'How does an <strong>influx of organic material</strong> affect BOD?', a:'It increases BOD &mdash; more organic material for microbes to break down.'},
+      {q:'How does <strong>rapid microbial growth</strong> affect BOD?', a:'Rapid growth &rarr; rapid O<sub>2</sub> consumption &rarr; BOD decreases over time.'},
+      {q:'What is <strong>eutrophication</strong>?', a:'Over-enrichment &rarr; increased plant and algae growth.'},
+      {q:'How does eutrophication <strong>impact BOD</strong>?', a:'Bloom dies &rarr; loss of O<sub>2</sub> production + microbes feed on dead organic material &rarr; BOD increases + becomes anoxic.'}
     ],
     'm5l1-q10':[
-      {q:'Which marine microbe accounts for ~50% of photosynthetic production?', a:'<span class="mem">Prochlorococcus</span> &mdash; the dominant marine phototroph.'},
-      {q:'What does <strong>Trichodesmium</strong> do?', a:'Nitrogen fixation.'},
-      {q:'What is <strong>Pelagibacter</strong> (the trap)?', a:'A <span class="concept">heterotroph</span> &mdash; not a phototroph.'},
-      {q:'What is <strong>Ostreococcus</strong>?', a:'A eukaryote.'}
+      {q:'What type of microbe dominates marine waters?', a:'<span class="mem">Phototrophs</span>.'},
+      {q:'Name the important marine phototrophs.', a:'<span class="mem">Prochlorococcus</span>, Trichodesmium (plankton), Ostreococcus, and anoxygenic phototrophs.'},
+      {q:'Which marine phototroph drives ~50% of photosynthetic production?', a:'<span class="mem">Prochlorococcus</span> &mdash; the top marine producer.'}
     ],
     'm5l1-q11':[
-      {q:'Most abundant <strong>heterotroph</strong> in the open ocean?', a:'<span class="mem">Pelagibacter</span> (oligotroph, proteorhodopsin).'},
-      {q:'Most abundant <strong>microorganism overall</strong> in the ocean?', a:'<span class="mem">Viruses</span> (&asymp; 10<sup>8</sup>/mL).'},
-      {q:'Which organism marks open <strong>pelagic</strong> water?', a:'Pelagibacter.'}
+      {q:'What is the <strong>pelagic zone</strong>?', a:'Open (marine) waters.'},
+      {q:'Which organism tells you you&rsquo;re in open <strong>pelagic</strong> water?', a:'<span class="mem">Pelagibacter</span> &mdash; the most abundant marine heterotroph.'},
+      {q:'What does it mean that Pelagibacter is an <strong>oligotroph</strong>?', a:'It grows best at very low nutrient concentrations.'},
+      {q:'What is the <strong>most abundant</strong> microorganism in the oceans?', a:'<span class="mem">Viruses</span> (&asymp; 10<sup>8</sup>/mL).'}
     ],
     'm5l1-q12':[
-      {q:'Default <strong>deep-sea</strong> conditions, and the microbes they favor?', a:'Cold, dark, high-pressure, nutrient-poor &rarr; <span class="mem">chemotrophic, piezophilic</span> microbes.'},
-      {q:'What exception lets <strong>thermophiles</strong> live in the deep sea?', a:'<span class="mem">Hydrothermal vents</span> &mdash; heat + reduced chemicals &rarr; thermophilic chemolithotrophs.'}
+      {q:'What are the typical conditions of the <strong>deep sea</strong>?', a:'<span class="mem">Low temperature, high pressure, no light, low nutrient levels</span>.'},
+      {q:'What must deep-sea organisms be (energy + pressure)?', a:'<span class="mem">Chemotrophic</span> and <span class="mem">piezophilic</span> or <span class="mem">piezotolerant</span> &mdash; they love or tolerate high pressure.'},
+      {q:'Deep-sea organisms are often psychrophilic/psychrotolerant &mdash; but can also be?', a:'<span class="concept">Thermophilic or thermotolerant</span>.'},
+      {q:'What causes <strong>variations</strong> from typical deep-sea conditions?', a:'<span class="mem">Hydrothermal vents</span> &mdash; home to thriving animal and microbial communities.'},
+      {q:'What microbes live at <strong>hydrothermal vents</strong>?', a:'Mostly <span class="concept">chemolithotrophic bacteria</span>; thermophiles and hyperthermophiles.'}
     ],
     'm5l2-q1':[
       {q:'<strong>Largest</strong> carbon reservoir?', a:'<span class="mem">Sediments and rocks</span> in the crust.'},
