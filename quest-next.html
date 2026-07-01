@@ -9,7 +9,7 @@
   --outline:#140f24; --inset:#0f0a22; --gold:#ffd96b; --tx:#e3dbff; --card:#463a78; --cardtx:#f3eeff;
   --pixfont:'Silkscreen','Courier New',monospace; --pixfont2:'VT323','Courier New',monospace;
   --base:#191234; --base2:#322766; --dot:#2b2258; --env:#8068c4; --ban:rgba(128,104,196,.42);
-  --comp:#5fe0c8; --compL:#6ff0d8; --compD:#3fb8a4; --chi:#7d6bc0; --clo:#281f48; --ctext:#f3eeff; --donetx:#0c3830;
+  --comp:#5fe0c8; --compL:#6ff0d8; --compD:#3fb8a4; --chi:#7d6bc0; --clo:#281f48; --ctext:#f3eeff; --donetx:#0c3830; --pathdot:#4a3d78;
 }
 *{box-sizing:border-box;}
 html,body{margin:0;min-height:100%;background:#161029;font-family:var(--pixfont);color:var(--tx);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;}
@@ -118,8 +118,8 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .wmhd .wmglobe:hover{ transform:translateY(-1px) scale(1.08); box-shadow:0 0 12px rgba(255,200,110,.55); }
 .wmhd .wmglobe:active{ transform:translateY(1px) scale(.94); }
 .map{ position:relative; width:100%; }
-.mdot{ position:absolute; width:6px; height:6px; transform:translate(-50%,-50%) rotate(45deg); background:#4a3d78; image-rendering:pixelated; }
-.mglow{ position:absolute; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none; transition:left .55s ease-in-out, top .55s ease-in-out; background:radial-gradient(circle, rgba(120,224,205,.32) 0%, rgba(255,217,107,.15) 42%, transparent 70%); animation:mamb 2.4s ease-in-out infinite; }
+.mdot{ position:absolute; width:6px; height:6px; transform:translate(-50%,-50%) rotate(45deg); background:var(--pathdot,#4a3d78); image-rendering:pixelated; }
+.mglow{ position:absolute; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none; transition:left .55s ease-in-out, top .55s ease-in-out; background:radial-gradient(circle, color-mix(in srgb, var(--comp) 34%, transparent) 0%, rgba(255,217,107,.15) 42%, transparent 70%); animation:mamb 2.4s ease-in-out infinite; }
 @keyframes mamb{ 0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.94)} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)} }
 .mhill{ position:absolute; transform:translate(-50%,-50%); image-rendering:pixelated; z-index:2; cursor:pointer; }
 .mflag{ position:absolute; transform:translate(-50%,-100%); image-rendering:pixelated; z-index:4; pointer-events:none; }
@@ -131,7 +131,7 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .mlbl .nm{ font-family:var(--pixfont2); font-size:19px; color:var(--cardtx); line-height:1.05; }
 .mlbl .track{ width:120px; height:10px; margin:8px auto 5px; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); overflow:hidden; }
 .mlbl .fill{ height:100%; }
-.fill.tealbar{ background:repeating-linear-gradient(45deg,#5fe0c8 0 6px,#3fb8a4 6px 12px); box-shadow:0 0 8px rgba(95,224,200,.55); }
+.fill.tealbar{ background:repeating-linear-gradient(45deg,var(--compL) 0 6px,var(--compD) 6px 12px); box-shadow:0 0 8px color-mix(in srgb, var(--comp) 60%, transparent); }
 .fill.goldbar{ background:linear-gradient(90deg,#ffd96b,#ff9e5a 55%,#ff7aa8); box-shadow:0 0 11px rgba(255,180,90,.85); }
 .fill.greybar{ background:repeating-linear-gradient(45deg,#6b6478 0 6px,#544e63 6px 12px); }
 .mlbl .stat{ font-family:var(--pixfont); font-size:11px; letter-spacing:.5px; margin-top:4px; display:flex; align-items:center; justify-content:center; gap:5px; }
@@ -223,6 +223,22 @@ const PALETTES={
   sakura:  {label:'sakura',   acc:'#ffb3d1', c1:'#45304a', c2:'#34203a', bd:'#b877a0'},
 };
 const PAL_KEYS=Object.keys(PALETTES);
+// ---- palette theming: retint the map/quest views to the active world ----
+function _hex2rgb(h){ h=(h||'').replace('#',''); if(h.length===3)h=h.split('').map(c=>c+c).join(''); return [parseInt(h.slice(0,2),16)||0,parseInt(h.slice(2,4),16)||0,parseInt(h.slice(4,6),16)||0]; }
+function shade(hex,pct){ const [r,g,b]=_hex2rgb(hex); const t=pct<0?0:255,p=Math.abs(pct)/100,mix=v=>Math.round(v+(t-v)*p); return 'rgb('+mix(r)+','+mix(g)+','+mix(b)+')'; }
+function rgba(hex,a){ const [r,g,b]=_hex2rgb(hex); return 'rgba('+r+','+g+','+b+','+a+')'; }
+function applyWorldTheme(w){
+  const P=PALETTES[(w&&w.color)]||PALETTES.twilight;
+  const app=document.getElementById('app'); if(!app)return;
+  const set=(k,v)=>app.style.setProperty(k,v);
+  // teal / completion role -> this world's accent
+  set('--comp',P.acc); set('--compL',shade(P.acc,20)); set('--compD',shade(P.acc,-30)); set('--donetx',shade(P.acc,-70));
+  // dusky-blue base role -> this world's base shades
+  set('--base2',P.c1); set('--base',shade(P.c2,-14)); set('--dot',shade(P.c1,-16)); set('--pathdot',shade(P.bd,-4));
+  set('--frame',P.c1); set('--card',shade(P.c1,12)); set('--bar',shade(P.c1,14)); set('--barhi',P.bd);
+  set('--hi',P.bd); set('--lo',shade(P.c2,-22)); set('--env',P.bd); set('--chi',P.bd); set('--clo',shade(P.c2,-8));
+  set('--ban',rgba(P.bd,.42));
+}
 const EMOJIS=['✦','📚','💪','🧠','🎨','🎯','🌙','🔥','🎮','📖','🌱','☕'];
 const CW_PLAY='M8 5v14l11-7z', CW_STAR='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.81 8.62 2 9.24l5.46 4.73L5.82 21z';
 let uid=0; const nid=(p)=>p+'_'+(Date.now().toString(36))+'_'+(uid++);
@@ -551,7 +567,7 @@ document.getElementById('saveBtn').onclick=()=>{ saveQuest(); document.getElemen
 document.getElementById('giveupBtn').onclick=()=>askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; persist(); document.getElementById('saveNote').textContent='🏳️ given up — resumable later'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); });
 const V={map:document.getElementById('viewMap'), build:document.getElementById('viewBuild'), preview:document.getElementById('viewPreview'), hub:document.getElementById('viewHub')};
 const T={map:document.getElementById('tabMap'), build:document.getElementById('tabBuild'), preview:document.getElementById('tabPreview')};
-function show(name){ for(const k in V) V[k].classList.toggle('on', k===name); for(const k in T) T[k].classList.toggle('on', k===name); if(name==='map')renderMap(); else if(name==='build')renderBuilder(); else if(name==='preview')renderPreview(); else if(name==='hub')renderHub(); }
+function show(name){ applyWorldTheme(activeWorld()); for(const k in V) V[k].classList.toggle('on', k===name); for(const k in T) T[k].classList.toggle('on', k===name); if(name==='map')renderMap(); else if(name==='build')renderBuilder(); else if(name==='preview')renderPreview(); else if(name==='hub')renderHub(); }
 T.map.onclick=()=>show('map'); T.build.onclick=()=>show('build'); T.preview.onclick=()=>show('preview');
 
 // default click blip for everything EXCEPT completing a task (which keeps the satisfying sound)
