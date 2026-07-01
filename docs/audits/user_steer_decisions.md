@@ -47,6 +47,15 @@ Evaluate every improvement on THREE fronts: **look · performance · practicalit
 - Must ENCOURAGE without inducing dread/anxiety — honor the cozy "never red / never shaming / no harsh decay" restraint. A missed day should feel gentle ("the fire's still warm"), not punishing.
 - Getting its own dedicated Fable redesign pass (look · performance · practicality).
 
+## Economy model (locked, with worked example)
+- **Coins ← completing STEPS** (coin value = step's easy/med/hard value 5/10/20). **Stars ← completing CHAPTERS** (+3 on full quest). **XP ← steps (same value) + pomo per-minute bonus.** The pomo bonus is **XP-only, never coins** (anti-farm firewall). Tomatoes (1 per completed pomo) trade in for a small coin trickle (~5c) or cozy uses.
+- Worked ex — quest with Ch1[easy,med,hard]+Ch2[med,hard]: 65 coins, 5★ (2 chapters +3 quest), 65 XP from steps (+ pomo bonus XP). Work dominates; focus is a gentle bonus.
+- **Endgame / infinite sinks (so earning never feels pointless, without a treadmill):**
+  - Finite content = a structured SEASON (decor shelf ~season, dex ~10-14 wks, hats/charms) → extended by **wave-2 Night Market** buddies.
+  - Infinite cozy sinks: **preserve jars + feeding the tomato** (a keepsake/memento of cumulative focus, NOT a grind) for tomatoes; the **Payday Wheel** recycles coins.
+  - **Level (open-ended) + daily streak = perpetual**, need no sink — always a number climbing.
+  - Philosophy: "collecting everything" = a cozy STEADY-STATE (furnished Den + full family at tea); the endgame reward is the vibe, not endless unlocks. A study app must not become a second job.
+
 ## Standing rule reinforced
 - Every feature must REDUCE friction. If a mechanic requires manual bookkeeping/logging to earn rewards, redesign it to be automatic or drop it.
 - Evaluation lens for ALL work: look · performance · practicality.
