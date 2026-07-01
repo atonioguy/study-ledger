@@ -333,6 +333,22 @@
   /* ===== embed mode (iframed into the dashboard) ===== */
   html.embed,body.embed{ height:100%; background:transparent; }
   body.embed #app{ height:100%; min-height:0; max-width:none; margin:0; border:none; box-shadow:none; }
+  /* ===== pixel currency icons ===== */
+  .ic{ display:inline-block; width:1.05em; height:1.05em; vertical-align:-0.16em; background:center/contain no-repeat; flex:none; }
+  .ic-star{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 .5L11.5 6 6 11.5 .5 6Z' fill='%23bca6f0'/%3E%3Cpath d='M6 2.3 3.6 4.6 6 4.6Z' fill='%23eadfff'/%3E%3C/svg%3E"); }
+  .ic-coin{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Ccircle cx='6' cy='6' r='5.4' fill='%23d99a32'/%3E%3Ccircle cx='6' cy='6' r='4.2' fill='%23ffd05f'/%3E%3Ccircle cx='4.6' cy='4.6' r='1.1' fill='%23fff4c2'/%3E%3C/svg%3E"); }
+  /* ===== segmented questline trail ===== */
+  #cwList::before{ display:none; }
+  #cwList .cw-mod,#cwList .cw-modtrack,#cwList .cw-les,#cwList .cw-nodes,#cwList .cw-quests,#cwList .sq-note{ position:relative; z-index:1; }
+  .cw-seg{ position:absolute; left:13px; width:4px; z-index:0; border-radius:2px; background:repeating-linear-gradient(180deg,currentColor 0 4px,transparent 4px 9px); }
+  .cw-seg.fut{ color:var(--barhi); opacity:.4; }
+  .cw-seg.done{ color:var(--teal); opacity:.9; }
+  .cw-seg.next{ color:var(--gold); opacity:1; filter:drop-shadow(0 0 3px rgba(255,217,107,.7)); animation:sqTrail 1.5s ease-in-out infinite; }
+  @keyframes sqTrail{ 0%,100%{ opacity:.55 } 50%{ opacity:1 } }
+  .cw-les .cw-ldot{ left:-26px; }
+  .cw-les.current::after{ display:none; }
+  .cw-les.current .cw-ldot{ background:var(--gold); box-shadow:0 0 0 3px var(--body),0 0 10px rgba(255,217,107,.9); animation:sqGlow 1.5s ease-in-out infinite; }
+  @keyframes sqGlow{ 0%,100%{ box-shadow:0 0 0 3px var(--body),0 0 5px rgba(255,217,107,.55) } 50%{ box-shadow:0 0 0 3px var(--body),0 0 14px rgba(255,217,107,1) } }
   /* effects layer spans the whole app */
   #cwFx{ position:fixed; inset:0; z-index:70; pointer-events:none; }
   #cwBanner{ position:fixed; left:50%; top:88px; z-index:72; }
@@ -349,8 +365,8 @@
         <div class="hud-xpnum" id="cwXpTotal">0 / 250 xp</div>
       </div>
       <div class="hud-cur">
-        <span class="sq-chip coin">🪙 <b id="sqCoins">0</b></span>
-        <span class="sq-chip star">⭐ <b id="sqStars">0</b></span>
+        <span class="sq-chip coin"><span class="ic ic-coin"></span><b id="sqCoins">0</b></span>
+        <span class="sq-chip star"><span class="ic ic-star"></span><b id="sqStars">0</b></span>
       </div>
     </header>
 
@@ -364,21 +380,21 @@
       <section class="screen" id="screen-buddies" data-screen="buddies">
         <div class="sq-bhd">
           <div><h2 class="sq-bttl">buddies <span id="budCount">0/12</span></h2><div class="sq-bpity" id="budPity"></div></div>
-          <span class="sq-chip star">⭐ <b id="sqStars2">0</b></span>
+          <span class="sq-chip star"><span class="ic ic-star"></span><b id="sqStars2">0</b></span>
         </div>
         <div class="sq-hatch">
           <div class="sq-egg" id="budEgg">🥚</div>
-          <button id="budHatch" class="sq-bigbtn">hatch · 3⭐</button>
+          <button id="budHatch" class="sq-bigbtn">hatch · 3<span class="ic ic-star"></span></button>
         </div>
         <div class="sq-dex" id="budDex"></div>
       </section>
 
       <section class="screen" id="screen-shop" data-screen="shop">
-        <div class="sq-questhd"><span class="qt">✦ the shop</span><span class="qm">gamble 🪙 for ⭐</span></div>
+        <div class="sq-questhd"><span class="qt">✦ the shop</span><span class="qm">gamble <span class="ic ic-coin"></span> for <span class="ic ic-star"></span></span></div>
         <div class="slot-cab">
           <div class="slot-window"><span class="slot-sym">🍒</span><span class="slot-sym">🔔</span><span class="slot-sym">⭐</span></div>
           <div class="slot-msg" id="slotMsg">match 3 to win · ⭐⭐ also pays</div>
-          <button id="slotSpin" class="sq-bigbtn">spin · 8🪙</button>
+          <button id="slotSpin" class="sq-bigbtn">spin · 8<span class="ic ic-coin"></span></button>
           <div class="slot-left" id="slotLeft"></div>
           <div class="slot-odds">7️⃣7️⃣7️⃣ jackpot &middot; ⭐⭐⭐ +3⭐ &middot; 💎💎💎 +1⭐ &middot; 🍀🍀🍀 +35🪙</div>
         </div>
@@ -542,7 +558,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v1.9';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v2.0';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -590,7 +606,25 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     if(!target) target=lesEls[lesEls.length-1];
     if(target){ target.classList.add('current'); const av=document.createElement('span'); av.className='sq-avatar'; const u=hatIconURL(COS.eq); if(u){ const h=document.createElement('i'); h.className='m-hat'; h.style.backgroundImage='url("'+u+'")'; av.appendChild(h); } target.appendChild(av); }
   }
-  function coinFloat(x,y,amt){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); const e=document.createElement('span'); e.className='sq-coinfloat'; e.textContent='+'+amt+' 🪙'; e.style.left=(x-r.left)+'px'; e.style.top=(y-r.top+12)+'px'; fx.appendChild(e); e.animate([{transform:'translate(-50%,0)',opacity:1},{transform:'translate(-50%,-34px)',opacity:0}],{duration:900,easing:'ease-out'}).onfinish=()=>e.remove(); }
+  function coinFloat(x,y,amt){ const fx=document.getElementById('cwFx'); if(!fx)return; const r=fx.getBoundingClientRect(); const e=document.createElement('span'); e.className='sq-coinfloat'; e.innerHTML='+'+amt+' <span class="ic ic-coin"></span>'; e.style.left=(x-r.left)+'px'; e.style.top=(y-r.top+12)+'px'; fx.appendChild(e); e.animate([{transform:'translate(-50%,0)',opacity:1},{transform:'translate(-50%,-34px)',opacity:0}],{duration:900,easing:'ease-out'}).onfinish=()=>e.remove(); }
+  // segmented questline trail: colored per lesson-pair (teal=both done, gold=into the current, purple=future), starts at the first diamond
+  function buildTrail(){
+    const list=document.getElementById('cwList'); if(!list||!list.offsetParent)return;  // skip while the map tab is hidden (offsets would be 0)
+    list.querySelectorAll('.cw-seg').forEach(e=>e.remove());
+    const les=[...list.querySelectorAll('.cw-les')]; if(les.length<2)return;
+    const cy=el=>el.offsetTop+el.offsetHeight/2;
+    const done=les.map(el=>el.classList.contains('done'));
+    const cur=done.indexOf(false);                          // first unfinished lesson = the current one
+    for(let i=1;i<les.length;i++){
+      const y1=cy(les[i-1]), y2=cy(les[i]); if(y2<=y1)continue;
+      const seg=document.createElement('div'); seg.className='cw-seg';
+      seg.classList.add(done[i-1]&&done[i]?'done':(done[i-1]&&i===cur?'next':'fut'));
+      seg.style.top=y1+'px'; seg.style.height=(y2-y1)+'px';
+      list.appendChild(seg);
+    }
+  }
+  let _trailRaf=0;
+  function scheduleTrail(){ if(_trailRaf)return; _trailRaf=requestAnimationFrame(()=>{ _trailRaf=0; buildTrail(); }); }
 
   // ===== buddy collection (gacha) =====
   function shade(hex,amt){ const n=parseInt(hex.slice(1),16); let r=(n>>16)+amt,g=((n>>8)&255)+amt,b=(n&255)+amt; r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b)); return 'rgb('+r+','+g+','+b+')'; }
@@ -735,7 +769,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     const pool=BUDDIES.filter(b=>b.rar===rar); const pick=pool[Math.floor(Math.random()*pool.length)];
     const isNew=!BUD.owned[pick.id]; let note;
     if(isNew){ BUD.owned[pick.id]=1; if(!BUD.active)BUD.active=pick.id; note='✦ new buddy! ✦'; }
-    else { adjustBalance(12,0); note='duplicate · +12 🪙'; }
+    else { adjustBalance(12,0); note='duplicate · +12 <span class="ic ic-coin"></span>'; }
     saveBud(); refreshEcon(); markChanged();
     playPull(pick,isNew,note);                                 // corner buddy updates on card close, not now
   }
@@ -758,7 +792,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     m.querySelector('.ms-tom').style.backgroundImage='url("'+drawMascotBig('tomato',COS.eq)+'")';
     const s=campStats(), rk=rankFor(s.xp), cos=COSMETICS.find(o=>o.id===COS.eq);
     document.getElementById('msStats').innerHTML =
-      statRow('level','lv '+rk.lv+' · '+rk.name)+statRow('coins','🪙 '+coinBal())+statRow('stars','⭐ '+starBal())+
+      statRow('level','lv '+rk.lv+' · '+rk.name)+statRow('coins','<span class="ic ic-coin"></span> '+coinBal())+statRow('stars','<span class="ic ic-star"></span> '+starBal())+
       statRow('buddies',Object.keys(BUD.owned).length+' / '+BUDDIES.length)+statRow('outfit',cos?cos.name:'none');
     const bud = BUD.active && BUDDIES.find(x=>x.id===BUD.active);
     const be=m.querySelector('.ms-bud'); if(be){ if(bud){ be.style.display='block'; be.style.backgroundImage='url("'+drawBuddyPortrait(bud)+'")'; } else be.style.display='none'; }
@@ -833,11 +867,11 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     if(COS.eq===cosSel){ btn.textContent= cosSel==='none'?'no outfit':'equipped ✓'; btn.disabled=true; btn.className='sq-bigbtn off'; }
     else if(cosSel==='none'){ btn.textContent='take off'; btn.disabled=false; btn.className='sq-bigbtn'; }
     else if(COS.owned[cosSel]){ btn.textContent='equip'; btn.disabled=false; btn.className='sq-bigbtn'; }
-    else { const can=coinBal()>=sel.price; btn.textContent='buy · '+sel.price+'🪙'; btn.disabled=!can; btn.className='sq-bigbtn'+(can?'':' off'); }
+    else { const can=coinBal()>=sel.price; btn.innerHTML='buy · '+sel.price+'<span class="ic ic-coin"></span>'; btn.disabled=!can; btn.className='sq-bigbtn'+(can?'':' off'); }
     const grid=document.getElementById('cosGrid');
     grid.innerHTML=COSMETICS.map(o=>{
       const owned=!!COS.owned[o.id], eq=COS.eq===o.id, selc=cosSel===o.id;
-      const tag = eq?'<span class="cos-tag eq">equipped</span>' : (o.id==='none'?'<span class="cos-tag">take off</span>':(owned?'<span class="cos-tag">owned</span>':'<span class="cos-tag">'+o.price+'🪙</span>'));
+      const tag = eq?'<span class="cos-tag eq">equipped</span>' : (o.id==='none'?'<span class="cos-tag">take off</span>':(owned?'<span class="cos-tag">owned</span>':'<span class="cos-tag">'+o.price+'<span class="ic ic-coin"></span></span>'));
       return '<button class="cos-cell'+(selc?' sel':'')+'" data-cos="'+o.id+'"><span class="cos-ic" style="background-image:url(\''+drawMascotBig('slime',o.id)+'\')"></span><span class="cos-nm">'+o.name+'</span>'+tag+'</button>';
     }).join('');
     grid.querySelectorAll('.cos-cell').forEach(el=>el.onclick=()=>{ cosSel=el.dataset.cos; cwSfx('check'); cwBuzz(6); renderShopOutfits(); });
@@ -859,20 +893,20 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     const all3=(a===b&&b===c);
     if(all3&&a==='7️⃣') return {coins:50,stars:5,label:'✦ JACKPOT ✦',big:2};
     if(all3&&a==='⭐') return {coins:0,stars:3,label:'triple star!',big:1};
-    if(all3&&a==='💎') return {coins:15,stars:1,label:'diamonds! +1⭐',big:1};
-    if(all3&&a==='🍀') return {coins:35,stars:0,label:'lucky! +35🪙',big:0};
-    if(all3&&a==='🔔') return {coins:22,stars:0,label:'bells! +22🪙',big:0};
-    if(all3&&a==='🍒') return {coins:15,stars:0,label:'cherries! +15🪙',big:0};
-    if([a,b,c].filter(s=>s==='⭐').length===2) return {coins:0,stars:1,label:'two stars · +1⭐',big:1};
-    if([a,b,c].filter(s=>s==='🍒').length===2) return {coins:5,stars:0,label:'+5🪙',big:0};
+    if(all3&&a==='💎') return {coins:15,stars:1,label:'diamonds! +1<span class="ic ic-star"></span>',big:1};
+    if(all3&&a==='🍀') return {coins:35,stars:0,label:'lucky! +35<span class="ic ic-coin"></span>',big:0};
+    if(all3&&a==='🔔') return {coins:22,stars:0,label:'bells! +22<span class="ic ic-coin"></span>',big:0};
+    if(all3&&a==='🍒') return {coins:15,stars:0,label:'cherries! +15<span class="ic ic-coin"></span>',big:0};
+    if([a,b,c].filter(s=>s==='⭐').length===2) return {coins:0,stars:1,label:'two stars · +1<span class="ic ic-star"></span>',big:1};
+    if([a,b,c].filter(s=>s==='🍒').length===2) return {coins:5,stars:0,label:'+5<span class="ic ic-coin"></span>',big:0};
     return {coins:0,stars:0,label:'no luck — spin again',big:-1};
   }
   let slotSpinning=false;
-  function slotMsg(t){ const el=document.getElementById('slotMsg'); if(el)el.textContent=t; }
+  function slotMsg(t){ const el=document.getElementById('slotMsg'); if(el)el.innerHTML=t; }
   function updateSlotInfo(){ const l=document.getElementById('slotLeft'); if(l)l.textContent=slotLeft()+' spins left today'; const b=document.getElementById('slotSpin'); if(b)b.disabled=slotSpinning||coinBal()<SLOT_COST||slotLeft()<=0; }
   function slotSpin(){
     if(slotSpinning)return;
-    if(coinBal()<SLOT_COST){ slotMsg('not enough 🪙'); return; }
+    if(coinBal()<SLOT_COST){ slotMsg('not enough <span class="ic ic-coin"></span>'); return; }
     if(slotLeft()<=0){ slotMsg('come back tomorrow!'); return; }
     slotSpinning=true; adjustBalance(-SLOT_COST,0);
     const t=slotToday(); localStorage.setItem('aq_slot',JSON.stringify({d:t.d,n:t.n+1}));
@@ -925,15 +959,16 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     const wasDone=!!campDone[row.dataset.id];
     const item=CAMP_ITEMS.find(c=>c.id===row.dataset.id);
     _toggle(row,ev);
+    row.addEventListener('animationend',function h(){ row.classList.remove('cwpop'); row.removeEventListener('animationend',h); },{once:true});  // don't let .cwpop persist + replay when re-showing the tab
     const nowDone=!!campDone[row.dataset.id];
     if(nowDone&&!wasDone&&item){ const cx=(ev&&ev.clientX)||0, cy=(ev&&ev.clientY)||0; if(cx)coinFloat(cx,cy,item.xp); }
-    refreshEcon(); placeAvatar(); markChanged();
+    refreshEcon(); placeAvatar(); scheduleTrail(); markChanged();
   };
 
   function rebuild(){
     buildCampaign();
-    const rsb=document.getElementById('cwReset'); if(rsb){ const orig=rsb.onclick; rsb.onclick=(e)=>{ if(orig)orig(e); refreshEcon(); placeAvatar(); markChanged(); }; }
-    refreshEcon(); placeAvatar();
+    const rsb=document.getElementById('cwReset'); if(rsb){ const orig=rsb.onclick; rsb.onclick=(e)=>{ if(orig)orig(e); refreshEcon(); placeAvatar(); scheduleTrail(); markChanged(); }; }
+    refreshEcon(); placeAvatar(); scheduleTrail();
   }
 
   // ---- bottom nav ----
@@ -942,6 +977,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x===b));
     document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.dataset.screen===go));
     if(go==='shop'){ renderShopOutfits(); updateSlotInfo(); }
+    if(go==='map') scheduleTrail();
     cwSfx('check'); cwBuzz(8);
   });
 
@@ -983,6 +1019,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   initShop();
   initMascotSheet();
   rebuild();
+  addEventListener('resize',scheduleTrail);
   if(syncOn() && !adopted) pushCloud();
 })();
 
