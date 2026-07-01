@@ -120,6 +120,7 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
       <div id="chapters"></div>
       <button class="addbtn chap" id="addChapter">＋ add chapter</button>
       <div class="bigrow"><button class="bigbtn ghost" id="clearBtn">clear</button><button class="bigbtn" id="saveBtn">save quest</button></div>
+      <div class="bigrow"><button class="bigbtn danger" id="giveupBtn">give up quest</button></div>
       <div class="savenote" id="saveNote"></div>
     </div>
     <div class="view" id="viewPreview"></div>
@@ -268,7 +269,8 @@ function renderPreview(){
   const anySteps = quest.chapters.some(c=>c.steps.some(s=>s.text.trim()));
   let h='<div class="qhd"><span class="qt">'+esc(quest.name||'untitled quest')+'</span>'+
         '<span class="qm">'+t.xpEarned+' / '+t.xpTotal+' xp · '+t.stepsDone+'/'+t.steps+' done</span></div>';
-  if(!anySteps){ h+='<div class="pv-empty">add a chapter + some steps to see your quest take shape ✦</div>'; pv.innerHTML=h; bindGiveUp(); return; }
+  if(quest.state==='gaveup') h+='<div class="savenote" style="margin:0 0 10px">🏳️ given up — you keep what you earned, no bonus</div>';
+  if(!anySteps){ h+='<div class="pv-empty">add a chapter + some steps to see your quest take shape ✦</div>'; pv.innerHTML=h; return; }
   quest.chapters.forEach((c,ci)=>{
     let cx=0,cd=0,ce=0,ct=0; c.steps.forEach(s=>{ ct++; cx+=stepXP(s); if(s.done){cd++; ce+=stepXP(s);} });
     h+='<div class="pv-ban'+(ci>0?' mt':'')+'"><span class="lbl">'+esc(c.name||('chapter '+(ci+1)))+'</span><span class="cnt"><b>'+cd+'</b>/'+ct+' done</span></div>';
@@ -283,8 +285,6 @@ function renderPreview(){
   });
   h+='<div class="pv-foot">on finish: <i>'+quest.chapters.length+' + 3</i> ⭐ · earning <b>'+t.xpTotal+'</b> coins + xp as you go</div>';
   h+='<div class="pv-hint">tap a step to complete it · right-click / hold for details</div>';
-  h+='<div class="bigrow"><button class="bigbtn danger" id="giveupBtn">give up quest</button></div>';
-  h+='<div class="savenote" id="pvNote">'+(quest.state==='gaveup'?'🏳️ given up — you keep what you earned, no bonus':'')+'</div>';
   pv.innerHTML=h;
   pv.querySelectorAll('.pv-row').forEach(row=>{
     const ci=+row.dataset.ci, si=+row.dataset.si, s=quest.chapters[ci].steps[si];
@@ -295,9 +295,7 @@ function renderPreview(){
     row.addEventListener('pointermove',()=>{ clearTimeout(timer); });
     row.addEventListener('pointerup',()=>{ clearTimeout(timer); if(!held){ s.done=!s.done; if(document.getElementById('viewBuild').classList.contains('on'))renderBuilder(); persist(); renderPreview(); } });
   });
-  bindGiveUp();
 }
-function bindGiveUp(){ const g=document.getElementById('giveupBtn'); if(g) g.onclick=()=>askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; persist(); renderPreview(); }); }
 
 // ---- detail modal ----
 const detail=document.getElementById('detail');
@@ -325,6 +323,7 @@ document.getElementById('qname').addEventListener('input',e=>{ quest.name=e.targ
 document.getElementById('addChapter').onclick=()=>{ quest.chapters.push(blankChapter()); renderBuilder(); onEdit(); };
 document.getElementById('clearBtn').onclick=()=>askConfirm('clear this quest?','this wipes the current draft and starts fresh.',()=>{ quest=blankQuest(); renderBuilder(); persist(); document.getElementById('saveNote').textContent=''; });
 document.getElementById('saveBtn').onclick=()=>{ saveQuest(); document.getElementById('saveNote').textContent='✓ saved to your world'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); };
+document.getElementById('giveupBtn').onclick=()=>askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; persist(); document.getElementById('saveNote').textContent='🏳️ given up — resumable later'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); });
 const vB=document.getElementById('viewBuild'), vP=document.getElementById('viewPreview'), tB=document.getElementById('tabBuild'), tP=document.getElementById('tabPreview');
 tB.onclick=()=>{ vB.classList.add('on'); vP.classList.remove('on'); tB.classList.add('on'); tP.classList.remove('on'); renderBuilder(); };
 tP.onclick=()=>{ renderPreview(); vP.classList.add('on'); vB.classList.remove('on'); tP.classList.add('on'); tB.classList.remove('on'); };
