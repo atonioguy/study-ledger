@@ -30,6 +30,12 @@ Evaluate every improvement on THREE fronts: **look · performance · practicalit
 - Bias every proposal toward: tighter cohesion · flow-state design · friction elimination · a more satisfying, intentional overall package.
 - Apply this to ALL remaining agents (weave + the pomo/buddies/shop deep-dives) and the final synthesis.
 
+## Design Q&A resolutions (owner, locked)
+1. **Quests stand alone.** Full standalone feature (map/build/play) usable without the campfire. The **Campfire is an optional daily on-ramp** that reads ACROSS existing quests and surfaces ≤3 next-unstarted steps for a one-tap "just start" — it owns nothing, never replaces quests, never forced.
+2. **Start focus from a quest step** via the hold/right-click context menu ("▶ start focus"). Third entry point alongside the Campfire and TickTick-native; all converge on ONE TickTick focus session (create_focus w/ taskId).
+3. **Day-end = a MANUAL button** ("call it a night 🫖") the owner presses when out of fuel → triggers the tea/rest beat + Tomorrow's Promise. NO automatic time cutoff (irregular/late study hours). Campfire may gently OFFER tea when the day's cards all resolve, but it's always the owner's button; never naggy.
+4. **Tomatoes materialize PER COMPLETED POMODORO, not per minute** (per-minute = too many). One finished pomo (e.g. a 15-min TickTick focus) = one tomato, batch-reconciled from focus records next time the room opens. Bonus XP still accrues smoothly per focused minute (invisible number), but TOMATOES are chunky/countable = # pomos done. (Long timing/stopwatch sessions: ~1 tomato per 25-min block.)
+
 ## Standing rule reinforced
 - Every feature must REDUCE friction. If a mechanic requires manual bookkeeping/logging to earn rewards, redesign it to be automatic or drop it.
 - Evaluation lens for ALL work: look · performance · practicality.
