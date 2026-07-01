@@ -114,6 +114,9 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .wmhd{ display:flex; align-items:center; gap:8px; padding:7px 10px; margin:0 0 6px; background:linear-gradient(90deg,var(--ban),transparent); border-left:4px solid var(--gold); }
 .wmhd .wn{ font-family:var(--pixfont); font-size:12px; color:#ffd98a; letter-spacing:1.5px; text-transform:uppercase; text-shadow:0 0 8px rgba(255,200,110,.4); }
 .wmhd .cnt{ margin-left:auto; font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.65; }
+.wmhd .wmglobe{ flex:none; margin-left:4px; width:30px; height:30px; padding:0; font-size:16px; line-height:1; cursor:pointer; background:linear-gradient(180deg,#2c2450,#211b40); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 7px rgba(255,200,110,.25); transition:transform .1s, box-shadow .15s; image-rendering:pixelated; }
+.wmhd .wmglobe:hover{ transform:translateY(-1px) scale(1.08); box-shadow:0 0 12px rgba(255,200,110,.55); }
+.wmhd .wmglobe:active{ transform:translateY(1px) scale(.94); }
 .map{ position:relative; width:100%; }
 .mdot{ position:absolute; width:6px; height:6px; transform:translate(-50%,-50%) rotate(45deg); background:#4a3d78; image-rendering:pixelated; }
 .mglow{ position:absolute; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none; transition:left .55s ease-in-out, top .55s ease-in-out; background:radial-gradient(circle, rgba(120,224,205,.32) 0%, rgba(255,217,107,.15) 42%, transparent 70%); animation:mamb 2.4s ease-in-out infinite; }
@@ -444,10 +447,11 @@ function renderMap(){
   const wrap=document.getElementById('viewMap'); const quests=worldQuests(); const w=activeWorld();
   const HW=150,HH=68; hillPos={}; gangEl=glowEl=null;
   selectedId = (selectedId && quests.find(q=>q.id===selectedId)) ? selectedId : defaultSel(quests);
-  let head='<div class="wmhd"><span class="wn">'+esc(w.emoji||'✦')+' '+esc(w.name||'my quests')+'</span><span class="cnt">'+quests.length+' quest'+(quests.length===1?'':'s')+'</span></div>';
+  let head='<div class="wmhd"><span class="wn">'+esc(w.emoji||'✦')+' '+esc(w.name||'my quests')+'</span><span class="cnt">'+quests.length+' quest'+(quests.length===1?'':'s')+'</span><button class="wmglobe" title="worlds hub" aria-label="worlds hub">🌍</button></div>';
   if(!quests.length) head+='<div class="mempty">no quests yet — tap ＋ to build your first one ✦</div>';
   wrap.innerHTML=head;
-  const wmhd=wrap.querySelector('.wmhd'); if(wmhd){ wmhd.style.cursor='pointer'; wmhd.title='switch worlds'; wmhd.onclick=()=>show('hub'); }
+  const wmhd=wrap.querySelector('.wmhd'); if(wmhd){ wmhd.style.cursor='pointer'; wmhd.title='worlds hub'; wmhd.onclick=()=>show('hub'); }
+  const globe=wrap.querySelector('.wmglobe'); if(globe) globe.onclick=(e)=>{ e.stopPropagation(); show('hub'); };
   const map=document.createElement('div'); map.className='map';
   const pts=quests.map((q,i)=>({x:(i%2===0?300:132), y:120+i*172}));
   const addX=(quests.length%2===0?300:132), addY=120+quests.length*172; map.style.height=(addY+110)+'px';
@@ -553,7 +557,7 @@ T.map.onclick=()=>show('map'); T.build.onclick=()=>show('build'); T.preview.oncl
 // default click blip for everything EXCEPT completing a task (which keeps the satisfying sound)
 document.addEventListener('click', (e)=>{
   const t=e.target; if(t.closest('.play') || t.closest('.pv-row')) return;
-  if(t.closest('#tabs button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .grip, .hubcard, .hubrow, .emochip, .palchip')) sfx('sel');
+  if(t.closest('#tabs button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .grip, .hubcard, .hubrow, .emochip, .palchip, .wmglobe')) sfx('sel');
 }, true);
 
 show('map');
