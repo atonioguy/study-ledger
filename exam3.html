@@ -1,4 +1,4 @@
-<!-- build log: v2.24 live · M5L2 q4: add nitrogencycle.png, drop resolved N2O flag -->
+<!-- build log: v2.25 live · M5L2 q4: switch to prompt version (NH3/nitrate chain, no N2O); image retained -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -373,7 +373,7 @@
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
-  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.24</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.25</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
   <div class="sb-focus">
     <div class="sb-focus-label">Focus</div>
     <div class="sb-focus-row">
@@ -729,8 +729,8 @@
       <div class="answer"><span class="lbl">Answer</span>
         <div class="takeaway">
           <ul>
-            <li>Loss of organic N = <span class="mem">denitrification + anammox</span>, both producing <span class="concept">N<sub>2</sub></span>.</li>
-            <li>Nitrogenous fertilizer overuse &rarr; more denitrification &rarr; generates <span class="mem">N<sub>2</sub>O</span>.</li>
+            <li>Loss of organic nitrogen (NH<sub>3</sub>) = <span class="mem">denitrification + anammox</span>, both producing <span class="mem">N<sub>2</sub></span> &mdash; <span class="concept">less nitrogen available for us to use</span>.</li>
+            <li>Fertilizer overuse = excess <span class="concept">ammonia (NH<sub>3</sub>)</span> &rarr; nitrified to excess <span class="mem">nitrate (NO<sub>3</sub><sup>-</sup>)</span> &rarr; more <span class="mem">denitrification</span>.</li>
           </ul>
         </div>
         <div class="support">
@@ -740,7 +740,7 @@
           </figure>
         </div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Recognize the &ldquo;two combined&rdquo; phrasing &mdash; denitrification and anammox both end in N<sub>2</sub>, which is how nitrogen leaves the biosphere. For the fertilizer half, the chain runs more fixed nitrogen &rarr; more denitrification &rarr; more N<sub>2</sub>O.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>The &ldquo;two combined&rdquo; phrasing is the tell: denitrification and anammox both end in N<sub>2</sub>, so organic nitrogen leaves the biosphere and less is available for us to use. The fertilizer half runs excess ammonia &rarr; nitrified to excess nitrate &rarr; more denitrification &mdash; feeding that same loss of usable nitrogen.</div>
       <div class="fc" data-deck="m5l2-q4"></div>
     </article>
     <article class="q" id="m5l2-q5" data-lesson="m5l2">
@@ -2743,8 +2743,9 @@ window.smoothScrollTo=function(el){
       {q:'Methanogens vs. hydrates &mdash; keep them separate?', a:'Methanogens <em>produce</em> methane (use CO<sub>2</sub> as electron acceptor); hydrates are the storage form.'}
     ],
     'm5l2-q4':[
-      {q:'Which two processes lose organic nitrogen (both &rarr; N<sub>2</sub>)?', a:'<span class="mem">Denitrification + anammox</span>.'},
-      {q:'What does fertilizer overuse generate?', a:'<span class="mem">N<sub>2</sub>O</span> (driven by denitrification).'}
+      {q:'Which two processes cause loss of organic nitrogen (NH<sub>3</sub>)?', a:'<span class="mem">Denitrification + anammox</span> (both &rarr; N<sub>2</sub>).'},
+      {q:'Why does losing organic nitrogen matter?', a:'Less biologically available nitrogen for organisms to use.'},
+      {q:'What happens when nitrogenous fertilizer is overused?', a:'Excess <span class="mem">ammonia (NH<sub>3</sub>)</span> &rarr; excess <span class="mem">nitrate (NO<sub>3</sub><sup>-</sup>)</span> &rarr; more <span class="mem">denitrification</span>.'}
     ],
     'm5l2-q5':[
       {q:'What is <strong>biologically available nitrogen</strong>?', a:'<span class="mem">Ammonia (NH<sub>3</sub>)</span>.'},
