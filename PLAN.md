@@ -153,6 +153,12 @@ The concern: archives usually clog an app because the whole save syncs as **one 
 - **Never themed — always default chrome:** the **top HUD bar** and the **bottom tabs** (consistent, readable in every world).
 - **Recolor UI:** a palette picker with a themed preview per palette; from create-world and a world card's hold-menu → recolor.
 - **Cheap:** the game is CSS-variable-driven — a world swaps a small set of base/accent tokens; the fixed chrome + yellow tokens are left untouched.
+- **Finalized visual details (from mock iterations):**
+  - **Cards are bright/hill-aligned** (jewel-toned, not near-black), and **text auto-contrasts** — dark on light/bright surfaces, light on dark ones.
+  - **Completed step = a bright accent block** (matching the star/trail/progress accent brightness) with **dark high-contrast body text** (cream on Sakura's red), a **glowing gold star**, and the **yellow +xp with a matching glow**.
+  - **Play button (incomplete) takes the accent color + glow**; progress bars are **two-shade accent stripes**; the completed↔start trail + done pip use the accent, the completed→current segment + current sparkle stay gold.
+  - **Snow is a light/icy theme** (soft periwinkle base, dark text); its yellow currency shifts to **deep amber** so it stays legible on light cards.
+  - **Accents:** Twilight teal · Sunset (beige base) chocolate/caramel · Mint light-green · Snowy cool-blue · Sakura (pastel-pink base) red-velvet.
 
 ### ✅ Multi-quest: all sub-stickies resolved
 Map · end-states · worlds hub · view stats · move-quest · color theming are all designed. (Cross-cutting **leveling rework** remains in the parked stickies.)
