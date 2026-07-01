@@ -335,7 +335,7 @@
   body.embed #app{ height:100%; min-height:0; max-width:none; margin:0; border:none; box-shadow:none; }
   /* ===== pixel currency icons ===== */
   .ic{ display:inline-block; width:1.05em; height:1.05em; vertical-align:-0.16em; background:center/contain no-repeat; flex:none; }
-  .ic-star{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 .5L11.5 6 6 11.5 .5 6Z' fill='%23bca6f0'/%3E%3Cpath d='M6 2.3 3.6 4.6 6 4.6Z' fill='%23eadfff'/%3E%3C/svg%3E"); }
+  .ic-star{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 0 7.3 4.7 12 6 7.3 7.3 6 12 4.7 7.3 0 6 4.7 4.7Z' fill='%23bca6f0'/%3E%3Ccircle cx='6' cy='6' r='1' fill='%23eadfff'/%3E%3C/svg%3E"); }
   .ic-coin{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Ccircle cx='6' cy='6' r='5.4' fill='%23d99a32'/%3E%3Ccircle cx='6' cy='6' r='4.2' fill='%23ffd05f'/%3E%3Ccircle cx='4.6' cy='4.6' r='1.1' fill='%23fff4c2'/%3E%3C/svg%3E"); }
   /* ===== segmented questline trail ===== */
   #cwList::before{ display:none; }
@@ -343,12 +343,13 @@
   .cw-seg{ position:absolute; left:13px; width:4px; z-index:0; border-radius:2px; background:repeating-linear-gradient(180deg,currentColor 0 4px,transparent 4px 9px); }
   .cw-seg.fut{ color:var(--barhi); opacity:.4; }
   .cw-seg.done{ color:var(--teal); opacity:.9; }
-  .cw-seg.next{ color:var(--gold); opacity:1; filter:drop-shadow(0 0 3px rgba(255,217,107,.7)); animation:sqTrail 1.5s ease-in-out infinite; }
-  @keyframes sqTrail{ 0%,100%{ opacity:.55 } 50%{ opacity:1 } }
-  .cw-les .cw-ldot{ left:-26px; }
+  .cw-seg.next{ color:var(--gold); opacity:1; filter:drop-shadow(0 0 3px rgba(255,217,107,.6)); }
+  :root{ --spark:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 0 7.3 4.7 12 6 7.3 7.3 6 12 4.7 7.3 0 6 4.7 4.7Z'/%3E%3C/svg%3E"); }
+  .cw-les .cw-ldot{ left:-25px; width:14px; height:14px; transform:none; background:var(--barhi); box-shadow:none; border-radius:0; -webkit-mask:var(--spark) center/contain no-repeat; mask:var(--spark) center/contain no-repeat; }
+  .cw-les.done .cw-ldot{ background:var(--teal); box-shadow:none; }
   .cw-les.current::after{ display:none; }
-  .cw-les.current .cw-ldot{ background:var(--gold); box-shadow:0 0 0 3px var(--body),0 0 10px rgba(255,217,107,.9); animation:sqGlow 1.5s ease-in-out infinite; }
-  @keyframes sqGlow{ 0%,100%{ box-shadow:0 0 0 3px var(--body),0 0 5px rgba(255,217,107,.55) } 50%{ box-shadow:0 0 0 3px var(--body),0 0 14px rgba(255,217,107,1) } }
+  .cw-les.current .cw-ldot{ background:var(--gold); box-shadow:none; animation:sqGlowF 1.4s ease-in-out infinite; }
+  @keyframes sqGlowF{ 0%,100%{ filter:drop-shadow(0 0 2px rgba(255,217,107,.5)) } 50%{ filter:drop-shadow(0 0 7px rgba(255,217,107,1)) } }
   /* effects layer spans the whole app */
   #cwFx{ position:fixed; inset:0; z-index:70; pointer-events:none; }
   #cwBanner{ position:fixed; left:50%; top:88px; z-index:72; }
@@ -558,7 +559,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v2.0';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v2.1';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
