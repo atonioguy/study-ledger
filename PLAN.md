@@ -56,6 +56,9 @@ QUEST  ⟵ you name it ("Bio Exam Sprint")
 8. **Priority → dropped; due date → editable tag.** Priority isn't used, so it's ignored (no dot, no logic). A dated task carries its due date over as a small **editable, clearable** tag on the step; you can also add a date to a hand-typed step if you want. Purely cosmetic "when" — no XP/ordering effect.
 9. **The builder board is a full editor, not just an importer.** In both create *and* edit modes you can type brand-new steps, rename/rewrite anything, add banners, and jot notes — nothing has to come from TickTick. TickTick is one *source* you can pull from; the board is always yours to write on freely.
 10. **XP per step = difficulty presets.** Each step is tagged 🟢 easy **5** / 🟡 medium **10** / 🔴 hard **20** XP, **default medium**. Set it on the card in the builder; change it later via the step's edit menu. A **custom number** option sits behind the presets for outliers. Calibrated to the campaign (part ≈ 5–16 XP, rank ≈ 50) to keep the "start stingy" pace.
+11. **Rewards mirror the existing economy — coins per step, stars per chapter.**
+    - **Coins per step = the step's XP** (🟢5 / 🟡10 / 🔴20). Coins already equal XP in the game (`coinsEarned() = xp`), so a completed step fills the level bar *and* drops the same in spendable coins. Coins = the frequent/grindy currency (shop outfits 50–140, slot spins 8).
+    - **Stars: 1 per chapter finished, + 3 bonus for completing the whole quest.** Matches the campaign (lesson = 1 star, module = 3) and keeps stars the *milestone* currency for gacha pulls (3 stars each ≈ ~3 chapters per pull).
 
 ## 🎨 Layout & visual design (decided)
 The imported quest reuses the exam-quest look on the map — **not** the rigid `P1 / 14:32` diamond tiles (those stay for the hardcoded campaign). Reference: `quest.html` map view.
@@ -85,7 +88,6 @@ One editor to learn: the builder board *is* the quest editor.
 
 ## 📌 Parked stickies (open questions, pick when ready)
 - 🔗 **sync-back** — currently OFF. Would re-add the hidden link so checking a step off marks it done in TickTick. Only if the link idea comes back.
-- 🪙 **coins / stars payout** — XP-per-step is decided (#10); still open is where spendable currency comes from. Leaning: **not per step**, but paid on finishing a **section or the whole quest** (mirrors how clearing a lesson/module grants stars today), to keep currency special.
 - 🎨 **the "pick your tasks" screen** — how choosing tasks from TickTick actually looks/feels.
 - 🗂️ **multiple saved quests** — switching between more than one quest on the map.
 
