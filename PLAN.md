@@ -163,13 +163,22 @@ The concern: archives usually clog an app because the whole save syncs as **one 
 ### ✅ Multi-quest: all sub-stickies resolved
 Map · end-states · worlds hub · view stats · move-quest · color theming are all designed. (Cross-cutting **leveling rework** remains in the parked stickies.)
 
+## 🎚️ Leveling rework (decided)
+**Problem:** the current level/XP/streak are all scoped to the one exam campaign — 6 fixed ranks (`fresh start`→`exam ready`) maxing at ~250 xp, the XP bar = that one quest's total, and the 🔥 "streak" is actually `tasks-done / total` mislabeled. Multi-quest needs it **global + open-ended**.
+
+- **Level = lifetime XP, open-ended.** Every completed step in any quest/world adds to **one global XP pool that never resets** (given-up quests keep their earned per-step XP too).
+- **Gentle curve.** Cost from level L→L+1 = **`50 + 25·(L−1)`** xp → 50, 75, 100, 125, … Cumulative to reach: lv2 = 50, lv4 = 225, lv6 = 500, lv10 ≈ 1,400. Early levels fast, then stretch. Tunable.
+- **HUD bar = per-level progress** — `lv N · <xp into level> / <xp to next>`; the **total lifetime XP** is shown in View Stats.
+- **Rank titles = evolving tiers.** Keep the cute names (fresh start → warming up → in the zone → locked in → …) extended with higher ones; the level number always shows, the title advances at tier boundaries.
+- **🔥 = real daily streak.** Consecutive days you completed **≥1 step or logged ≥1 pomo** (ties the pomo room in). Track last-active date + count: +1 on a new consecutive day, unchanged if already active today, resets to 1 after a missed day. Displays as `🔥 5`.
+- **Migration:** existing saves convert the campaign's completed items into lifetime XP (sum of their xp) so no progress is lost on the switch.
+
 ## ✂️ Explicitly out (for now)
 - **No hidden link to TickTick.** Dropped cards are plain text; the quest lives entirely in the game.
   *(Revive with one word if wanted — see the retired "sync-back" idea below.)*
 - **Notion integration** — skipped, likely too complicated. Off the board.
 
 ## 📌 Parked stickies (open questions, pick when ready)
-- 🎚️ **rework the leveling system** — the current level/XP/rank system is built around the single exam campaign (`XP_TOTAL` = that one campaign's total; `RANKS` are fixed thresholds tied to it; the HUD bar tracks just it). With multi-quest/worlds it needs reworking so the **level/rank reflect cumulative XP across all quests & worlds**, not one quest. Open Qs: is the HUD bar global lifetime XP? do ranks become open-ended tiers that keep scaling? does each quest still show its own local progress (yes — that's the map readout) while the HUD shows the global level? how do existing saves migrate?
 - 🔗 **sync-back** — currently OFF. Would re-add the hidden link so checking a step off marks it done in TickTick. Only if the link idea comes back.
 - 🗂️ **multiple saved quests** — now being designed in the **Multi-quest** section above (worlds → maps → quests). Layer 1 (the map) decided; sub-stickies 2–5 remain.
 
