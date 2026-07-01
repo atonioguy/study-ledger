@@ -592,7 +592,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v2.7';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v2.8';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -610,6 +610,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     if(_actx.state==='suspended') _actx.resume();
   }
   cwSfx=function(n){
+    if(n==='blip'){ if(_actx){ try{ const o=_actx.createOscillator(),g=_actx.createGain(); o.type='triangle'; o.frequency.value=500; o.connect(g); g.connect(_actx.destination); const t=_actx.currentTime; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.09,t+0.012); g.gain.exponentialRampToValueAtTime(0.0001,t+0.08); o.start(t); o.stop(t+0.1); }catch(e){} } return null; }
     if(_actx && _buf[n]){ try{ const s=_actx.createBufferSource(); s.buffer=_buf[n]; const g=_actx.createGain(); g.gain.value=_vol[n]||.6; s.connect(g); g.connect(_actx.destination); s.start(0); s._gain=g; return s; }catch(e){} }
     const a=CW_SFX[n]; if(a){ try{ a.currentTime=0; a.play(); }catch(e){} return a; }
     return null;
@@ -744,7 +745,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
                           : '<span class="dx-art dx-lock">?</span><span class="dx-name">???</span>';
       return '<button class="dx-cell'+(owned?' owned':'')+(act?' active':'')+'" data-bud="'+b.id+'" style="--rc:'+RARC[b.rar]+'">'+inner+'</button>';
     }).join('');
-    dex.querySelectorAll('.dx-cell.owned').forEach(el=>el.onclick=()=>{ const b=BUDDIES.find(x=>x.id===el.dataset.bud); openCard(b,{}); cwSfx('check'); cwBuzz(8); });
+    dex.querySelectorAll('.dx-cell.owned').forEach(el=>el.onclick=()=>{ const b=BUDDIES.find(x=>x.id===el.dataset.bud); openCard(b,{}); cwSfx('blip'); cwBuzz(8); });
   }
 
   // ---- TCG card (used by dex tap + end of a pull) ----
@@ -838,7 +839,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   function initMascotSheet(){
     const buds=document.querySelector('.hud-buds'); if(buds)buds.onclick=openMascotSheet;
     const m=document.getElementById('mascotSheet'); if(m)m.onclick=(e)=>{ if(e.target.id==='mascotSheet')m.classList.remove('on'); };
-    const cl=document.getElementById('msClose'); if(cl)cl.onclick=()=>document.getElementById('mascotSheet').classList.remove('on');
+    const cl=document.getElementById('msClose'); if(cl)cl.onclick=()=>{ cwSfx('blip'); document.getElementById('mascotSheet').classList.remove('on'); };
     const sl=document.querySelector('.ms-slime'), to=document.querySelector('.ms-tom'), bu=document.querySelector('.ms-bud');
     if(sl)sl.onclick=()=>{ jiggle(sl); sayBubble(sl,pickSay(SLIME_SAY,'s')); };   // dumpling: encouragement
     if(to)to.onclick=()=>{ jiggle(to); sayBubble(to,pickSay(TOM_SAY,'t')); };      // tomato: focus jumpstart
@@ -910,7 +911,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
       const tag = eq?'<span class="cos-tag eq">equipped</span>' : (o.id==='none'?'<span class="cos-tag">take off</span>':(owned?'<span class="cos-tag">owned</span>':'<span class="cos-tag">'+o.price+'<span class="ic ic-coin"></span></span>'));
       return '<button class="cos-cell'+(selc?' sel':'')+'" data-cos="'+o.id+'"><span class="cos-ic" style="background-image:url(\''+drawMascotBig('slime',o.id)+'\')"></span><span class="cos-nm">'+o.name+'</span>'+tag+'</button>';
     }).join('');
-    grid.querySelectorAll('.cos-cell').forEach(el=>el.onclick=()=>{ cosSel=el.dataset.cos; cwSfx('check'); cwBuzz(6); renderShopOutfits(); });
+    grid.querySelectorAll('.cos-cell').forEach(el=>el.onclick=()=>{ cosSel=el.dataset.cos; cwSfx('blip'); cwBuzz(6); renderShopOutfits(); });
   }
   function cosAction(){
     const sel=COSMETICS.find(o=>o.id===cosSel); if(!sel)return;
@@ -1093,17 +1094,18 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     if(go==='shop'){ renderShopOutfits(); updateSlotInfo(); }
     if(go==='map') scheduleTrail();
     if(go==='pomo') pomoStart(); else pomoStop();
-    cwSfx('check'); cwBuzz(8);
+    cwSfx('blip'); cwBuzz(8);
   });
 
   // ---- ⚙ cloud-sync setup panel ----
   function syncStatusText(){ return syncOn() ? '✓ sync on · '+API.url.replace(/^https?:\/\//,'') : 'not connected — local only'; }
   function openSync(){ document.getElementById('syncUrl').value=API.url; document.getElementById('syncKey').value=API.key; document.getElementById('syncStatus').textContent=syncStatusText(); document.getElementById('sqSync').classList.add('on'); }
   function closeSync(){ document.getElementById('sqSync').classList.remove('on'); }
-  document.getElementById('sqGear').onclick=openSync;
-  document.getElementById('syncCancel').onclick=closeSync;
+  document.getElementById('sqGear').onclick=()=>{ cwSfx('blip'); openSync(); };
+  document.getElementById('syncCancel').onclick=()=>{ cwSfx('blip'); closeSync(); };
   document.getElementById('sqSync').onclick=(e)=>{ if(e.target.id==='sqSync') closeSync(); };
   document.getElementById('syncSave').onclick=async ()=>{
+    cwSfx('blip');
     const url=((document.getElementById('syncUrl').value)||'').trim().replace(/\/+$/,'');
     const key=((document.getElementById('syncKey').value)||'').trim();
     API.url=url; API.key=key;
