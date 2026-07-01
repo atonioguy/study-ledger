@@ -357,19 +357,15 @@
   .pomo-ttl{ font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; }
   .pomo-tally{ font-family:var(--pixfont2); font-size:15px; color:var(--tx); } .pomo-tally b{ color:#fff; font-weight:400; }
   .pomo-room{ flex:1; position:relative; overflow:hidden; background:radial-gradient(circle at 50% 30%, #37305e, #171029); border:3px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); box-shadow:inset 0 0 34px rgba(0,0,0,.45); touch-action:none; }
-  /* cozy twilight room: moon + stars on the back wall, a warm floor with baseboard + a little rug */
-  .pomo-room::before{ content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
+  /* pixel-tiled floor filling the bottom ~55%, with a crisp baseboard; moon/stars/rug are canvas sprites */
+  .pomo-room::before{ content:''; position:absolute; left:0; right:0; top:45%; bottom:0; z-index:0; pointer-events:none;
     background:
-      radial-gradient(circle at 84% 13%, #fdf3d0 0 7px, rgba(253,243,208,.28) 8px 13px, transparent 14px),
-      radial-gradient(circle at 22% 15%, rgba(255,255,255,.5) 0 1.4px, transparent 2.4px),
-      radial-gradient(circle at 64% 9%, rgba(255,255,255,.42) 0 1.4px, transparent 2.4px),
-      radial-gradient(circle at 44% 22%, rgba(255,255,255,.34) 0 1.4px, transparent 2.4px),
-      radial-gradient(circle at 74% 27%, rgba(255,255,255,.30) 0 1.4px, transparent 2.4px),
-      radial-gradient(ellipse 33% 6.5% at 50% 93%, rgba(224,132,150,.34) 0 56%, rgba(224,132,150,.14) 58% 82%, transparent 84%),
-      linear-gradient(180deg, transparent 0 73%, rgba(146,124,206,.55) 73% 73.7%, transparent 73.7%),
-      linear-gradient(180deg, transparent 73%, rgba(66,52,108,.42) 74% 100%);
+      repeating-conic-gradient(from 0deg, rgba(255,255,255,.03) 0% 25%, transparent 0% 50%) 0 0/22px 22px,
+      linear-gradient(180deg,#3b3058,#2a2043);
+    border-top:2px solid rgba(150,128,208,.5);
+    box-shadow:inset 0 2px 0 rgba(255,238,206,.05);
   }
-  .pomo-room::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:26%; z-index:0; background:linear-gradient(0deg,rgba(255,238,206,.06),transparent); pointer-events:none; }
+  .pomo-deco{ position:absolute; z-index:0; pointer-events:none; background:center/contain no-repeat; image-rendering:pixelated; }
   .pomo-ent{ position:absolute; top:0; left:0; width:34px; height:30px; background:center/contain no-repeat; image-rendering:pixelated; cursor:grab; touch-action:none; will-change:transform; z-index:2; filter:drop-shadow(0 3px 2px rgba(0,0,0,.38)); }
   .pomo-ent.is-dump{ width:46px; height:34px; }
   .pomo-ent.held{ cursor:grabbing; filter:drop-shadow(0 11px 8px rgba(0,0,0,.5)); z-index:6; }
@@ -596,7 +592,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v2.5';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v2.6';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -970,6 +966,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
   // ===== pomo room (log pomodoros -> roam -> sell for coins) =====
   const POMO_PRICE=5;
+  const FLOOR_FRAC=0.45;                                // floor takes the bottom ~55% of the room; mascots roam only here
   let POMOS=[], POMO_DUMP=null, POMO_RAF=0, POMO_AREA=null, pomoState={room:0,total:0};
   function loadPomo(){ try{ const d=JSON.parse(localStorage.getItem('aq_pomo')||'{}'); pomoState={room:d.room||0,total:d.total||0}; }catch(e){ pomoState={room:0,total:0}; } }
   function savePomo(){ localStorage.setItem('aq_pomo',JSON.stringify(pomoState)); }
@@ -980,7 +977,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     const o={el,kind,x,y,vy:0,mode:'roam',tx:null,ty:null,face:1,bob:Math.random()*6.28,pause:0,react:0,landY:null};
     el.addEventListener('pointerdown',e=>{ e.preventDefault(); o.mode='held'; const r=A.getBoundingClientRect(); o.gx=e.clientX-r.left-o.x; o.gy=e.clientY-r.top-o.y; try{el.setPointerCapture(e.pointerId);}catch(_){} el.classList.add('held'); cwSfx('squish'); cwBuzz(8); });
     el.addEventListener('pointermove',e=>{ if(o.mode!=='held')return; const r=A.getBoundingClientRect(); o.x=e.clientX-r.left-o.gx; o.y=e.clientY-r.top-o.gy; });
-    const drop=()=>{ if(o.mode!=='held')return; o.mode='fall'; o.vy=0; el.classList.remove('held'); const H=A.clientHeight, eh=el.offsetHeight||30, floor=H-eh-2; o.landY=Math.min(floor, o.y+22+Math.random()*30); };  // settle a small hop below where you let go
+    const drop=()=>{ if(o.mode!=='held')return; o.mode='fall'; o.vy=0; el.classList.remove('held'); const H=A.clientHeight, eh=el.offsetHeight||30, floor=H-eh-2, flTop=Math.round(H*FLOOR_FRAC); o.landY=Math.max(flTop, Math.min(floor, o.y+22+Math.random()*30)); };  // settle a small hop below release, but always onto the floor
     el.addEventListener('pointerup',drop); el.addEventListener('pointercancel',drop);
     return o;
   }
@@ -992,11 +989,13 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
       let bobY=0, pop=0;
       if(o.mode==='held'){ o.x=Math.max(0,Math.min(W-ew,o.x)); o.y=Math.max(0,Math.min(H-eh,o.y)); }
       else if(o.mode==='fall'){ o.vy+=0.9; o.y+=o.vy; const stop=(o.landY!=null?Math.min(o.landY,floor):floor); if(o.y>=stop){ o.y=stop; if(o.vy>3){cwSfx('squish');cwBuzz(6);} o.vy=0; o.mode='roam'; o.tx=null; o.ty=null; o.landY=null; } }
-      else { // roam free across the whole room
+      else { // roam around the floor only (never up onto the wall)
         o.bob+=0.11; bobY=Math.sin(o.bob)*1.7;
-        if(o.tx==null){ o.tx=6+Math.random()*(W-ew-12); o.ty=6+Math.random()*(H-eh-12); }
+        const yTop=Math.min(Math.round(H*FLOOR_FRAC), floor), yBot=floor;
+        if(o.ty!=null){ o.y=Math.max(yTop,Math.min(yBot,o.y)); }
+        if(o.tx==null){ o.tx=6+Math.random()*(W-ew-12); o.ty=yTop+Math.random()*(yBot-yTop); }
         const dx=o.tx-o.x, dy=o.ty-o.y, dist=Math.hypot(dx,dy);
-        if(dist<3){ if(o.pause>0){ o.pause--; } else { o.tx=6+Math.random()*(W-ew-12); o.ty=6+Math.random()*(H-eh-12); o.pause=24+Math.random()*80; } }
+        if(dist<3){ if(o.pause>0){ o.pause--; } else { o.tx=6+Math.random()*(W-ew-12); o.ty=yTop+Math.random()*(yBot-yTop); o.pause=24+Math.random()*80; } }
         else { if(dx<-0.5)o.face=-1; else if(dx>0.5)o.face=1; o.x+=(dx/dist)*Math.min(spd,dist); o.y+=(dy/dist)*Math.min(spd,dist); }
       }
       if(o.react>0){ o.react--; pop=Math.sin((1-o.react/22)*Math.PI); }        // startle-hop when a new pomo drops
@@ -1006,17 +1005,37 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     });
     POMO_RAF=requestAnimationFrame(pomoTick);
   }
+  // ---- pixel-art room decor (drawn on canvas, scaled up crisp like the mascots) ----
+  function pxc(w,h){ const c=document.createElement('canvas'); c.width=w; c.height=h; return c; }
+  function pomoMoonURL(){ const c=pxc(11,11),x=c.getContext('2d'),cx=5,cy=5,R=5.2;
+    for(let j=0;j<11;j++)for(let i=0;i<11;i++){ const d=Math.hypot(i-cx,j-cy); if(d<=R){ x.fillStyle=d>R-1?'#e7d6a0':'#fdf3d0'; x.fillRect(i,j,1,1); } }
+    x.fillStyle='#e3d199'; x.fillRect(3,3,2,1); x.fillRect(7,5,1,2); x.fillRect(4,7,2,1);   // little craters
+    return c.toDataURL(); }
+  function pomoStarURL(){ const c=pxc(5,5),x=c.getContext('2d'); x.fillStyle='rgba(255,255,255,.9)'; x.fillRect(2,0,1,5); x.fillRect(0,2,5,1); x.fillStyle='#fff'; x.fillRect(2,2,1,1); return c.toDataURL(); }
+  function pomoRugURL(){ const W=44,H=17,c=pxc(W,H),x=c.getContext('2d'),cx=(W-1)/2,cy=(H-1)/2,rx=W/2-0.5,ry=H/2-0.5;
+    for(let j=0;j<H;j++)for(let i=0;i<W;i++){ const v=((i-cx)/rx)**2+((j-cy)/ry)**2; if(v<=1){ let col='#7c4a5f'; if(v>0.66)col='#5b3648'; else if(v<0.3)col='#8f586c'; x.fillStyle=col; x.fillRect(i,j,1,1); } }
+    x.fillStyle='#b5788c'; x.fillRect(cx-1,cy,3,1); x.fillRect(cx,cy-1,1,3);               // center diamond motif
+    return {url:c.toDataURL(),ar:W/H}; }
+  function pomoDecor(){ const A=POMO_AREA; if(!A)return; A.querySelectorAll('.pomo-deco').forEach(e=>e.remove());
+    const add=(url,css)=>{ const d=document.createElement('div'); d.className='pomo-deco'; d.style.backgroundImage='url("'+url+'")'; Object.assign(d.style,css); A.appendChild(d); };
+    add(pomoMoonURL(),{right:'9%',top:'6%',width:'26px',height:'26px'});
+    const su=pomoStarURL(), spots=[['20%','13%','6px','.6'],['62%','8%','7px','.85'],['45%','20%','6px','.55'],['78%','24%','7px','.8'],['33%','28%','6px','.5']];
+    spots.forEach(([l,t,s,o])=>add(su,{left:l,top:t,width:s,height:s,opacity:o}));
+    const rug=pomoRugURL(), rw=Math.round((A.clientWidth||300)*0.6);
+    add(rug.url,{left:'50%',bottom:'5%',width:rw+'px',height:Math.round(rw/rug.ar)+'px',transform:'translateX(-50%)',opacity:'.92'});
+  }
   function pomoBuild(){
     const A=document.getElementById('pomoArea'); if(!A)return; POMO_AREA=A;
     A.querySelectorAll('.pomo-ent').forEach(e=>e.remove()); POMOS=[];
-    const W=A.clientWidth||300, H=A.clientHeight||300;
-    POMO_DUMP=makeEnt('dump', W*0.42, 8+Math.random()*(H-52));
-    for(let i=0;i<pomoState.room;i++) POMOS.push(makeEnt('pomo', 8+Math.random()*(W-48), 8+Math.random()*(H-46)));
+    pomoDecor();
+    const W=A.clientWidth||300, H=A.clientHeight||300, flTop=Math.round(H*FLOOR_FRAC);
+    POMO_DUMP=makeEnt('dump', W*0.42, flTop+Math.random()*(H-42-flTop));
+    for(let i=0;i<pomoState.room;i++) POMOS.push(makeEnt('pomo', 8+Math.random()*(W-48), flTop+Math.random()*(H-40-flTop)));
     pomoTally();
   }
   function pomoStart(){ pomoBuild(); if(!POMO_RAF)POMO_RAF=requestAnimationFrame(pomoTick); }
   function pomoStop(){ if(POMO_RAF){ cancelAnimationFrame(POMO_RAF); POMO_RAF=0; } }
-  function dropPomo(){ const A=POMO_AREA; if(!A)return; const W=A.clientWidth, H=A.clientHeight; const dx0=18+Math.random()*(W-52); const o=makeEnt('pomo', dx0, -34); o.mode='fall'; o.vy=2; o.landY=28+Math.random()*(H-72); POMOS.push(o); (POMO_DUMP?POMOS.concat([POMO_DUMP]):POMOS).forEach(p=>{ if(p!==o && p.mode==='roam'){ p.react=22; p.pause=0; p.face=(dx0<p.x?-1:1); } }); pomoState.room++; pomoState.total++; savePomo(); pomoTally(); markChanged(); cwSfx('check'); cwBuzz(10); }
+  function dropPomo(){ const A=POMO_AREA; if(!A)return; const W=A.clientWidth, H=A.clientHeight; const flTop=Math.round(H*FLOOR_FRAC); const dx0=18+Math.random()*(W-52); const o=makeEnt('pomo', dx0, -34); o.mode='fall'; o.vy=2; o.landY=flTop+Math.random()*(H-40-flTop); POMOS.push(o); (POMO_DUMP?POMOS.concat([POMO_DUMP]):POMOS).forEach(p=>{ if(p!==o && p.mode==='roam'){ p.react=22; p.pause=0; p.face=(dx0<p.x?-1:1); } }); pomoState.room++; pomoState.total++; savePomo(); pomoTally(); markChanged(); cwSfx('check'); cwBuzz(10); }
   function askSellPomos(){ if(pomoState.room<=0)return; const m=document.getElementById('pomoConfirm'); if(!m){ sellPomos(); return; } const n=pomoState.room; const a=document.getElementById('pcN'); if(a)a.textContent=n; const s=document.getElementById('pcS'); if(s)s.textContent=n===1?'':'s'; const c=document.getElementById('pcCoins'); if(c)c.textContent=n*POMO_PRICE; m.classList.add('on'); }
   function closeSellConfirm(){ const m=document.getElementById('pomoConfirm'); if(m)m.classList.remove('on'); }
   function sellPomos(){ closeSellConfirm(); if(pomoState.room<=0)return; const gain=pomoState.room*POMO_PRICE; adjustBalance(gain,0); pomoState.room=0; savePomo(); POMOS.forEach(o=>o.el.remove()); POMOS=[]; refreshEcon(); pomoTally(); markChanged(); cwSfx('fanfare'); cwBuzz([16,30]); const fx=document.getElementById('cwFx'); if(fx){ const r=fx.getBoundingClientRect(); cwBurst(r.left+r.width/2,r.top+r.height*0.55,true); } }
