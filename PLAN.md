@@ -112,9 +112,13 @@ Three nested layers wrapping the quest we designed (the game today is just the m
 ### Layer 1 — the world map / travel (decided)
 - **Vertical-snake road** (scroll down); winds left↔right as it descends. Matches the existing vertical trail, thumb-friendly on iPhone.
 - **Quests are freely selectable, NOT gated/sequential** — any quest, anytime.
-- **The gang (mascots) travel** — they park at the current/most-recent quest and walk to a tapped spot before it opens.
-- **Road grows as you add quests, up to ~20 spots.** A `⊕ add a quest` spot at the end launches the pick → builder flow.
-- **Spot states:** ✅ done (gold dumpling flag) · 🏳️ given-up (faded flag) · ▶ in progress (gang parked + progress %) · ○ not started · ⊕ add-new.
+- **The gang travels together** — dumpling + tomato + the **equipped gacha buddy** (if one is active) — parking at the current/most-recent quest and walking to a tapped spot before it opens.
+- **Road length = exactly the number of quests (up to 20)** — it stops at the last quest, no empty road beyond. The `⊕ add a quest` spot is the final spot (launches pick → builder) until you reach 20.
+- **Every spot shows its completion `%`** (0–100). **Flags:**
+  - ✅ **done → big gold dumpling victory flag**
+  - 🍅 **in-progress (started, not finished) → tiny pomo flag**, always visible so every active quest is spottable at a glance even when the gang is elsewhere
+  - ○ **not-started → no flag**
+  - 🏳️ **given-up → faded flag** (exact look TBD in the end-states sticky)
 
 ### Still to whiteboard (sub-stickies)
 2. 🚩 **quest end-states** — complete vs give-up; the flags; give-up keeps already-earned currency but forfeits the **+3 whole-quest completion bonus** (refines reward #11).
