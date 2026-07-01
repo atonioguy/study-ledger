@@ -53,6 +53,7 @@ QUEST  ⟵ you name it ("Bio Exam Sprint")
 5. **Dropped cards are fully editable** — a dropped task just copies its text in as a plain, editable card.
 6. **Rearrange / edit / remove freely** — drag handle to reorder & move; ✎ pencil to edit; pull a card back to **the pile** to un-place it (nothing is truly deleted mid-build).
 7. **Add your own by hand** — type new chapters, steps, and notes that were never in TickTick.
+8. **Priority → dropped; due date → editable tag.** Priority isn't used, so it's ignored (no dot, no logic). A dated task carries its due date over as a small **editable, clearable** tag on the step; you can also add a date to a hand-typed step if you want. Purely cosmetic "when" — no XP/ordering effect.
 
 ## ✂️ Explicitly out (for now)
 - **No hidden link to TickTick.** Dropped cards are plain text; the quest lives entirely in the game.
@@ -61,7 +62,6 @@ QUEST  ⟵ you name it ("Bio Exam Sprint")
 
 ## 📌 Parked stickies (open questions, pick when ready)
 - 🔗 **sync-back** — currently OFF. Would re-add the hidden link so checking a step off marks it done in TickTick. Only if the link idea comes back.
-- 📅 **due date / priority** — becomes a little note on the step, or ignored?
 - 🎁 **XP / coins per step** — how rewards get assigned to imported steps.
 - 🎨 **the "pick your tasks" screen** — how choosing tasks from TickTick actually looks/feels.
 - 🗂️ **multiple saved quests** — switching between more than one quest on the map.
