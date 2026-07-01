@@ -144,6 +144,28 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
     repeating-linear-gradient(45deg,#2a2248 0 6px,#241d40 6px 12px); }
 .madd .al{ margin-top:8px; font-family:var(--pixfont); font-size:10px; color:#b7a6ef; }
 .mempty{ text-align:center; font-family:var(--pixfont2); font-size:16px; color:var(--tx); opacity:.55; padding:26px 16px 0; }
+
+/* ---------- WORLDS HUB ---------- */
+.hubttl{ font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1.5px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.45); margin:2px 2px 12px; }
+.hubgrid{ display:grid; grid-template-columns:1fr 1fr; gap:13px; }
+.hubcard{ position:relative; min-height:150px; padding:12px; cursor:pointer; image-rendering:pixelated; display:flex; flex-direction:column;
+  background:linear-gradient(180deg,var(--c1,#3a3062),var(--c2,#2a2148)); border:3px solid; border-color:var(--bd,#7d68c0) #241d40 #241d40 var(--bd,#7d68c0); box-shadow:0 5px 0 #150f28, 0 0 0 2px var(--outline); }
+.hubcard .hemoji{ font-size:26px; line-height:1; }
+.hubcard .hname{ font-family:var(--pixfont); font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--acc,#ffd96b); margin-top:8px; text-shadow:0 0 8px rgba(0,0,0,.35); }
+.hubcard .hbar{ margin-top:auto; height:9px; background:rgba(0,0,0,.4); border:2px solid rgba(0,0,0,.3); overflow:hidden; }
+.hubcard .hfill{ height:100%; background:var(--acc,#ffd96b); box-shadow:0 0 8px var(--acc,#ffd96b); }
+.hubcard .hstat{ font-family:var(--pixfont2); font-size:13px; color:var(--cardtx); opacity:.85; margin-top:5px; }
+.hubcard .hstat2{ font-family:var(--pixfont2); font-size:13px; margin-top:1px; display:flex; align-items:center; gap:4px; color:#ffcf6e; } .hubcard .hstat2.st{ color:#c3acff; }
+.hubcard .hbadge{ position:absolute; top:9px; right:10px; font-family:var(--pixfont); font-size:7px; letter-spacing:.5px; color:#0c2620; background:var(--acc,#ffd96b); padding:2px 5px; }
+.hubadd{ align-items:center; justify-content:center; gap:8px; background:repeating-linear-gradient(45deg,#221c3e 0 7px,#1d1836 7px 14px)!important; border:3px dashed #6a58a0!important; box-shadow:none!important; color:#b7a6ef; }
+.hubadd .hplus{ font-size:30px; } .hubadd .hname{ color:#b7a6ef!important; margin-top:0; }
+.hubrow{ margin-top:14px; display:flex; align-items:center; gap:9px; padding:12px 13px; cursor:pointer; background:linear-gradient(180deg,#2c2450,#211b40); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); font-family:var(--pixfont); font-size:11px; color:var(--cardtx); letter-spacing:.5px; }
+.welbl{ display:block; font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; text-transform:uppercase; color:var(--tx); opacity:.6; margin:12px 0 5px; }
+.pickrow{ display:flex; flex-wrap:wrap; gap:7px; }
+.emochip{ width:38px; height:38px; display:grid; place-items:center; font-size:19px; cursor:pointer; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
+.emochip.on{ border-color:var(--gold); box-shadow:0 0 8px rgba(255,217,107,.5); }
+.palchip{ width:44px; height:30px; cursor:pointer; border:2px solid #241d40; box-shadow:0 0 0 2px var(--outline); }
+.palchip.on{ outline:2px solid #fff; outline-offset:1px; }
 </style></head>
 <body><div id="app">
   <header id="top">
@@ -161,7 +183,17 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
       <div class="savenote" id="saveNote"></div>
     </div>
     <div class="view" id="viewPreview"></div>
+    <div class="view" id="viewHub"></div>
   </div>
+
+  <div class="modal" id="worldEdit"><div class="mcard">
+    <h3 id="weTitle">new world</h3>
+    <label class="welbl">name</label><input class="txt" id="weName" maxlength="24" placeholder="world name…">
+    <label class="welbl">icon</label><div class="pickrow" id="weEmoji"></div>
+    <label class="welbl">palette</label><div class="pickrow" id="wePal"></div>
+    <div class="mrow"><button class="bigbtn ghost" id="weCancel">cancel</button><button class="bigbtn" id="weSave">save</button></div>
+    <div class="mrow" id="weManageRow" style="margin-top:8px;display:none"><button class="bigbtn danger" id="weArchive">archive world</button></div>
+  </div></div>
 
   <div class="modal" id="detail"><div class="mcard">
     <h3>▸ task details</h3>
@@ -180,6 +212,15 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 <script>
 // ===== Side Quest — builder prototype =====
 const XP={easy:5,med:10,hard:20}, DIFFS=['easy','med','hard'];
+const PALETTES={
+  twilight:{label:'twilight', acc:'#ffd96b', c1:'#3a3062', c2:'#2a2148', bd:'#7d68c0'},
+  sunset:  {label:'sunset',   acc:'#ff9e5a', c1:'#4d2f3b', c2:'#3a2330', bd:'#c8703e'},
+  mint:    {label:'mint',     acc:'#5fe0c8', c1:'#26473f', c2:'#1b342d', bd:'#4a9f8c'},
+  snow:    {label:'snowy',    acc:'#7fbfff', c1:'#33436e', c2:'#243050', bd:'#6a82c0'},
+  sakura:  {label:'sakura',   acc:'#ffb3d1', c1:'#45304a', c2:'#34203a', bd:'#b877a0'},
+};
+const PAL_KEYS=Object.keys(PALETTES);
+const EMOJIS=['✦','📚','💪','🧠','🎨','🎯','🌙','🔥','🎮','📖','🌱','☕'];
 const CW_PLAY='M8 5v14l11-7z', CW_STAR='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.81 8.62 2 9.24l5.46 4.73L5.82 21z';
 let uid=0; const nid=(p)=>p+'_'+(Date.now().toString(36))+'_'+(uid++);
 
@@ -344,7 +385,7 @@ function renderPreview(){
 const detail=document.getElementById('detail');
 let detailStep=null;
 function openDetail(s,ci){
-  detailStep=s;
+  detailStep=s; sfx('sel');
   document.getElementById('dTask').textContent = s.text||'(untitled step)';
   document.getElementById('dMeta').innerHTML = [s.date?'<span class="date">'+esc(s.date)+'</span>':'', '<span class="xp">+'+stepXP(s)+' xp</span>', s.diff].filter(Boolean).join(' · ');
   const dn=document.getElementById('dNotes'); dn.textContent = s.notes||'no notes'; dn.classList.toggle('empty', !s.notes);
@@ -406,6 +447,7 @@ function renderMap(){
   let head='<div class="wmhd"><span class="wn">'+esc(w.emoji||'✦')+' '+esc(w.name||'my quests')+'</span><span class="cnt">'+quests.length+' quest'+(quests.length===1?'':'s')+'</span></div>';
   if(!quests.length) head+='<div class="mempty">no quests yet — tap ＋ to build your first one ✦</div>';
   wrap.innerHTML=head;
+  const wmhd=wrap.querySelector('.wmhd'); if(wmhd){ wmhd.style.cursor='pointer'; wmhd.title='switch worlds'; wmhd.onclick=()=>show('hub'); }
   const map=document.createElement('div'); map.className='map';
   const pts=quests.map((q,i)=>({x:(i%2===0?300:132), y:120+i*172}));
   const addX=(quests.length%2===0?300:132), addY=120+quests.length*172; map.style.height=(addY+110)+'px';
@@ -426,28 +468,93 @@ function renderMap(){
     glowEl=document.createElement('div'); glowEl.className='mglow'; glowEl.style.left=p.cx+'px'; glowEl.style.top=p.cy+'px'; glowEl.style.width=(HW*1.7)+'px'; glowEl.style.height=(HW*1.5)+'px'; map.appendChild(glowEl);
     gangEl=document.createElement('div'); gangEl.className='mgang'; gangEl.style.left=p.cx+'px'; gangEl.style.top=(p.baseY-2)+'px'; gangEl.innerHTML='<img src="'+SL+'" style="width:42px"><img src="'+TM+'" style="width:32px"><img src="'+BD+'" style="width:30px">'; map.appendChild(gangEl);
   }
-  const add=document.createElement('div'); add.className='madd'; add.style.left=addX+'px'; add.style.top=addY+'px'; add.innerHTML='<div class="an">＋</div><div class="al">add a quest</div>'; add.onclick=()=>{ sfx('add'); newQuest(); }; map.appendChild(add);
+  const add=document.createElement('div'); add.className='madd'; add.style.left=addX+'px'; add.style.top=addY+'px'; add.innerHTML='<div class="an">＋</div><div class="al">add a quest</div>'; add.onclick=newQuest; map.appendChild(add);
   wrap.appendChild(map);
   map.querySelectorAll('.mhill').forEach(hEl=>hEl.onclick=()=>{ const id=hEl.dataset.qid; if(id===selectedId) openQuest(id); else selectQuest(id); });
 }
 function selectQuest(id){ if(id===selectedId)return; selectedId=id; try{localStorage.setItem('aq_sel',id);}catch(e){} const p=hillPos[id]; if(!p)return;
   if(gangEl){ gangEl.style.left=p.cx+'px'; gangEl.style.top=(p.baseY-2)+'px'; gangEl.classList.add('walking'); setTimeout(()=>{ gangEl && gangEl.classList.remove('walking'); },660); }
   if(glowEl){ glowEl.style.left=p.cx+'px'; glowEl.style.top=p.cy+'px'; }
-  sfx('sel');
 }
 function openQuest(id){ const q=WORLD.quests[id]; if(!q)return; quest=JSON.parse(JSON.stringify(q)); persist(); show('preview'); }
 function newQuest(){ quest=blankQuest(); persist(); show('build'); }
+
+// ---- worlds hub ----
+function worldAgg(w){ const qs=(w.questIds||[]).map(id=>WORLD.quests[id]).filter(Boolean); let xe=0,xt=0,se=0,st=0,resolved=0;
+  qs.forEach(q=>{ const t=questTotals(q), s=questStars(q), stt=questState(q); xe+=t.xpEarned; xt+=t.xpTotal; se+=s.earned; st+=s.total; if(stt==='done'||stt==='gaveup')resolved++; });
+  return {n:qs.length, resolved, xe, xt, se, st, pct:(xt?Math.round(xe/xt*100):0), allDone:qs.length>0&&resolved===qs.length}; }
+function renderHub(){
+  const wrap=document.getElementById('viewHub');
+  let h='<div class="hubttl">🌍 worlds — tap to travel</div><div class="hubgrid">';
+  WORLD.worlds.filter(w=>!w.archived).forEach(w=>{
+    const P=PALETTES[w.color]||PALETTES.twilight, a=worldAgg(w);
+    h+='<div class="hubcard" data-wid="'+w.id+'" style="--c1:'+P.c1+';--c2:'+P.c2+';--bd:'+P.bd+';--acc:'+P.acc+'">'+
+       (a.allDone?'<span class="hbadge">✦ done</span>':'')+
+       '<div class="hemoji">'+esc(w.emoji||'✦')+'</div><div class="hname">'+esc(w.name)+'</div>'+
+       '<div class="hbar"><div class="hfill" style="width:'+a.pct+'%"></div></div>'+
+       '<div class="hstat">'+a.resolved+' / '+a.n+' quests</div>'+
+       '<div class="hstat2">'+a.xe+' / '+a.xt+' xp</div><div class="hstat2 st">'+a.se+' / '+a.st+' <span class="ics"></span></div></div>';
+  });
+  h+='<div class="hubcard hubadd" id="hubAdd"><div class="hplus">＋</div><div class="hname">new world</div></div></div>';
+  h+='<div class="hubrow" id="hubStats"><span>📊</span> view stats <span style="margin-left:auto;opacity:.55">→</span></div>';
+  wrap.innerHTML=h;
+  wrap.querySelectorAll('.hubcard[data-wid]').forEach(c=>{ let tm=null,held=false;
+    c.addEventListener('contextmenu',e=>{ e.preventDefault(); clearTimeout(tm); held=true; openWorldEdit(c.dataset.wid); });
+    c.addEventListener('pointerdown',()=>{ held=false; tm=setTimeout(()=>{ held=true; openWorldEdit(c.dataset.wid); },450); });
+    c.addEventListener('pointermove',()=>clearTimeout(tm));
+    c.addEventListener('pointerup',()=>{ clearTimeout(tm); if(!held) switchWorld(c.dataset.wid); });
+  });
+  document.getElementById('hubAdd').onclick=()=>openWorldEdit(null);
+  document.getElementById('hubStats').onclick=()=>askConfirm('view stats','the stats library (archived worlds + past quests) comes in a later slice ✦',()=>{});
+}
+function switchWorld(id){ WORLD.activeWorldId=id; persistWorld(); selectedId=null; show('map'); }
+
+// ---- world editor (create / rename / recolor / archive) ----
+let weWid=null, weEmoji='✦', weColor='twilight';
+function openWorldEdit(wid){
+  weWid=wid; const w = wid ? WORLD.worlds.find(x=>x.id===wid) : null;
+  document.getElementById('weTitle').textContent = wid ? 'edit world' : 'new world';
+  document.getElementById('weName').value = w ? (w.name||'') : '';
+  weEmoji = w ? (w.emoji||'✦') : '✦'; weColor = w ? (w.color||'twilight') : 'twilight';
+  const er=document.getElementById('weEmoji'); er.innerHTML=EMOJIS.map(e=>'<div class="emochip'+(e===weEmoji?' on':'')+'" data-e="'+e+'">'+e+'</div>').join('');
+  er.querySelectorAll('.emochip').forEach(c=>c.onclick=()=>{ weEmoji=c.dataset.e; er.querySelectorAll('.emochip').forEach(x=>x.classList.toggle('on',x===c)); });
+  const pr=document.getElementById('wePal'); pr.innerHTML=PAL_KEYS.map(k=>{ const P=PALETTES[k]; return '<div class="palchip'+(k===weColor?' on':'')+'" data-k="'+k+'" title="'+P.label+'" style="background:linear-gradient(135deg,'+P.c1+' 55%,'+P.acc+' 55%);border-color:'+P.bd+'"></div>'; }).join('');
+  pr.querySelectorAll('.palchip').forEach(c=>c.onclick=()=>{ weColor=c.dataset.k; pr.querySelectorAll('.palchip').forEach(x=>x.classList.toggle('on',x===c)); });
+  document.getElementById('weManageRow').style.display = wid ? 'flex' : 'none';
+  document.getElementById('worldEdit').classList.add('on');
+}
+function saveWorldEdit(){
+  const name=(document.getElementById('weName').value||'').trim()||'my world';
+  if(weWid){ const w=WORLD.worlds.find(x=>x.id===weWid); if(w){ w.name=name; w.emoji=weEmoji; w.color=weColor; } }
+  else { const nw={id:nid('w'), name, emoji:weEmoji, color:weColor, questIds:[]}; WORLD.worlds.push(nw); WORLD.activeWorldId=nw.id; selectedId=null; }
+  persistWorld(); document.getElementById('worldEdit').classList.remove('on'); renderHub();
+}
+function archiveWorld(){
+  if(!weWid)return; const w=WORLD.worlds.find(x=>x.id===weWid); if(!w)return; w.archived=true;
+  if(WORLD.activeWorldId===weWid){ const first=WORLD.worlds.find(x=>!x.archived); if(first){ WORLD.activeWorldId=first.id; } else { const nw={id:nid('w'),name:'My Quests',emoji:'✦',color:'twilight',questIds:[]}; WORLD.worlds.push(nw); WORLD.activeWorldId=nw.id; } selectedId=null; }
+  persistWorld(); document.getElementById('worldEdit').classList.remove('on'); renderHub();
+}
+document.getElementById('weCancel').onclick=()=>document.getElementById('worldEdit').classList.remove('on');
+document.getElementById('weSave').onclick=saveWorldEdit;
+document.getElementById('weArchive').onclick=()=>askConfirm('archive world?','it moves to view stats with its progress kept; you can’t add to it once archived.',archiveWorld);
+document.getElementById('worldEdit').addEventListener('click',e=>{ if(e.target.id==='worldEdit') e.currentTarget.classList.remove('on'); });
 
 // ---- wiring ----
 document.getElementById('qname').addEventListener('input',e=>{ quest.name=e.target.value; onEdit(); });
 document.getElementById('addChapter').onclick=()=>{ quest.chapters.push(blankChapter()); renderBuilder(); onEdit(); };
 document.getElementById('clearBtn').onclick=()=>askConfirm('clear this quest?','this wipes the current draft and starts fresh.',()=>{ quest=blankQuest(); renderBuilder(); persist(); document.getElementById('saveNote').textContent=''; });
-document.getElementById('saveBtn').onclick=()=>{ saveQuest(); sfx('save'); document.getElementById('saveNote').textContent='✓ saved to your world'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); };
-document.getElementById('giveupBtn').onclick=()=>askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; sfx('give'); persist(); document.getElementById('saveNote').textContent='🏳️ given up — resumable later'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); });
-const V={map:document.getElementById('viewMap'), build:document.getElementById('viewBuild'), preview:document.getElementById('viewPreview')};
+document.getElementById('saveBtn').onclick=()=>{ saveQuest(); document.getElementById('saveNote').textContent='✓ saved to your world'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); };
+document.getElementById('giveupBtn').onclick=()=>askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; persist(); document.getElementById('saveNote').textContent='🏳️ given up — resumable later'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); });
+const V={map:document.getElementById('viewMap'), build:document.getElementById('viewBuild'), preview:document.getElementById('viewPreview'), hub:document.getElementById('viewHub')};
 const T={map:document.getElementById('tabMap'), build:document.getElementById('tabBuild'), preview:document.getElementById('tabPreview')};
-function show(name){ for(const k in V){ V[k].classList.toggle('on', k===name); T[k].classList.toggle('on', k===name); } if(name==='map')renderMap(); else if(name==='build')renderBuilder(); else renderPreview(); }
+function show(name){ for(const k in V) V[k].classList.toggle('on', k===name); for(const k in T) T[k].classList.toggle('on', k===name); if(name==='map')renderMap(); else if(name==='build')renderBuilder(); else if(name==='preview')renderPreview(); else if(name==='hub')renderHub(); }
 T.map.onclick=()=>show('map'); T.build.onclick=()=>show('build'); T.preview.onclick=()=>show('preview');
+
+// default click blip for everything EXCEPT completing a task (which keeps the satisfying sound)
+document.addEventListener('click', (e)=>{
+  const t=e.target; if(t.closest('.play') || t.closest('.pv-row')) return;
+  if(t.closest('#tabs button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .grip, .hubcard, .hubrow, .emochip, .palchip')) sfx('sel');
+}, true);
 
 show('map');
 </script>
