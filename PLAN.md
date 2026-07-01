@@ -126,8 +126,15 @@ Three nested layers wrapping the quest we designed (the game today is just the m
 - **Give up** — from **⚙ edit quest → "give up quest"**, behind a confirm (like selling pomos). Keep **all coins + stars already earned**; **no +3 bonus**; a **faded flag** plants; the quest freezes at its current %.
 - **Give-up is resumable** — the faded flag means "abandoned for now." Re-entering and continuing **resumes** it (flips back to in-progress / pomo flag). Finish it later and the faded flag **converts to the gold victory flag + the +3 bonus** — the completion bonus is paid whenever you truly complete it, first attempt or not.
 
+### Layer 3 — worlds & the worlds hub (decided)
+- **A world = a top-level category** with its own name, **emoji** (📚/💪/🧠), **color** (default twilight), and its own quest map. There's always a **default world** so the game works out of the box (the current exam questline lives as its first quest).
+- **Navigation adds one zoom level:** `🌍 WORLDS hub → tap a world → its MAP → tap a quest → the QUEST`. The hub is reached by tapping the `🌍 <world> ▾` strip atop the map; a back-arrow steps up.
+- **The worlds hub is its own screen** — a grid of **colored portal cards**, each showing its emoji, name, color theme, and a **progress bar + quest count**. The **active world glows and has the gang standing on it**; a world with all quests done shows a **✦ done** badge.
+- **Create** = a `＋ new world` card → name it, pick a color, pick an emoji.
+- **Manage** = hold / right-click a card → **rename · recolor · archive** (same context-menu pattern as steps).
+- **Archive library** entry sits at the bottom of the hub (see #4).
+
 ### Still to whiteboard (sub-stickies)
-3. 🌍 **worlds** — create / label / switch between them.
 4. 📚 **archive library** — retiring a world, and what stats it documents (per quest: completion %, XP, coins + stars, dates, steps done).
 5. 🎨 **world color theming** *(optional)* — each world map a customizable palette; default twilight; selecting a color re-themes the opened quest too (feasible: the game is already CSS-variable-driven, palette re-declared on `.cw-win`). Drop if too beefy.
 
