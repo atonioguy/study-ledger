@@ -24,6 +24,12 @@ Evaluate every improvement on THREE fronts: **look · performance · practicalit
 - **Shop + gambling (slot machine)** — improve overall; make spending and the gamble feel more rewarding/interesting and balanced against the new per-step/per-chapter payouts (inflation risk).
 - These likely warrant DEDICATED Fable redesign passes after the weave review frames them.
 
+## Creative mandate (owner amplified — the throughline)
+- See the **ENTIRE game as one package** (now that the live game is in scope), through a **cohesive lens** that improves the whole, not isolated parts.
+- The owner EXPLICITLY WANTS bold improvement: wherever an agent notices the game **falls short**, could be **greatly enhanced**, **tied together more tightly**, or made to **encourage flow states with little-to-no friction** — propose it. More workshopping and revamping is *welcomed*, not scope to avoid.
+- Bias every proposal toward: tighter cohesion · flow-state design · friction elimination · a more satisfying, intentional overall package.
+- Apply this to ALL remaining agents (weave + the pomo/buddies/shop deep-dives) and the final synthesis.
+
 ## Standing rule reinforced
 - Every feature must REDUCE friction. If a mechanic requires manual bookkeeping/logging to earn rewards, redesign it to be automatic or drop it.
 - Evaluation lens for ALL work: look · performance · practicality.
