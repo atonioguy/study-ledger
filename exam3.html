@@ -1,4 +1,4 @@
-<!-- build log: v2.22 live · editor v2: custom undo/redo, manual list/style ops, styles apply to bullets, None button, Cancel/Save, top-docked toolbar -->
+<!-- build log: v2.23 live · M5L2 scope-cleanup (q1 image, q2, q4, q6, q7, q8, q9, q10) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -373,7 +373,7 @@
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
-  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.22</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.23</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
   <div class="sb-focus">
     <div class="sb-focus-label">Focus</div>
     <div class="sb-focus-row">
@@ -683,6 +683,10 @@
         <div class="takeaway"><span class="mem">Sediments and rocks</span> &mdash; the largest carbon reservoir.</div>
         <div class="support">
           <p>The <span class="concept">atmosphere</span> is the most rapidly <em>transferred</em> reservoir, not the largest; oceans are an active exchange pool, not the biggest sink.</p>
+          <figure style="margin:10px 0 4px;">
+            <img src="images/reservoirs.png" alt="Earth's carbon reservoirs and their relative sizes — sediments and rocks hold by far the most carbon, while the atmosphere holds comparatively little but cycles it fastest." style="width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border-radius:6px;" loading="lazy">
+            <figcaption style="font-size:.82em;color:var(--ink-soft);font-style:italic;text-align:center;margin-top:2px;">Earth's carbon reservoirs — sediments and rocks are by far the largest store; the atmosphere holds little but is the most rapidly transferred.</figcaption>
+          </figure>
         </div>
       </div>
       <div class="explain bl"><span class="lbl">Explanation</span><br>The trap is &ldquo;largest&rdquo; vs. &ldquo;fastest-cycling.&rdquo; If a question asks for the biggest store of carbon, the answer is sediments and rocks &mdash; not the atmosphere or the oceans, which move carbon quickly but hold comparatively little of it.</div>
@@ -699,7 +703,7 @@
             <li><span class="concept">Acidification chain</span> &mdash; more CO<sub>2</sub> &rarr; lower pH &rarr; reefs die &rarr; CaCO<sub>3</sub> released.</li>
           </ul>
           <div class="sub">Gas-making step</div>
-          <p><span class="mem">Decomposition</span> releases both CO<sub>2</sub> and CH<sub>4</sub> and is the largest CO<sub>2</sub> source; photosynthesis is the counterweight.</p>
+          <p><span class="mem">Decomposition</span> releases both CO<sub>2</sub> and CH<sub>4</sub> (methane) which are greenhouse gases; photosynthesis is the counterweight.</p>
         </div>
       </div>
       <div class="explain bl"><span class="lbl">Explanation</span>
@@ -725,8 +729,8 @@
       <div class="answer"><span class="lbl">Answer</span>
         <div class="takeaway">
           <ul>
-            <li>Loss of organic N = <span class="mem">denitrification + anammox</span>, both producing <span class="mem">N<sub>2</sub></span>.</li>
-            <li>Fertilizer overuse &rarr; more denitrification &rarr; generates <span class="mem">N<sub>2</sub>O</span>.</li>
+            <li>Loss of organic N = <span class="mem">denitrification + anammox</span>, both producing <span class="concept">N<sub>2</sub></span>.</li>
+            <li>Nitrogenous fertilizer overuse &rarr; more denitrification &rarr; generates <span class="mem">N<sub>2</sub>O</span>.</li>
           </ul>
         </div>
       </div>
@@ -749,9 +753,12 @@
       <div class="answer"><span class="lbl">Answer</span>
         <div class="takeaway">
           <ul>
-            <li><strong>Entry point:</strong> <span class="mem">SO<sub>2</sub> from fossil fuels</span>.</li>
-            <li><strong>Oxidizers:</strong> <span class="mem">chemolithotrophs</span>.</li>
-            <li><strong>Form oxidized:</strong> reduced sulfur (<span class="mem">H<sub>2</sub>S, S<sup>0</sup></span>) &rarr; <span class="mem">sulfate (SO<sub>4</sub><sup>2-</sup>)</span>.</li>
+            <li><strong>Entry point:</strong> <span class="mem">sulfur dioxide gas (SO<sub>2</sub>)</span> from the burning of fossil fuels (e.g. coal).</li>
+            <li><strong>Oxidizers:</strong> <span class="mem">sulfur-oxidizing chemolithotrophs</span>.
+              <ul>
+                <li>oxidize <span class="mem">sulfide (H<sub>2</sub>S)</span> and <span class="mem">elemental sulfur (S<sup>0</sup>)</span> at <span class="concept">oxic/anoxic interfaces</span>.</li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>
@@ -762,10 +769,7 @@
     <article class="q" id="m5l2-q7" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q7</span><span class="q-text">What is often cycled with iron?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <div class="takeaway"><span class="mem">Manganese</span> &mdash; cycled in parallel with iron (Mn <span class="concept">4+/2+</span> mirroring Fe <span class="concept">3+/2+</span>).</div>
-        <div class="support">
-          <p>Named iron oxidizers: <span class="concept">Acidithiobacillus</span> and <span class="concept">Leptospirillum ferrooxidans</span>.</p>
-        </div>
+        <div class="takeaway"><span class="mem">Manganese</span> &mdash; cycles between <span class="concept">oxidized (Mn<sup>4+</sup>)</span> and <span class="concept">reduced (Mn<sup>2+</sup>)</span> with iron.</div>
       </div>
       <div class="explain bl"><span class="lbl">Explanation</span><br>If a question says something is &ldquo;cycled with iron,&rdquo; the answer is manganese &mdash; both swing between an oxidized and a reduced state. One detail worth holding: Fe<sup>3+</sup> reduction happens <em>outside</em> the cell, because the iron mineral is insoluble and can&rsquo;t be brought in.</div>
       <div class="fc" data-deck="m5l2-q7"></div>
@@ -773,9 +777,9 @@
     <article class="q" id="m5l2-q8" data-lesson="m5l2">
       <div class="q-head"><span class="q-num">M5L2 Q8</span><span class="q-text">Where would you find calcium in marine microbes?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <div class="takeaway">In the <span class="mem">exoskeletons / shells</span> marine phototrophs build &mdash; <span class="concept">calcium carbonate (CaCO<sub>3</sub>)</span>.</div>
+        <div class="takeaway">In the <span class="mem">exoskeletons / shells</span> that marine phototrophs build using <span class="mem">Ca<sup>2+</sup></span>.</div>
       </div>
-      <div class="explain bl"><span class="lbl">Explanation</span><br>Short and specific &mdash; calcium lives in the shells and exoskeletons. The high-value connection is back to the carbon cycle: acidifying oceans dissolve those CaCO<sub>3</sub> structures, which is a big part of why reefs are endangered.</div>
+      <div class="explain bl"><span class="lbl">Explanation</span><br>Short and specific &mdash; calcium lives in the shells and exoskeletons marine phototrophs build from Ca<sup>2+</sup>. The high-value connection is back to the carbon cycle: those shells are calcium carbonate (CaCO<sub>3</sub>), and acidifying oceans dissolve them &mdash; a big part of why reefs are endangered.</div>
       <div class="fc" data-deck="m5l2-q8"></div>
     </article>
     <article class="q" id="m5l2-q9" data-lesson="m5l2">
@@ -783,8 +787,8 @@
       <div class="answer"><span class="lbl">Answer</span>
         <div class="takeaway">
           <ul>
-            <li><strong>Concern:</strong> microbes methylate mercury into <span class="mem">methylmercury (CH<sub>3</sub>Hg<sup>+</sup>)</span> &mdash; soluble, toxic, biomagnifies.</li>
-            <li><strong>Benefit:</strong> other bacteria <span class="mem">detoxify mercury</span> using plasmid-encoded enzymes.</li>
+            <li><span class="mem">Mercury is highly toxic</span>.</li>
+            <li>Microorganisms metabolize it into <span class="mem">methylmercury (CH<sub>3</sub>Hg<sup>+</sup>)</span> (<span class="concept">soluble, toxic</span>) &mdash; but several bacteria can transform it to <span class="mem">nontoxic forms</span>.</li>
           </ul>
         </div>
       </div>
@@ -796,12 +800,16 @@
       <div class="answer"><span class="lbl">Answer</span>
         <div class="takeaway">
           <ul>
-            <li><span class="mem">Bioaccumulation</span> = buildup <em>within one organism, over time</em>.</li>
-            <li><span class="mem">Biomagnification</span> = increase <em>across trophic levels, up the food chain</em>.</li>
+            <li><span class="mem">Bioaccumulation</span> = buildup <em>within one organism, over time</em>.
+              <ul><li>e.g. <span class="concept">mercury builds up in an organism over time</span>.</li></ul>
+            </li>
+            <li><span class="mem">Biomagnification</span> = increase <em>across trophic levels, up the food chain</em>.
+              <ul><li>e.g. <span class="concept">mercury increases in concentration as it passes up the food chain</span>.</li></ul>
+            </li>
           </ul>
         </div>
         <div class="support">
-          <p>A top predator (e.g., tuna) vs. bottom organisms (plankton) points at biomagnification.</p>
+          <p>Mercury has <span class="concept">few elimination routes</span> &mdash; a low-to-nonexistent rate of degradation &mdash; so it keeps accumulating.</p>
         </div>
       </div>
       <div class="explain bl"><span class="lbl">Explanation</span><br>Classic distinguish-the-pair: one builds up vertically within a single organism, the other climbs the food chain. The tell is whether the scenario tracks one organism over time (bioaccumulation) or compares levels of a food web (biomagnification).</div>
@@ -2738,25 +2746,25 @@ window.smoothScrollTo=function(el){
       {q:'Don&rsquo;t confuse fixation with&hellip;?', a:'Nitrification (NH<sub>3</sub> &rarr; NO<sub>2</sub><sup>-</sup> &rarr; NO<sub>3</sub><sup>-</sup>) and denitrification (the loss pathway).'}
     ],
     'm5l2-q6':[
-      {q:'Typical <strong>entry point</strong> of the sulfur cycle?', a:'<span class="mem">SO<sub>2</sub> from fossil fuels</span>.'},
-      {q:'Which organisms <strong>oxidize</strong> sulfur?', a:'<span class="mem">Chemolithotrophs</span>.'},
-      {q:'What form of sulfur do they oxidize, and to what?', a:'Reduced sulfur (H<sub>2</sub>S, S<sup>0</sup>) &rarr; <span class="mem">sulfate (SO<sub>4</sub><sup>2-</sup>)</span>.'}
+      {q:'Typical <strong>entry point</strong> of the sulfur cycle?', a:'<span class="mem">Sulfur dioxide gas (SO<sub>2</sub>)</span> from burning fossil fuels (e.g. coal).'},
+      {q:'Which organisms <strong>oxidize</strong> sulfur?', a:'<span class="mem">Sulfur-oxidizing chemolithotrophs</span>.'},
+      {q:'What form of sulfur do they oxidize?', a:'<span class="mem">Sulfide (H<sub>2</sub>S)</span> and <span class="mem">elemental sulfur (S<sup>0</sup>)</span>, at <span class="concept">oxic/anoxic interfaces</span>.'}
     ],
     'm5l2-q7':[
-      {q:'What is cycled in parallel with <strong>iron</strong>?', a:'<span class="mem">Manganese</span> (Mn<sup>4+</sup>/<sup>2+</sup> mirroring Fe<sup>3+</sup>/<sup>2+</sup>).'},
-      {q:'Named <strong>iron oxidizers</strong>?', a:'Acidithiobacillus and Leptospirillum ferrooxidans.'},
+      {q:'What is cycled with <strong>iron</strong>?', a:'<span class="mem">Manganese</span> &mdash; cycles between oxidized (Mn<sup>4+</sup>) and reduced (Mn<sup>2+</sup>).'},
       {q:'Where does Fe<sup>3+</sup> reduction happen, and why?', a:'Outside the cell &mdash; the iron mineral is insoluble and can&rsquo;t be brought in.'}
     ],
     'm5l2-q8':[
-      {q:'Where is <strong>calcium</strong> found in marine microbes?', a:'In <span class="mem">exoskeletons / shells</span> &mdash; calcium carbonate (CaCO<sub>3</sub>).'}
+      {q:'Where is <strong>calcium</strong> found in marine microbes?', a:'In <span class="mem">exoskeletons / shells</span> &mdash; marine phototrophs use <span class="mem">Ca<sup>2+</sup></span> to build them.'}
     ],
     'm5l2-q9':[
-      {q:'Mercury <strong>concern</strong>?', a:'Microbes methylate it into <span class="mem">methylmercury (CH<sub>3</sub>Hg<sup>+</sup>)</span> &mdash; soluble, toxic, biomagnifies.'},
-      {q:'Microbial <strong>benefit</strong> in the mercury cycle?', a:'Other bacteria <span class="mem">detoxify mercury</span> via plasmid-encoded enzymes.'}
+      {q:'What is the <strong>concern</strong> with mercury?', a:'<span class="mem">Mercury is highly toxic</span>; microbes metabolize it into <span class="mem">methylmercury (CH<sub>3</sub>Hg<sup>+</sup>)</span> &mdash; soluble, toxic.'},
+      {q:'Microbial <strong>benefit</strong> in the mercury cycle?', a:'Several bacteria transform mercury to <span class="mem">nontoxic forms</span> (plasmid-encoded enzymes).'}
     ],
     'm5l2-q10':[
-      {q:'What is <strong>bioaccumulation</strong>?', a:'Buildup <em>within one organism</em>, over time.'},
-      {q:'What is <strong>biomagnification</strong>?', a:'Rising concentration <em>up the food chain</em> (top predators highest).'}
+      {q:'What is <strong>bioaccumulation</strong>?', a:'Buildup <em>within one organism</em>, over time (e.g. mercury builds up in an organism over time).'},
+      {q:'What is <strong>biomagnification</strong>?', a:'Rising concentration <em>up the food chain</em> (e.g. mercury increases as it passes up the food chain).'},
+      {q:'Why does mercury keep accumulating?', a:'Few elimination routes &mdash; a low-to-nonexistent rate of degradation.'}
     ],
     'm5l3-q1':[
       {q:'What is <strong>microbial leaching</strong>?', a:'Microbes oxidize metal sulfides in ore into <span class="concept">soluble sulfates</span>, freeing the metal.'},
