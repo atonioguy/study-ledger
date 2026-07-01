@@ -174,6 +174,7 @@ Map · end-states · worlds hub · view stats · move-quest · color theming are
 - When folding into `quest.html`, **keep the live game's existing polished look and button/UI behavior.** Antonio really likes the current **exam-3 questline look** — that fidelity must be preserved, not downgraded to the prototype's rougher version. Port the *features* into the live UI, don't replace the live UI with the prototype.
 - Sticky banners: on the map the **world-name banner** stays pinned while scrolling quests; in a quest the **quest-name banner** stays pinned while scrolling steps (both park just under the top HUD bar).
 - **Play-progress must persist:** checking a step off in a quest writes back to the stored quest (not just the working draft), so it survives leaving + re-opening and updates the map's progress bar/flag. (Prototype does this via `syncQuestToWorld()`; the live game must do the same.)
+- **Save handling (decided):** on the fold, **preserve + auto-migrate** — detect the existing exam-3 save and convert it into the new worlds/quests + lifetime-XP structure automatically on load, losing no progress. (Fold itself is deferred; prototyping continues first.)
 
 ## 🎚️ Leveling rework (decided)
 **Problem:** the current level/XP/streak are all scoped to the one exam campaign — 6 fixed ranks (`fresh start`→`exam ready`) maxing at ~250 xp, the XP bar = that one quest's total, and the 🔥 "streak" is actually `tasks-done / total` mislabeled. Multi-quest needs it **global + open-ended**.
