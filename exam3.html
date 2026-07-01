@@ -1,4 +1,4 @@
-<!-- build log: v2.18 live · M5L1 scope-cleanup: realigned q7–q12 answers/decks/quiz to slide scope -->
+<!-- build log: v2.19 live · M5L1 answer-focus pass: promoted direct answers into .takeaway (q4,q5,q7,q9,q11,q12) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -353,7 +353,7 @@
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
-  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.18</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.19</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
   <div class="sb-focus">
     <div class="sb-focus-label">Focus</div>
     <div class="sb-focus-row">
@@ -439,17 +439,18 @@
     <article class="q" id="m5l1-q4" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q4</span><span class="q-text">What is a microenvironment? Using a soil particle as an example, what types of microbes live in the different microenvironments?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <div class="takeaway">A <span class="mem">microenvironment</span> is the immediate, fast-changing surroundings of a single cell.</div>
-        <div class="support">
-          <p>On one soil particle, an <span class="mem">O<sub>2</sub> gradient</span> over a few millimeters splits the habitat:</p>
+        <div class="takeaway">A <span class="mem">microenvironment</span> is the immediate, fast-changing surroundings of a single cell.
           <ul>
-            <li><span class="concept">aerobes</span> &mdash; oxygenated surface</li>
-            <li><span class="concept">obligate anaerobes</span> &mdash; anoxic core (after surface microbes use up the O<sub>2</sub>)</li>
+            <li><span class="mem">Aerobes</span> &mdash; oxygenated <span class="concept">surface</span>.</li>
+            <li><span class="mem">Obligate anaerobes</span> &mdash; anoxic <span class="concept">core</span> (after surface microbes use up the O<sub>2</sub>).</li>
           </ul>
+        </div>
+        <div class="support">
+          <p>On one soil particle, an <span class="concept">O<sub>2</sub> gradient</span> over a few millimeters splits the habitat.</p>
           <figure style="margin:10px 0 4px;">
-  <img src="images/soil-particle-o2.png" alt="Oxygen concentration contours across a single soil particle — ~21% at the oxic surface down to 0% in the anoxic core" style="width:100%;max-width:340px;height:auto;display:block;margin:0 auto;border-radius:6px;" loading="lazy">
-  <figcaption style="font-size:.82em;color:var(--ink-soft);font-style:italic;text-align:center;margin-top:2px;">O₂ (%) across one soil particle — surface microbes consume the O₂, so the core turns anoxic.</figcaption>
-</figure>
+            <img src="images/soil-particle-o2.png" alt="Oxygen concentration contours across a single soil particle — ~21% at the oxic surface down to 0% in the anoxic core" style="width:100%;max-width:340px;height:auto;display:block;margin:0 auto;border-radius:6px;" loading="lazy">
+            <figcaption style="font-size:.82em;color:var(--ink-soft);font-style:italic;text-align:center;margin-top:2px;">O₂ (%) across one soil particle — surface microbes consume the O₂, so the core turns anoxic.</figcaption>
+          </figure>
         </div>
       </div>
       <div class="explain bl"><span class="lbl">Explanation</span><br>The soil aggregate is the classic proof that &ldquo;the environment&rdquo; is never uniform &mdash; a gradient across a few millimeters creates totally different niches on one grain. A question might ask where on a particle you&rsquo;d find the anaerobes: the anoxic core, after the surface microbes have used up the oxygen. Keep this distinct from a niche, which is a guild&rsquo;s shared habitat rather than one cell&rsquo;s surroundings.</div>
@@ -459,8 +460,7 @@
     <article class="q" id="m5l1-q5" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q5</span><span class="q-text">What components make up soil, what are its four layers, and which layer is the most species-abundant?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <div class="takeaway">Soil is mostly pore space, and life is concentrated at the top.</div>
-        <div class="support">
+        <div class="takeaway">
           <div class="sub">Composition</div>
           <ul>
             <li><span class="mem">Air + water</span> ~50% <span class="concept">(the largest component)</span></li>
@@ -475,10 +475,12 @@
             <li><span class="mem">C horizon</span> &mdash; soil base developed from bedrock; microbial activity very low.</li>
           </ul>
           <p>The <span class="mem">soil surface (O + A horizons)</span> holds the most organic matter and microbial life &mdash; the most species-abundant layer; activity falls with depth.</p>
-<figure style="margin:10px 0 4px;">
-  <img src="images/soil-horizons.png" alt="Soil profile: O, A, B, C horizons; organic carbon decreases with depth, and microbial activity is highest in the O and A surface horizons" style="width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border-radius:6px;" loading="lazy">
-  <figcaption style="font-size:.82em;color:var(--ink-soft);font-style:italic;text-align:center;margin-top:2px;">Soil horizons O–C. Organic matter and microbial life are highest at the surface (O + A) and fall with depth.</figcaption>
-</figure>
+        </div>
+        <div class="support">
+          <figure style="margin:10px 0 4px;">
+            <img src="images/soil-horizons.png" alt="Soil profile: O, A, B, C horizons; organic carbon decreases with depth, and microbial activity is highest in the O and A surface horizons" style="width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border-radius:6px;" loading="lazy">
+            <figcaption style="font-size:.82em;color:var(--ink-soft);font-style:italic;text-align:center;margin-top:2px;">Soil horizons O–C. Organic matter and microbial life are highest at the surface (O + A) and fall with depth.</figcaption>
+          </figure>
         </div>
       </div>
       <div class="explain bl"><span class="lbl">Explanation</span>
@@ -499,8 +501,7 @@
     <article class="q" id="m5l1-q7" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q7</span><span class="q-text">What impact does water depth have on microbial species richness and abundance, and what are benthic species (where would you find them)?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <div class="takeaway">Deeper water = <span class="concept">less light, less O<sub>2</sub>, fewer nutrients</span> &rarr; fewer, more specialized organisms.</div>
-        <div class="support">
+        <div class="takeaway">Deeper water = <span class="mem">less light, less O<sub>2</sub>, fewer nutrients</span> &rarr; fewer, more specialized organisms.
           <ul>
             <li><span class="mem">Benthic</span> &mdash; attached to the bottom or sides.</li>
             <li><span class="mem">Planktonic</span> (phytoplankton) &mdash; freely suspended.</li>
@@ -537,8 +538,7 @@
     <article class="q" id="m5l1-q9" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q9</span><span class="q-text">What is biochemical oxygen demand (BOD), what alters it, and how does eutrophication impact BOD?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <div class="takeaway"><span class="mem">BOD (biochemical oxygen demand)</span> &mdash; the microbial oxygen-consuming capacity of a body of water.</div>
-        <div class="support">
+        <div class="takeaway"><span class="mem">BOD (biochemical oxygen demand)</span> &mdash; the microbial oxygen-consuming capacity of a body of water.
           <div class="sub">What alters it</div>
           <ul>
             <li>influx of organic material &rarr; <span class="concept">BOD &uarr;</span></li>
@@ -549,6 +549,8 @@
           <ul>
             <li>bloom dies &rarr; loss of O<sub>2</sub> production <strong>+</strong> microbes feed on dead organic material &rarr; <span class="concept">BOD &uarr;</span> <strong>+</strong> becomes <span class="mem">anoxic</span></li>
           </ul>
+        </div>
+        <div class="support">
           <figure style="margin:10px 0 4px;">
             <img src="images/bod.png" alt="Oxygen-sag curve downstream of an organic-waste input: bacteria, organic carbon, and BOD spike while dissolved O2 drops; released nutrients (NO3-, NH4+, PO4 3-) then fuel an algae and cyanobacteria bloom as O2 recovers" style="width:100%;max-width:440px;height:auto;display:block;margin:0 auto;border-radius:6px;" loading="lazy">
             <figcaption style="font-size:.82em;color:var(--ink-soft);font-style:italic;text-align:center;margin-top:2px;">Oxygen sag below an organic-waste input: <span class="mem">bacteria &amp; BOD</span> spike &rarr; <span class="mem">dissolved O<sub>2</sub> drops</span> &rarr; released nutrients fuel an algal/cyanobacterial bloom &rarr; O<sub>2</sub> recovers.</figcaption>
@@ -579,8 +581,7 @@
     <article class="q" id="m5l1-q11" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q11</span><span class="q-text">What is the pelagic zone, what organisms tell you that&#x27;s where you are, and what is most abundant there?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <div class="takeaway"><span class="mem">Pelagic zone</span> = open (marine) waters.</div>
-        <div class="support">
+        <div class="takeaway"><span class="mem">Pelagic zone</span> = open (marine) waters.
           <div class="sub">What tells you you&rsquo;re there</div>
           <ul>
             <li><span class="mem">Pelagibacter</span> is found in this zone &mdash; the most abundant marine <span class="concept">heterotroph</span>.
@@ -602,8 +603,7 @@
     <article class="q" id="m5l1-q12" data-lesson="m5l1">
       <div class="q-head"><span class="q-num">M5L1 Q12</span><span class="q-text">What is the typical condition of the deep sea, and what causes variations from this?</span><button class="flag-btn" type="button" title="Flag for later" aria-label="Flag this block for later" aria-pressed="false">⚑</button></div>
       <div class="answer"><span class="lbl">Answer</span>
-        <div class="takeaway">Typical deep sea: <span class="mem">low temperature, high pressure, no light, low nutrient levels</span>.</div>
-        <div class="support">
+        <div class="takeaway">Typical deep sea: <span class="mem">low temperature, high pressure, no light, low nutrient levels</span>.
           <ul>
             <li>organisms must be <span class="mem">chemotrophic</span> and <span class="mem">piezophilic</span> or <span class="mem">piezotolerant</span>
               <ul><li>needs to either love or tolerate high pressure.</li></ul>
