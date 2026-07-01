@@ -54,6 +54,28 @@ QUEST  ⟵ you name it ("Bio Exam Sprint")
 6. **Rearrange / edit / remove freely** — drag handle to reorder & move; ✎ pencil to edit; pull a card back to **the pile** to un-place it (nothing is truly deleted mid-build).
 7. **Add your own by hand** — type new chapters, steps, and notes that were never in TickTick.
 8. **Priority → dropped; due date → editable tag.** Priority isn't used, so it's ignored (no dot, no logic). A dated task carries its due date over as a small **editable, clearable** tag on the step; you can also add a date to a hand-typed step if you want. Purely cosmetic "when" — no XP/ordering effect.
+9. **The builder board is a full editor, not just an importer.** In both create *and* edit modes you can type brand-new steps, rename/rewrite anything, add banners, and jot notes — nothing has to come from TickTick. TickTick is one *source* you can pull from; the board is always yours to write on freely.
+
+## 🎨 Layout & visual design (decided)
+The imported quest reuses the exam-quest look on the map — **not** the rigid `P1 / 14:32` diamond tiles (those stay for the hardcoded campaign). Reference: `quest.html` map view.
+
+- **No box around the steps.** Rows sit right on the dotted background so the **segmented trail + mascot** stay visible down the left side (teal = done, gold sparkle = current, purple = future).
+- **Module-style banner per section** — a customizable **typed** label with a **gold left bar** (`border-left:4px solid --gold`) and a **low-opacity purple gradient that spans across** (`linear-gradient(90deg, rgba(128,104,196,.32), transparent)`), with a **teal striped progress bar** below it.
+  - **Default = one banner = the whole quest.** Add more banners to chunk it into modules like exam 3 (each gets its own progress bar).
+  - **Banners are typed text, NOT drop targets.** Task cards only drop into the step list, never onto a banner.
+- **Step row (flexible, wraps).** Long TickTick titles **wrap to ~2 lines then trim with `…`** instead of squishing.
+  - Leading control is the **▶ play button**, which becomes the **gold ⭐ star** when the step is completed (reuses `CW_PLAY` / `CW_STAR`).
+  - **Done = color shift only (teal), NO strikethrough.**
+  - Inline meta line: **`[date] · notes`** (date in teal); no inline edit toggle — edits live in the step menu.
+  - **`+XP` is gold** (`#ffcf6e`), matching the campaign. *(XP values still placeholder — see parked sticky.)*
+
+## ✏️ Editing — two tiers (decided)
+| Scope | How | For | Does |
+|---|---|---|---|
+| **One step** | right-click / long-press a row | quick tweaks | inline menu → **open** (full details, where long notes live) · **edit** (rename, notes, date, delete) |
+| **Whole quest** | **⚙ edit quest** (top-right) | structural | re-opens the **builder board** loaded with this quest — rename quest, add/rename/reorder/delete banners, pull up the pile to add more tasks or type new steps, move/delete steps, reset or delete the quest |
+
+One editor to learn: the builder board *is* the quest editor.
 
 ## ✂️ Explicitly out (for now)
 - **No hidden link to TickTick.** Dropped cards are plain text; the quest lives entirely in the game.
