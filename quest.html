@@ -350,6 +350,20 @@
   .cw-les.current::after{ display:none; }
   .cw-les.current .cw-ldot{ background:var(--gold); box-shadow:none; animation:sqGlowF 1.4s ease-in-out infinite; }
   @keyframes sqGlowF{ 0%,100%{ filter:drop-shadow(0 0 2px rgba(255,217,107,.5)) } 50%{ filter:drop-shadow(0 0 7px rgba(255,217,107,1)) } }
+  /* ===== pomo room ===== */
+  #screen-pomo{ padding:12px 12px calc(14px + env(safe-area-inset-bottom)); overflow:hidden; }
+  #screen-pomo.on{ display:flex; flex-direction:column; }
+  .pomo-hd{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin:0 2px 10px; }
+  .pomo-ttl{ font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; }
+  .pomo-tally{ font-family:var(--pixfont2); font-size:15px; color:var(--tx); } .pomo-tally b{ color:#fff; font-weight:400; }
+  .pomo-room{ flex:1; position:relative; overflow:hidden; background:radial-gradient(circle at 50% 32%, #322a56, #191333); border:3px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); box-shadow:inset 0 0 34px rgba(0,0,0,.45); touch-action:none; }
+  .pomo-room::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:24%; background:linear-gradient(0deg,rgba(255,255,255,.05),transparent); pointer-events:none; }
+  .pomo-ent{ position:absolute; top:0; left:0; width:34px; height:30px; background:center/contain no-repeat; image-rendering:pixelated; cursor:grab; touch-action:none; will-change:transform; z-index:1; }
+  .pomo-ent.is-dump{ width:46px; height:34px; }
+  .pomo-ent.held{ cursor:grabbing; filter:drop-shadow(0 10px 8px rgba(0,0,0,.5)); z-index:5; }
+  .pomo-actions{ display:flex; gap:9px; margin-top:12px; }
+  .pomo-actions .sq-bigbtn{ flex:1; }
+  .sq-bigbtn.ghost{ background:linear-gradient(180deg,#3a3060,#241d3c); }
   /* effects layer spans the whole app */
   #cwFx{ position:fixed; inset:0; z-index:70; pointer-events:none; }
   #cwBanner{ position:fixed; left:50%; top:88px; z-index:72; }
@@ -407,10 +421,16 @@
         </div>
         <div class="shop-soon"><span class="sq-soon">charms — next update</span></div>
       </section>
+          <section class="screen" id="screen-pomo" data-screen="pomo">
+        <div class="pomo-hd"><span class="pomo-ttl">✦ pomo room</span><span class="pomo-tally"><b id="pomoRoomN">0</b> here · <b id="pomoTotalN">0</b> logged</span></div>
+        <div class="pomo-room" id="pomoArea"></div>
+        <div class="pomo-actions"><button id="pomoDrop" class="sq-bigbtn">＋ log a pomo</button><button id="pomoSell" class="sq-bigbtn ghost off" disabled>sell all · <b id="pomoSellN">0</b><span class="ic ic-coin"></span></button></div>
+      </section>
     </div>
 
     <nav id="nav">
       <button class="on" data-go="map"><span class="ni">🗺️</span>map</button>
+      <button data-go="pomo"><span class="ni">🍅</span>pomo</button>
       <button data-go="buddies"><span class="ni">🥚</span>buddies</button>
       <button data-go="shop"><span class="ni">🎰</span>shop</button>
     </nav>
@@ -559,7 +579,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v2.2';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v2.3';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -789,6 +809,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   function statRow(k,v){ return '<div class="ms-stat"><span>'+k+'</span><b>'+v+'</b></div>'; }
   function openMascotSheet(){
     const m=document.getElementById('mascotSheet'); if(!m)return;
+    const bb=document.getElementById('msBubble'); if(bb){ bb.classList.remove('show'); bb.textContent=''; }   // clear any lingering bubble so it doesn't auto-replay on open
     m.querySelector('.ms-slime').style.backgroundImage='url("'+drawMascotBig('slime',COS.eq)+'")';
     m.querySelector('.ms-tom').style.backgroundImage='url("'+drawMascotBig('tomato',COS.eq)+'")';
     const s=campStats(), rk=rankFor(s.xp), cos=COSMETICS.find(o=>o.id===COS.eq);
@@ -930,12 +951,55 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   }
   function initShop(){ const b=document.getElementById('slotSpin'); if(b)b.onclick=slotSpin; const a=document.getElementById('cosAction'); if(a)a.onclick=cosAction; updateSlotInfo(); renderShopOutfits(); }
 
+  // ===== pomo room (log pomodoros -> roam -> sell for coins) =====
+  const POMO_PRICE=5;
+  let POMOS=[], POMO_DUMP=null, POMO_RAF=0, POMO_AREA=null, pomoState={room:0,total:0};
+  function loadPomo(){ try{ const d=JSON.parse(localStorage.getItem('aq_pomo')||'{}'); pomoState={room:d.room||0,total:d.total||0}; }catch(e){ pomoState={room:0,total:0}; } }
+  function savePomo(){ localStorage.setItem('aq_pomo',JSON.stringify(pomoState)); }
+  function pomoTally(){ const a=document.getElementById('pomoRoomN'); if(a)a.textContent=pomoState.room; const b=document.getElementById('pomoTotalN'); if(b)b.textContent=pomoState.total; const s=document.getElementById('pomoSellN'); if(s)s.textContent=pomoState.room*POMO_PRICE; const sb=document.getElementById('pomoSell'); if(sb){ sb.disabled=pomoState.room<=0; sb.classList.toggle('off',pomoState.room<=0); } }
+  function makeEnt(kind,x,y){
+    const A=POMO_AREA; const el=document.createElement('div'); el.className='pomo-ent '+(kind==='dump'?'is-dump':'is-pomo');
+    el.style.backgroundImage=(kind==='dump'?'var(--slime)':'var(--tomato)'); A.appendChild(el);
+    const o={el,kind,x,y,vy:0,mode:'roam',tx:null,face:1};
+    el.addEventListener('pointerdown',e=>{ e.preventDefault(); o.mode='held'; const r=A.getBoundingClientRect(); o.gx=e.clientX-r.left-o.x; o.gy=e.clientY-r.top-o.y; try{el.setPointerCapture(e.pointerId);}catch(_){} el.classList.add('held'); cwSfx('squish'); cwBuzz(8); });
+    el.addEventListener('pointermove',e=>{ if(o.mode!=='held')return; const r=A.getBoundingClientRect(); o.x=e.clientX-r.left-o.gx; o.y=e.clientY-r.top-o.gy; });
+    const drop=()=>{ if(o.mode!=='held')return; o.mode='fall'; o.vy=0; el.classList.remove('held'); };
+    el.addEventListener('pointerup',drop); el.addEventListener('pointercancel',drop);
+    return o;
+  }
+  function pomoTick(){
+    const A=POMO_AREA; if(!A){ POMO_RAF=0; return; }
+    const W=A.clientWidth, H=A.clientHeight;
+    (POMO_DUMP?POMOS.concat([POMO_DUMP]):POMOS).forEach(o=>{
+      const ew=o.el.offsetWidth||34, eh=o.el.offsetHeight||30, floor=H-eh-2, spd=(o.kind==='dump'?0.5:0.4);
+      if(o.mode==='held'){ o.x=Math.max(0,Math.min(W-ew,o.x)); o.y=Math.max(0,Math.min(H-eh,o.y)); }
+      else if(o.mode==='fall'){ o.vy+=0.9; o.y+=o.vy; if(o.y>=floor){ o.y=floor; if(o.vy>3){cwSfx('squish');cwBuzz(6);} o.vy=0; o.mode='roam'; o.tx=null; } }
+      else { if(o.tx==null || Math.abs(o.tx-o.x)<3){ o.tx=6+Math.random()*(W-ew-12); } const dx=o.tx-o.x; o.face=dx<0?-1:1; o.x+=Math.sign(dx)*Math.min(spd,Math.abs(dx)); o.y=floor; }
+      const sc=o.mode==='held'?1.18:1;
+      o.el.style.transform='translate('+Math.round(o.x)+'px,'+Math.round(o.y)+'px) scale('+(o.face*sc)+','+sc+')';
+    });
+    POMO_RAF=requestAnimationFrame(pomoTick);
+  }
+  function pomoBuild(){
+    const A=document.getElementById('pomoArea'); if(!A)return; POMO_AREA=A;
+    A.querySelectorAll('.pomo-ent').forEach(e=>e.remove()); POMOS=[];
+    const W=A.clientWidth||300, H=A.clientHeight||300;
+    POMO_DUMP=makeEnt('dump', W*0.42, H-40);
+    for(let i=0;i<pomoState.room;i++) POMOS.push(makeEnt('pomo', 8+Math.random()*(W-48), H-34));
+    pomoTally();
+  }
+  function pomoStart(){ pomoBuild(); if(!POMO_RAF)POMO_RAF=requestAnimationFrame(pomoTick); }
+  function pomoStop(){ if(POMO_RAF){ cancelAnimationFrame(POMO_RAF); POMO_RAF=0; } }
+  function dropPomo(){ const A=POMO_AREA; if(!A)return; const W=A.clientWidth; const o=makeEnt('pomo', 18+Math.random()*(W-52), -34); o.mode='fall'; o.vy=2; POMOS.push(o); pomoState.room++; pomoState.total++; savePomo(); pomoTally(); markChanged(); cwSfx('check'); cwBuzz(10); }
+  function sellPomos(){ if(pomoState.room<=0)return; const gain=pomoState.room*POMO_PRICE; adjustBalance(gain,0); pomoState.room=0; savePomo(); POMOS.forEach(o=>o.el.remove()); POMOS=[]; refreshEcon(); pomoTally(); markChanged(); cwSfx('fanfare'); cwBuzz([16,30]); const fx=document.getElementById('cwFx'); if(fx){ const r=fx.getBoundingClientRect(); cwBurst(r.left+r.width/2,r.top+r.height*0.55,true); } }
+  function initPomo(){ loadPomo(); const d=document.getElementById('pomoDrop'); if(d)d.onclick=dropPomo; const s=document.getElementById('pomoSell'); if(s)s.onclick=sellPomos; pomoTally(); }
+
   // ---- cloud sync ----
   const API={ url:(localStorage.getItem('aq_api_url')||'').replace(/\/+$/,''), key:localStorage.getItem('aq_api_key')||'' };
   const syncOn=()=>!!(API.url&&API.key);
   const stamp=()=>parseInt(localStorage.getItem('aq_save_t')||'0',10);
   function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
-  function snapshot(){ return { v:2, t:stamp(), campDone:campDone, econ:readEcon(), buddies:lsGet('aq_buddies'), cos:lsGet('aq_cos') }; }
+  function snapshot(){ return { v:2, t:stamp(), campDone:campDone, econ:readEcon(), buddies:lsGet('aq_buddies'), cos:lsGet('aq_cos'), pomo:lsGet('aq_pomo') }; }
   let pushTimer=0;
   function pushCloud(){ if(!syncOn())return; clearTimeout(pushTimer); pushTimer=setTimeout(()=>{
     fetch(API.url+'/save?slot=sidequest',{method:'POST',headers:{'x-aq-key':API.key,'content-type':'application/json'},body:JSON.stringify(snapshot())}).catch(()=>{});
@@ -948,6 +1012,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
       if(d.econ)localStorage.setItem('aq_econ',JSON.stringify(d.econ));
       if(d.buddies)localStorage.setItem('aq_buddies',JSON.stringify(d.buddies));
       if(d.cos)localStorage.setItem('aq_cos',JSON.stringify(d.cos));
+      if(d.pomo)localStorage.setItem('aq_pomo',JSON.stringify(d.pomo));
       localStorage.setItem('aq_save_t',String(d.t||0)); return true;
     }
     return false;
@@ -979,6 +1044,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
     document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.dataset.screen===go));
     if(go==='shop'){ renderShopOutfits(); updateSlotInfo(); }
     if(go==='map') scheduleTrail();
+    if(go==='pomo') pomoStart(); else pomoStop();
     cwSfx('check'); cwBuzz(8);
   });
 
@@ -1002,7 +1068,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
       const r=await fetch(API.url+'/save?slot=sidequest',{headers:{'x-aq-key':API.key}});
       if(r.status===401){ st.textContent='✕ wrong key'; return; }
       if(!r.ok){ st.textContent='✕ worker error ('+r.status+') — KV bound?'; return; }
-      const adopted=await pullCloud(); loadBud(); loadCos(); applyCos(); rebuild(); renderDex(); renderActiveBuddy(); renderShopOutfits(); if(!adopted) pushCloud();
+      const adopted=await pullCloud(); loadBud(); loadCos(); applyCos(); loadPomo(); rebuild(); renderDex(); renderActiveBuddy(); renderShopOutfits(); pomoTally(); if(!adopted) pushCloud();
       st.textContent='✓ connected — synced'; cwSfx('levelup'); cwBuzz(16);
       setTimeout(closeSync,800);
     }catch(e){ st.textContent='✕ cannot reach worker'; }
@@ -1018,6 +1084,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   loadCos(); applyCos();
   initBuddies();
   initShop();
+  initPomo();
   initMascotSheet();
   rebuild();
   addEventListener('resize',scheduleTrail);
