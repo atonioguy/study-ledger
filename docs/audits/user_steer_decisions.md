@@ -56,6 +56,14 @@ Evaluate every improvement on THREE fronts: **look · performance · practicalit
   - **Level (open-ended) + daily streak = perpetual**, need no sink — always a number climbing.
   - Philosophy: "collecting everything" = a cozy STEADY-STATE (furnished Den + full family at tea); the endgame reward is the vibe, not endless unlocks. A study app must not become a second job.
 
+## Leveling needs its own motivator / prizes (owner) — proposed ladder
+- Level-ups must PAY OUT (currently just a rising number). Keep rewards **mostly NON-coin** so pomo-focus-XP can't indirectly farm coins via levels (firewall).
+- **Every level** → a free golden Payday Wheel spin + the level-up flourish (self-balancing via wheel odds).
+- **Every rank-up** (tier titles fresh start → warming up → in the zone → locked in → …) → a milestone prize: Shooting Star wish token / decor piece / charm / cosmetic + new-title ceremony.
+- **Big milestone levels (10, 20, …)** → a guaranteed drop (rare buddy or special item).
+- **Some cosmetics/features unlock AT levels** (e.g. lv 8 → an outfit / extra world slot) — concrete climb goals.
+- Coordinates with the wheel (shop), wish tokens (buddies), and the reward-animation pass (feel). May get a dedicated Fable tuning pass if the owner wants the full ladder balanced.
+
 ## Standing rule reinforced
 - Every feature must REDUCE friction. If a mechanic requires manual bookkeeping/logging to earn rewards, redesign it to be automatic or drop it.
 - Evaluation lens for ALL work: look · performance · practicality.
