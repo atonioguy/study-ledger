@@ -118,10 +118,15 @@ Three nested layers wrapping the quest we designed (the game today is just the m
   - ✅ **done → big gold dumpling victory flag**
   - 🍅 **in-progress (started, not finished) → tiny pomo flag**, always visible so every active quest is spottable at a glance even when the gang is elsewhere
   - ○ **not-started → no flag**
-  - 🏳️ **given-up → faded flag** (exact look TBD in the end-states sticky)
+  - 🏳️ **given-up → faded flag** (abandoned but resumable — see end-states below)
+
+### Layer 2 — quest end-states (decided)
+- **Completed = 100%** (all steps checked) — auto-triggers on the final step; no "mark complete" button. **Victory moment:** fanfare + burst + "QUEST COMPLETE" banner, the **+3 star bonus** lands, and the **big gold dumpling flag** plants on the hill.
+- **Completed quests are trophies** — tapping opens the finished questline **read-only** (no re-checking, no re-earning). It stays as a monument until archived.
+- **Give up** — from **⚙ edit quest → "give up quest"**, behind a confirm (like selling pomos). Keep **all coins + stars already earned**; **no +3 bonus**; a **faded flag** plants; the quest freezes at its current %.
+- **Give-up is resumable** — the faded flag means "abandoned for now." Re-entering and continuing **resumes** it (flips back to in-progress / pomo flag). Finish it later and the faded flag **converts to the gold victory flag + the +3 bonus** — the completion bonus is paid whenever you truly complete it, first attempt or not.
 
 ### Still to whiteboard (sub-stickies)
-2. 🚩 **quest end-states** — complete vs give-up; the flags; give-up keeps already-earned currency but forfeits the **+3 whole-quest completion bonus** (refines reward #11).
 3. 🌍 **worlds** — create / label / switch between them.
 4. 📚 **archive library** — retiring a world, and what stats it documents (per quest: completion %, XP, coins + stars, dates, steps done).
 5. 🎨 **world color theming** *(optional)* — each world map a customizable palette; default twilight; selecting a color re-themes the opened quest too (feasible: the game is already CSS-variable-driven, palette re-declared on `.cw-win`). Drop if too beefy.
