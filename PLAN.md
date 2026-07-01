@@ -81,6 +81,24 @@ The imported quest reuses the exam-quest look on the map — **not** the rigid `
 
 One editor to learn: the builder board *is* the quest editor.
 
+## 🎣 The "pick your tasks" screen (decided)
+The front door — how TickTick tasks get into the builder's pile.
+
+- **Data source:** the existing Cloudflare worker `/ticktick` endpoint + the key already saved from cloud sync — **no new login**. If the key isn't set, nudge to connect (same as sync).
+- **Pick flow = hybrid.** A focused pick screen loads the pile at the start, and it's **re-openable anytime** from the builder (⚙ edit quest → *add tasks*) to pull in more. One picker, two entry points:
+  ```
+  [ + new quest ] → PICK (browse + select) → add to pile → BUILDER (assemble)
+                                                                ▲
+       ⚙ edit quest → "add tasks" ───────────────────────────┘
+  ```
+- **Organization = toggle by-list ↔ by-date**, with a search box + a "due this week" filter on top. (by-list groups under TickTick list headers; by-date is the soonest-due-first flat list with the list name as a tag.)
+- **Subtasks:** a parent with subtasks shows a ▸ expand. **Selecting a parent pulls it into the pile carrying its subtasks** (this is what enables the builder's "drop as chapter → subtasks become steps"). Checking a parent auto-checks its subtasks; you can uncheck any, or grab a single subtask on its own. The pile always retains the parent→child relationship.
+- **Selection:** multi-select checkboxes → **"add to pile"** with a live count.
+- **Micro-details (parked, no decision needed):** tasks already added to this quest show greyed with a ✓ (no double-adding); not-connected state nudges like sync.
+
+### 🔧 Technical to-do (implementation, not design)
+- The worker's `/ticktick` currently returns tasks but **not their subtasks** — add subtask/checklist data to the feed so the pick screen and chapter auto-fill work.
+
 ## ✂️ Explicitly out (for now)
 - **No hidden link to TickTick.** Dropped cards are plain text; the quest lives entirely in the game.
   *(Revive with one word if wanted — see the retired "sync-back" idea below.)*
@@ -88,7 +106,6 @@ One editor to learn: the builder board *is* the quest editor.
 
 ## 📌 Parked stickies (open questions, pick when ready)
 - 🔗 **sync-back** — currently OFF. Would re-add the hidden link so checking a step off marks it done in TickTick. Only if the link idea comes back.
-- 🎨 **the "pick your tasks" screen** — how choosing tasks from TickTick actually looks/feels.
 - 🗂️ **multiple saved quests** — switching between more than one quest on the map.
 
 ## Finished assembly model (one paragraph)
