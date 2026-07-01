@@ -16,7 +16,19 @@ html,body{margin:0;min-height:100%;background:#161029;font-family:var(--pixfont)
 #app{ position:relative; width:100%; max-width:460px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column;
   background:radial-gradient(var(--dot) 1px,transparent 1.5px) 0 0/4px 4px, radial-gradient(circle at 50% 0%, var(--base2), var(--base));
   image-rendering:pixelated; }
-#top{ flex:none; display:flex; align-items:center; gap:9px; padding:calc(11px + env(safe-area-inset-top)) 14px 10px; background:linear-gradient(180deg,#332a59,#241d3c); border-bottom:2px solid var(--outline); box-shadow:0 3px 0 rgba(0,0,0,.3); position:sticky; top:0; z-index:9; }
+#top{ flex:none; display:flex; flex-direction:column; gap:9px; padding:calc(11px + env(safe-area-inset-top)) 14px 10px; background:linear-gradient(180deg,#332a59,#241d3c); border-bottom:2px solid var(--outline); box-shadow:0 3px 0 rgba(0,0,0,.3); position:sticky; top:0; z-index:9; }
+.topbar{ display:flex; align-items:center; gap:9px; }
+.hud{ display:flex; align-items:center; gap:10px; }
+.hud.levelup{ animation:hudpop .5s ease; }
+@keyframes hudpop{ 0%,100%{transform:none} 30%{transform:scale(1.03)} }
+.hud-lvl{ flex:none; min-width:74px; display:flex; flex-direction:column; line-height:1; }
+.hud-rank{ font-family:var(--pixfont); font-size:8px; letter-spacing:.5px; text-transform:uppercase; color:var(--gold); text-shadow:0 0 7px rgba(255,200,110,.4); white-space:nowrap; }
+.hud-lv{ font-family:var(--pixfont2); font-size:15px; color:#ffcf6e; margin-top:3px; }
+.hud-bar{ flex:1; position:relative; height:15px; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); overflow:hidden; }
+/* HUD level bar = constant gold motif (currency/progress), never themed to the world accent */
+.hud-fill{ height:100%; width:0; background:repeating-linear-gradient(45deg,#ffd96b 0 6px,#f0a54a 6px 12px); box-shadow:0 0 8px rgba(255,190,90,.6); transition:width .5s ease; }
+.hud-xp{ position:absolute; inset:0; display:grid; place-items:center; font-family:var(--pixfont2); font-size:12px; color:var(--bartx); text-shadow:0 1px 2px rgba(0,0,0,.75); }
+.hud-streak{ flex:none; font-family:var(--pixfont); font-size:12px; color:#ffcf6e; text-shadow:0 0 8px rgba(255,150,60,.5); white-space:nowrap; }
 #top .t{ font-family:var(--pixfont); font-size:13px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.4); }
 #top .sub{ font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.6; }
 #tabs{ margin-left:auto; display:flex; gap:6px; }
@@ -211,8 +223,15 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 </style></head>
 <body><div id="app">
   <header id="top">
-    <span class="t">✦ side quest</span><span class="sub">builder</span>
-    <div id="tabs"><button id="tabMap" class="on">map</button><button id="tabBuild">build</button><button id="tabPreview">preview</button></div>
+    <div class="topbar">
+      <span class="t">✦ side quest</span><span class="sub">builder</span>
+      <div id="tabs"><button id="tabMap" class="on">map</button><button id="tabBuild">build</button><button id="tabPreview">preview</button></div>
+    </div>
+    <div class="hud" id="hud">
+      <div class="hud-lvl"><span class="hud-rank" id="hudRank">fresh start</span><span class="hud-lv" id="hudLv">lv 1</span></div>
+      <div class="hud-bar"><div class="hud-fill" id="hudFill"></div><span class="hud-xp" id="hudXp">0 / 50</span></div>
+      <span class="hud-streak" id="hudStreak">🔥 0</span>
+    </div>
   </header>
   <div class="wrap">
     <div class="view on" id="viewMap"></div>
@@ -354,6 +373,28 @@ function esc(x){ return String(x==null?'':x).replace(/[&<>"]/g,m=>({'&':'&amp;',
 // ---- persistence ----
 function persist(){ try{ localStorage.setItem('aq_builder_draft', JSON.stringify(quest)); }catch(e){} }
 function load(){ try{ const d=JSON.parse(localStorage.getItem('aq_builder_draft')); return (d&&d.chapters)?d:null; }catch(e){ return null; } }
+
+// ---- global leveling + daily streak (one lifetime XP pool, open-ended) ----
+const RANKS=[[1,'fresh start'],[3,'warming up'],[5,'in the zone'],[8,'locked in'],[12,'on a roll'],[16,'unstoppable'],[20,'legend'],[26,'ascended']];
+function loadAQ(){ try{ const a=JSON.parse(localStorage.getItem('aq_progress')); if(a&&typeof a.xp==='number')return {xp:a.xp, streak:a.streak||0, lastDay:a.lastDay||null}; }catch(e){} return {xp:0, streak:0, lastDay:null}; }
+let AQ=loadAQ();
+function persistAQ(){ try{ localStorage.setItem('aq_progress', JSON.stringify(AQ)); }catch(e){} }
+function xpForLevel(L){ return 50 + 25*(L-1); }                 // cost to go L -> L+1
+function levelInfo(xp){ let L=1, acc=0, need=xpForLevel(1); while(xp>=acc+need){ acc+=need; L++; need=xpForLevel(L); } return {level:L, into:xp-acc, need}; }
+function rankFor(L){ let n=RANKS[0][1]; for(const r of RANKS){ if(L>=r[0])n=r[1]; } return n; }
+function dayStr(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function bumpStreak(){ const now=new Date(), t=dayStr(now); if(AQ.lastDay===t)return; const y=new Date(now); y.setDate(y.getDate()-1); AQ.streak=(AQ.lastDay===dayStr(y))?(AQ.streak+1):1; AQ.lastDay=t; } // +1 pomo/step counts too when folded in
+function awardXP(delta){ if(!delta)return; const before=levelInfo(AQ.xp).level; AQ.xp=Math.max(0, AQ.xp+delta); if(delta>0)bumpStreak(); persistAQ(); renderHUD(levelInfo(AQ.xp).level>before); }
+function renderHUD(levelUp){
+  const rk=document.getElementById('hudRank'); if(!rk)return;
+  const info=levelInfo(AQ.xp);
+  rk.textContent=rankFor(info.level);
+  document.getElementById('hudLv').textContent='lv '+info.level;
+  document.getElementById('hudFill').style.width=Math.round(info.into/info.need*100)+'%';
+  document.getElementById('hudXp').textContent=info.into+' / '+info.need;
+  document.getElementById('hudStreak').textContent='🔥 '+(AQ.streak||0);
+  if(levelUp){ const h=document.getElementById('hud'); h.classList.remove('levelup'); void h.offsetWidth; h.classList.add('levelup'); }
+}
 function saveQuest(){
   quest.createdAt = quest.createdAt || 'now';
   WORLD.quests[quest.id] = JSON.parse(JSON.stringify(quest));
@@ -486,7 +527,7 @@ function renderPreview(){
     row.addEventListener('contextmenu',e=>{ e.preventDefault(); clearTimeout(timer); openDetail(s,ci); });
     row.addEventListener('pointerdown',()=>{ held=false; timer=setTimeout(openIt,450); });
     row.addEventListener('pointermove',()=>{ clearTimeout(timer); });
-    row.addEventListener('pointerup',()=>{ clearTimeout(timer); if(!held){ s.done=!s.done; if(s.done)sfx('done'); if(document.getElementById('viewBuild').classList.contains('on'))renderBuilder(); persist(); renderPreview(); } });
+    row.addEventListener('pointerup',()=>{ clearTimeout(timer); if(!held){ s.done=!s.done; if(s.done)sfx('done'); awardXP(s.done?stepXP(s):-stepXP(s)); if(document.getElementById('viewBuild').classList.contains('on'))renderBuilder(); persist(); renderPreview(); } });
   });
 }
 
@@ -760,6 +801,7 @@ document.addEventListener('click', (e)=>{
 // keep sticky quest/world banners parked just below the app bar (measured, so it survives safe-area insets)
 function setTopH(){ const t=document.getElementById('top'); if(t) document.getElementById('app').style.setProperty('--toph', t.offsetHeight+'px'); }
 setTopH(); window.addEventListener('resize', setTopH);
+renderHUD();
 show('map');
 </script>
 </body></html>
