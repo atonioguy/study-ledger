@@ -116,11 +116,13 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .wmhd .cnt{ margin-left:auto; font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.65; }
 .map{ position:relative; width:100%; }
 .mdot{ position:absolute; width:6px; height:6px; transform:translate(-50%,-50%) rotate(45deg); background:#4a3d78; image-rendering:pixelated; }
-.mglow{ position:absolute; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none; background:radial-gradient(circle, rgba(120,224,205,.32) 0%, rgba(255,217,107,.15) 42%, transparent 70%); animation:mamb 2.4s ease-in-out infinite; }
+.mglow{ position:absolute; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none; transition:left .55s ease-in-out, top .55s ease-in-out; background:radial-gradient(circle, rgba(120,224,205,.32) 0%, rgba(255,217,107,.15) 42%, transparent 70%); animation:mamb 2.4s ease-in-out infinite; }
 @keyframes mamb{ 0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.94)} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)} }
 .mhill{ position:absolute; transform:translate(-50%,-50%); image-rendering:pixelated; z-index:2; cursor:pointer; }
 .mflag{ position:absolute; transform:translate(-50%,-100%); image-rendering:pixelated; z-index:4; pointer-events:none; }
-.mgang{ position:absolute; transform:translate(-50%,-100%); z-index:5; display:flex; align-items:flex-end; gap:1px; pointer-events:none; filter:drop-shadow(0 3px 2px rgba(0,0,0,.4)); }
+.mgang{ position:absolute; transform:translate(-50%,-100%); z-index:5; display:flex; align-items:flex-end; gap:1px; pointer-events:none; filter:drop-shadow(0 3px 2px rgba(0,0,0,.4)); transition:left .55s ease-in-out, top .55s ease-in-out; }
+.mgang.walking img{ animation:mbob .26s ease-in-out infinite alternate; }
+@keyframes mbob{ to{ transform:translateY(-2px); } }
 .mgang img{ image-rendering:pixelated; display:block; }
 .mlbl{ position:absolute; transform:translateX(-50%); text-align:center; z-index:3; width:190px; pointer-events:none; }
 .mlbl .nm{ font-family:var(--pixfont2); font-size:19px; color:var(--cardtx); line-height:1.05; }
@@ -133,7 +135,13 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .mlbl .stat.xp{ color:#ffcf6e; } .mlbl .stat.st{ color:#c3acff; }
 .ics{ display:inline-block; width:13px; height:13px; background:center/contain no-repeat; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 0 8.4 3.6 12 6 8.4 8.4 6 12 3.6 8.4 0 6 3.6 3.6Z' fill='%23bca6f0'/%3E%3C/svg%3E"); }
 .madd{ position:absolute; transform:translate(-50%,-50%); z-index:3; display:flex; flex-direction:column; align-items:center; cursor:pointer; }
-.madd .an{ width:64px; height:54px; display:grid; place-items:center; background:repeating-linear-gradient(45deg,#2a2248 0 6px,#241d40 6px 12px); border:3px dashed #6a58a0; color:#b7a6ef; font-family:var(--pixfont); font-size:26px; }
+.madd .an{ width:66px; height:56px; display:grid; place-items:center; color:#b7a6ef; font-family:var(--pixfont); font-size:26px;
+  background:
+    linear-gradient(90deg,#6a58a0 60%,transparent 0) top left/12px 3px repeat-x,
+    linear-gradient(90deg,#6a58a0 60%,transparent 0) bottom left/12px 3px repeat-x,
+    linear-gradient(180deg,#6a58a0 60%,transparent 0) top left/3px 12px repeat-y,
+    linear-gradient(180deg,#6a58a0 60%,transparent 0) top right/3px 12px repeat-y,
+    repeating-linear-gradient(45deg,#2a2248 0 6px,#241d40 6px 12px); }
 .madd .al{ margin-top:8px; font-family:var(--pixfont); font-size:10px; color:#b7a6ef; }
 .mempty{ text-align:center; font-family:var(--pixfont2); font-size:16px; color:var(--tx); opacity:.55; padding:26px 16px 0; }
 </style></head>
@@ -247,7 +255,7 @@ function renderStep(c,ci,s,si){
   el.querySelector('.tk').addEventListener('input',e=>{ s.text=e.target.value; onEdit(); });
   el.querySelector('.date').addEventListener('input',e=>{ s.date=e.target.value; onEdit(); });
   const ta=el.querySelector('.notes'); ta.addEventListener('input',e=>{ s.notes=e.target.value; autoGrow(ta); onEdit(); });
-  el.querySelector('.play').onclick=()=>{ s.done=!s.done; renderBuilder(); onEdit(); };
+  el.querySelector('.play').onclick=()=>{ s.done=!s.done; if(s.done)sfx('done'); renderBuilder(); onEdit(); };
   el.querySelector('.diffchip').onclick=()=>{ s.diff=DIFFS[(DIFFS.indexOf(s.diff)+1)%3]; renderBuilder(); onEdit(); };
   el.querySelector('.grip').addEventListener('pointerdown',e=>beginDrag(e,'step',el,{ci,si}));
   el.querySelector('.del').onclick=()=>{ if(c.steps.length>1) c.steps.splice(si,1); else c.steps.splice(si,1,blankStep()); renderBuilder(); onEdit(); };
@@ -328,7 +336,7 @@ function renderPreview(){
     row.addEventListener('contextmenu',e=>{ e.preventDefault(); clearTimeout(timer); openDetail(s,ci); });
     row.addEventListener('pointerdown',()=>{ held=false; timer=setTimeout(openIt,450); });
     row.addEventListener('pointermove',()=>{ clearTimeout(timer); });
-    row.addEventListener('pointerup',()=>{ clearTimeout(timer); if(!held){ s.done=!s.done; if(document.getElementById('viewBuild').classList.contains('on'))renderBuilder(); persist(); renderPreview(); } });
+    row.addEventListener('pointerup',()=>{ clearTimeout(timer); if(!held){ s.done=!s.done; if(s.done)sfx('done'); if(document.getElementById('viewBuild').classList.contains('on'))renderBuilder(); persist(); renderPreview(); } });
   });
 }
 
@@ -377,35 +385,55 @@ function flagURL(kind){ const c=pxc(26,32),x=c.getContext('2d'); x.imageSmoothin
   return c.toDataURL(); }
 const SL=drawSlime(), TM=drawTomato(), BD=drawBuddy(), HURL=hillURL(48,22,0);
 const FLAG={done:flagURL('done'),prog:flagURL('prog'),gaveup:flagURL('gaveup')};
+
+// ---- tiny synth SFX (real mp3s get wired when this folds into the game) ----
+let _ac;
+function tone(f,start,dur,vol,type){ const o=_ac.createOscillator(),g=_ac.createGain(); o.type=type||'square'; o.frequency.value=f; o.connect(g); g.connect(_ac.destination); const t=_ac.currentTime+start; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+0.012); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); o.start(t); o.stop(t+dur+0.03); }
+function sfx(name){ try{ _ac=_ac||new (window.AudioContext||window.webkitAudioContext)(); if(_ac.state==='suspended')_ac.resume();
+  if(name==='done'){ tone(660,0,.13,.16); tone(990,.07,.17,.14); }
+  else if(name==='sel'){ tone(500,0,.07,.10,'triangle'); }
+  else if(name==='save'){ tone(523,0,.1,.13); tone(784,.08,.1,.12); tone(1046,.16,.18,.12); }
+  else if(name==='give'){ tone(300,0,.14,.12,'sawtooth'); tone(180,.1,.22,.10,'sawtooth'); }
+  else if(name==='add'){ tone(440,0,.06,.09,'triangle'); tone(660,.05,.11,.09,'triangle'); }
+}catch(e){} }
+
+let selectedId=null, hillPos={}, gangEl=null, glowEl=null;
+function defaultSel(quests){ try{ const s=localStorage.getItem('aq_sel'); if(s && quests.find(q=>q.id===s))return s; }catch(e){} let i=quests.findIndex(q=>questState(q)==='prog'); if(i<0)i=quests.findIndex(q=>questState(q)==='new'); if(i<0)i=0; return quests[i]?quests[i].id:null; }
 function renderMap(){
-  const wrap=document.getElementById('viewMap'); const quests=worldQuests();
-  const HW=150,HH=68, w=activeWorld();
-  let h='<div class="wmhd"><span class="wn">'+esc(w.emoji||'✦')+' '+esc(w.name||'my quests')+'</span><span class="cnt">'+quests.length+' quest'+(quests.length===1?'':'s')+'</span></div>';
-  if(!quests.length) h+='<div class="mempty">no quests yet — tap ＋ to build your first one ✦</div>';
-  wrap.innerHTML=h;
+  const wrap=document.getElementById('viewMap'); const quests=worldQuests(); const w=activeWorld();
+  const HW=150,HH=68; hillPos={}; gangEl=glowEl=null;
+  selectedId = (selectedId && quests.find(q=>q.id===selectedId)) ? selectedId : defaultSel(quests);
+  let head='<div class="wmhd"><span class="wn">'+esc(w.emoji||'✦')+' '+esc(w.name||'my quests')+'</span><span class="cnt">'+quests.length+' quest'+(quests.length===1?'':'s')+'</span></div>';
+  if(!quests.length) head+='<div class="mempty">no quests yet — tap ＋ to build your first one ✦</div>';
+  wrap.innerHTML=head;
   const map=document.createElement('div'); map.className='map';
   const pts=quests.map((q,i)=>({x:(i%2===0?300:132), y:120+i*172}));
-  const addX=(quests.length%2===0?300:132), addY=120+quests.length*172;
-  map.style.height=(addY+90)+'px';
+  const addX=(quests.length%2===0?300:132), addY=120+quests.length*172; map.style.height=(addY+110)+'px';
   const chain=pts.concat([{x:addX,y:addY}]);
   for(let i=0;i<chain.length-1;i++){ const a=chain[i],b=chain[i+1]; const steps=Math.round(Math.hypot(b.x-a.x,b.y-a.y)/15); for(let s=1;s<steps;s++){ const t=s/steps; const d=document.createElement('div'); d.className='mdot'; d.style.left=(a.x+(b.x-a.x)*t)+'px'; d.style.top=(a.y+(b.y-a.y)*t)+'px'; map.appendChild(d); } }
-  let gangIdx=quests.findIndex(q=>questState(q)==='prog'); if(gangIdx<0) gangIdx=quests.findIndex(q=>questState(q)==='new');
   quests.forEach((q,i)=>{
     const st=questState(q), tot=questTotals(q), stars=questStars(q), pct=tot.xpTotal?Math.round(tot.xpEarned/tot.xpTotal*100):0;
-    const cx=pts[i].x, cy=pts[i].y, crestY=cy-HH/2+6, baseY=cy+HH/2;
-    if(i===gangIdx){ const gl=document.createElement('div'); gl.className='mglow'; gl.style.left=cx+'px'; gl.style.top=cy+'px'; gl.style.width=(HW*1.7)+'px'; gl.style.height=(HW*1.5)+'px'; map.appendChild(gl); }
+    const cx=pts[i].x, cy=pts[i].y, crestY=cy-HH/2+6, baseY=cy+HH/2; hillPos[q.id]={cx,cy,baseY};
     const hill=document.createElement('img'); hill.className='mhill'; hill.src=HURL; hill.style.width=HW+'px'; hill.style.height=HH+'px'; hill.style.left=cx+'px'; hill.style.top=cy+'px'; hill.dataset.qid=q.id; map.appendChild(hill);
     if(FLAG[st]){ const f=document.createElement('img'); f.className='mflag'; f.src=FLAG[st]; f.style.width=(st==='done'?42:32)+'px'; f.style.left=(cx+(st==='done'?20:18))+'px'; f.style.top=(crestY+(st==='done'?6:8))+'px'; map.appendChild(f); }
-    if(i===gangIdx){ const g=document.createElement('div'); g.className='mgang'; g.style.left=cx+'px'; g.style.top=(baseY-2)+'px'; g.innerHTML='<img src="'+SL+'" style="width:42px"><img src="'+TM+'" style="width:32px"><img src="'+BD+'" style="width:30px">'; map.appendChild(g); }
     const barcls=st==='done'?'goldbar':(st==='gaveup'?'greybar':'tealbar');
     const lbl=document.createElement('div'); lbl.className='mlbl'; lbl.style.left=cx+'px'; lbl.style.top=(baseY+16)+'px';
     lbl.innerHTML='<div class="nm">'+esc(q.name||'untitled quest')+'</div><div class="track"><div class="fill '+barcls+'" style="width:'+pct+'%"></div></div>'+
       '<div class="stat xp">'+tot.xpEarned+' / '+tot.xpTotal+' xp</div><div class="stat st">'+stars.earned+' / '+stars.total+' <span class="ics"></span></div>';
     map.appendChild(lbl);
   });
-  const add=document.createElement('div'); add.className='madd'; add.style.left=addX+'px'; add.style.top=addY+'px'; add.innerHTML='<div class="an">＋</div><div class="al">add a quest</div>'; add.onclick=newQuest; map.appendChild(add);
+  if(selectedId && hillPos[selectedId]){ const p=hillPos[selectedId];
+    glowEl=document.createElement('div'); glowEl.className='mglow'; glowEl.style.left=p.cx+'px'; glowEl.style.top=p.cy+'px'; glowEl.style.width=(HW*1.7)+'px'; glowEl.style.height=(HW*1.5)+'px'; map.appendChild(glowEl);
+    gangEl=document.createElement('div'); gangEl.className='mgang'; gangEl.style.left=p.cx+'px'; gangEl.style.top=(p.baseY-2)+'px'; gangEl.innerHTML='<img src="'+SL+'" style="width:42px"><img src="'+TM+'" style="width:32px"><img src="'+BD+'" style="width:30px">'; map.appendChild(gangEl);
+  }
+  const add=document.createElement('div'); add.className='madd'; add.style.left=addX+'px'; add.style.top=addY+'px'; add.innerHTML='<div class="an">＋</div><div class="al">add a quest</div>'; add.onclick=()=>{ sfx('add'); newQuest(); }; map.appendChild(add);
   wrap.appendChild(map);
-  map.querySelectorAll('.mhill').forEach(hEl=>hEl.onclick=()=>openQuest(hEl.dataset.qid));
+  map.querySelectorAll('.mhill').forEach(hEl=>hEl.onclick=()=>{ const id=hEl.dataset.qid; if(id===selectedId) openQuest(id); else selectQuest(id); });
+}
+function selectQuest(id){ if(id===selectedId)return; selectedId=id; try{localStorage.setItem('aq_sel',id);}catch(e){} const p=hillPos[id]; if(!p)return;
+  if(gangEl){ gangEl.style.left=p.cx+'px'; gangEl.style.top=(p.baseY-2)+'px'; gangEl.classList.add('walking'); setTimeout(()=>{ gangEl && gangEl.classList.remove('walking'); },660); }
+  if(glowEl){ glowEl.style.left=p.cx+'px'; glowEl.style.top=p.cy+'px'; }
+  sfx('sel');
 }
 function openQuest(id){ const q=WORLD.quests[id]; if(!q)return; quest=JSON.parse(JSON.stringify(q)); persist(); show('preview'); }
 function newQuest(){ quest=blankQuest(); persist(); show('build'); }
@@ -414,8 +442,8 @@ function newQuest(){ quest=blankQuest(); persist(); show('build'); }
 document.getElementById('qname').addEventListener('input',e=>{ quest.name=e.target.value; onEdit(); });
 document.getElementById('addChapter').onclick=()=>{ quest.chapters.push(blankChapter()); renderBuilder(); onEdit(); };
 document.getElementById('clearBtn').onclick=()=>askConfirm('clear this quest?','this wipes the current draft and starts fresh.',()=>{ quest=blankQuest(); renderBuilder(); persist(); document.getElementById('saveNote').textContent=''; });
-document.getElementById('saveBtn').onclick=()=>{ saveQuest(); document.getElementById('saveNote').textContent='✓ saved to your world'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); };
-document.getElementById('giveupBtn').onclick=()=>askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; persist(); document.getElementById('saveNote').textContent='🏳️ given up — resumable later'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); });
+document.getElementById('saveBtn').onclick=()=>{ saveQuest(); sfx('save'); document.getElementById('saveNote').textContent='✓ saved to your world'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); };
+document.getElementById('giveupBtn').onclick=()=>askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; sfx('give'); persist(); document.getElementById('saveNote').textContent='🏳️ given up — resumable later'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); });
 const V={map:document.getElementById('viewMap'), build:document.getElementById('viewBuild'), preview:document.getElementById('viewPreview')};
 const T={map:document.getElementById('tabMap'), build:document.getElementById('tabBuild'), preview:document.getElementById('tabPreview')};
 function show(name){ for(const k in V){ V[k].classList.toggle('on', k===name); T[k].classList.toggle('on', k===name); } if(name==='map')renderMap(); else if(name==='build')renderBuilder(); else renderPreview(); }
