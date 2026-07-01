@@ -356,11 +356,23 @@
   .pomo-hd{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin:0 2px 10px; }
   .pomo-ttl{ font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; }
   .pomo-tally{ font-family:var(--pixfont2); font-size:15px; color:var(--tx); } .pomo-tally b{ color:#fff; font-weight:400; }
-  .pomo-room{ flex:1; position:relative; overflow:hidden; background:radial-gradient(circle at 50% 32%, #322a56, #191333); border:3px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); box-shadow:inset 0 0 34px rgba(0,0,0,.45); touch-action:none; }
-  .pomo-room::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:24%; background:linear-gradient(0deg,rgba(255,255,255,.05),transparent); pointer-events:none; }
-  .pomo-ent{ position:absolute; top:0; left:0; width:34px; height:30px; background:center/contain no-repeat; image-rendering:pixelated; cursor:grab; touch-action:none; will-change:transform; z-index:1; }
+  .pomo-room{ flex:1; position:relative; overflow:hidden; background:radial-gradient(circle at 50% 30%, #37305e, #171029); border:3px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); box-shadow:inset 0 0 34px rgba(0,0,0,.45); touch-action:none; }
+  /* cozy twilight room: moon + stars on the back wall, a warm floor with baseboard + a little rug */
+  .pomo-room::before{ content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(circle at 84% 13%, #fdf3d0 0 7px, rgba(253,243,208,.28) 8px 13px, transparent 14px),
+      radial-gradient(circle at 22% 15%, rgba(255,255,255,.5) 0 1.4px, transparent 2.4px),
+      radial-gradient(circle at 64% 9%, rgba(255,255,255,.42) 0 1.4px, transparent 2.4px),
+      radial-gradient(circle at 44% 22%, rgba(255,255,255,.34) 0 1.4px, transparent 2.4px),
+      radial-gradient(circle at 74% 27%, rgba(255,255,255,.30) 0 1.4px, transparent 2.4px),
+      radial-gradient(ellipse 33% 6.5% at 50% 93%, rgba(224,132,150,.34) 0 56%, rgba(224,132,150,.14) 58% 82%, transparent 84%),
+      linear-gradient(180deg, transparent 0 73%, rgba(146,124,206,.55) 73% 73.7%, transparent 73.7%),
+      linear-gradient(180deg, transparent 73%, rgba(66,52,108,.42) 74% 100%);
+  }
+  .pomo-room::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:26%; z-index:0; background:linear-gradient(0deg,rgba(255,238,206,.06),transparent); pointer-events:none; }
+  .pomo-ent{ position:absolute; top:0; left:0; width:34px; height:30px; background:center/contain no-repeat; image-rendering:pixelated; cursor:grab; touch-action:none; will-change:transform; z-index:2; filter:drop-shadow(0 3px 2px rgba(0,0,0,.38)); }
   .pomo-ent.is-dump{ width:46px; height:34px; }
-  .pomo-ent.held{ cursor:grabbing; filter:drop-shadow(0 10px 8px rgba(0,0,0,.5)); z-index:5; }
+  .pomo-ent.held{ cursor:grabbing; filter:drop-shadow(0 11px 8px rgba(0,0,0,.5)); z-index:6; }
   .pomo-actions{ display:flex; gap:9px; margin-top:12px; }
   .pomo-actions .sq-bigbtn{ flex:1; }
   .sq-bigbtn.ghost{ background:linear-gradient(180deg,#3a3060,#241d3c); }
@@ -446,6 +458,11 @@
       <div class="sq-dev"><span class="lbl">— testing (temporary) —</span><div class="row"><button id="devGrant">＋ 10⭐ · 60🪙</button><button id="devWipe">wipe wallet+buddies</button></div></div>
       <div class="sq-modrow"><button id="syncCancel" class="sq-mbtn">close</button><button id="syncSave" class="sq-mbtn primary">save</button></div>
       <div class="sq-ver" id="sqVer"></div>
+    </div></div>
+    <div id="pomoConfirm" class="sq-modal"><div class="sq-card">
+      <h3>sell pomos?</h3>
+      <p class="sq-syncnote">trade <b id="pcN">0</b> pomo<span id="pcS">s</span> for <b id="pcCoins">0</b> coins? your room gets cleared out.</p>
+      <div class="sq-modrow"><button id="pcKeep" class="sq-mbtn">keep them</button><button id="pcSell" class="sq-mbtn primary">sell all</button></div>
     </div></div>
     <div id="sqPull" class="sq-pull"><div class="pull-stage"><div class="pull-aura" id="pullAura"></div><div class="pull-egg" id="pullEgg">🥚</div></div></div>
     <div id="cardModal" class="sq-modal"><div class="card-wrap"><div class="card-rays"></div><div class="tcg" id="tcg"></div><div class="card-foot" id="cardFoot"></div></div></div>
@@ -579,7 +596,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v2.4';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v2.5';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -960,10 +977,10 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   function makeEnt(kind,x,y){
     const A=POMO_AREA; const el=document.createElement('div'); el.className='pomo-ent '+(kind==='dump'?'is-dump':'is-pomo');
     el.style.backgroundImage=(kind==='dump'?'var(--slime)':'var(--tomato)'); A.appendChild(el);
-    const o={el,kind,x,y,vy:0,mode:'roam',tx:null,ty:null,face:1,bob:Math.random()*6.28,pause:0,react:0};
+    const o={el,kind,x,y,vy:0,mode:'roam',tx:null,ty:null,face:1,bob:Math.random()*6.28,pause:0,react:0,landY:null};
     el.addEventListener('pointerdown',e=>{ e.preventDefault(); o.mode='held'; const r=A.getBoundingClientRect(); o.gx=e.clientX-r.left-o.x; o.gy=e.clientY-r.top-o.y; try{el.setPointerCapture(e.pointerId);}catch(_){} el.classList.add('held'); cwSfx('squish'); cwBuzz(8); });
     el.addEventListener('pointermove',e=>{ if(o.mode!=='held')return; const r=A.getBoundingClientRect(); o.x=e.clientX-r.left-o.gx; o.y=e.clientY-r.top-o.gy; });
-    const drop=()=>{ if(o.mode!=='held')return; o.mode='fall'; o.vy=0; el.classList.remove('held'); };
+    const drop=()=>{ if(o.mode!=='held')return; o.mode='fall'; o.vy=0; el.classList.remove('held'); const H=A.clientHeight, eh=el.offsetHeight||30, floor=H-eh-2; o.landY=Math.min(floor, o.y+22+Math.random()*30); };  // settle a small hop below where you let go
     el.addEventListener('pointerup',drop); el.addEventListener('pointercancel',drop);
     return o;
   }
@@ -974,7 +991,7 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
       const ew=o.el.offsetWidth||34, eh=o.el.offsetHeight||30, floor=H-eh-2, spd=(o.kind==='dump'?0.55:0.45);
       let bobY=0, pop=0;
       if(o.mode==='held'){ o.x=Math.max(0,Math.min(W-ew,o.x)); o.y=Math.max(0,Math.min(H-eh,o.y)); }
-      else if(o.mode==='fall'){ o.vy+=0.9; o.y+=o.vy; if(o.y>=floor){ o.y=floor; if(o.vy>3){cwSfx('squish');cwBuzz(6);} o.vy=0; o.mode='roam'; o.tx=null; o.ty=null; } }
+      else if(o.mode==='fall'){ o.vy+=0.9; o.y+=o.vy; const stop=(o.landY!=null?Math.min(o.landY,floor):floor); if(o.y>=stop){ o.y=stop; if(o.vy>3){cwSfx('squish');cwBuzz(6);} o.vy=0; o.mode='roam'; o.tx=null; o.ty=null; o.landY=null; } }
       else { // roam free across the whole room
         o.bob+=0.11; bobY=Math.sin(o.bob)*1.7;
         if(o.tx==null){ o.tx=6+Math.random()*(W-ew-12); o.ty=6+Math.random()*(H-eh-12); }
@@ -999,9 +1016,11 @@ function buildCampaign(){ const list=document.getElementById('cwList'); if(!list
   }
   function pomoStart(){ pomoBuild(); if(!POMO_RAF)POMO_RAF=requestAnimationFrame(pomoTick); }
   function pomoStop(){ if(POMO_RAF){ cancelAnimationFrame(POMO_RAF); POMO_RAF=0; } }
-  function dropPomo(){ const A=POMO_AREA; if(!A)return; const W=A.clientWidth; const dx0=18+Math.random()*(W-52); const o=makeEnt('pomo', dx0, -34); o.mode='fall'; o.vy=2; POMOS.push(o); (POMO_DUMP?POMOS.concat([POMO_DUMP]):POMOS).forEach(p=>{ if(p!==o && p.mode==='roam'){ p.react=22; p.pause=0; p.face=(dx0<p.x?-1:1); } }); pomoState.room++; pomoState.total++; savePomo(); pomoTally(); markChanged(); cwSfx('check'); cwBuzz(10); }
-  function sellPomos(){ if(pomoState.room<=0)return; const gain=pomoState.room*POMO_PRICE; adjustBalance(gain,0); pomoState.room=0; savePomo(); POMOS.forEach(o=>o.el.remove()); POMOS=[]; refreshEcon(); pomoTally(); markChanged(); cwSfx('fanfare'); cwBuzz([16,30]); const fx=document.getElementById('cwFx'); if(fx){ const r=fx.getBoundingClientRect(); cwBurst(r.left+r.width/2,r.top+r.height*0.55,true); } }
-  function initPomo(){ loadPomo(); const d=document.getElementById('pomoDrop'); if(d)d.onclick=dropPomo; const s=document.getElementById('pomoSell'); if(s)s.onclick=sellPomos; pomoTally(); }
+  function dropPomo(){ const A=POMO_AREA; if(!A)return; const W=A.clientWidth, H=A.clientHeight; const dx0=18+Math.random()*(W-52); const o=makeEnt('pomo', dx0, -34); o.mode='fall'; o.vy=2; o.landY=28+Math.random()*(H-72); POMOS.push(o); (POMO_DUMP?POMOS.concat([POMO_DUMP]):POMOS).forEach(p=>{ if(p!==o && p.mode==='roam'){ p.react=22; p.pause=0; p.face=(dx0<p.x?-1:1); } }); pomoState.room++; pomoState.total++; savePomo(); pomoTally(); markChanged(); cwSfx('check'); cwBuzz(10); }
+  function askSellPomos(){ if(pomoState.room<=0)return; const m=document.getElementById('pomoConfirm'); if(!m){ sellPomos(); return; } const n=pomoState.room; const a=document.getElementById('pcN'); if(a)a.textContent=n; const s=document.getElementById('pcS'); if(s)s.textContent=n===1?'':'s'; const c=document.getElementById('pcCoins'); if(c)c.textContent=n*POMO_PRICE; m.classList.add('on'); }
+  function closeSellConfirm(){ const m=document.getElementById('pomoConfirm'); if(m)m.classList.remove('on'); }
+  function sellPomos(){ closeSellConfirm(); if(pomoState.room<=0)return; const gain=pomoState.room*POMO_PRICE; adjustBalance(gain,0); pomoState.room=0; savePomo(); POMOS.forEach(o=>o.el.remove()); POMOS=[]; refreshEcon(); pomoTally(); markChanged(); cwSfx('fanfare'); cwBuzz([16,30]); const fx=document.getElementById('cwFx'); if(fx){ const r=fx.getBoundingClientRect(); cwBurst(r.left+r.width/2,r.top+r.height*0.55,true); } }
+  function initPomo(){ loadPomo(); const d=document.getElementById('pomoDrop'); if(d)d.onclick=dropPomo; const s=document.getElementById('pomoSell'); if(s)s.onclick=askSellPomos; const pk=document.getElementById('pcKeep'); if(pk)pk.onclick=closeSellConfirm; const ps=document.getElementById('pcSell'); if(ps)ps.onclick=sellPomos; const m=document.getElementById('pomoConfirm'); if(m)m.addEventListener('click',e=>{ if(e.target===m)closeSellConfirm(); }); pomoTally(); }
 
   // ---- cloud sync ----
   const API={ url:(localStorage.getItem('aq_api_url')||'').replace(/\/+$/,''), key:localStorage.getItem('aq_api_key')||'' };
