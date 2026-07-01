@@ -144,8 +144,15 @@ The concern: archives usually clog an app because the whole save syncs as **one 
 - **Archived worlds are records, not resumable** (fits "documented stats"; completed quests were already read-only trophies).
 - **View Stats screen** — reached from the worlds hub (`📊 view stats →`): lists archived worlds with their totals; tap one to drill into its per-quest breakdown. (The verb for retiring a world is still "archive"; it just lands in View Stats.)
 
-### Still to whiteboard (sub-stickies)
-5. 🎨 **world color theming** *(optional)* — each world map a customizable palette; default twilight; selecting a color re-themes the opened quest too (feasible: the game is already CSS-variable-driven, palette re-declared on `.cw-win`). Drop if too beefy.
+### Layer 5 — world color theming (decided)
+- **5 palettes** chosen at create/recolor: 🌆 **Twilight** (default), 🔥 **Sunset**, 🌿 **Mint**, ❄️ **Snowy** (white/icy), 🌸 **Sakura** (pink).
+- **Themed (subtle, environmental):** the **hills** (each palette has its own hill style — snow caps, blossoms, amber grass…), the **map environment** (background tint, trail, selected-quest glow, world-switcher strip), and the **quest interior only as a gentle ambient tint** — keeps the dark dusky base feel; subtle, not a full recolor.
+- **Never themed — always the default palette:** the **top HUD bar**, the **bottom tabs**, and the **task/step cards**. Consistent + readable in every world.
+- **Recolor UI:** a palette picker showing a themed hill+environment preview per palette; reached from create-world and from a world card's hold-menu → recolor.
+- **Cheap to implement:** the game is CSS-variable-driven, so a world applies its palette by swapping a small set of **environment tokens** (bg / hill / accent), leaving the fixed chrome + task tokens untouched.
+
+### ✅ Multi-quest: all sub-stickies resolved
+Map · end-states · worlds hub · view stats · move-quest · color theming are all designed. (Cross-cutting **leveling rework** remains in the parked stickies.)
 
 ## ✂️ Explicitly out (for now)
 - **No hidden link to TickTick.** Dropped cards are plain text; the quest lives entirely in the game.
