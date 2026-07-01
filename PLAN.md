@@ -188,7 +188,7 @@ Map · end-states · worlds hub · view stats · move-quest · color theming are
 - Persistent top HUD row (under the title/tabs, sticky): **rank title · lv N**, a **per-level XP bar** (`xp-into-level / xp-to-next`), and **🔥 streak**.
 - Global lifetime XP in `aq_progress` (`{xp, streak, lastDay}`). Curve `50 + 25·(L−1)`; ranks `fresh start → warming up → in the zone → locked in → on a roll → unstoppable → legend → ascended`.
 - XP is awarded when a step is completed in the preview (`+stepXP` on done, `−stepXP` on undo); streak bumps once per day on completion (pomo will also count once folded into the live game). Level-up pulses the HUD.
-- **HUD level bar stays constant gold** in every world (currency/progress motif) even though the rest retints to the world accent. *(Live-game fold still needs to migrate the exam campaign's completed items into the XP pool.)*
+- **Player-level bar = constant gold** in every world — a yellow→red gradient with a sweeping sheen, matching the live game. The **per-chapter / per-quest progress bars use the world accent** (only the player level is gold). *(Live-game fold still needs to migrate the exam campaign's completed items into the XP pool.)*
 
 ## ✂️ Explicitly out (for now)
 - **No hidden link to TickTick.** Dropped cards are plain text; the quest lives entirely in the game.

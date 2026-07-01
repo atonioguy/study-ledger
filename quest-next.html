@@ -25,8 +25,10 @@ html,body{margin:0;min-height:100%;background:#161029;font-family:var(--pixfont)
 .hud-rank{ font-family:var(--pixfont); font-size:8px; letter-spacing:.5px; text-transform:uppercase; color:var(--gold); text-shadow:0 0 7px rgba(255,200,110,.4); white-space:nowrap; }
 .hud-lv{ font-family:var(--pixfont2); font-size:15px; color:#ffcf6e; margin-top:3px; }
 .hud-bar{ flex:1; position:relative; height:15px; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); overflow:hidden; }
-/* HUD level bar = constant gold motif (currency/progress), never themed to the world accent */
-.hud-fill{ height:100%; width:0; background:repeating-linear-gradient(45deg,#ffd96b 0 6px,#f0a54a 6px 12px); box-shadow:0 0 8px rgba(255,190,90,.6); transition:width .5s ease; }
+/* player-level bar = constant yellow→red gradient with a sweeping sheen, matching the live game (per-chapter/quest bars use the world accent) */
+.hud-fill{ height:100%; width:0; position:relative; overflow:hidden; background:linear-gradient(90deg,#ffd96b,#ff9e5a 55%,#ff7aa8); box-shadow:0 0 12px rgba(255,180,90,.85); transition:width .5s ease; }
+.hud-fill::after{ content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent); animation:hudShine 2s linear infinite; }
+@keyframes hudShine{ 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
 .hud-xp{ position:absolute; inset:0; display:grid; place-items:center; font-family:var(--pixfont2); font-size:12px; color:var(--bartx); text-shadow:0 1px 2px rgba(0,0,0,.75); }
 .hud-streak{ flex:none; font-family:var(--pixfont); font-size:12px; color:#ffcf6e; text-shadow:0 0 8px rgba(255,150,60,.5); white-space:nowrap; }
 #top .t{ font-family:var(--pixfont); font-size:13px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.4); }
