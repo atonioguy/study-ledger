@@ -134,9 +134,17 @@ Three nested layers wrapping the quest we designed (the game today is just the m
 - **Create** = a `＋ new world` card → name it, pick a color, pick an emoji. **If no emoji is chosen, the default placeholder is the sparkle/star icon.**
 - **Manage** = hold / right-click a card → **rename · recolor · archive** (same context-menu pattern as steps).
 - **Archive library** entry sits at the bottom of the hub (see #4).
+- **Move a quest between worlds** — from **⚙ edit quest → "move to world…"** → pick a target world. It leaves the current world's road and appends to the target's; the quest **re-themes to the target's palette**; earned coins/stars are global so nothing's lost. Blocked only if the target world is at the 20-quest cap. (Cheap — a quest just carries a "which world" tag that gets reassigned.)
+
+### Layer 4 — archive library (decided)
+The concern: archives usually clog an app because the whole save syncs as **one ≤200 KB blob** — keeping full archived worlds would bloat every sync and eventually fail. The fix (two moves):
+- **Summary-only, not the whole thing.** Archiving computes a compact **stats snapshot** and **discards the heavy data** (step text, notes, TickTick cards, per-step state). Kilobytes → a few hundred bytes to ~1–2 KB per world. The archive is a trophy shelf of *numbers*, not a full copy.
+- **Its own lazy-loaded slot** (`sidequest-archive`) — loaded **only when you open the archive library**, never in the active game state or its frequent sync. So archive size **never** slows the app, no matter how big it grows. *(The worker already accepts any `?slot=` name → zero worker changes needed.)*
+- **Detail kept = world + per-quest breakdown.** Per world: name, emoji, color, dates (created + archived), quests (completed/given-up/total), xp earned/possible, stars earned/possible. Plus a **tiny per-quest line**: name, completed-or-given-up, its xp + stars, date.
+- **Archived worlds are records, not resumable** (fits "documented stats"; completed quests were already read-only trophies).
+- **Archive library screen** — reached from the worlds hub (`📚 archive library →`): lists archived worlds with their totals; tap one to drill into its per-quest breakdown.
 
 ### Still to whiteboard (sub-stickies)
-4. 📚 **archive library** — retiring a world, and what stats it documents (per quest: completion %, XP, coins + stars, dates, steps done).
 5. 🎨 **world color theming** *(optional)* — each world map a customizable palette; default twilight; selecting a color re-themes the opened quest too (feasible: the game is already CSS-variable-driven, palette re-declared on `.cw-win`). Drop if too beefy.
 
 ## ✂️ Explicitly out (for now)
