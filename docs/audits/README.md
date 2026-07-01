@@ -14,7 +14,8 @@ A fleet of Fable-model agents audited the project to plan the prototype → live
 | `live_game_weave.md` | Product review of the live game's existing features + how the new system weaves coherently across all of it (what to keep/change/challenge/cut) |
 | `redesign_pomo.md` | Deep redesign: the pomo room as "The Den" (rest chamber, TickTick focus timer, tomatoes-per-pomo, furnish-with-coins) |
 | `redesign_buddies.md` | Deep redesign: buddies as a found-family (personality, presence, bond, reachable dex) |
-| `redesign_shop_economy.md` | Deep redesign: the Twilight Market + Payday Machine (inverted slot, decor sinks, banked ledger, balance math) |
+| `redesign_shop_economy.md` | Deep redesign: the Twilight Market + Payday Wheel (inverted gamble, decor sinks, banked ledger, balance math) |
+| `redesign_streak.md` | Deep redesign: "The Hearth" — the streak as the campfire fire (shame-free forgiveness, 5am rollover, flame tiers, milestones) |
 | `aesthetic_direction_notes.md` | Owner's reference-image direction (cozy + vibrant twilight/pastel) |
 | `user_steer_decisions.md` | Owner steering: rejected/approved ideas, TickTick pomo integration, standing anti-friction rule |
 
