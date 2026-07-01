@@ -75,7 +75,7 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .savenote{ font-family:var(--pixfont2); font-size:15px; color:var(--comp); text-align:center; margin-top:10px; min-height:18px; }
 
 /* ---------- PREVIEW ---------- */
-.qhd{ display:flex; align-items:baseline; gap:8px; margin:0 2px 12px; }
+.qhd{ position:sticky; top:var(--toph,52px); z-index:8; display:flex; align-items:baseline; gap:8px; margin:0 -14px 12px; padding:10px 16px; background:linear-gradient(180deg,var(--base2),var(--base)); border-bottom:2px solid var(--outline); box-shadow:0 4px 9px rgba(0,0,0,.4); }
 .qhd .qt{ font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.45); }
 .qhd .qm{ font-family:var(--pixfont2); font-size:15px; color:var(--tx); opacity:.65; margin-left:auto; }
 .pv-ban{ position:relative; display:flex; align-items:center; gap:9px; margin:2px 0 8px; padding:8px 12px; background:linear-gradient(90deg,var(--ban),transparent); border-left:4px solid var(--gold); }
@@ -111,13 +111,18 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 
 /* ---------- WORLD MAP ---------- */
 #viewMap.on{ display:block; }
-.wmhd{ display:flex; align-items:center; gap:8px; padding:7px 10px; margin:0 0 6px; background:linear-gradient(90deg,var(--ban),transparent); border-left:4px solid var(--gold); }
+.wmhd{ position:sticky; top:var(--toph,52px); z-index:8; display:flex; align-items:center; gap:8px; padding:8px 12px; margin:0 -14px 8px; background:linear-gradient(90deg,var(--ban),transparent), linear-gradient(180deg,var(--base2),var(--base)); border-left:4px solid var(--gold); box-shadow:0 4px 9px rgba(0,0,0,.4); }
 .wmhd .wn{ font-family:var(--pixfont); font-size:12px; color:#ffd98a; letter-spacing:1.5px; text-transform:uppercase; text-shadow:0 0 8px rgba(255,200,110,.4); }
 .wmhd .cnt{ margin-left:auto; font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.65; }
 .wmhd .wmglobe{ flex:none; margin-left:4px; width:30px; height:30px; padding:0; font-size:16px; line-height:1; cursor:pointer; background:linear-gradient(180deg,#2c2450,#211b40); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 7px rgba(255,200,110,.25); transition:transform .1s, box-shadow .15s; image-rendering:pixelated; }
 .wmhd .wmglobe:hover{ transform:translateY(-1px) scale(1.08); box-shadow:0 0 12px rgba(255,200,110,.55); }
 .wmhd .wmglobe:active{ transform:translateY(1px) scale(.94); }
 .map{ position:relative; width:100%; }
+.mbox{ position:absolute; transform:translateX(-50%); z-index:1; box-sizing:border-box; cursor:pointer; image-rendering:pixelated;
+  background:linear-gradient(180deg, color-mix(in srgb, var(--frame) 80%, transparent), color-mix(in srgb, var(--base) 90%, transparent));
+  border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi);
+  box-shadow:0 6px 0 rgba(0,0,0,.32), 0 0 0 2px var(--outline), inset 0 2px 0 rgba(255,255,255,.05); transition:box-shadow .2s, border-color .2s; }
+.mbox.sel{ border-color:var(--comp); box-shadow:0 6px 0 rgba(0,0,0,.32), 0 0 15px color-mix(in srgb, var(--comp) 70%, transparent), 0 0 0 2px var(--outline); }
 .mdot{ position:absolute; width:6px; height:6px; transform:translate(-50%,-50%) rotate(45deg); background:var(--pathdot,#4a3d78); image-rendering:pixelated; }
 .mglow{ position:absolute; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none; transition:left .55s ease-in-out, top .55s ease-in-out; background:radial-gradient(circle, color-mix(in srgb, var(--comp) 34%, transparent) 0%, rgba(255,217,107,.15) 42%, transparent 70%); animation:mamb 2.4s ease-in-out infinite; }
 @keyframes mamb{ 0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.94)} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)} }
@@ -476,6 +481,11 @@ function renderMap(){
   quests.forEach((q,i)=>{
     const st=questState(q), tot=questTotals(q), stars=questStars(q), pct=tot.xpTotal?Math.round(tot.xpEarned/tot.xpTotal*100):0;
     const cx=pts[i].x, cy=pts[i].y, crestY=cy-HH/2+6, baseY=cy+HH/2; hillPos[q.id]={cx,cy,baseY};
+    // framed plot box: contains the label + base of the hill; hill crest + flag protrude above the top edge
+    const box=document.createElement('div'); box.className='mbox'+(q.id===selectedId?' sel':'');
+    box.style.left=cx+'px'; box.style.top=(cy-8)+'px'; box.style.width='214px'; box.style.height='160px'; box.dataset.qid=q.id;
+    box.onclick=()=>{ if(q.id===selectedId) openQuest(q.id); else selectQuest(q.id); };
+    map.appendChild(box);
     const hill=document.createElement('img'); hill.className='mhill'; hill.src=HURL; hill.style.width=HW+'px'; hill.style.height=HH+'px'; hill.style.left=cx+'px'; hill.style.top=cy+'px'; hill.dataset.qid=q.id; map.appendChild(hill);
     if(FLAG[st]){ const f=document.createElement('img'); f.className='mflag'; f.src=FLAG[st]; f.style.width=(st==='done'?42:32)+'px'; f.style.left=(cx+(st==='done'?20:18))+'px'; f.style.top=(crestY+(st==='done'?6:8))+'px'; map.appendChild(f); }
     const barcls=st==='done'?'goldbar':(st==='gaveup'?'greybar':'tealbar');
@@ -492,7 +502,9 @@ function renderMap(){
   wrap.appendChild(map);
   map.querySelectorAll('.mhill').forEach(hEl=>hEl.onclick=()=>{ const id=hEl.dataset.qid; if(id===selectedId) openQuest(id); else selectQuest(id); });
 }
-function selectQuest(id){ if(id===selectedId)return; selectedId=id; try{localStorage.setItem('aq_sel',id);}catch(e){} const p=hillPos[id]; if(!p)return;
+function selectQuest(id){ if(id===selectedId)return; selectedId=id; try{localStorage.setItem('aq_sel',id);}catch(e){}
+  document.querySelectorAll('.mbox').forEach(b=>b.classList.toggle('sel', b.dataset.qid===id));
+  const p=hillPos[id]; if(!p)return;
   if(gangEl){ gangEl.style.left=p.cx+'px'; gangEl.style.top=(p.baseY-2)+'px'; gangEl.classList.add('walking'); setTimeout(()=>{ gangEl && gangEl.classList.remove('walking'); },660); }
   if(glowEl){ glowEl.style.left=p.cx+'px'; glowEl.style.top=p.cy+'px'; }
 }
@@ -573,9 +585,12 @@ T.map.onclick=()=>show('map'); T.build.onclick=()=>show('build'); T.preview.oncl
 // default click blip for everything EXCEPT completing a task (which keeps the satisfying sound)
 document.addEventListener('click', (e)=>{
   const t=e.target; if(t.closest('.play') || t.closest('.pv-row')) return;
-  if(t.closest('#tabs button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .grip, .hubcard, .hubrow, .emochip, .palchip, .wmglobe')) sfx('sel');
+  if(t.closest('#tabs button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .mbox, .grip, .hubcard, .hubrow, .emochip, .palchip, .wmglobe')) sfx('sel');
 }, true);
 
+// keep sticky quest/world banners parked just below the app bar (measured, so it survives safe-area insets)
+function setTopH(){ const t=document.getElementById('top'); if(t) document.getElementById('app').style.setProperty('--toph', t.offsetHeight+'px'); }
+setTopH(); window.addEventListener('resize', setTopH);
 show('map');
 </script>
 </body></html>
