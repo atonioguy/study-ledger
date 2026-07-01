@@ -454,6 +454,7 @@ function renderBuilder(){
     body.appendChild(add); ch.appendChild(body); chaptersEl.appendChild(ch);
   });
   chaptersEl.querySelectorAll('textarea.notes').forEach(autoGrow);
+  const gb=document.getElementById('giveupBtn'); if(gb){ const gv=quest.state==='gaveup'; gb.textContent=gv?'↩ resume quest':'give up quest'; gb.classList.toggle('danger',!gv); }
 }
 function renderStep(c,ci,s,si){
   const el=document.createElement('div'); el.className='step'; el.dataset.ci=ci; el.dataset.si=si;
@@ -865,7 +866,11 @@ document.getElementById('addChapter').onclick=()=>{ quest.chapters.push(blankCha
 document.getElementById('importBtn').onclick=()=>openPick('add');
 document.getElementById('clearBtn').onclick=()=>askConfirm('clear this quest?','this wipes the current draft and starts fresh.',()=>{ quest=blankQuest(); renderBuilder(); persist(); document.getElementById('saveNote').textContent=''; });
 document.getElementById('saveBtn').onclick=()=>{ saveQuest(); document.getElementById('saveNote').textContent='✓ saved to your world'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); };
-document.getElementById('giveupBtn').onclick=()=>askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; persist(); document.getElementById('saveNote').textContent='🏳️ given up — resumable later'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); });
+function noteFlash(msg){ const n=document.getElementById('saveNote'); n.textContent=msg; setTimeout(()=>{ n.textContent=''; },2600); }
+document.getElementById('giveupBtn').onclick=()=>{
+  if(quest.state==='gaveup'){ quest.state='active'; persist(); syncQuestToWorld(); renderBuilder(); noteFlash('↩ resumed — back in progress'); return; }
+  askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; persist(); syncQuestToWorld(); renderBuilder(); noteFlash('🏳️ given up — resumable later'); });
+};
 const V={map:document.getElementById('viewMap'), build:document.getElementById('viewBuild'), preview:document.getElementById('viewPreview'), hub:document.getElementById('viewHub'), pick:document.getElementById('viewPick'), stats:document.getElementById('viewStats')};
 const T={map:document.getElementById('tabMap'), build:document.getElementById('tabBuild'), preview:document.getElementById('tabPreview')};
 function show(name){ applyWorldTheme(activeWorld()); for(const k in V) V[k].classList.toggle('on', k===name); for(const k in T) T[k].classList.toggle('on', k===name); if(name==='map')renderMap(); else if(name==='build')renderBuilder(); else if(name==='preview')renderPreview(); else if(name==='hub')renderHub(); else if(name==='pick')renderPick(); else if(name==='stats')renderStats(); }
