@@ -1,4 +1,4 @@
-<!-- build log: v2.25 live · M5L2 q4: switch to prompt version (NH3/nitrate chain, no N2O); image retained -->
+<!-- build log: v2.26 live · fix refresh scroll drift: manual scroll restoration re-applied after reflow -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -373,7 +373,7 @@
 
 <div id="overlay"></div>
 <aside id="sidebar" aria-label="Lesson navigation">
-  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.25</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
+  <div class="sb-top"><h2>Contents <span class="sb-ver" title="Build version — check this to confirm your push went live">v2.26</span></h2><button class="sb-close" id="sb-close" aria-label="Close navigation">&times;</button></div>
   <div class="sb-focus">
     <div class="sb-focus-label">Focus</div>
     <div class="sb-focus-row">
@@ -3385,6 +3385,31 @@ window.smoothScrollTo=function(el){
   document.addEventListener('keydown',function(e){ if(!body.classList.contains('edit-active'))return; if(!(e.ctrlKey||e.metaKey))return; var k=e.key.toLowerCase();
     if(k==='z'&&!e.shiftKey){ e.preventDefault(); undo(); } else if((k==='z'&&e.shiftKey)||k==='y'){ e.preventDefault(); redo(); } });
   window.addEventListener('beforeunload',function(e){ if(body.classList.contains('edit-active') && hasEdits()){ e.preventDefault(); e.returnValue=''; } });
+})();
+</script>
+<script>
+/* ---- restore exact scroll position across reloads (fixes post-load reflow drift) ---- */
+(function(){
+  try{ if('scrollRestoration' in history) history.scrollRestoration='manual'; }catch(e){}
+  var KEY='exam3-scrolly';
+  function getY(){ return window.pageYOffset||document.documentElement.scrollTop||0; }
+  var t=null;
+  function save(){ try{ sessionStorage.setItem(KEY, String(Math.round(getY()))); }catch(e){} }
+  window.addEventListener('scroll', function(){ if(t)return; t=setTimeout(function(){ t=null; save(); },120); }, {passive:true});
+  window.addEventListener('pagehide', save);
+  window.addEventListener('beforeunload', save);
+
+  var target=null;
+  try{ var v=sessionStorage.getItem(KEY); if(v!=null){ v=parseInt(v,10); if(!isNaN(v)&&v>0) target=v; } }catch(e){}
+  if(target==null || location.hash) return;
+
+  var done=false, moved=false;
+  ['wheel','touchstart','keydown','mousedown'].forEach(function(ev){ window.addEventListener(ev, function(){ moved=true; }, {passive:true, once:true}); });
+  function restore(){ if(moved||done) return; var max=document.documentElement.scrollHeight-window.innerHeight; window.scrollTo(0, Math.min(target, Math.max(0,max))); }
+  restore();  /* runs after the injection IIFEs above; refined below as images/fonts settle */
+  document.addEventListener('DOMContentLoaded', restore);
+  window.addEventListener('load', function(){ restore(); setTimeout(restore,50); setTimeout(function(){ restore(); done=true; },300); });
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(function(){ if(!done) restore(); }); }
 })();
 </script>
 </body>
