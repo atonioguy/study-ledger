@@ -222,6 +222,26 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .pkfoot.empty .bigbtn{ opacity:.5; pointer-events:none; }
 .pkskip{ width:100%; margin-top:8px; }
 .pkempty{ text-align:center; font-family:var(--pixfont2); font-size:16px; color:var(--tx); opacity:.55; padding:24px 10px; }
+/* view stats (archive / trophy shelf) */
+.stsum{ margin-bottom:6px; padding:13px; background:linear-gradient(180deg,var(--frame),var(--card)); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 5px 0 #150f28, 0 0 0 2px var(--outline); }
+.stsum-top{ display:flex; align-items:baseline; gap:8px; margin-bottom:11px; }
+.stsum-rank{ font-family:var(--pixfont); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--gold); text-shadow:0 0 9px rgba(255,200,110,.45); }
+.stsum-lv{ margin-left:auto; font-family:var(--pixfont2); font-size:16px; color:#ffcf6e; }
+.stsum-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:9px; }
+.stsum-grid > div{ display:flex; flex-direction:column; align-items:center; gap:3px; padding:9px 4px; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
+.stsum-grid b{ font-family:var(--pixfont2); font-size:19px; color:var(--cardtx); }
+.stsum-grid span{ font-family:var(--pixfont); font-size:7px; letter-spacing:.5px; text-transform:uppercase; color:var(--tx); opacity:.65; text-align:center; }
+.stsec{ font-family:var(--pixfont); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#ffd98a; margin:16px 0 9px; padding:6px 10px; background:linear-gradient(90deg,var(--ban),transparent); border-left:4px solid var(--gold); text-shadow:0 0 8px rgba(255,200,110,.35); }
+.stcard{ position:relative; margin-bottom:9px; padding:11px 12px; cursor:pointer; background:linear-gradient(180deg,var(--c1),var(--c2)); border:3px solid; border-color:var(--bd) #241d40 #241d40 var(--bd); box-shadow:0 4px 0 #150f28, 0 0 0 2px var(--outline); }
+.stcard-top{ display:flex; align-items:center; gap:9px; }
+.stcard .semoji{ font-size:22px; line-height:1; } .stcard .sname{ font-family:var(--pixfont); font-size:12px; letter-spacing:.5px; text-transform:uppercase; color:var(--acc,#ffd96b); text-shadow:0 0 8px rgba(0,0,0,.4); }
+.stcard .sdate{ margin-left:auto; font-family:var(--pixfont2); font-size:13px; color:var(--cardtx); opacity:.75; white-space:nowrap; }
+.stcard .sstats{ display:flex; flex-wrap:wrap; gap:12px; margin-top:8px; font-family:var(--pixfont2); font-size:14px; color:var(--cardtx); }
+.stcard .sstats .sx{ color:#ffcf6e; } .stcard .sstats .ss{ color:#ffe08a; }
+.stqrow{ display:flex; align-items:center; gap:9px; padding:9px 11px; margin-bottom:6px; background:var(--card); border:2px solid; border-color:var(--chi) var(--clo) var(--clo) var(--chi); }
+.stqrow .qi{ flex:none; font-size:15px; } .stqrow .qn{ flex:1; min-width:0; font-family:var(--pixfont2); font-size:16px; color:var(--cardtx); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.stqrow .qx{ flex:none; font-family:var(--pixfont2); font-size:14px; color:#ffcf6e; } .stqrow .qs{ flex:none; font-family:var(--pixfont2); font-size:14px; color:#ffe08a; }
+.stempty{ text-align:center; font-family:var(--pixfont2); font-size:16px; color:var(--tx); opacity:.6; padding:22px 14px; line-height:1.45; }
 </style></head>
 <body><div id="app">
   <header id="top">
@@ -255,6 +275,7 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
       <div id="pkList"></div>
       <div class="pkfoot empty" id="pkFoot"><button class="bigbtn" id="pkAdd">select tasks to add</button><button class="bigbtn ghost pkskip" id="pkSkip">start blank instead</button></div>
     </div>
+    <div class="view" id="viewStats"></div>
   </div>
 
   <div class="modal" id="worldEdit"><div class="mcard">
@@ -750,9 +771,57 @@ function renderHub(){
     c.addEventListener('pointerup',()=>{ clearTimeout(tm); if(!held) switchWorld(c.dataset.wid); });
   });
   document.getElementById('hubAdd').onclick=()=>openWorldEdit(null);
-  document.getElementById('hubStats').onclick=()=>askConfirm('view stats','the stats library (archived worlds + past quests) comes in a later slice ✦',()=>{});
+  document.getElementById('hubStats').onclick=()=>{ stDrillId=null; show('stats'); };
 }
 function switchWorld(id){ WORLD.activeWorldId=id; persistWorld(); selectedId=null; show('map'); }
+
+// ---- view stats (archive trophy shelf; lazy 'aq_archive' slot, heavy data discarded on archive) ----
+function loadArchive(){ try{ const a=JSON.parse(localStorage.getItem('aq_archive')); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+function saveArchive(a){ try{ localStorage.setItem('aq_archive', JSON.stringify(a)); }catch(e){} }
+function archiveSnapshot(w){
+  const qs=(w.questIds||[]).map(id=>WORLD.quests[id]).filter(Boolean);
+  let xe=0,xt=0,se=0,st=0,done=0,gaveup=0;
+  const quests=qs.map(q=>{ const t=questTotals(q), s=questStars(q), stt=questState(q);
+    xe+=t.xpEarned; xt+=t.xpTotal; se+=s.earned; st+=s.total;
+    if(stt==='done')done++; else if(stt==='gaveup')gaveup++;
+    return { name:q.name||'untitled quest', state:stt, xe:t.xpEarned, xt:t.xpTotal, se:s.earned, st:s.total };
+  });
+  return { id:w.id, name:w.name||'my world', emoji:w.emoji||'✦', color:w.color||'twilight', created:w.created||null, archived:dayStr(new Date()), n:qs.length, done, gaveup, xe, xt, se, st, quests };
+}
+let stDrillId=null;
+function stStateIcon(s){ return s==='done'?'🚩':(s==='gaveup'?'🏳️':'🍅'); }
+function renderStats(){
+  const wrap=document.getElementById('viewStats'); const arch=loadArchive();
+  const drill = stDrillId ? arch.find(a=>a.id===stDrillId) : null;
+  let h='<div class="pkhd"><button class="pkback" id="stBack">←</button><span class="pktt">'+(drill?esc(drill.emoji+' '+drill.name):'view stats')+'</span></div>';
+  if(drill){
+    const P=PALETTES[drill.color]||PALETTES.twilight;
+    h+='<div class="stsum" style="--acc:'+P.acc+'"><div class="stsum-top"><span class="stsum-rank">archived</span><span class="stsum-lv">'+esc(drill.archived||'')+'</span></div>'+
+      '<div class="stsum-grid"><div><b>'+drill.done+(drill.gaveup?' · '+drill.gaveup+'🏳️':'')+' / '+drill.n+'</b><span>quests done</span></div>'+
+      '<div><b>'+drill.xe+' / '+drill.xt+'</b><span>xp earned</span></div>'+
+      '<div><b>'+drill.se+' / '+drill.st+' ⭐</b><span>stars</span></div></div></div>';
+    h+='<div class="stsec">quests</div>';
+    if(!drill.quests.length) h+='<div class="stempty">no quests were in this world</div>';
+    drill.quests.forEach(q=>{ h+='<div class="stqrow"><span class="qi">'+stStateIcon(q.state)+'</span><span class="qn">'+esc(q.name)+'</span><span class="qx">'+q.xe+'/'+q.xt+' xp</span><span class="qs">'+q.se+'/'+q.st+' ⭐</span></div>'; });
+  } else {
+    const info=levelInfo(AQ.xp);
+    let stars=0; WORLD.worlds.filter(w=>!w.archived).forEach(w=>{ stars+=worldAgg(w).se; }); arch.forEach(a=>stars+=a.se);
+    h+='<div class="stsum"><div class="stsum-top"><span class="stsum-rank">'+esc(rankFor(info.level))+'</span><span class="stsum-lv">lv '+info.level+'</span></div>'+
+      '<div class="stsum-grid"><div><b>'+AQ.xp.toLocaleString()+'</b><span>lifetime xp</span></div>'+
+      '<div><b>🔥 '+(AQ.streak||0)+'</b><span>day streak</span></div>'+
+      '<div><b>'+stars+' ⭐</b><span>stars earned</span></div></div></div>';
+    h+='<div class="stsec">archived worlds</div>';
+    if(!arch.length) h+='<div class="stempty">no archived worlds yet ✦<br>retire a finished world from its card (hold → archive) and it lands here as a trophy of its stats.</div>';
+    arch.forEach(a=>{ const P=PALETTES[a.color]||PALETTES.twilight;
+      h+='<div class="stcard" data-aid="'+a.id+'" style="--c1:'+P.c1+';--c2:'+P.c2+';--bd:'+P.bd+';--acc:'+P.acc+'">'+
+        '<div class="stcard-top"><span class="semoji">'+esc(a.emoji||'✦')+'</span><span class="sname">'+esc(a.name)+'</span><span class="sdate">'+esc(a.archived||'')+'</span></div>'+
+        '<div class="sstats"><span>🚩 '+a.done+' · 🏳️ '+a.gaveup+' / '+a.n+'</span><span class="sx">'+a.xe+'/'+a.xt+' xp</span><span class="ss">'+a.se+'/'+a.st+' ⭐</span></div></div>';
+    });
+  }
+  wrap.innerHTML=h;
+  document.getElementById('stBack').onclick=()=>{ if(stDrillId){ stDrillId=null; renderStats(); } else show('hub'); };
+  if(!drill) wrap.querySelectorAll('.stcard[data-aid]').forEach(c=>c.onclick=()=>{ stDrillId=c.dataset.aid; renderStats(); });
+}
 
 // ---- world editor (create / rename / recolor / archive) ----
 let weWid=null, weEmoji='✦', weColor='twilight';
@@ -771,12 +840,18 @@ function openWorldEdit(wid){
 function saveWorldEdit(){
   const name=(document.getElementById('weName').value||'').trim()||'my world';
   if(weWid){ const w=WORLD.worlds.find(x=>x.id===weWid); if(w){ w.name=name; w.emoji=weEmoji; w.color=weColor; } }
-  else { const nw={id:nid('w'), name, emoji:weEmoji, color:weColor, questIds:[]}; WORLD.worlds.push(nw); WORLD.activeWorldId=nw.id; selectedId=null; }
+  else { const nw={id:nid('w'), name, emoji:weEmoji, color:weColor, created:dayStr(new Date()), questIds:[]}; WORLD.worlds.push(nw); WORLD.activeWorldId=nw.id; selectedId=null; }
   persistWorld(); document.getElementById('worldEdit').classList.remove('on'); renderHub();
 }
 function archiveWorld(){
-  if(!weWid)return; const w=WORLD.worlds.find(x=>x.id===weWid); if(!w)return; w.archived=true;
-  if(WORLD.activeWorldId===weWid){ const first=WORLD.worlds.find(x=>!x.archived); if(first){ WORLD.activeWorldId=first.id; } else { const nw={id:nid('w'),name:'My Quests',emoji:'✦',color:'twilight',questIds:[]}; WORLD.worlds.push(nw); WORLD.activeWorldId=nw.id; } selectedId=null; }
+  if(!weWid)return; const w=WORLD.worlds.find(x=>x.id===weWid); if(!w)return;
+  const arch=loadArchive(); arch.unshift(archiveSnapshot(w)); saveArchive(arch);       // keep the compact stats
+  (w.questIds||[]).forEach(id=>{ delete WORLD.quests[id]; });                            // discard the heavy data
+  WORLD.worlds=WORLD.worlds.filter(x=>x.id!==weWid);
+  if(WORLD.activeWorldId===weWid || !WORLD.worlds.some(x=>x.id===WORLD.activeWorldId)){
+    if(!WORLD.worlds.length){ const nw={id:nid('w'),name:'My Quests',emoji:'✦',color:'twilight',created:dayStr(new Date()),questIds:[]}; WORLD.worlds.push(nw); }
+    WORLD.activeWorldId=WORLD.worlds[0].id; selectedId=null;
+  }
   persistWorld(); document.getElementById('worldEdit').classList.remove('on'); renderHub();
 }
 document.getElementById('weCancel').onclick=()=>document.getElementById('worldEdit').classList.remove('on');
@@ -791,15 +866,15 @@ document.getElementById('importBtn').onclick=()=>openPick('add');
 document.getElementById('clearBtn').onclick=()=>askConfirm('clear this quest?','this wipes the current draft and starts fresh.',()=>{ quest=blankQuest(); renderBuilder(); persist(); document.getElementById('saveNote').textContent=''; });
 document.getElementById('saveBtn').onclick=()=>{ saveQuest(); document.getElementById('saveNote').textContent='✓ saved to your world'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); };
 document.getElementById('giveupBtn').onclick=()=>askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; persist(); document.getElementById('saveNote').textContent='🏳️ given up — resumable later'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); });
-const V={map:document.getElementById('viewMap'), build:document.getElementById('viewBuild'), preview:document.getElementById('viewPreview'), hub:document.getElementById('viewHub'), pick:document.getElementById('viewPick')};
+const V={map:document.getElementById('viewMap'), build:document.getElementById('viewBuild'), preview:document.getElementById('viewPreview'), hub:document.getElementById('viewHub'), pick:document.getElementById('viewPick'), stats:document.getElementById('viewStats')};
 const T={map:document.getElementById('tabMap'), build:document.getElementById('tabBuild'), preview:document.getElementById('tabPreview')};
-function show(name){ applyWorldTheme(activeWorld()); for(const k in V) V[k].classList.toggle('on', k===name); for(const k in T) T[k].classList.toggle('on', k===name); if(name==='map')renderMap(); else if(name==='build')renderBuilder(); else if(name==='preview')renderPreview(); else if(name==='hub')renderHub(); else if(name==='pick')renderPick(); }
+function show(name){ applyWorldTheme(activeWorld()); for(const k in V) V[k].classList.toggle('on', k===name); for(const k in T) T[k].classList.toggle('on', k===name); if(name==='map')renderMap(); else if(name==='build')renderBuilder(); else if(name==='preview')renderPreview(); else if(name==='hub')renderHub(); else if(name==='pick')renderPick(); else if(name==='stats')renderStats(); }
 T.map.onclick=()=>show('map'); T.build.onclick=()=>show('build'); T.preview.onclick=()=>show('preview');
 
 // default click blip for everything EXCEPT completing a task (which keeps the satisfying sound)
 document.addEventListener('click', (e)=>{
   const t=e.target; if(t.closest('.play') || t.closest('.pv-row')) return;
-  if(t.closest('#tabs button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .mbox, .grip, .hubcard, .hubrow, .emochip, .palchip, .wmglobe, .pkseg, .pkfilter, .pkback, .pktask, .pkexpand')) sfx('sel');
+  if(t.closest('#tabs button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .mbox, .grip, .hubcard, .hubrow, .emochip, .palchip, .wmglobe, .pkseg, .pkfilter, .pkback, .pktask, .pkexpand, .stcard')) sfx('sel');
 }, true);
 
 // keep sticky quest/world banners parked just below the app bar (measured, so it survives safe-area insets)

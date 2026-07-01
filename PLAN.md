@@ -142,6 +142,10 @@ Three nested layers wrapping the quest we designed (the game today is just the m
 - **View Stats** entry sits at the bottom of the hub (see #4).
 - **Move a quest between worlds** — from **⚙ edit quest → "move to world…"** → pick a target world. It leaves the current world's road and appends to the target's; the quest **re-themes to the target's palette**; earned coins/stars are global so nothing's lost. Blocked only if the target world is at the 20-quest cap. (Cheap — a quest just carries a "which world" tag that gets reassigned.)
 
+### ✅ Layer 4 — view stats — BUILT in prototype (`quest-next.html`)
+- Reached from the hub's `📊 view stats →`. Top shows a **lifetime summary** (rank · level, lifetime XP, 🔥 streak, total ⭐ across active + archived). Below, the **archived-worlds** list (palette-themed trophy cards with flag tally + xp/star totals + archived date); tap one to **drill** into its per-quest breakdown (🚩 done / 🏳️ given-up, xp, stars). Back steps drill → list → hub.
+- **Archive discards heavy data:** `archiveWorld()` computes a compact snapshot into a separate lazy `aq_archive` slot, then removes the world + its quests from active state (kilobytes → a few hundred bytes). Archived worlds are records, not resumable.
+
 ### Layer 4 — view stats (archive) (decided)
 The concern: archives usually clog an app because the whole save syncs as **one ≤200 KB blob** — keeping full archived worlds would bloat every sync and eventually fail. The fix (two moves):
 - **Summary-only, not the whole thing.** Archiving computes a compact **stats snapshot** and **discards the heavy data** (step text, notes, TickTick cards, per-step state). Kilobytes → a few hundred bytes to ~1–2 KB per world. The archive is a trophy shelf of *numbers*, not a full copy.
