@@ -174,6 +174,40 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .emochip.on{ border-color:var(--gold); box-shadow:0 0 8px rgba(255,217,107,.5); }
 .palchip{ width:44px; height:30px; cursor:pointer; border:2px solid #241d40; box-shadow:0 0 0 2px var(--outline); }
 .palchip.on{ outline:2px solid #fff; outline-offset:1px; }
+/* pick-your-tasks screen */
+.pkhd{ position:sticky; top:var(--toph,52px); z-index:8; display:flex; align-items:center; gap:9px; margin:0 -14px 10px; padding:9px 14px; background:linear-gradient(180deg,var(--base2),var(--base)); border-bottom:2px solid var(--outline); box-shadow:0 4px 9px rgba(0,0,0,.4); }
+.pkback{ flex:none; width:30px; height:30px; padding:0; font-size:17px; cursor:pointer; color:var(--cardtx); background:linear-gradient(180deg,#2c2450,#211b40); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); }
+.pktt{ font-family:var(--pixfont); font-size:13px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.4); }
+.pksync{ margin-left:auto; font-family:var(--pixfont2); font-size:14px; color:var(--comp); opacity:.9; }
+.pksearch{ margin-bottom:9px; }
+.pktools{ display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+.pktoggle{ display:flex; box-shadow:0 0 0 2px var(--outline); }
+.pkseg{ font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; text-transform:lowercase; padding:8px 12px; cursor:pointer; color:var(--tx); background:var(--inset); border:none; }
+.pkseg.on{ background:var(--comp); color:#1a1330; }
+.pkfilter{ margin-left:auto; font-family:var(--pixfont2); font-size:14px; padding:6px 11px; cursor:pointer; color:var(--tx); background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
+.pkfilter.on{ background:var(--comp); color:#1a1330; border-color:var(--comp); }
+.pkgh{ font-family:var(--pixfont); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#ffd98a; margin:14px 0 8px; padding:6px 10px; background:linear-gradient(90deg,var(--ban),transparent); border-left:4px solid var(--gold); text-shadow:0 0 8px rgba(255,200,110,.35); }
+.pkgh.first{ margin-top:0; }
+.pktask{ display:flex; align-items:center; gap:9px; padding:10px 11px; margin-bottom:7px; cursor:pointer; background:var(--card); border:2px solid; border-color:var(--chi) var(--clo) var(--clo) var(--chi); transition:border-color .12s, box-shadow .12s; }
+.pktask.sel{ border-color:var(--comp); box-shadow:0 0 9px color-mix(in srgb,var(--comp) 45%, transparent); }
+.pktask.sub{ margin-left:26px; background:var(--frame); }
+.pkexpand{ flex:none; width:18px; text-align:center; font-size:12px; color:var(--comp); cursor:pointer; }
+.pkexpand.ph{ visibility:hidden; }
+.pkcheck{ flex:none; width:22px; height:22px; display:grid; place-items:center; font-family:var(--pixfont2); font-size:15px; color:#12240f; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
+.pkcheck.on{ background:var(--comp); } .pkcheck.part{ background:var(--compD); color:#12240f; }
+.pkbd{ flex:1; min-width:0; }
+.pkname{ display:block; font-family:var(--pixfont2); font-size:16px; color:var(--cardtx); line-height:1.15; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pksub{ display:block; font-family:var(--pixfont2); font-size:13px; color:var(--ctext); opacity:.6; }
+.pkmeta{ flex:none; display:flex; align-items:center; gap:7px; }
+.pkdue{ font-family:var(--pixfont2); font-size:14px; color:var(--comp); }
+.pkdue.soon{ color:#ffcf6e; }
+.pkpri{ flex:none; width:8px; height:8px; transform:rotate(45deg); }
+.pkpri.hi{ background:#ff6a6a; box-shadow:0 0 5px rgba(255,106,106,.7); } .pkpri.mid{ background:#ffcf6e; }
+.pkfoot{ position:sticky; bottom:0; margin:12px -14px 0; padding:12px 14px calc(12px + env(safe-area-inset-bottom)); background:linear-gradient(0deg,var(--base) 60%,transparent); }
+.pkfoot .bigbtn{ width:100%; }
+.pkfoot.empty .bigbtn{ opacity:.5; pointer-events:none; }
+.pkskip{ width:100%; margin-top:8px; }
+.pkempty{ text-align:center; font-family:var(--pixfont2); font-size:16px; color:var(--tx); opacity:.55; padding:24px 10px; }
 </style></head>
 <body><div id="app">
   <header id="top">
@@ -185,6 +219,7 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
     <div class="view" id="viewBuild">
       <div class="qname-row"><label>quest</label><input class="txt" id="qname" placeholder="name your quest…" maxlength="80"></div>
       <div id="chapters"></div>
+      <button class="addbtn chap" id="importBtn">↯ import from ticktick</button>
       <button class="addbtn chap" id="addChapter">＋ add chapter</button>
       <div class="bigrow"><button class="bigbtn ghost" id="clearBtn">clear</button><button class="bigbtn" id="saveBtn">save quest</button></div>
       <div class="bigrow"><button class="bigbtn danger" id="giveupBtn">give up quest</button></div>
@@ -192,6 +227,13 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
     </div>
     <div class="view" id="viewPreview"></div>
     <div class="view" id="viewHub"></div>
+    <div class="view" id="viewPick">
+      <div class="pkhd"><button class="pkback" id="pkBack" title="back">←</button><span class="pktt">pick your tasks</span><span class="pksync">✓ ticktick</span></div>
+      <input class="txt pksearch" id="pkSearch" placeholder="search your tasks…" maxlength="60">
+      <div class="pktools"><div class="pktoggle"><button class="pkseg on" data-org="list">by list</button><button class="pkseg" data-org="date">by date</button></div><button class="pkfilter" id="pkWeek">⏳ due this week</button></div>
+      <div id="pkList"></div>
+      <div class="pkfoot empty" id="pkFoot"><button class="bigbtn" id="pkAdd">select tasks to add</button><button class="bigbtn ghost pkskip" id="pkSkip">start blank instead</button></div>
+    </div>
   </div>
 
   <div class="modal" id="worldEdit"><div class="mcard">
@@ -247,6 +289,49 @@ function applyWorldTheme(w){
 const EMOJIS=['✦','📚','💪','🧠','🎨','🎯','🌙','🔥','🎮','📖','🌱','☕'];
 const CW_PLAY='M8 5v14l11-7z', CW_STAR='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.81 8.62 2 9.24l5.46 4.73L5.82 21z';
 let uid=0; const nid=(p)=>p+'_'+(Date.now().toString(36))+'_'+(uid++);
+
+// ===== real TickTick snapshot (baked from your lists; the live version fetches this from the worker) =====
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function dueLabel(iso){ if(!iso)return ''; const p=iso.split('-'); return MON[(+p[1])-1]+' '+(+p[2]); }
+function dueSoon(iso){ if(!iso)return false; const now=new Date(); const due=new Date(iso+'T23:59:59'); const days=(due-now)/86400000; return days>=-1 && days<=7; }
+const TT_LISTS=[
+ { id:'micro', name:'BMSC 3404 · Microbiology', tasks:[
+   { id:'m-ex3', title:'Unit 3 EXAM (Modules 5 & 6)', note:'48-hr window Jul 4–6. 55 Q, closed book, Examplify.', due:'2026-07-07', pri:5, subs:[
+     { id:'m-ex3a', title:'Self-quiz + weak spots', note:'Active recall over Modules 5 & 6; list weak spots to hit Sunday.', due:'2026-07-04', pri:0 },
+     { id:'m-ex3b', title:'Light review + buffer', note:'Light pass over weak spots; do not cram. Take the exam early.', due:'2026-07-05', pri:0 } ]},
+   { id:'m-cheese', title:'M5 Cheesemaking — write-up', note:'Cheese results + colony data + post-lab questions.', due:'2026-07-06', pri:3, subs:[
+     { id:'m-cheese1', title:'Colony reading #1', note:'~day 3 — read the cheese plate (count, size, color) + photo.', due:'2026-07-02', pri:1 },
+     { id:'m-cheese2', title:'Colony reading #2 (final)', note:'~day 5 — final reading before the write-up.', due:'2026-07-04', pri:1 } ]},
+   { id:'m-fomite', title:'M6 Fomite lab — write-up', note:'Transfer observations + colony data + post-lab questions.', due:'2026-07-13', pri:3, subs:[
+     { id:'m-fomite1', title:'Colony reading #1', note:'~day 3 after plating — read all surface plates + photo.', due:'2026-07-09', pri:1 },
+     { id:'m-fomite2', title:'Colony reading #2 (final)', note:'~day 5 — second/final reading before the write-up.', due:'2026-07-11', pri:1 } ]},
+   { id:'m-disc3', title:'Unit 3 Discussion — Part 2', note:'2 peer replies + a follow-up on your own post. Spread across days.', due:'2026-07-06', pri:3, subs:[
+     { id:'m-disc3a', title:'Peer reply #1', note:'Add a unique point, not just agreement. Bring the Module 6 symbiosis lens.', due:'2026-07-01', pri:0 },
+     { id:'m-disc3b', title:'Peer reply #2', note:'Different day than reply #1. Reply to comments on your own post too.', due:'2026-07-03', pri:0 },
+     { id:'m-disc3c', title:'Follow-up on your own post', note:'Update your post with a Module 6 insight, even if no one commented.', due:'2026-07-05', pri:0 } ]},
+   { id:'m-m6lec', title:'M6 — lectures & review', note:'Module 6 lecture reviews feeding the Unit 3 exam. Check each off as you watch.', due:null, pri:0, subs:[
+     { id:'m-m6l1', title:'L1 review — symbiosis types', note:'P1 7:18 (~7 min). ≈ 6.1 symbiosis types.', due:null, pri:0 },
+     { id:'m-m6l2', title:'L2 review — microbe–microbe', note:'P1 9:07 / P2 5:05 (~14 min). ≈ 6.2.', due:null, pri:0 },
+     { id:'m-m6l3', title:'L3 review — microbe–plant', note:'P1 11:41 / P2 11:46 (~23 min). ≈ 6.3.', due:null, pri:0 },
+     { id:'m-m6l4', title:'L4 review — microbe–animal + microbiome', note:'~36 min. ≈ 6.4 + 6.5.', due:null, pri:0 } ]},
+   { id:'m-wino', title:'Winogradsky Column — FINAL write-up (100 pts)', note:'Term-long lab finale. Compile all weekly observations into the full report.', due:'2026-07-18', pri:5, subs:[] },
+   { id:'m-ex4', title:'Unit 4 EXAM (Modules 7 & 8)', note:'Closes Jul 17 (last day of course). Take it early — heavy final day.', due:'2026-07-18', pri:5, subs:[] } ]},
+ { id:'career', name:'BMSC 4125 · Career Readiness', tasks:[
+   { id:'c-3a', title:'Assignment 3A — Preparing for an Interview', note:'Submit your interview-question responses doc (Job or Admissions set) on Canvas.', due:'2026-07-06', pri:5, subs:[
+     { id:'c-3a1', title:'Draft Q6–10', note:'Draft the remaining 5 answers (interests + soft skills, ≤2 min each).', due:'2026-06-29', pri:0 },
+     { id:'c-3a2', title:'Review & submit', note:'Tighten each answer to ≤2 min, fix typos, submit on Canvas.', due:'2026-06-30', pri:0 } ]},
+   { id:'c-3b', title:'Assignment 3B — Mock Interview', note:'Submit a 10-question mock interview in Big Interview. Dress pro, clean background.', due:'2026-07-06', pri:5, subs:[
+     { id:'c-3b1', title:'Big Interview setup + practice', note:'Enter your code, test camera/mic, do a practice take or two out loud.', due:'2026-07-01', pri:0 },
+     { id:'c-3b2', title:'Record all 10 & submit', note:'Answer all 10 (≤4 min, 2 takes each), review, then submit final answers.', due:'2026-07-02', pri:0 } ]},
+   { id:'c-disc3', title:'Discussion 3 — Tell Me About Yourself (2nd post)', note:'Reply to at least two classmates with a specific, actionable suggestion.', due:'2026-07-02', pri:3, subs:[
+     { id:'c-disc3a', title:'Reply to classmate 1', note:'Concise, specific suggestion — or a question about one of their 3 components.', due:'2026-07-01', pri:0 },
+     { id:'c-disc3b', title:'Reply to classmate 2', note:'Ideally a different day/person than reply 1.', due:'2026-07-01', pri:0 } ]},
+   { id:'c-4a', title:'Assignment 4A — Requesting a Letter of Recommendation', note:'Module 4 · 10 pts. Due Jul 17.', due:'2026-07-18', pri:5, subs:[] } ]},
+ { id:'mcat', name:'MCAT Prep', tasks:[
+   { id:'mc-fl2', title:'Blueprint Full Length 2', note:'Full-length practice test in your Blueprint portal. Recommended by Jul 11.', due:'2026-07-11', pri:0, subs:[] },
+   { id:'mc-fl3', title:'Blueprint Full Length 3', note:'Full-length practice test in your Blueprint portal. Recommended by Aug 1.', due:'2026-08-01', pri:0, subs:[] },
+   { id:'mc-diag', title:'Diagnostic + first 2 Full-Length Practice Tests', note:'Pace practice tests across the summer semester.', due:'2026-08-08', pri:0, subs:[] } ]},
+];
 
 function blankStep(){ return {id:nid('s'), text:'', diff:'med', date:'', notes:'', done:false}; }
 function blankChapter(){ return {id:nid('c'), name:'', steps:[blankStep()]}; }
@@ -509,7 +594,90 @@ function selectQuest(id){ if(id===selectedId)return; selectedId=id; try{localSto
   if(glowEl){ glowEl.style.left=p.cx+'px'; glowEl.style.top=p.cy+'px'; }
 }
 function openQuest(id){ const q=WORLD.quests[id]; if(!q)return; quest=JSON.parse(JSON.stringify(q)); persist(); show('preview'); }
-function newQuest(){ quest=blankQuest(); persist(); show('build'); }
+function newQuest(){ openPick('new'); }
+
+// ---- pick-your-tasks screen ----
+let pkSel=new Set(), pkExpand=new Set(), pkOrg='list', pkWeekOn=false, pkMode='new', pkQuery='';
+function pkFind(id){ for(const L of TT_LISTS){ for(const p of L.tasks){ if(p.id===id)return{isSub:false,task:p}; for(const s of (p.subs||[])){ if(s.id===id)return{isSub:true,task:s,parent:p}; } } } return null; }
+function pkTaskVisible(p){
+  if(pkQuery){ const m=(p.title||'').toLowerCase().includes(pkQuery) || (p.subs||[]).some(s=>(s.title||'').toLowerCase().includes(pkQuery)); if(!m)return false; }
+  if(pkWeekOn){ if(!(dueSoon(p.due) || (p.subs||[]).some(s=>dueSoon(s.due)))) return false; }
+  return true;
+}
+function pkToggleParent(p){ if(pkSel.has(p.id)){ pkSel.delete(p.id); (p.subs||[]).forEach(s=>pkSel.delete(s.id)); } else { pkSel.add(p.id); (p.subs||[]).forEach(s=>pkSel.add(s.id)); } renderPick(); }
+function pkToggleSub(s){ if(pkSel.has(s.id)) pkSel.delete(s.id); else pkSel.add(s.id); renderPick(); }
+function pkCell(p,isSub){
+  const sel=pkSel.has(p.id);
+  const hasSubs=!isSub && (p.subs||[]).length>0;
+  const selSubs=hasSubs?p.subs.filter(s=>pkSel.has(s.id)).length:0;
+  const part=!sel && selSubs>0;
+  const glyph=sel?'✓':(part?'–':'');
+  const exp=pkExpand.has(p.id) || (pkQuery && hasSubs && p.subs.some(s=>(s.title||'').toLowerCase().includes(pkQuery)));
+  const dsoon=dueSoon(p.due);
+  const pri=p.pri>=5?'hi':(p.pri>=3?'mid':'');
+  let r='<div class="pktask'+(isSub?' sub':'')+(sel?' sel':'')+'" data-id="'+p.id+'">';
+  r+= (!isSub&&hasSubs)?'<span class="pkexpand" data-exp="'+p.id+'">'+(exp?'▾':'▸')+'</span>':'<span class="pkexpand ph">▸</span>';
+  r+='<span class="pkcheck'+(sel?' on':(part?' part':''))+'">'+glyph+'</span>';
+  r+='<span class="pkbd"><span class="pkname">'+esc(p.title)+'</span>';
+  if(hasSubs) r+='<span class="pksub">'+p.subs.length+' subtask'+(p.subs.length===1?'':'s')+(pkOrg==='date'&&p._list?' · '+esc(p._list):'')+'</span>';
+  else if(pkOrg==='date'&&!isSub&&p._list) r+='<span class="pksub">'+esc(p._list)+'</span>';
+  r+='</span><span class="pkmeta">';
+  if(p.due) r+='<span class="pkdue'+(dsoon?' soon':'')+'">'+dueLabel(p.due)+'</span>';
+  if(pri) r+='<span class="pkpri '+pri+'"></span>';
+  r+='</span></div>';
+  return { html:r, exp };
+}
+function renderPick(){
+  document.getElementById('pkSkip').style.display=(pkMode==='new')?'':'none';
+  const listEl=document.getElementById('pkList'); let html='', any=false, first=true;
+  const emit=(p,isSub)=>{ const c=pkCell(p,isSub); html+=c.html; if(!isSub && c.exp) (p.subs||[]).forEach(s=>{ html+=pkCell(s,true).html; }); };
+  if(pkOrg==='list'){
+    TT_LISTS.forEach(L=>{ const vis=L.tasks.filter(pkTaskVisible); if(!vis.length)return; any=true;
+      html+='<div class="pkgh'+(first?' first':'')+'">'+esc(L.name)+'</div>'; first=false;
+      vis.forEach(p=>emit(p,false)); });
+  } else {
+    const flat=[]; TT_LISTS.forEach(L=>L.tasks.forEach(p=>{ if(pkTaskVisible(p)){ p._list=L.name; flat.push(p); } }));
+    flat.sort((a,b)=>{ if(!a.due&&!b.due)return 0; if(!a.due)return 1; if(!b.due)return -1; return a.due<b.due?-1:(a.due>b.due?1:0); });
+    if(flat.length){ any=true; flat.forEach(p=>emit(p,false)); }
+  }
+  listEl.innerHTML = any ? html : '<div class="pkempty">no tasks match ✦</div>';
+  const n=pkSel.size;
+  document.getElementById('pkFoot').classList.toggle('empty', n===0);
+  document.getElementById('pkAdd').textContent = n ? ('add '+n+' to quest ▸') : 'select tasks to add';
+  listEl.querySelectorAll('.pkexpand[data-exp]').forEach(x=>x.onclick=(e)=>{ e.stopPropagation(); const id=x.dataset.exp; if(pkExpand.has(id))pkExpand.delete(id); else pkExpand.add(id); renderPick(); });
+  listEl.querySelectorAll('.pktask').forEach(row=>row.onclick=(e)=>{ if(e.target.closest('.pkexpand[data-exp]'))return; const f=pkFind(row.dataset.id); if(!f)return; f.isSub?pkToggleSub(f.task):pkToggleParent(f.task); });
+}
+function openPick(mode){ pkMode=mode; pkSel.clear(); pkExpand.clear(); pkQuery=''; pkWeekOn=false; pkOrg='list';
+  const si=document.getElementById('pkSearch'); if(si)si.value='';
+  document.getElementById('pkWeek').classList.remove('on');
+  document.querySelectorAll('.pkseg').forEach(b=>b.classList.toggle('on',b.dataset.org==='list'));
+  show('pick');
+}
+function pkStepFrom(t){ return { id:nid('s'), text:t.title, diff:(t.pri>=5?'hard':t.pri>=3?'med':'easy'), date:dueLabel(t.due), notes:t.note||'', done:false }; }
+function pkAddToQuest(){
+  const chapters=[], loose=[];
+  TT_LISTS.forEach(L=>L.tasks.forEach(p=>{
+    const selSubs=(p.subs||[]).filter(s=>pkSel.has(s.id));
+    if(pkSel.has(p.id) && selSubs.length) chapters.push({ id:nid('c'), name:p.title, steps:selSubs.map(pkStepFrom) });
+    else if(pkSel.has(p.id)) loose.push(pkStepFrom(p));
+    else selSubs.forEach(s=>loose.push(pkStepFrom(s)));
+  }));
+  if(loose.length) chapters.push({ id:nid('c'), name:(pkMode==='add'?'more tasks':'tasks'), steps:loose });
+  if(!chapters.length) return;
+  if(pkMode==='add'){
+    const c0=quest.chapters[0], blankFirst = quest.chapters.length===1 && c0 && !c0.name && c0.steps.length===1 && !c0.steps[0].text;
+    if(blankFirst) quest.chapters=chapters; else quest.chapters.push(...chapters);
+  } else {
+    quest={ id:nid('q'), name:'', chapters, createdAt:null, state:'active' };
+  }
+  persist(); pkSel.clear(); show('build');
+}
+document.getElementById('pkSearch').addEventListener('input', e=>{ pkQuery=e.target.value.trim().toLowerCase(); renderPick(); });
+document.querySelectorAll('.pkseg').forEach(b=>b.onclick=()=>{ pkOrg=b.dataset.org; document.querySelectorAll('.pkseg').forEach(x=>x.classList.toggle('on',x===b)); renderPick(); });
+document.getElementById('pkWeek').onclick=()=>{ pkWeekOn=!pkWeekOn; document.getElementById('pkWeek').classList.toggle('on',pkWeekOn); renderPick(); };
+document.getElementById('pkBack').onclick=()=>show(pkMode==='add'?'build':'map');
+document.getElementById('pkSkip').onclick=()=>{ quest=blankQuest(); persist(); show('build'); };
+document.getElementById('pkAdd').onclick=pkAddToQuest;
 
 // ---- worlds hub ----
 function worldAgg(w){ const qs=(w.questIds||[]).map(id=>WORLD.quests[id]).filter(Boolean); let xe=0,xt=0,se=0,st=0,resolved=0;
@@ -574,18 +742,19 @@ document.getElementById('worldEdit').addEventListener('click',e=>{ if(e.target.i
 // ---- wiring ----
 document.getElementById('qname').addEventListener('input',e=>{ quest.name=e.target.value; onEdit(); });
 document.getElementById('addChapter').onclick=()=>{ quest.chapters.push(blankChapter()); renderBuilder(); onEdit(); };
+document.getElementById('importBtn').onclick=()=>openPick('add');
 document.getElementById('clearBtn').onclick=()=>askConfirm('clear this quest?','this wipes the current draft and starts fresh.',()=>{ quest=blankQuest(); renderBuilder(); persist(); document.getElementById('saveNote').textContent=''; });
 document.getElementById('saveBtn').onclick=()=>{ saveQuest(); document.getElementById('saveNote').textContent='✓ saved to your world'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); };
 document.getElementById('giveupBtn').onclick=()=>askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; persist(); document.getElementById('saveNote').textContent='🏳️ given up — resumable later'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); });
-const V={map:document.getElementById('viewMap'), build:document.getElementById('viewBuild'), preview:document.getElementById('viewPreview'), hub:document.getElementById('viewHub')};
+const V={map:document.getElementById('viewMap'), build:document.getElementById('viewBuild'), preview:document.getElementById('viewPreview'), hub:document.getElementById('viewHub'), pick:document.getElementById('viewPick')};
 const T={map:document.getElementById('tabMap'), build:document.getElementById('tabBuild'), preview:document.getElementById('tabPreview')};
-function show(name){ applyWorldTheme(activeWorld()); for(const k in V) V[k].classList.toggle('on', k===name); for(const k in T) T[k].classList.toggle('on', k===name); if(name==='map')renderMap(); else if(name==='build')renderBuilder(); else if(name==='preview')renderPreview(); else if(name==='hub')renderHub(); }
+function show(name){ applyWorldTheme(activeWorld()); for(const k in V) V[k].classList.toggle('on', k===name); for(const k in T) T[k].classList.toggle('on', k===name); if(name==='map')renderMap(); else if(name==='build')renderBuilder(); else if(name==='preview')renderPreview(); else if(name==='hub')renderHub(); else if(name==='pick')renderPick(); }
 T.map.onclick=()=>show('map'); T.build.onclick=()=>show('build'); T.preview.onclick=()=>show('preview');
 
 // default click blip for everything EXCEPT completing a task (which keeps the satisfying sound)
 document.addEventListener('click', (e)=>{
   const t=e.target; if(t.closest('.play') || t.closest('.pv-row')) return;
-  if(t.closest('#tabs button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .mbox, .grip, .hubcard, .hubrow, .emochip, .palchip, .wmglobe')) sfx('sel');
+  if(t.closest('#tabs button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .mbox, .grip, .hubcard, .hubrow, .emochip, .palchip, .wmglobe, .pkseg, .pkfilter, .pkback, .pktask, .pkexpand')) sfx('sel');
 }, true);
 
 // keep sticky quest/world banners parked just below the app bar (measured, so it survives safe-area insets)

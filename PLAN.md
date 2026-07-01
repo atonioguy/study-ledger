@@ -99,6 +99,12 @@ The front door — how TickTick tasks get into the builder's pile.
 ### 🔧 Technical to-do (implementation, not design)
 - The worker's `/ticktick` currently returns tasks but **not their subtasks** — add subtask/checklist data to the feed so the pick screen and chapter auto-fill work.
 
+### ✅ Pick screen — BUILT in prototype (`quest-next.html`)
+- Full pick-your-tasks screen: search · by-list ↔ by-date toggle · "due this week" filter · expandable subtasks · multi-select with live count · **add N to quest**.
+- **Reached two ways:** map's *add a quest* (＋) opens it fresh (`new` mode, with *start blank instead*); builder's **↯ import from ticktick** reopens it (`add` mode, appends).
+- **Auto-assembly:** a selected parent+subs → a **chapter** (subs become **steps**); a lone task/subtask → a loose step in a **tasks** chapter. Notes carry from TickTick content, dates from due dates, difficulty inferred from priority (p5→hard, p3→med, else easy). Everything stays editable in the builder.
+- **Data:** currently a **baked real snapshot** of Antonio's actual lists (Microbiology · Career Readiness · MCAT). The live version swaps this for the worker fetch (needs the subtask endpoint above).
+
 ## 🌍 Multi-quest: worlds → maps → quests (IN PROGRESS)
 Three nested layers wrapping the quest we designed (the game today is just the middle layer with one quest):
 ```
