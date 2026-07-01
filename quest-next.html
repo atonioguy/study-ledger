@@ -404,6 +404,8 @@ function saveQuest(){
   if(!w.questIds.includes(quest.id)) w.questIds.push(quest.id);
   persistWorld();
 }
+// persist play-progress (checked-off steps) back to the stored quest so it survives leaving + re-opening
+function syncQuestToWorld(){ if(quest && quest.id && WORLD.quests[quest.id]){ WORLD.quests[quest.id] = JSON.parse(JSON.stringify(quest)); persistWorld(); } }
 
 // ---- builder render ----
 const chaptersEl=document.getElementById('chapters');
@@ -529,7 +531,7 @@ function renderPreview(){
     row.addEventListener('contextmenu',e=>{ e.preventDefault(); clearTimeout(timer); openDetail(s,ci); });
     row.addEventListener('pointerdown',()=>{ held=false; timer=setTimeout(openIt,450); });
     row.addEventListener('pointermove',()=>{ clearTimeout(timer); });
-    row.addEventListener('pointerup',()=>{ clearTimeout(timer); if(!held){ s.done=!s.done; if(s.done)sfx('done'); awardXP(s.done?stepXP(s):-stepXP(s)); if(document.getElementById('viewBuild').classList.contains('on'))renderBuilder(); persist(); renderPreview(); } });
+    row.addEventListener('pointerup',()=>{ clearTimeout(timer); if(!held){ s.done=!s.done; if(s.done)sfx('done'); awardXP(s.done?stepXP(s):-stepXP(s)); if(document.getElementById('viewBuild').classList.contains('on'))renderBuilder(); persist(); syncQuestToWorld(); renderPreview(); } });
   });
 }
 
