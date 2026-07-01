@@ -36,6 +36,17 @@ Evaluate every improvement on THREE fronts: **look · performance · practicalit
 3. **Day-end = a MANUAL button** ("call it a night 🫖") the owner presses when out of fuel → triggers the tea/rest beat + Tomorrow's Promise. NO automatic time cutoff (irregular/late study hours). Campfire may gently OFFER tea when the day's cards all resolve, but it's always the owner's button; never naggy.
 4. **Tomatoes materialize PER COMPLETED POMODORO, not per minute** (per-minute = too many). One finished pomo (e.g. a 15-min TickTick focus) = one tomato, batch-reconciled from focus records next time the room opens. Bonus XP still accrues smoothly per focused minute (invisible number), but TOMATOES are chunky/countable = # pomos done. (Long timing/stopwatch sessions: ~1 tomato per 25-min block.)
 
+## Design Q&A resolutions — round 2 (owner, locked)
+5. **Campfire shuffle: YES, but bounded.** A gentle "🔀 show me 3 others" adds autonomy (match a task to current energy) which HELPS initiation. Guard against avoidance: soft daily cap / tiny friction, still curated from real next-unstarted steps (nudged by due-soon/priority), never an infinite task-slot-machine to defer starting. Agency, not reroll-until-easy.
+6. **Bonus XP vs. selling pomos — no farm risk by design.** Bonus XP is **XP-ONLY, never coins** (inflation firewall). Both bonus XP and tomatoes are gated by REAL TickTick focus time and reconciled **idempotently by focus-record id** (no re-mint); step toggle is net-zero XP. Tomato→coin stays a tiny trickle (5c) so focus-coins never rival study-coins. **Light rework:** "sell pomos" → "trade in," and give tomatoes a **secondary cozy use** (Den warmth / preserve jars / feed the tomato) so the pomo reward feels meaningful without inflating coins.
+
+7. **Prize WHEEL, not a slot machine.** The gamble becomes a spin-the-wheel — cozier, more readable (segments visible = honest/transparent odds, not predatory), satisfying tick-decelerate spin, fits the pixel aesthetic. Keep ALL the Payday framing: boots inert, a free **golden spin** earned by the day's first completed step, ~10 paid spins/day cap, bonus golden spins on chapter/quest clears, can't be farmed instead of studying. Segments = coins / tomatoes / rare-star sparkle / jackpot koi hat. "Payday Machine" → **"Payday Wheel."**
+
+## Feature the owner wants REVAMPED: the daily streak
+- Make the **daily streak** truly satisfying + encouraging — both mechanics AND game feel. Currently weak (live game's "🔥 0/7" is a mislabeled done/21, not a real streak).
+- Must ENCOURAGE without inducing dread/anxiety — honor the cozy "never red / never shaming / no harsh decay" restraint. A missed day should feel gentle ("the fire's still warm"), not punishing.
+- Getting its own dedicated Fable redesign pass (look · performance · practicality).
+
 ## Standing rule reinforced
 - Every feature must REDUCE friction. If a mechanic requires manual bookkeeping/logging to earn rewards, redesign it to be automatic or drop it.
 - Evaluation lens for ALL work: look · performance · practicality.
