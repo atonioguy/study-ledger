@@ -114,7 +114,7 @@ Three nested layers wrapping the quest we designed (the game today is just the m
 - **Quests are freely selectable, NOT gated/sequential** — any quest, anytime.
 - **The gang travels together** — dumpling + tomato + the **equipped gacha buddy** (if one is active) — parking at the current/most-recent quest and walking to a tapped spot before it opens.
 - **Road length = exactly the number of quests (up to 20)** — it stops at the last quest, no empty road beyond. The `⊕ add a quest` spot is the final spot (launches pick → builder) until you reach 20.
-- **Every spot shows a progress bar + `earned/total xp` + `earned/total ⭐`** (stars earned vs. all the stars available to earn on that quest = 1/chapter + 3 completion bonus). Replaces the raw %. **Flags:**
+- **Every spot shows a progress bar + `earned/total xp` + `earned/total ⭐`** (stars earned vs. all the stars available to earn on that quest = 1/chapter + 3 completion bonus). Replaces the raw %; **the bar fills by xp % (earned ÷ total xp).** **Flags:**
   - ✅ **done → big gold dumpling victory flag**
   - 🍅 **in-progress (started, not finished) → tiny pomo flag**, always visible so every active quest is spottable at a glance even when the gang is elsewhere
   - ○ **not-started → no flag**
@@ -129,7 +129,7 @@ Three nested layers wrapping the quest we designed (the game today is just the m
 ### Layer 3 — worlds & the worlds hub (decided)
 - **A world = a top-level category** with its own name, **emoji** (📚/💪/🧠), **color** (default twilight), and its own quest map. There's always a **default world** so the game works out of the box (the current exam questline lives as its first quest).
 - **Navigation adds one zoom level:** `🌍 WORLDS hub → tap a world → its MAP → tap a quest → the QUEST`. The hub is reached by tapping the `🌍 <world> ▾` strip atop the map; a back-arrow steps up.
-- **The worlds hub is its own screen** — a grid of **colored portal cards**, each showing its emoji, name, color theme, and a **progress bar + quest count + `earned/total xp` + `earned/total ⭐`** (world-aggregate totals). The **active world glows and has the gang standing on it**; a world with all quests done shows a **✦ done** badge.
+- **The worlds hub is its own screen** — a grid of **colored portal cards**, each showing its emoji, name, color theme, and a **progress bar (fills by xp %) + quest count + `earned/total xp` + `earned/total ⭐`** (world-aggregate totals). The **active world glows and has the gang standing on it**; a world with all quests done shows a **✦ done** badge.
 - **Create** = a `＋ new world` card → name it, pick a color, pick an emoji. **If no emoji is chosen, the default placeholder is the sparkle/star icon.**
 - **Manage** = hold / right-click a card → **rename · recolor · archive** (same context-menu pattern as steps).
 - **Archive library** entry sits at the bottom of the hub (see #4).
