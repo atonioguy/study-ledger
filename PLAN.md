@@ -55,6 +55,7 @@ QUEST  ⟵ you name it ("Bio Exam Sprint")
 7. **Add your own by hand** — type new chapters, steps, and notes that were never in TickTick.
 8. **Priority → dropped; due date → editable tag.** Priority isn't used, so it's ignored (no dot, no logic). A dated task carries its due date over as a small **editable, clearable** tag on the step; you can also add a date to a hand-typed step if you want. Purely cosmetic "when" — no XP/ordering effect.
 9. **The builder board is a full editor, not just an importer.** In both create *and* edit modes you can type brand-new steps, rename/rewrite anything, add banners, and jot notes — nothing has to come from TickTick. TickTick is one *source* you can pull from; the board is always yours to write on freely.
+10. **XP per step = difficulty presets.** Each step is tagged 🟢 easy **5** / 🟡 medium **10** / 🔴 hard **20** XP, **default medium**. Set it on the card in the builder; change it later via the step's edit menu. A **custom number** option sits behind the presets for outliers. Calibrated to the campaign (part ≈ 5–16 XP, rank ≈ 50) to keep the "start stingy" pace.
 
 ## 🎨 Layout & visual design (decided)
 The imported quest reuses the exam-quest look on the map — **not** the rigid `P1 / 14:32` diamond tiles (those stay for the hardcoded campaign). Reference: `quest.html` map view.
@@ -67,7 +68,7 @@ The imported quest reuses the exam-quest look on the map — **not** the rigid `
   - Leading control is the **▶ play button**, which becomes the **gold ⭐ star** when the step is completed (reuses `CW_PLAY` / `CW_STAR`).
   - **Done = color shift only (teal), NO strikethrough.**
   - Inline meta line: **`[date] · notes`** (date in teal); no inline edit toggle — edits live in the step menu.
-  - **`+XP` is gold** (`#ffcf6e`), matching the campaign. *(XP values still placeholder — see parked sticky.)*
+  - **`+XP` is gold** (`#ffcf6e`), matching the campaign. Values come from the difficulty preset (easy 5 / medium 10 / hard 20 — see decision #10).
 
 ## ✏️ Editing — two tiers (decided)
 | Scope | How | For | Does |
@@ -84,7 +85,7 @@ One editor to learn: the builder board *is* the quest editor.
 
 ## 📌 Parked stickies (open questions, pick when ready)
 - 🔗 **sync-back** — currently OFF. Would re-add the hidden link so checking a step off marks it done in TickTick. Only if the link idea comes back.
-- 🎁 **XP / coins per step** — how rewards get assigned to imported steps.
+- 🪙 **coins / stars payout** — XP-per-step is decided (#10); still open is where spendable currency comes from. Leaning: **not per step**, but paid on finishing a **section or the whole quest** (mirrors how clearing a lesson/module grants stars today), to keep currency special.
 - 🎨 **the "pick your tasks" screen** — how choosing tasks from TickTick actually looks/feels.
 - 🗂️ **multiple saved quests** — switching between more than one quest on the map.
 
