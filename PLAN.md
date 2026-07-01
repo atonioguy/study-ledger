@@ -67,10 +67,10 @@ The imported quest reuses the exam-quest look on the map — **not** the rigid `
 - **Module-style banner per section** — a customizable **typed** label with a **gold left bar** (`border-left:4px solid --gold`) and a **low-opacity purple gradient that spans across** (`linear-gradient(90deg, rgba(128,104,196,.32), transparent)`), with a **teal striped progress bar** below it.
   - **Default = one banner = the whole quest.** Add more banners to chunk it into modules like exam 3 (each gets its own progress bar).
   - **Banners are typed text, NOT drop targets.** Task cards only drop into the step list, never onto a banner.
-- **Step row (flexible, wraps).** Long TickTick titles **wrap to ~2 lines then trim with `…`** instead of squishing.
+- **Step row (two lines).** The **task name is one line and truncates with `…`** when long; the **date + notes sit on a second line** below it (not appended after the name).
   - Leading control is the **▶ play button**, which becomes the **gold ⭐ star** when the step is completed (reuses `CW_PLAY` / `CW_STAR`).
-  - **Done = color shift only (teal), NO strikethrough.**
-  - Inline meta line: **`[date] · notes`** (date in teal); no inline edit toggle — edits live in the step menu.
+  - **Done = color shift only (to the world's accent), NO strikethrough.**
+  - Second line: **`[date] · notes`** (date in the world accent); no inline edit toggle — edits live in the step menu.
   - **`+XP` is gold** (`#ffcf6e`), matching the campaign. Values come from the difficulty preset (easy 5 / medium 10 / hard 20 — see decision #10).
 
 ## ✏️ Editing — two tiers (decided)
@@ -145,11 +145,14 @@ The concern: archives usually clog an app because the whole save syncs as **one 
 - **View Stats screen** — reached from the worlds hub (`📊 view stats →`): lists archived worlds with their totals; tap one to drill into its per-quest breakdown. (The verb for retiring a world is still "archive"; it just lands in View Stats.)
 
 ### Layer 5 — world color theming (decided)
-- **5 palettes** chosen at create/recolor: 🌆 **Twilight** (default), 🔥 **Sunset**, 🌿 **Mint**, ❄️ **Snowy** (white/icy), 🌸 **Sakura** (pink).
-- **Themed (subtle, environmental):** the **hills** (each palette has its own hill style — snow caps, blossoms, amber grass…), the **map environment** (background tint, trail, selected-quest glow, world-switcher strip), and the **quest interior only as a gentle ambient tint** — keeps the dark dusky base feel; subtle, not a full recolor.
-- **Never themed — always the default palette:** the **top HUD bar**, the **bottom tabs**, and the **task/step cards**. Consistent + readable in every world.
-- **Recolor UI:** a palette picker showing a themed hill+environment preview per palette; reached from create-world and from a world card's hold-menu → recolor.
-- **Cheap to implement:** the game is CSS-variable-driven, so a world applies its palette by swapping a small set of **environment tokens** (bg / hill / accent), leaving the fixed chrome + task tokens untouched.
+- **5 palettes** chosen at create/recolor: 🌆 **Twilight** (default), 🔥 **Sunset**, 🌿 **Mint**, ❄️ **Snowy**, 🌸 **Sakura**.
+- **Two-token model (mirrors the default).** The default is a **dusky base** ("dusky blue") + a **teal accent**. Each palette **takes over the base role with its own hue**, and a **complementary accent takes over teal's role**:
+  - 🌆 Twilight = dusky **purple** base + **teal** accent · 🔥 Sunset = **ember** + **cyan** · 🌿 Mint = **green** + **coral** · ❄️ Snowy = **slate-blue** + **peach** · 🌸 Sakura = **pink** + **mint**.
+- **Themed by the base+accent:** the **background** (a dimmed palette, like the picker cards), the **hills**, the **world strip + banner tint**, the **task/step cards + text**, and everything that was **teal → the complementary accent** (done row + its text/date, chapter progress bar, done-trail segment, done pip).
+- **Kept as a constant yellow motif (currency + progress):** coins, xp numbers, the HUD level bar, the gold banner side-bar, and the **into-current trail segment** (completed→current stays gold; the completed↔completed/start stretch takes the accent).
+- **Never themed — always default chrome:** the **top HUD bar** and the **bottom tabs** (consistent, readable in every world).
+- **Recolor UI:** a palette picker with a themed preview per palette; from create-world and a world card's hold-menu → recolor.
+- **Cheap:** the game is CSS-variable-driven — a world swaps a small set of base/accent tokens; the fixed chrome + yellow tokens are left untouched.
 
 ### ✅ Multi-quest: all sub-stickies resolved
 Map · end-states · worlds hub · view stats · move-quest · color theming are all designed. (Cross-cutting **leveling rework** remains in the parked stickies.)
