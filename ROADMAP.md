@@ -66,8 +66,10 @@ One cozy loop where **effort furnishes rest**. You boot to the **Campfire** — 
 ### 🎨 T7 — Art direction
 - Reduced-motion + bloom-token foundation · **palette refresh** (unique vivid accent + glow hue per world; fixes twilight/mint collision + snow mismatch; optional cozy **pastel** register) · ambient sky-glow + vignette · prismatic reward star + glowing currency · glossy alive mascots (no new art needed) · cozy map props (canvas-generated) · text pop · budgeted particles (fireflies/petals/rain/twinkles).
 
-### 🎮 T8 — Juice
-- **Quest-complete flag-plant ceremony** (the missing victory moment — highest gap) · coin-flight to wallet · combo momentum · level-up flourish · thump/rumble tiers · idle life · pet-the-gang · gang travels the road · weather-as-a-gift.
+### 🎮 T8 — Juice & reward animations
+- **6-tier escalation ladder** (`reward_animations.md`): step < chapter < quest < level < hatch, each with *exclusive* cues so bigger wins read as bigger (only quest-complete gets the banner + screen-dim + fanfare + map-cut). Shared FX kit (`coinFly`/`starFly`, pitch-laddered `cwSfx`, `thump(tier)`, celebration queue, reduced-motion gate) built once.
+- **Quest-complete flag-plant ceremony** (the missing victory moment) · coin/star-fly to wallet · level-up **gold-pixel spill** + rank type-on · buddy-hatch pity-nest + walk-home · combo pitch-ladder · all 4 orphaned mp3s wired · idle life · pet-the-gang · gang travels the road · weather-as-a-gift.
+- **Leveling reward ladder:** free golden wheel spin every level · milestone prize per rank (wish token / decor / charm / cosmetic) · guaranteed drop at lv 10/20/… · some cosmetics/features unlock at levels. Rewards skew non-coin (firewall).
 
 ### 🔥 T10 — Daily-streak revamp *(dedicated redesign in progress)*
 - Real daily streak (≥1 step **or** ≥1 pomo per day, replacing the mislabeled `done/21`) made **truly satisfying + encouraging** — evolving flame, milestone ceremonies, mascot reactions, tied to the campfire fire.
