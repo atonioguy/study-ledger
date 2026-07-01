@@ -64,6 +64,18 @@ Evaluate every improvement on THREE fronts: **look · performance · practicalit
 - **Some cosmetics/features unlock AT levels** (e.g. lv 8 → an outfit / extra world slot) — concrete climb goals.
 - Coordinates with the wheel (shop), wish tokens (buddies), and the reward-animation pass (feel). May get a dedicated Fable tuning pass if the owner wants the full ladder balanced.
 
+## Cosmetics + progression rewards (owner, round 3)
+- **Level rewards: NO feature/world-slot unlocks** (counterintuitive — don't gate your own workspace). Use **level-locked COSMETICS** instead.
+- **Prize ladder: Fable to FINETUNE** (exact per-level/per-rank/milestone rewards, balanced vs wheel+buddy+streak economies, non-coin skew per firewall).
+- **Charms: CUT** (fluff / tracking overhead / distracting). Delete the "coming soon" teases. Keep ONLY if a genuinely zero-friction incorporation exists — high bar; default remove.
+- **Cosmetics MECHANIC needs its own revamp** (never done — only the gamble/decor-sink was). Covers **MASCOT cosmetics** (the slime/tomato/dumpling gang — NOT buddies) **unified with ROOM DECOR** into one cozy customization system. Liberty to expand.
+
+## Quest management must feel good (owner)
+- Moving quests **between worlds** + **reordering within a world**, plus **delete / give-up / resume / archive** — all smooth, intentional, satisfying, cozy — NOT clunky. Needs a proper interaction/flow design + an undo/safety model (esp. deletion).
+
+## Streak — CONFIRMED
+- The 2-min "showed up" ember **DOES light the day's fire** (owner confirmed yes). Just *starting* keeps the streak alive — a day is lit by ≥1 step OR ≥1 credited pomo OR the 2-min showed-up ember.
+
 ## Standing rule reinforced
 - Every feature must REDUCE friction. If a mechanic requires manual bookkeeping/logging to earn rewards, redesign it to be automatic or drop it.
 - Evaluation lens for ALL work: look · performance · practicality.
