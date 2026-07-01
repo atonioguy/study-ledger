@@ -99,6 +99,29 @@ The front door — how TickTick tasks get into the builder's pile.
 ### 🔧 Technical to-do (implementation, not design)
 - The worker's `/ticktick` currently returns tasks but **not their subtasks** — add subtask/checklist data to the feed so the pick screen and chapter auto-fill work.
 
+## 🌍 Multi-quest: worlds → maps → quests (IN PROGRESS)
+Three nested layers wrapping the quest we designed (the game today is just the middle layer with one quest):
+```
+🌍 WORLDS  (school · exercise · mental health · …)   ← create, label, color, archive
+   └─ 🗺️ WORLD MAP  (winding road of up to ~20 quest spots)   ← the gang travels; pick a quest
+        └─ 📜 QUEST  (the questline: banners, steps, XP/coins/stars)
+                     ↳ on finish OR give-up → a 🚩 dumpling flag is planted at that spot
+   📚 ARCHIVE LIBRARY   ← finished/archived worlds retire here with their stats kept
+```
+
+### Layer 1 — the world map / travel (decided)
+- **Vertical-snake road** (scroll down); winds left↔right as it descends. Matches the existing vertical trail, thumb-friendly on iPhone.
+- **Quests are freely selectable, NOT gated/sequential** — any quest, anytime.
+- **The gang (mascots) travel** — they park at the current/most-recent quest and walk to a tapped spot before it opens.
+- **Road grows as you add quests, up to ~20 spots.** A `⊕ add a quest` spot at the end launches the pick → builder flow.
+- **Spot states:** ✅ done (gold dumpling flag) · 🏳️ given-up (faded flag) · ▶ in progress (gang parked + progress %) · ○ not started · ⊕ add-new.
+
+### Still to whiteboard (sub-stickies)
+2. 🚩 **quest end-states** — complete vs give-up; the flags; give-up keeps already-earned currency but forfeits the **+3 whole-quest completion bonus** (refines reward #11).
+3. 🌍 **worlds** — create / label / switch between them.
+4. 📚 **archive library** — retiring a world, and what stats it documents (per quest: completion %, XP, coins + stars, dates, steps done).
+5. 🎨 **world color theming** *(optional)* — each world map a customizable palette; default twilight; selecting a color re-themes the opened quest too (feasible: the game is already CSS-variable-driven, palette re-declared on `.cw-win`). Drop if too beefy.
+
 ## ✂️ Explicitly out (for now)
 - **No hidden link to TickTick.** Dropped cards are plain text; the quest lives entirely in the game.
   *(Revive with one word if wanted — see the retired "sync-back" idea below.)*
@@ -106,7 +129,7 @@ The front door — how TickTick tasks get into the builder's pile.
 
 ## 📌 Parked stickies (open questions, pick when ready)
 - 🔗 **sync-back** — currently OFF. Would re-add the hidden link so checking a step off marks it done in TickTick. Only if the link idea comes back.
-- 🗂️ **multiple saved quests** — switching between more than one quest on the map.
+- 🗂️ **multiple saved quests** — now being designed in the **Multi-quest** section above (worlds → maps → quests). Layer 1 (the map) decided; sub-stickies 2–5 remain.
 
 ## Finished assembly model (one paragraph)
 > Pull from a **pile** of your TickTick cards (main tasks + subtasks) → drop into a quest skeleton where
