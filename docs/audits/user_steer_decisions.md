@@ -76,6 +76,14 @@ Evaluate every improvement on THREE fronts: **look · performance · practicalit
 ## Streak — CONFIRMED
 - The 2-min "showed up" ember **DOES light the day's fire** (owner confirmed yes). Just *starting* keeps the streak alive — a day is lit by ≥1 step OR ≥1 credited pomo OR the 2-min showed-up ember.
 
+## Auto Today quest (owner — new feature, before Phase A)
+- **One-tap "Auto Today" button on the map**: builds a day quest from the TickTick **Today** list; toggle to **include overdue or not**. Lands on a **"does this look good?" review** (pre-filled pick screen) to remove/tweak before finalizing — no editor round-trip.
+- **Tasks have ONE identity (TickTick id); Auto Today REFERENCES, doesn't copy.** A task can appear in its origin quest AND today's Auto quest — same item. **Check off anywhere → done everywhere**, crediting the origin quest's chapter/quest progress. Kills the back-and-forth.
+- **Rewards mint ONCE per task id (idempotent)** — not cheating (paid once for the real task, regardless of how many quests display it); also auto-dedupes overlap with tasks already imported elsewhere.
+- **Carry-over via Tomorrow's Promise:** yesterday's unfinished Auto-Today tasks are offered into today's; finishing later still credits the origin quest.
+- **Overdue/abandon handling — SOFTENED from owner's give-up idea:** an unfinished task just stays open; completing it later still credits its origin quest. NO auto "given up" on a whole world (clashes with never-shame). Give-up stays manual; auto-give-up could be an opt-in setting only.
+- Belongs in ROADMAP as a new track (T11), targeted for Phase B (proto-now) alongside the pick screen.
+
 ## Standing rule reinforced
 - Every feature must REDUCE friction. If a mechanic requires manual bookkeeping/logging to earn rewards, redesign it to be automatic or drop it.
 - Evaluation lens for ALL work: look · performance · practicality.
