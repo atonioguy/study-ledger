@@ -196,7 +196,7 @@
   .sq-vault .slot{ width:62px; height:62px; background:var(--card); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); display:grid; place-items:center; font-size:26px; opacity:.5; }
 
   /* ===== bottom nav ===== */
-  #nav{ flex:none; z-index:18; display:flex; background:linear-gradient(180deg,#2a2350,#1c1636); border-top:2px solid var(--outline); padding-bottom:env(safe-area-inset-bottom); }
+  #nav{ flex:none; z-index:18; display:flex; background:linear-gradient(180deg,#2a2350,#1c1636); border-top:2px solid var(--outline); padding-bottom:6px; }
   #nav button{ flex:1; background:none; border:none; cursor:pointer; padding:9px 4px 10px; display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--tx); opacity:.55; font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; text-transform:lowercase; }
   #nav button .ni{ font-size:20px; line-height:1; }
   #nav button.on{ opacity:1; color:var(--gold); text-shadow:0 0 8px rgba(255,210,110,.5); }
@@ -581,8 +581,112 @@
   .sq-walkhome{ position:absolute; width:36px; height:33px; background:center/contain no-repeat; image-rendering:pixelated; z-index:72; pointer-events:none; will-change:transform; }
   .sq-dust{ position:absolute; width:2px; height:2px; background:#b9a6c8; z-index:2; pointer-events:none; }
 
+  /* ==================================================================
+     STAGE 2a — WORLD MAP + WORLDS HUB (structure ported from the
+     quest-next prototype, skinned to LANTERNLIGHT: ink outlines, clay
+     depth, frame sprites, gold-clip titles, the two sanctioned blooms)
+     ================================================================== */
+  /* ---- sticky world banner + quick world switcher ---- */
+  .wmhd{ position:sticky; top:0; z-index:8; display:flex; align-items:center; gap:8px; margin:-16px -14px 12px; padding:10px 12px;
+    background:linear-gradient(90deg,rgba(138,114,216,.30),rgba(138,114,216,.05) 70%,transparent),linear-gradient(180deg,var(--dusk-3),var(--dusk-2));
+    border-bottom:2px solid var(--ink); border-left:4px solid var(--hearth-1); box-shadow:0 4px 9px rgba(8,5,20,.45), inset 0 1px 0 rgba(255,244,214,.07); }
+  .wswbtn{ display:flex; align-items:center; gap:7px; background:none; border:none; padding:2px 4px 2px 0; cursor:pointer; min-width:0;
+    font-family:var(--pixfont); font-size:12px; letter-spacing:1px; text-transform:lowercase; color:var(--hearth-1); }
+  .wswbtn .wn{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    background:linear-gradient(180deg,#fff4c2,#ffcf6e); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    filter:drop-shadow(1px 1px 0 var(--ink)) drop-shadow(0 0 6px rgba(255,200,110,.35)); }
+  .wswbtn .dn{ flex:none; font-size:9px; opacity:.8; }
+  .wmhd .cnt{ margin-left:auto; font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.65; white-space:nowrap; }
+  .wmglobe{ flex:none; width:32px; height:32px; padding:0; display:grid; place-items:center; cursor:pointer;
+    --btn-hi:#3d3268; --btn-md:#2c2452; --btn-lo:#1a1338;
+    background:linear-gradient(180deg,var(--btn-hi) 0 45%,var(--btn-md) 45%); border:2px solid var(--ink); border-radius:7px;
+    box-shadow:0 3px 0 var(--btn-lo),0 3px 0 2px var(--ink),inset 0 1px 0 rgba(255,244,214,.14); transition:transform 70ms linear, box-shadow 90ms; }
+  .wmglobe:hover{ box-shadow:0 3px 0 var(--btn-lo),0 3px 0 2px var(--ink),var(--bloom-acc),inset 0 1px 0 rgba(255,244,214,.14); }
+  .wmglobe:active{ transform:translateY(2px); box-shadow:0 1px 0 var(--btn-lo),0 1px 0 2px var(--ink); }
+  .wmglobe .pi{ width:16px; height:16px; font-size:14px; line-height:16px; }
+  .wsw{ position:absolute; left:8px; top:calc(100% + 6px); z-index:22; min-width:240px; max-width:calc(100% - 16px); padding:9px;
+    background:var(--dusk-3); background-clip:padding-box; border:8px solid var(--dusk-3);
+    border-image:var(--f-panel) 8 fill / 8px; image-rendering:pixelated; box-shadow:0 14px 34px rgba(0,0,0,.55); }
+  .wsw[hidden]{ display:none; }
+  .wswrow{ display:flex; align-items:center; gap:8px; padding:8px 9px; cursor:pointer; border-radius:6px; }
+  .wswrow:hover{ background:rgba(255,244,214,.06); }
+  .wswrow.here{ background:var(--dusk-0); box-shadow:inset 3px 0 0 var(--hearth-1); }
+  .wswrow .we{ flex:none; font-size:15px; line-height:1; }
+  .wswrow .wname{ flex:1; min-width:0; font-family:var(--pixfont2); font-size:16px; color:var(--cardtx); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .wswrow .wbar{ flex:none; width:52px; height:9px; background:var(--dusk-0); border:2px solid var(--ink); border-radius:5px; overflow:hidden; }
+  .wswrow .wfill{ display:block; height:100%; background:repeating-linear-gradient(45deg,#5fe0c8 0 5px,#3fb8a4 5px 10px); }
+  .wswrow .wq{ flex:none; font-family:var(--pixfont2); font-size:13px; color:var(--tx); opacity:.6; }
+  .wswrow.all{ border-top:2px solid rgba(20,15,36,.6); margin-top:4px; padding-top:10px; }
+  .wswrow.all .wname{ font-family:var(--pixfont); font-size:10px; color:#c3acff; text-transform:lowercase; }
+  /* ---- the map field: hills, flags, plot boxes, trail dots, the gang ---- */
+  .wmap{ position:relative; width:100%; z-index:1; }
+  .mdot{ position:absolute; width:6px; height:6px; transform:translate(-50%,-50%) rotate(45deg); background:var(--dusk-4); box-shadow:0 0 5px rgba(138,114,216,.35); image-rendering:pixelated; }
+  .mbox{ position:absolute; transform:translateX(-50%); z-index:2; box-sizing:border-box; cursor:pointer; border-radius:10px;
+    background:linear-gradient(180deg,rgba(51,42,89,.82),rgba(23,16,41,.92));
+    border:2px solid var(--ink); box-shadow:0 4px 0 rgba(10,6,24,.95),0 4px 0 2px var(--ink),inset 0 2px 0 rgba(255,244,214,.06); transition:box-shadow .2s, border-color .2s; }
+  .mbox.sel{ border-color:var(--glow); box-shadow:0 4px 0 rgba(10,6,24,.95),0 4px 0 2px var(--ink),var(--bloom-acc),inset 0 2px 0 rgba(255,244,214,.06); }
+  .mglow{ position:absolute; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none; z-index:1; transition:left .55s ease-in-out, top .55s ease-in-out;
+    background:radial-gradient(circle, rgba(138,114,216,.30) 0%, rgba(255,217,107,.14) 42%, transparent 70%); animation:mamb 2.4s ease-in-out infinite; }
+  @keyframes mamb{ 0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.94)} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)} }
+  .mhill{ position:absolute; transform:translate(-50%,-50%); image-rendering:pixelated; z-index:3; cursor:pointer; filter:drop-shadow(0 3px 0 rgba(10,6,24,.5)); }
+  .mflag{ position:absolute; transform:translate(-50%,-100%); image-rendering:pixelated; z-index:5; pointer-events:none; filter:drop-shadow(0 2px 0 rgba(10,6,24,.45)); }
+  .mgang{ position:absolute; transform:translate(-50%,-100%); z-index:6; display:flex; align-items:flex-end; gap:1px; pointer-events:none; filter:drop-shadow(0 3px 2px rgba(0,0,0,.4)); transition:left .55s ease-in-out, top .55s ease-in-out; }
+  .mgang img{ image-rendering:pixelated; display:block; }
+  .mgang.walking img{ animation:mbob .26s ease-in-out infinite alternate; }
+  @keyframes mbob{ to{ transform:translateY(-2px); } }
+  .mlbl{ position:absolute; transform:translateX(-50%); text-align:center; z-index:4; width:196px; pointer-events:none; }
+  .mlbl .nm{ font-family:var(--pixfont2); font-size:19px; color:var(--cardtx); line-height:1.05; text-shadow:1px 1px 0 rgba(20,15,36,.7); }
+  .mlbl .track{ width:124px; height:11px; margin:8px auto 5px; background:var(--dusk-0); border:2px solid var(--ink); border-radius:6px; overflow:hidden; box-shadow:inset 0 2px 4px rgba(0,0,0,.5); }
+  .mlbl .fill{ height:100%; border-radius:4px 2px 2px 4px; }
+  .fill.tealbar{ background:repeating-linear-gradient(45deg,#5fe0c8 0 6px,#3fb8a4 6px 12px); box-shadow:0 0 8px rgba(95,224,200,.55); }
+  .fill.goldbar{ background:linear-gradient(90deg,#ffd96b,#ff9e5a 55%,#ff7aa8); box-shadow:0 0 11px rgba(255,180,90,.85); }
+  .fill.greybar{ background:repeating-linear-gradient(45deg,#6b6478 0 6px,#544e63 6px 12px); }
+  .mlbl .stat{ font-family:var(--pixfont); font-size:10px; letter-spacing:.5px; margin-top:4px; display:flex; align-items:center; justify-content:center; gap:5px; }
+  .mlbl .stat.xp{ color:#ffcf6e; } .mlbl .stat.st{ color:#c3acff; }
+  .mlbl .mgo{ display:inline-block; margin-top:7px; font-family:var(--pixfont); font-size:8px; letter-spacing:.5px; color:var(--dusk-0);
+    background:linear-gradient(180deg,#ffe291 0 45%,#ffc95e 45%); border:2px solid var(--ink); border-radius:6px; padding:4px 8px;
+    box-shadow:0 2px 0 #c07f2e,0 2px 0 2px var(--ink); animation:sqBreathe 3s ease-in-out infinite; }
+  .madd{ position:absolute; transform:translate(-50%,-50%); z-index:3; display:flex; flex-direction:column; align-items:center; cursor:pointer; }
+  .madd .an{ width:66px; height:56px; display:grid; place-items:center; color:#c3acff; font-family:var(--pixfont); font-size:26px; border-radius:10px;
+    border:3px dashed var(--dusk-4); background:repeating-linear-gradient(45deg,rgba(36,29,60,.85) 0 7px,rgba(23,16,41,.85) 7px 14px);
+    box-shadow:0 3px 0 rgba(10,6,24,.7); transition:transform 70ms linear, box-shadow .15s, border-color .15s; }
+  .madd:hover .an{ border-color:var(--glow); box-shadow:0 3px 0 rgba(10,6,24,.7),var(--bloom-acc); }
+  .madd:active .an{ transform:translateY(2px); }
+  .madd .al{ margin-top:8px; font-family:var(--pixfont); font-size:10px; color:#c3acff; }
+  .mempty{ position:absolute; left:50%; top:22px; transform:translateX(-50%); width:86%; text-align:center; font-family:var(--pixfont2); font-size:16px; color:var(--tx); opacity:.6; }
+  /* ---- worlds hub: portal cards ---- */
+  .hubgrid{ display:grid; grid-template-columns:1fr 1fr; gap:13px; position:relative; z-index:1; }
+  .hubcard{ position:relative; min-height:150px; padding:12px; cursor:pointer; display:flex; flex-direction:column; border-radius:11px;
+    background:linear-gradient(180deg,var(--c1,#3a3062),var(--c2,#2a2148)); border:2px solid var(--ink);
+    box-shadow:0 5px 0 rgba(10,6,24,.95),0 5px 0 2px var(--ink),inset 0 2px 0 rgba(255,244,214,.10); transition:transform 70ms linear, box-shadow 90ms; }
+  .hubcard:active{ transform:translateY(2px); box-shadow:0 2px 0 rgba(10,6,24,.95),0 2px 0 2px var(--ink); }
+  .hubcard .hemoji{ font-size:26px; line-height:1; }
+  .hubcard .hname{ font-family:var(--pixfont); font-size:11px; letter-spacing:1px; text-transform:lowercase; color:var(--acc,#ffd96b); margin-top:8px; text-shadow:1px 1px 0 rgba(20,15,36,.6); }
+  .hubcard .hbar{ margin-top:auto; height:10px; background:rgba(10,6,24,.55); border:2px solid var(--ink); border-radius:5px; overflow:hidden; }
+  .hubcard .hfill{ height:100%; background:var(--acc,#ffd96b); box-shadow:0 0 8px var(--acc,#ffd96b); }
+  .hubcard .hstat{ font-family:var(--pixfont2); font-size:13px; color:var(--cardtx); opacity:.85; margin-top:5px; }
+  .hubcard .hstat2{ font-family:var(--pixfont2); font-size:13px; margin-top:1px; display:flex; align-items:center; gap:4px; color:#ffcf6e; }
+  .hubcard .hstat2.st{ color:#c3acff; }
+  .hubcard .hbadge{ position:absolute; top:9px; right:38px; font-family:var(--pixfont); font-size:7px; letter-spacing:.5px; color:#0c2620; background:var(--acc,#ffd96b); padding:2px 5px; border-radius:4px; border:1px solid var(--ink); }
+  .hubcard .hedit{ position:absolute; top:7px; right:7px; width:24px; height:24px; padding:0; display:grid; place-items:center; cursor:pointer; font-size:12px; color:var(--cardtx); background:rgba(10,6,24,.5); border:2px solid var(--ink); border-radius:6px; }
+  .hubcard .hedit:active{ transform:translateY(1px); }
+  .hubadd{ align-items:center; justify-content:center; gap:8px; background:repeating-linear-gradient(45deg,rgba(36,29,60,.9) 0 7px,rgba(23,16,41,.9) 7px 14px);
+    border:3px dashed var(--dusk-4); box-shadow:0 3px 0 rgba(10,6,24,.7); color:#c3acff; }
+  .hubadd:hover{ border-color:var(--glow); box-shadow:0 3px 0 rgba(10,6,24,.7),var(--bloom-acc); }
+  .hubadd .hplus{ font-size:30px; }
+  .hubadd .hname{ color:#c3acff; margin-top:0; }
+  /* ---- world editor + new-quest chips ---- */
+  .pickrow{ display:flex; flex-wrap:wrap; gap:7px; }
+  .emochip{ width:38px; height:38px; display:grid; place-items:center; font-size:19px; cursor:pointer; background:var(--dusk-0); border:2px solid var(--ink); border-radius:8px; box-shadow:inset 0 2px 4px rgba(0,0,0,.4); }
+  .emochip.on{ border-color:var(--hearth-1); box-shadow:var(--bloom-gold),inset 0 2px 4px rgba(0,0,0,.4); }
+  .palchip{ width:44px; height:30px; cursor:pointer; border:2px solid var(--ink); border-radius:7px; box-shadow:0 2px 0 var(--ink); }
+  .palchip.on{ outline:2px solid var(--hearth-0); outline-offset:2px; }
+  .sq-mbtn.danger{ --btn-hi:#a34d58; --btn-md:#7e3542; --btn-lo:#4a1c26; color:#ffe3e3; background:linear-gradient(180deg,var(--btn-hi) 0 45%,var(--btn-md) 45%); }
+  .sq-back{ margin-left:0; }
+
   /* ---- reduced motion: loops freeze (a still firefly is still pretty), one-shots <=120ms ---- */
   @media (prefers-reduced-motion: reduce){
+    .mglow,.mgang.walking img,.mlbl .mgo{ animation:none !important; }
     .hud-buds .cw-slime,.hud-buds .cw-tom,.hud-buds .cw-bud,.ms-mascot,.cos-mascot,.sq-avatar,.sq-egg,
     #hud .cw-lv,.cw-xpfill:after,.tcg-sheen,.card-rays,.cw-hero::before,
     .cw-les.current .cw-ldot,#nav button.on::after,.sq-amb i{ animation:none !important; }
@@ -612,8 +716,18 @@
     </header>
 
     <div id="screens">
-      <section class="screen on" id="screen-map" data-screen="map">
-        <div class="sq-questhd"><span class="qt">✦ exam 3 quest</span><span class="qm">modules 5 + 6 · exam sun</span><button id="cwReset" class="sq-reset" title="reset progress"><span class="pi" data-pi="undo">⟲</span></button><button id="sqGear" class="sq-reset" title="cloud sync"><span class="pi" data-pi="gear">⚙</span></button></div>
+      <section class="screen on" id="screen-wmap" data-screen="wmap">
+        <div class="wmhd" id="wmHead">
+          <button class="wswbtn" id="wswBtn" title="switch world" aria-haspopup="true"><span class="wn" id="wswName">✦ my quests</span><span class="dn">▾</span></button>
+          <span class="cnt" id="wmCnt"></span>
+          <button class="wmglobe" id="wmGlobe" title="all worlds" aria-label="worlds hub"><span class="pi" data-pi="globe">🌍</span></button>
+          <div class="wsw" id="wsw" hidden></div>
+        </div>
+        <div class="wmap" id="wmArea"></div>
+      </section>
+
+      <section class="screen" id="screen-map" data-screen="map">
+        <div class="sq-questhd"><button id="cwBack" class="sq-reset sq-back" title="back to world map">←</button><span class="qt">✦ exam 3 quest</span><span class="qm">modules 5 + 6 · exam sun</span><button id="cwReset" class="sq-reset" title="reset progress"><span class="pi" data-pi="undo">⟲</span></button><button id="sqGear" class="sq-reset" title="cloud sync"><span class="pi" data-pi="gear">⚙</span></button></div>
         <div class="cw-list" id="cwList"></div>
         <div class="sq-note"><b>content done by friday.</b> weekend is recall, not rewatching — a slipped day rolls forward, the buffer absorbs it.</div>
       </section>
@@ -647,6 +761,11 @@
         </div>
         <div class="shop-soon"><span class="sq-soon">charms — next update</span></div>
       </section>
+
+      <section class="screen" id="screen-worlds" data-screen="worlds">
+        <div class="sq-questhd"><span class="qt">✦ worlds</span><span class="qm">tap to travel · ✎ to edit</span></div>
+        <div class="hubgrid" id="hubGrid"></div>
+      </section>
           <section class="screen" id="screen-pomo" data-screen="pomo">
         <div class="pomo-hd"><span class="pomo-ttl">✦ the den</span><span class="pomo-tally"><b id="pomoRoomN">0</b> here · <b id="pomoTotalN">0</b> logged</span></div>
         <div class="pomo-room" id="pomoArea"></div>
@@ -655,7 +774,8 @@
     </div>
 
     <nav id="nav">
-      <button class="on" data-go="map"><span class="ni pi" data-pi="map">🗺️</span>map</button>
+      <button class="on" data-go="wmap"><span class="ni pi" data-pi="map">🗺️</span>map</button>
+      <button data-go="worlds"><span class="ni pi" data-pi="globe">🌍</span>worlds</button>
       <button data-go="pomo"><span class="ni pi" data-pi="tomato">🍅</span>den</button>
       <button data-go="buddies"><span class="ni pi" data-pi="egg">🥚</span>buddies</button>
       <button data-go="shop"><span class="ni pi" data-pi="wheel">🎰</span>shop</button>
@@ -686,6 +806,22 @@
       <div class="ms-stats" id="msStats"></div>
       <div class="ms-charms"><span class="lbl">charms</span><p class="ms-soon">one-use boosts — coming soon</p></div>
       <button class="sq-mbtn primary" id="msClose">close</button>
+    </div></div>
+    <div id="worldEdit" class="sq-modal"><div class="sq-card">
+      <h3 id="weTitle">new world</h3>
+      <label>name</label>
+      <input id="weName" type="text" maxlength="24" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="world name…">
+      <label>icon</label><div class="pickrow" id="weEmoji"></div>
+      <label>palette</label><div class="pickrow" id="wePal"></div>
+      <div class="sq-modrow"><button class="sq-mbtn" id="weCancel">cancel</button><button class="sq-mbtn primary" id="weSave">save</button></div>
+      <div class="sq-modrow" id="weManageRow" style="display:none"><button class="sq-mbtn" id="weArchive">archive world</button></div>
+    </div></div>
+    <div id="questNew" class="sq-modal"><div class="sq-card">
+      <h3>＋ new quest</h3>
+      <p class="sq-syncnote">plant a quest on this world's map — chapters + steps arrive with the builder.</p>
+      <label>name</label>
+      <input id="qnName" type="text" maxlength="80" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="quest name…">
+      <div class="sq-modrow"><button class="sq-mbtn" id="qnCancel">cancel</button><button class="sq-mbtn primary" id="qnSave">plant it</button></div>
     </div></div>
     <div id="cwFx"></div>
     <div class="cw-banner" id="cwBanner"></div>
@@ -918,6 +1054,11 @@ try{
         P(4,3,4,1,INK); P(3,4,7,1,INK); P(2,5,9,1,INK); P(1,6,10,2,INK); P(2,8,8,1,INK);
         P(4,4,5,1,'#e3ebf7'); P(3,5,7,1,'#e3ebf7'); P(2,6,8,1,'#e3ebf7'); P(2,7,8,1,'#bcc8e2');
         P(5,4,1,1,'#fff'); break;
+      case 'globe':                                                     // worlds globe (sea + land + sun glint)
+        P(4,1,4,1,INK); P(3,2,6,1,INK); P(2,3,8,1,INK); P(1,4,10,4,INK); P(2,8,8,1,INK); P(3,9,6,1,INK); P(4,10,4,1,INK);
+        P(4,2,4,1,'#5f91e0'); P(3,3,6,1,'#5f91e0'); P(2,4,8,4,'#5f91e0'); P(3,8,6,1,'#5f91e0'); P(4,9,4,1,'#5f91e0');
+        P(4,3,3,2,'#8fe6b4'); P(7,5,2,2,'#8fe6b4'); P(3,7,2,1,'#8fe6b4'); P(6,8,2,1,'#8fe6b4');
+        P(4,2,1,1,HILITE); break;
       case 'flame':                                                     // the hearth flame
         P(5,0,1,1,INK); P(4,1,3,1,INK); P(4,2,4,1,INK); P(3,3,6,2,INK); P(2,5,8,4,INK); P(3,9,6,1,INK); P(4,10,4,1,INK);
         P(5,2,2,2,'#e8a94a'); P(4,4,4,1,'#e8a94a'); P(3,5,6,4,'#e8a94a'); P(4,9,4,1,'#e8a94a');
@@ -977,6 +1118,12 @@ try{
   ambience(document.getElementById('screen-map'),[
     {x:12,y:14,dx:26,dy:-18,t:9,d:0},{x:78,y:9,dx:-20,dy:14,t:11,d:1.2},{x:40,y:26,dx:18,dy:-26,t:8,d:2.1},
     {x:64,y:48,dx:-24,dy:-12,t:10,d:.6},{x:22,y:62,dx:22,dy:-20,t:12,d:1.8},{x:86,y:36,dx:-16,dy:-22,t:9.5,d:2.6}]);
+  ambience(document.getElementById('screen-wmap'),[
+    {x:14,y:16,dx:24,dy:-16,t:10,d:0},{x:80,y:10,dx:-18,dy:12,t:11,d:1.1},{x:44,y:30,dx:16,dy:-24,t:9,d:2.3},
+    {x:68,y:52,dx:-22,dy:-12,t:10.5,d:.7},{x:24,y:66,dx:20,dy:-18,t:12,d:1.9},{x:88,y:38,dx:-14,dy:-20,t:9.5,d:2.8}]);
+  ambience(document.getElementById('screen-worlds'),[
+    {x:12,y:14,dx:16,dy:-14,t:11,d:0},{x:84,y:10,dx:-12,dy:12,t:10,d:1.3},{x:34,y:40,dx:14,dy:-16,t:12,d:.9},
+    {x:70,y:62,dx:-16,dy:-14,t:10,d:2.1},{x:50,y:24,dx:10,dy:-18,t:13,d:2.9}]);
   ambience(document.getElementById('screen-buddies'),[
     {x:10,y:12,dx:14,dy:-16,t:11,d:0},{x:82,y:8,dx:-12,dy:12,t:9,d:1.4},{x:30,y:34,dx:16,dy:-14,t:12,d:.8},
     {x:68,y:56,dx:-14,dy:-18,t:10,d:2.2},{x:48,y:20,dx:10,dy:-20,t:13,d:3}]);
@@ -1006,13 +1153,16 @@ try{
   var _map=document.getElementById('screen-map');
   if(_map){ var wrap=document.createElement('div'); wrap.className='sq-horizon';
     var hh=heroImg('horizon',''); if(hh) wrap.appendChild(hh); _map.insertBefore(wrap,_map.firstChild); }
+  var _wmap=document.getElementById('screen-wmap');                     // world map gets the same twilight skyline strip
+  if(_wmap){ var wrap2=document.createElement('div'); wrap2.className='sq-horizon';
+    var hh2=heroImg('horizon',''); if(hh2) wrap2.appendChild(hh2); _wmap.insertBefore(wrap2,_wmap.firstChild); }
   window.SQ_ASSETS=SQ_ASSETS; window.sqHeroImg=heroImg;                 // future rooms (campfire/tea/title) mount from the same manifest
 }catch(e){ /* chrome generation must never block the game */ }
 })();
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v3.2';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v3.3';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -1163,6 +1313,226 @@ try{
   }
   let _trailRaf=0;
   function scheduleTrail(){ if(_trailRaf)return; _trailRaf=requestAnimationFrame(()=>{ _trailRaf=0; buildTrail(); }); }
+
+  // ===== stage 2a: WORLD MAP + WORLDS HUB (screens over the D1 model; ported from quest-next, LANTERNLIGHT skin) =====
+  // world palettes (art_direction: dusky base + one singing accent + a per-world glow hue)
+  const W_PAL={
+    twilight:{label:'twilight', acc:'#66ecd4', glow:'#8f7bff', c1:'#3d3168', c2:'#241c46', bd:'#8a72d8'},
+    sunset:  {label:'sunset',   acc:'#57d9e0', glow:'#ff9e5a', c1:'#523142', c2:'#3a2130', bd:'#d67a44'},
+    mint:    {label:'mint',     acc:'#ff9e86', glow:'#8fe6b4', c1:'#27503f', c2:'#183028', bd:'#54ad94'},
+    snow:    {label:'snowy',    acc:'#ffcaa0', glow:'#add0ff', c1:'#38507e', c2:'#243050', bd:'#7a94d0'},
+    sakura:  {label:'sakura',   acc:'#9fe9c4', glow:'#ffc2e0', c1:'#4a3352', c2:'#33203c', bd:'#c885b0'},
+  };
+  const W_EMOJIS=['✦','📚','💪','🧠','🎨','🎯','🌙','🔥','🎮','📖','🌱','☕'];
+  // pixel sprites for the map (hill + progress flags), drawn once at first render
+  function hillURL(w,h){ const c=pxc(w,h),x=c.getContext('2d'); x.imageSmoothingEnabled=false; const TOP='#7aa65a',G1='#5f8a45',G2='#496b37',BASE='#35502c',BLADE='#8dc06b';
+    const top=[]; for(let i=0;i<w;i++) top[i]=Math.round(h-1-(h-3)*Math.sin(Math.PI*(i+0.5)/w));
+    for(let i=0;i<w;i++){ for(let y=top[i];y<h;y++){ x.fillStyle=(y===top[i]?TOP:(y<=top[i]+2?G1:G2)); x.fillRect(i,y,1,1);} }
+    x.fillStyle=BASE; x.fillRect(0,h-1,w,1); x.fillStyle=BLADE; [0.32,0.5,0.68].forEach(bx=>{const i=Math.round(w*bx);x.fillRect(i,top[i]-1,1,2);}); return c.toDataURL(); }
+  function flagURL(kind){ const c=pxc(26,32),x=c.getContext('2d'); x.imageSmoothingEnabled=false;
+    if(kind==='done'){ x.fillStyle='#b9a678'; x.fillRect(3,6,2,26); x.fillStyle='#caa63e'; x.fillRect(5,5,20,15); x.fillStyle='#ffd96b'; x.fillRect(5,6,18,13); x.clearRect(22,10,3,4); x.fillStyle='#caa63e'; x.fillRect(21,6,1,13);
+      x.fillStyle='#efe6d4'; x.fillRect(9,9,10,7); x.fillRect(10,8,8,1); x.fillStyle='#94835f'; x.fillRect(9,8,10,1); x.fillRect(8,9,1,7); x.fillRect(19,9,1,7); x.fillRect(9,16,10,1); x.fillStyle='#473d54'; x.fillRect(11,11,1,2); x.fillRect(16,11,1,2); }
+    else if(kind==='prog'){ x.fillStyle='#b9a678'; x.fillRect(3,10,2,22); x.fillStyle='#e6c9a0'; x.fillRect(5,9,15,12); x.fillStyle='#f3e2c6'; x.fillRect(5,10,13,10); x.fillStyle='#cba97e'; x.fillRect(18,10,1,10);
+      x.fillStyle='#d84b3a'; x.fillRect(9,13,7,6); x.fillRect(10,12,5,1); x.fillStyle='#a5382c'; x.fillRect(9,12,7,1); x.fillRect(8,13,1,6); x.fillRect(16,13,1,6); x.fillRect(9,19,7,1); x.fillStyle='#5aa048'; x.fillRect(11,10,3,2); }
+    else { x.fillStyle='#6b6478'; x.fillRect(3,9,2,23); x.fillStyle='#48435a'; x.fillRect(5,8,17,13); x.fillStyle='#5c5670'; x.fillRect(5,9,15,11); x.clearRect(17,10,4,3); x.clearRect(18,15,3,3); }
+    return c.toDataURL(); }
+  let _wmSpr=null;
+  function wmSprites(){ if(!_wmSpr) _wmSpr={ hill:hillURL(48,22), flags:{done:flagURL('done'),prog:flagURL('prog'),gaveup:flagURL('gaveup')}, sl:drawSlime(), tm:drawTomato() }; return _wmSpr; }
+  // ---- screen router: one place toggles screens + keeps the nav lamp truthful ----
+  const NAV_ROOT={map:'wmap'};                                          // the exam questline lives UNDER the map tab
+  function sqShow(scr){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.dataset.screen===scr));
+    const root=NAV_ROOT[scr]||scr;
+    document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x.dataset.go===root));
+    if(scr==='pomo') pomoStart(); else pomoStop();
+    if(scr==='map') scheduleTrail();                                    // exam-3 trail needs visible offsets
+    if(scr==='wmap') renderWorldMap();
+    if(scr==='worlds') renderHub();
+  }
+  // ---- world map ----
+  const WM_HW=150, WM_HH=68;
+  let wmSel=null, wmPos={}, wmGang=null, wmGlow=null;
+  function wmDefaultSel(quests){ try{ const s=localStorage.getItem('aq_sel'); if(s&&quests.find(q=>q.id===s))return s; }catch(e){}
+    let i=quests.findIndex(q=>questState(q)==='prog'); if(i<0)i=quests.findIndex(q=>questState(q)==='new'); if(i<0)i=0; return quests[i]?quests[i].id:null; }
+  function worldAgg(w){ const qs=worldQuests(w); let xe=0,xt=0,se=0,st=0,resolved=0;
+    qs.forEach(q=>{ const t=questTotals(q), s=questStars(q), stt=questState(q); xe+=t.xpEarned; xt+=t.xpTotal; se+=s.earned; st+=s.total; if(stt==='done'||stt==='gaveup')resolved++; });
+    return {n:qs.length, resolved, xe, xt, se, st, pct:(xt?Math.round(xe/xt*100):0), allDone:qs.length>0&&resolved===qs.length}; }
+  function renderWorldMap(){
+    const area=document.getElementById('wmArea'); if(!area||!area.offsetParent)return;   // skip while hidden (re-rendered on show)
+    const w=activeWorld(), quests=worldQuests(w), S=wmSprites();
+    wmPos={}; wmGang=null; wmGlow=null;
+    wmSel=(wmSel&&quests.find(q=>q.id===wmSel))?wmSel:wmDefaultSel(quests);
+    // sticky banner + quick switcher rows
+    const nm=document.getElementById('wswName'); if(nm)nm.textContent=(w.emoji||'✦')+' '+(w.name||'my quests');
+    const cnt=document.getElementById('wmCnt'); if(cnt)cnt.textContent=quests.length+' quest'+(quests.length===1?'':'s');
+    const wsw=document.getElementById('wsw');
+    if(wsw){ let rows=''; WORLD.worlds.filter(x=>!x.archived).forEach(x=>{ const a=worldAgg(x);
+        rows+='<div class="wswrow'+(x.id===w.id?' here':'')+'" data-wid="'+x.id+'"><span class="we">'+esc(x.emoji||'✦')+'</span><span class="wname">'+esc(x.name||'my world')+'</span><span class="wbar"><span class="wfill" style="width:'+a.pct+'%"></span></span><span class="wq">'+a.n+'</span></div>'; });
+      rows+='<div class="wswrow all" data-all="1"><span class="we">🌍</span><span class="wname">all worlds</span><span class="wq">→</span></div>';
+      wsw.innerHTML=rows; wsw.hidden=true;
+      wsw.querySelectorAll('.wswrow').forEach(r=>r.onclick=(e)=>{ e.stopPropagation(); wsw.hidden=true;
+        if(r.dataset.all){ sqShow('worlds'); cwSfx('blip'); return; }
+        if(r.dataset.wid===WORLD.activeWorldId) return; switchWorld(r.dataset.wid); });
+    }
+    // plots: alternating hills down a diamond-dot trail, '+' spot at the end
+    area.innerHTML='';
+    const Wd=area.clientWidth||412, xR=Math.min(Wd-112,Math.round(Wd*0.70)), xL=Math.max(112,Math.round(Wd*0.30));
+    const pts=quests.map((q,i)=>({x:(i%2===0?xR:xL), y:120+i*172}));
+    const addX=(quests.length%2===0?xR:xL), addY=120+quests.length*172;
+    area.style.height=(addY+120)+'px';
+    const chain=pts.concat([{x:addX,y:addY}]);
+    for(let i=0;i<chain.length-1;i++){ const a=chain[i],b=chain[i+1]; const steps=Math.round(Math.hypot(b.x-a.x,b.y-a.y)/15)||1;
+      for(let s=1;s<steps;s++){ const t=s/steps; const d=document.createElement('div'); d.className='mdot'; d.style.left=(a.x+(b.x-a.x)*t)+'px'; d.style.top=(a.y+(b.y-a.y)*t)+'px'; area.appendChild(d); } }
+    if(!quests.length){ const em=document.createElement('div'); em.className='mempty'; em.textContent='no quests here yet — tap ＋ below to plant one ✦'; area.appendChild(em); }
+    quests.forEach((q,i)=>{
+      const st=questState(q), tot=questTotals(q), stars=questStars(q), pct=tot.xpTotal?Math.round(tot.xpEarned/tot.xpTotal*100):0;
+      const cx=pts[i].x, cy=pts[i].y, crestY=cy-WM_HH/2+6, baseY=cy+WM_HH/2; wmPos[q.id]={cx,cy,baseY};
+      const box=document.createElement('div'); box.className='mbox'+(q.id===wmSel?' sel':'');
+      box.style.left=cx+'px'; box.style.top=(cy-8)+'px'; box.style.width='214px'; box.style.height='166px'; box.dataset.qid=q.id;
+      box.onclick=()=>{ if(q.id===wmSel) openQuest(q.id); else wmSelect(q.id); };
+      area.appendChild(box);
+      const hill=document.createElement('img'); hill.className='mhill'; hill.alt=''; hill.src=S.hill; hill.style.width=WM_HW+'px'; hill.style.height=WM_HH+'px'; hill.style.left=cx+'px'; hill.style.top=cy+'px'; hill.dataset.qid=q.id; area.appendChild(hill);
+      if(S.flags[st]){ const f=document.createElement('img'); f.className='mflag'; f.alt=''; f.src=S.flags[st]; f.style.width=(st==='done'?42:32)+'px'; f.style.left=(cx+(st==='done'?20:18))+'px'; f.style.top=(crestY+(st==='done'?6:8))+'px'; area.appendChild(f); }
+      const barcls=st==='done'?'goldbar':(st==='gaveup'?'greybar':'tealbar');
+      const lbl=document.createElement('div'); lbl.className='mlbl'; lbl.dataset.qid=q.id; lbl.style.left=cx+'px'; lbl.style.top=(baseY+16)+'px';
+      lbl.innerHTML='<div class="nm">'+esc(q.name||'untitled quest')+'</div><div class="track"><div class="fill '+barcls+'" style="width:'+pct+'%"></div></div>'+
+        '<div class="stat xp">'+tot.xpEarned+' / '+tot.xpTotal+' xp</div><div class="stat st">'+stars.earned+' / '+stars.total+' <span class="ic ic-star"></span></div>'+
+        (q.id===wmSel?'<div class="mgo">▶ tap again to enter</div>':'');
+      area.appendChild(lbl);
+      hill.onclick=()=>{ if(q.id===wmSel) openQuest(q.id); else wmSelect(q.id); };
+    });
+    if(wmSel&&wmPos[wmSel]){ const p=wmPos[wmSel];
+      wmGlow=document.createElement('div'); wmGlow.className='mglow'; wmGlow.style.left=p.cx+'px'; wmGlow.style.top=p.cy+'px'; wmGlow.style.width=(WM_HW*1.7)+'px'; wmGlow.style.height=(WM_HW*1.5)+'px'; area.appendChild(wmGlow);
+      let gang='<img alt="" src="'+S.sl+'" style="width:42px"><img alt="" src="'+S.tm+'" style="width:32px">';
+      try{ const ab=BUD.active&&BUDDIES.find(b=>b.id===BUD.active); if(ab) gang+='<img alt="" src="'+drawBuddy(ab.color,ab.top)+'" style="width:30px">'; }catch(e){}
+      wmGang=document.createElement('div'); wmGang.className='mgang'; wmGang.style.left=p.cx+'px'; wmGang.style.top=(p.baseY-2)+'px'; wmGang.innerHTML=gang; area.appendChild(wmGang);
+    }
+    const add=document.createElement('div'); add.className='madd'; add.style.left=addX+'px'; add.style.top=addY+'px';
+    add.innerHTML='<div class="an">＋</div><div class="al">add a quest</div>'; add.onclick=openNewQuest; area.appendChild(add);
+  }
+  function wmSelect(id){ if(id===wmSel)return; wmSel=id; try{ localStorage.setItem('aq_sel',id); }catch(e){}
+    const area=document.getElementById('wmArea'); if(!area)return;
+    area.querySelectorAll('.mbox').forEach(b=>b.classList.toggle('sel',b.dataset.qid===id));
+    area.querySelectorAll('.mgo').forEach(e=>e.remove());
+    const lbl=area.querySelector('.mlbl[data-qid="'+id+'"]');
+    if(lbl){ const g=document.createElement('div'); g.className='mgo'; g.textContent='▶ tap again to enter'; lbl.appendChild(g); }
+    const p=wmPos[id]; if(!p)return;
+    if(wmGang){ wmGang.style.left=p.cx+'px'; wmGang.style.top=(p.baseY-2)+'px'; wmGang.classList.add('walking'); setTimeout(()=>{ wmGang&&wmGang.classList.remove('walking'); },660); }
+    if(wmGlow){ wmGlow.style.left=p.cx+'px'; wmGlow.style.top=p.cy+'px'; }
+    cwSfx('blip'); cwBuzz(6);
+  }
+  // opening the World-1 campaign plot lands on the EXISTING exam-3 questline screen, untouched
+  function openQuest(id){ const q=WORLD.quests[id]; if(!q)return;
+    if(q.kind==='campaign'){ sqShow('map'); cwSfx('blip'); cwBuzz(8); return; }
+    cwBanner('✦ quest play arrives next update ✦');
+  }
+  function switchWorld(id){ WORLD.activeWorldId=id; persistWorld(); markChanged(); wmSel=null; sqShow('wmap'); cwSfx('blip'); cwBuzz(6); }
+  // ---- new quest (name-first plant; the full builder is a later stage) ----
+  function openNewQuest(){ const m=document.getElementById('questNew'); if(!m)return; const inp=document.getElementById('qnName'); if(inp)inp.value='';
+    m.classList.add('on'); cwSfx('blip'); setTimeout(()=>{ try{ inp.focus(); }catch(e){} },80); }
+  function createQuest(){ const inp=document.getElementById('qnName'); const name=((inp&&inp.value)||'').trim();
+    if(!name){ if(inp)inp.focus(); return; }
+    const q=blankQuest(); q.name=name; q.createdAt=Date.now();
+    WORLD.quests[q.id]=q; const w=activeWorld(); if(!Array.isArray(w.questIds))w.questIds=[]; w.questIds.push(q.id);
+    persistWorld(); markChanged(); wmSel=q.id; try{ localStorage.setItem('aq_sel',q.id); }catch(e){}
+    document.getElementById('questNew').classList.remove('on');
+    renderWorldMap(); cwSfx('check'); cwBuzz(10); cwBanner('✦ new quest planted ✦');
+  }
+  // ---- worlds hub: portal cards (tap = travel · ✎/hold = edit) ----
+  function renderHub(){
+    const wrap=document.getElementById('hubGrid'); if(!wrap)return;
+    let h='';
+    WORLD.worlds.filter(w=>!w.archived).forEach(w=>{
+      const P=W_PAL[w.color]||W_PAL.twilight, a=worldAgg(w);
+      h+='<div class="hubcard" data-wid="'+w.id+'" style="--c1:'+P.c1+';--c2:'+P.c2+';--bd:'+P.bd+';--acc:'+P.acc+'">'+
+         (a.allDone?'<span class="hbadge">✦ done</span>':'')+
+         '<button class="hedit" data-wid="'+w.id+'" title="edit world" aria-label="edit world">✎</button>'+
+         '<div class="hemoji">'+esc(w.emoji||'✦')+'</div><div class="hname">'+esc(w.name||'my world')+'</div>'+
+         '<div class="hbar"><div class="hfill" style="width:'+a.pct+'%"></div></div>'+
+         '<div class="hstat">'+a.resolved+' / '+a.n+' quests</div>'+
+         '<div class="hstat2">'+a.xe+' / '+a.xt+' xp</div><div class="hstat2 st">'+a.se+' / '+a.st+' <span class="ic ic-star"></span></div></div>';
+    });
+    h+='<div class="hubcard hubadd" id="hubAdd"><div class="hplus">＋</div><div class="hname">new world</div></div>';
+    wrap.innerHTML=h;
+    wrap.querySelectorAll('.hedit').forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); openWorldEdit(b.dataset.wid); });
+    wrap.querySelectorAll('.hubcard[data-wid]').forEach(c=>{ let tm=null,held=false;
+      c.addEventListener('contextmenu',e=>{ e.preventDefault(); clearTimeout(tm); held=true; openWorldEdit(c.dataset.wid); });
+      c.addEventListener('pointerdown',e=>{ if(e.target.closest('.hedit'))return; held=false; tm=setTimeout(()=>{ held=true; openWorldEdit(c.dataset.wid); },450); });
+      c.addEventListener('pointermove',()=>clearTimeout(tm));
+      c.addEventListener('pointercancel',()=>clearTimeout(tm));
+      c.addEventListener('pointerup',e=>{ clearTimeout(tm); if(held||e.target.closest('.hedit'))return; switchWorld(c.dataset.wid); });
+    });
+    const ha=document.getElementById('hubAdd'); if(ha)ha.onclick=()=>openWorldEdit(null);
+  }
+  // ---- world editor (create / rename / recolor / archive — archive is inline two-tap, never a stacked modal) ----
+  let weWid=null, weEmoji='✦', weColor='twilight', weArmed=false;
+  function weHoldsCampaign(w){ return !!(w&&(w.questIds||[]).some(id=>{ const q=WORLD.quests[id]; return q&&q.kind==='campaign'; })); }
+  function openWorldEdit(wid){
+    weWid=wid; weArmed=false; const w=wid?WORLD.worlds.find(x=>x.id===wid):null;
+    document.getElementById('weTitle').textContent=wid?'edit world':'new world';
+    document.getElementById('weName').value=w?(w.name||''):'';
+    weEmoji=w?(w.emoji||'✦'):'✦'; weColor=w?(w.color||'twilight'):'twilight';
+    const er=document.getElementById('weEmoji');
+    er.innerHTML=W_EMOJIS.map(e=>'<div class="emochip'+(e===weEmoji?' on':'')+'" data-e="'+e+'">'+e+'</div>').join('');
+    er.querySelectorAll('.emochip').forEach(c=>c.onclick=()=>{ weEmoji=c.dataset.e; er.querySelectorAll('.emochip').forEach(x=>x.classList.toggle('on',x===c)); cwSfx('blip'); });
+    const pr=document.getElementById('wePal');
+    pr.innerHTML=Object.keys(W_PAL).map(k=>{ const P=W_PAL[k];
+      return '<div class="palchip'+(k===weColor?' on':'')+'" data-k="'+k+'" title="'+P.label+'" style="background:linear-gradient(135deg,'+P.c1+' 45%,'+P.acc+' 45% 75%,'+P.glow+' 75%);border-color:'+P.bd+'"></div>'; }).join('');
+    pr.querySelectorAll('.palchip').forEach(c=>c.onclick=()=>{ weColor=c.dataset.k; pr.querySelectorAll('.palchip').forEach(x=>x.classList.toggle('on',x===c)); cwSfx('blip'); });
+    const mr=document.getElementById('weManageRow'), ab=document.getElementById('weArchive');
+    mr.style.display=wid?'flex':'none';
+    if(ab){ const locked=weHoldsCampaign(w); ab.disabled=locked; ab.classList.remove('danger');
+      ab.textContent=locked?'holds the exam quest — can’t archive':'archive world'; }
+    document.getElementById('worldEdit').classList.add('on');
+  }
+  function saveWorldEdit(){
+    const name=(document.getElementById('weName').value||'').trim()||'my world';
+    if(weWid){ const w=WORLD.worlds.find(x=>x.id===weWid); if(w){ w.name=name; w.emoji=weEmoji; w.color=weColor; } }
+    else { const nw={id:nid('w'),name,emoji:weEmoji,color:weColor,created:dayStr(),questIds:[]}; WORLD.worlds.push(nw); WORLD.activeWorldId=nw.id; wmSel=null; }
+    persistWorld(); markChanged(); document.getElementById('worldEdit').classList.remove('on'); renderHub(); cwSfx('check'); cwBuzz(10);
+  }
+  function archiveSnapshot(w){
+    const qs=worldQuests(w); let xe=0,xt=0,se=0,st=0,done=0,gaveup=0;
+    const quests=qs.map(q=>{ const t=questTotals(q), s=questStars(q), stt=questState(q);
+      xe+=t.xpEarned; xt+=t.xpTotal; se+=s.earned; st+=s.total;
+      if(stt==='done')done++; else if(stt==='gaveup')gaveup++;
+      return { name:q.name||'untitled quest', state:stt, xe:t.xpEarned, xt:t.xpTotal, se:s.earned, st:s.total };
+    });
+    return { id:w.id, name:w.name||'my world', emoji:w.emoji||'✦', color:w.color||'twilight', created:w.created||null, archived:dayStr(), n:qs.length, done, gaveup, xe, xt, se, st, quests };
+  }
+  function archiveWorld(){
+    if(!weWid)return; const w=WORLD.worlds.find(x=>x.id===weWid); if(!w||weHoldsCampaign(w))return;   // the exam quest never archives
+    try{ const arch=JSON.parse(localStorage.getItem('aq_archive')||'[]'); arch.unshift(archiveSnapshot(w)); lsSet('aq_archive',JSON.stringify(arch)); }catch(e){}
+    (w.questIds||[]).forEach(id=>{ delete WORLD.quests[id]; });                          // trophy stats kept, heavy data discarded
+    WORLD.worlds=WORLD.worlds.filter(x=>x.id!==weWid);
+    if(!WORLD.worlds.length) WORLD.worlds.push(defaultWorlds().worlds[0]);
+    if(!WORLD.worlds.some(x=>x.id===WORLD.activeWorldId)){ WORLD.activeWorldId=WORLD.worlds[0].id; wmSel=null; }
+    persistWorld(); markChanged(); document.getElementById('worldEdit').classList.remove('on'); renderHub(); cwSfx('reset'); cwBuzz(12);
+  }
+  // ---- static wiring for the new chrome (banner, back, modals) ----
+  (function wireWorldUI(){
+    const gb=document.getElementById('wmGlobe'); if(gb)gb.onclick=()=>{ sqShow('worlds'); cwSfx('blip'); cwBuzz(6); };
+    const wb=document.getElementById('wswBtn'); if(wb)wb.onclick=(e)=>{ e.stopPropagation(); const d=document.getElementById('wsw'); if(d)d.hidden=!d.hidden; cwSfx('blip'); };
+    document.addEventListener('click',(e)=>{ const d=document.getElementById('wsw'); if(d&&!d.hidden&&!e.target.closest('#wmHead')) d.hidden=true; });
+    const bk=document.getElementById('cwBack'); if(bk)bk.onclick=()=>{ sqShow('wmap'); cwSfx('blip'); cwBuzz(8); };
+    const we=document.getElementById('worldEdit');
+    if(we){
+      document.getElementById('weCancel').onclick=()=>{ we.classList.remove('on'); cwSfx('blip'); };
+      document.getElementById('weSave').onclick=saveWorldEdit;
+      const ab=document.getElementById('weArchive');
+      if(ab)ab.onclick=()=>{ if(ab.disabled)return;
+        if(!weArmed){ weArmed=true; ab.textContent='really archive? tap again'; ab.classList.add('danger'); cwSfx('hmm',0,.4); return; }
+        archiveWorld(); };
+      we.addEventListener('click',e=>{ if(e.target===we) we.classList.remove('on'); });
+    }
+    const qn=document.getElementById('questNew');
+    if(qn){
+      document.getElementById('qnCancel').onclick=()=>{ qn.classList.remove('on'); cwSfx('blip'); };
+      document.getElementById('qnSave').onclick=createQuest;
+      const qi=document.getElementById('qnName'); if(qi)qi.addEventListener('keydown',e=>{ if(e.key==='Enter')createQuest(); });
+      qn.addEventListener('click',e=>{ if(e.target===qn) qn.classList.remove('on'); });
+    }
+  })();
 
   // ===== buddy collection (gacha) =====
   function shade(hex,amt){ const n=parseInt(hex.slice(1),16); let r=(n>>16)+amt,g=((n>>8)&255)+amt,b=(n&255)+amt; r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b)); return 'rgb('+r+','+g+','+b+')'; }
@@ -1714,14 +2084,12 @@ try{
     refreshEcon(); placeAvatar(); scheduleTrail();
   }
 
-  // ---- bottom nav ----
+  // ---- bottom nav (screen toggles + nav lamp now route through sqShow; questline sits under the map tab) ----
   document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
     const go=b.dataset.go;
-    document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x===b));
-    document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.dataset.screen===go));
+    sqShow(go);
     if(go==='shop'){ renderShopOutfits(); updateSlotInfo(); }
     if(go==='map') scheduleTrail();
-    if(go==='pomo') pomoStart(); else pomoStop();
     cwSfx('blip'); cwBuzz(8);
   });
 
@@ -1746,7 +2114,7 @@ try{
       const r=await fetch(API.url+'/save?slot=sidequest',{headers:{'x-aq-key':API.key}});
       if(r.status===401){ st.textContent='✕ wrong key'; return; }
       if(!r.ok){ st.textContent='✕ worker error ('+r.status+') — KV bound?'; return; }
-      const adopted=await pullCloud(); migrateToWorlds(); loadWorld(); loadAQ(); loadBud(); loadCos(); applyCos(); loadPomo(); rebuild(); renderDex(); renderActiveBuddy(); renderShopOutfits(); pomoTally(); if(!adopted) pushCloud();
+      const adopted=await pullCloud(); migrateToWorlds(); loadWorld(); loadAQ(); loadBud(); loadCos(); applyCos(); loadPomo(); rebuild(); renderWorldMap(); renderHub(); renderDex(); renderActiveBuddy(); renderShopOutfits(); pomoTally(); if(!adopted) pushCloud();
       st.textContent='✓ connected — synced'; cwSfx('levelup'); cwBuzz(16);
       setTimeout(closeSync,800);
     }catch(e){ st.textContent='✕ cannot reach worker'; }
@@ -1767,7 +2135,9 @@ try{
   initPomo();
   initMascotSheet();
   rebuild();
+  renderWorldMap();                  // stage 2a: the world map is the front door (exam-3 questline one tap in)
   addEventListener('resize',scheduleTrail);
+  addEventListener('resize',()=>{ const s=document.getElementById('screen-wmap'); if(s&&s.classList.contains('on')) renderWorldMap(); });
   if(syncOn() && !adopted) pushCloud();
 })();
 
