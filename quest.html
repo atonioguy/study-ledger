@@ -774,6 +774,151 @@
     .cf-card,.prm-row{ transition-duration:50ms !important; }
   }
 
+  /* ==================================================================
+     STAGE 2d — QUEST CREATION: builder · TickTick pick · quest play ·
+     auto today (structure ported from quest-next, skinned LANTERNLIGHT:
+     ink outlines, clay depth, dark wells, frame sprites, the two blooms)
+     ================================================================== */
+  /* ---- shared text wells ---- */
+  .bd-txt{ font-family:var(--pixfont2); font-size:17px; color:var(--cardtx); width:100%; padding:8px 10px;
+    background:var(--dusk-0); border:2px solid var(--ink); border-radius:6px; box-shadow:inset 0 2px 6px rgba(0,0,0,.5); }
+  .bd-txt::placeholder{ color:var(--tx); opacity:.4; }
+  .bd-txt:focus{ outline:none; border-color:var(--glow); box-shadow:inset 0 2px 6px rgba(0,0,0,.5),var(--bloom-acc); }
+  /* ---- builder ---- */
+  .qname-row{ display:flex; align-items:center; gap:8px; margin:0 0 14px; }
+  .qname-row label{ font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; text-transform:uppercase; color:var(--tx); opacity:.6; flex:none; }
+  .qname-row .bd-txt{ font-family:var(--pixfont); font-size:13px; letter-spacing:.5px; color:var(--hearth-1); text-transform:uppercase; }
+  .chapter{ margin:0 0 13px; padding:2px; background:var(--dusk-2); background-clip:padding-box; border:8px solid var(--dusk-2);
+    border-image:var(--f-panel) 8 fill / 8px; image-rendering:pixelated; }
+  .chapter.dragging,.bd-step.dragging{ opacity:.94; box-shadow:0 12px 26px rgba(0,0,0,.55); }
+  .chapter-hd{ display:flex; align-items:center; gap:7px; padding:7px 8px; margin:0 0 8px; border-radius:0 8px 8px 0;
+    background:linear-gradient(90deg,rgba(138,114,216,.28),transparent); border-left:4px solid var(--hearth-1); }
+  .chapter-hd .bd-txt{ background:transparent; border:none; box-shadow:none; border-radius:0; font-family:var(--pixfont); font-size:12px; letter-spacing:1px; color:#ffd98a; text-transform:uppercase; padding:2px 0; }
+  .chapter-hd .bd-txt:focus{ border-bottom:2px solid var(--hearth-1); box-shadow:none; }
+  .grip{ flex:none; width:22px; align-self:stretch; display:grid; place-items:center; cursor:grab; color:var(--tx); opacity:.55; font-size:15px; touch-action:none; user-select:none; }
+  .grip:active{ cursor:grabbing; }
+  .bmini{ flex:none; width:26px; height:26px; display:grid; place-items:center; cursor:pointer; font-family:var(--pixfont); font-size:11px; padding:0;
+    background:var(--dusk-2); color:var(--cardtx); border:2px solid var(--ink); border-radius:6px; box-shadow:0 2px 0 var(--ink); transition:transform 70ms linear; }
+  .bmini:active{ transform:translateY(1px); box-shadow:0 1px 0 var(--ink); }
+  .bmini.del{ color:#ff9ab0; }
+  .bd-steps{ display:flex; flex-direction:column; gap:8px; min-height:14px; }
+  .bd-ph{ border:2px dashed var(--acc); border-radius:8px; background:rgba(95,224,200,.08); }
+  .bd-step{ display:flex; align-items:stretch; gap:7px; padding:8px 9px; border-radius:8px;
+    background:var(--dusk-3); border:2px solid var(--ink); box-shadow:0 2px 0 var(--ink),inset 0 1px 0 rgba(255,244,214,.08); }
+  .bd-step .play{ flex:none; width:26px; height:26px; display:grid; place-items:center; cursor:pointer; margin-top:1px; }
+  .bd-step .play svg{ display:block; }
+  .bd-step .mid{ flex:1; min-width:0; display:flex; flex-direction:column; gap:6px; }
+  .bd-step .row2{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .diffchip{ font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; padding:5px 9px; cursor:pointer; text-transform:lowercase; white-space:nowrap;
+    border:2px solid var(--ink); border-radius:6px; box-shadow:0 2px 0 var(--ink); transition:transform 70ms linear; }
+  .diffchip:active{ transform:translateY(1px); box-shadow:0 1px 0 var(--ink); }
+  .diffchip.easy{ background:#26543f; color:#8fe8b4; }
+  .diffchip.med{ background:#3a3466; color:#c3b4ff; }
+  .diffchip.hard{ background:#5a2f3a; color:#ff9eb4; }
+  .bd-step .sxp{ font-family:var(--pixfont2); font-size:16px; color:#ffcf6e; flex:none; text-shadow:0 0 7px rgba(255,200,100,.35); }
+  .bd-step .date{ font-family:var(--pixfont2); font-size:15px; color:var(--acc); width:102px; margin-left:auto; padding:4px 7px; }
+  .bd-step .date::placeholder{ color:var(--acc); opacity:.5; }
+  textarea.bd-txt.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25; font-size:15px; }
+  .bd-step .del{ flex:none; align-self:flex-start; }
+  .addbtn{ font-family:var(--pixfont); font-size:10px; letter-spacing:.5px; text-transform:lowercase; padding:10px; cursor:pointer; width:100%; margin:0 0 9px; border-radius:8px;
+    background:repeating-linear-gradient(45deg,rgba(36,29,60,.9) 0 7px,rgba(23,16,41,.9) 7px 14px); border:2px dashed var(--dusk-4); color:#c3acff; box-shadow:0 2px 0 rgba(10,6,24,.7); }
+  .addbtn:hover{ border-color:var(--glow); box-shadow:0 2px 0 rgba(10,6,24,.7),var(--bloom-acc); }
+  .addbtn.instep{ margin:9px 0 0; }
+  .bigrow{ display:flex; gap:9px; margin-top:12px; }
+  .savenote{ font-family:var(--pixfont2); font-size:15px; color:var(--acc); text-align:center; margin-top:10px; min-height:18px; }
+  /* ---- quest play ---- */
+  #qvWrap .sq-questhd .qt{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; }
+  #qvWrap .sq-questhd .qm{ flex:none; }
+  .qv-pace{ font-family:var(--pixfont2); font-size:14px; color:#ffe9b0; opacity:.85; text-align:center; margin:-4px 2px 12px; }
+  .qv-gaveup{ font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.7; text-align:center; margin:-4px 2px 12px; }
+  .pv-ban{ position:relative; display:flex; align-items:center; gap:9px; margin:2px 0 8px; padding:8px 12px; border-radius:0 8px 8px 0;
+    background:linear-gradient(90deg,rgba(138,114,216,.28),rgba(138,114,216,.04) 70%,transparent); border-left:4px solid var(--hearth-1); box-shadow:inset 0 1px 0 rgba(255,244,214,.07); }
+  .pv-ban.mt{ margin-top:18px; }
+  .pv-ban .lbl{ font-family:var(--pixfont); font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--hearth-1);
+    background:linear-gradient(180deg,#fff4c2,#ffcf6e); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    filter:drop-shadow(1px 1px 0 var(--ink)) drop-shadow(0 0 6px rgba(255,200,110,.3)); }
+  .pv-ban .cnt{ margin-left:auto; font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.75; } .pv-ban .cnt b{ color:#ffcf6e; }
+  .pv-ban .chby{ color:var(--acc); }
+  .pv-track{ height:11px; margin:0 2px 9px; background:var(--dusk-0); border:2px solid var(--ink); border-radius:6px; overflow:hidden; box-shadow:inset 0 2px 4px rgba(0,0,0,.5); }
+  .pv-fill{ height:100%; border-radius:4px 2px 2px 4px; background:repeating-linear-gradient(45deg,#5fe0c8 0 6px,#3fb8a4 6px 12px); box-shadow:0 0 9px rgba(95,224,200,.55); transition:width .3s; }
+  .pv-rows{ display:flex; flex-direction:column; gap:9px; }
+  .pv-row{ display:flex; align-items:flex-start; gap:11px; padding:10px 11px; cursor:pointer; border-radius:9px; --btn-lo:#251c50;
+    background:linear-gradient(180deg,#443878 0 45%,#332a59 45%); border:2px solid var(--ink);
+    box-shadow:0 4px 0 var(--btn-lo),0 4px 0 2px var(--ink),inset 0 2px 0 rgba(255,244,214,.14); transition:transform 70ms linear, box-shadow 90ms; }
+  .pv-row:active{ transform:translateY(2px); box-shadow:0 1px 0 var(--btn-lo),0 1px 0 2px var(--ink); }
+  .pv-row .ic{ flex:none; width:26px; height:26px; display:grid; place-items:center; margin-top:1px; }
+  .pv-row .ic svg{ display:block; }
+  .qv-seat{ width:26px; height:23px; background:var(--tomato) center/contain no-repeat; image-rendering:pixelated; filter:drop-shadow(0 0 5px rgba(255,130,90,.55)); }
+  .pv-row .bd{ flex:1; min-width:0; }
+  .pv-row .task{ display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:var(--pixfont2); font-size:17px; color:var(--cardtx); line-height:1.15; }
+  .pv-row .meta{ display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; font-family:var(--pixfont2); font-size:13px; color:var(--cardtx); opacity:.75; margin-top:2px; line-height:1.3; }
+  .pv-row .meta .date{ color:var(--acc); } .pv-row .meta .prog{ color:#ffcf6e; }
+  .pv-row .xp{ flex:none; font-family:var(--pixfont2); font-size:16px; color:#ffcf6e; margin-top:2px; }
+  .pv-row.done{ opacity:.85; --btn-lo:#0a4034; background:linear-gradient(180deg,#33c2a1 0 45%,#1e8f76 45%);
+    box-shadow:0 4px 0 var(--btn-lo),0 4px 0 2px var(--ink),0 0 12px rgba(95,224,200,.3),inset 0 2px 0 rgba(240,255,250,.3); }
+  .pv-row.done .task{ color:#08302a; } .pv-row.done .meta,.pv-row.done .meta .date{ color:#0c3830; opacity:.85; }
+  .pv-row.done .xp{ color:#ffe27a; text-shadow:0 0 6px rgba(255,217,107,.9); }
+  .pv-row.doing{ border-color:var(--hearth-2); box-shadow:0 4px 0 var(--btn-lo),0 4px 0 2px var(--ink),var(--bloom-gold),inset 0 2px 0 rgba(255,244,214,.14); }
+  .pv-row.doing .task{ color:#ffe9b0; }
+  .pv-empty{ font-family:var(--pixfont2); font-size:16px; color:var(--tx); opacity:.55; text-align:center; padding:40px 10px; line-height:1.4; }
+  .pv-foot{ font-family:var(--pixfont2); font-size:15px; color:var(--tx); opacity:.8; text-align:center; margin-top:16px; }
+  .pv-foot b{ color:#ffcf6e; } .pv-foot i{ color:var(--acc); font-style:normal; }
+  .pv-hint{ font-family:var(--pixfont2); font-size:13px; color:var(--tx); opacity:.5; text-align:center; margin-top:6px; }
+  /* ---- step detail modal ---- */
+  .dtask{ font-family:var(--pixfont2); font-size:19px; color:var(--cardtx); line-height:1.18; }
+  .dmeta{ font-family:var(--pixfont2); font-size:14px; color:var(--cardtx); opacity:.75; margin:5px 0 10px; }
+  .dmeta .date{ color:var(--acc); } .dmeta .xp{ color:#ffcf6e; }
+  .dnotes{ font-family:var(--pixfont2); font-size:16px; color:var(--cardtx); opacity:.92; line-height:1.4; white-space:pre-wrap; min-height:20px; padding:9px 10px;
+    background:var(--dusk-0); border:2px solid var(--ink); border-radius:6px; box-shadow:inset 0 2px 5px rgba(0,0,0,.45); }
+  .dnotes.empty{ opacity:.45; }
+  /* ---- ⚡ auto today (one-tap day quest, under the world banner) ---- */
+  .autotoday{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin:0 0 12px; padding:11px; cursor:pointer; border-radius:8px;
+    font-family:var(--pixfont); font-size:10px; letter-spacing:.5px; text-transform:lowercase; color:#ffd98a; text-shadow:1px 1px 0 var(--ink);
+    --btn-hi:#3d3268; --btn-md:#2c2452; --btn-lo:#1a1338; background:linear-gradient(180deg,var(--btn-hi) 0 45%,var(--btn-md) 45%);
+    border:2px solid var(--ink); box-shadow:0 3px 0 var(--btn-lo),0 3px 0 2px var(--ink),inset 0 1px 0 rgba(255,244,214,.12); transition:transform 70ms linear, box-shadow 90ms; }
+  .autotoday:hover{ box-shadow:0 3px 0 var(--btn-lo),0 3px 0 2px var(--ink),var(--bloom-gold),inset 0 1px 0 rgba(255,244,214,.12); }
+  .autotoday:active{ transform:translateY(2px); box-shadow:0 1px 0 var(--btn-lo),0 1px 0 2px var(--ink); }
+  .autotoday .ats{ font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.65; text-transform:none; letter-spacing:0; }
+  /* ---- the pick screen ---- */
+  .pksearch{ margin-bottom:9px; }
+  .pktools{ display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+  .pktoggle{ display:flex; border:2px solid var(--ink); border-radius:7px; overflow:hidden; box-shadow:0 2px 0 var(--ink); }
+  .pkseg{ font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; text-transform:lowercase; padding:8px 12px; cursor:pointer; color:var(--tx); background:var(--dusk-0); border:none; }
+  .pkseg.on{ background:var(--acc); color:#0c2620; }
+  .pkfilter{ margin-left:auto; font-family:var(--pixfont2); font-size:14px; padding:6px 11px; cursor:pointer; color:var(--tx);
+    background:var(--dusk-0); border:2px solid var(--ink); border-radius:7px; box-shadow:0 2px 0 var(--ink); transition:transform 70ms linear; }
+  .pkfilter:active{ transform:translateY(1px); box-shadow:0 1px 0 var(--ink); }
+  .pkfilter.on{ background:var(--acc); color:#0c2620; }
+  .pkgh{ font-family:var(--pixfont); font-size:11px; letter-spacing:1px; text-transform:uppercase; margin:14px 0 8px; padding:6px 10px; border-radius:0 8px 8px 0;
+    color:var(--hearth-1); background:linear-gradient(90deg,rgba(138,114,216,.28),transparent); border-left:4px solid var(--hearth-1); text-shadow:1px 1px 0 var(--ink); }
+  .pkgh.first{ margin-top:0; }
+  .pktask{ display:flex; align-items:center; gap:9px; padding:10px 11px; margin-bottom:8px; cursor:pointer; border-radius:8px;
+    background:var(--dusk-3); border:2px solid var(--ink); box-shadow:0 2px 0 var(--ink),inset 0 1px 0 rgba(255,244,214,.08); transition:border-color .12s, box-shadow .12s; }
+  .pktask.sel{ border-color:var(--acc); box-shadow:0 2px 0 var(--ink),0 0 12px rgba(95,224,200,.45); }
+  .pktask.sub{ margin-left:26px; background:var(--dusk-2); }
+  .pkexpand{ flex:none; width:18px; text-align:center; font-size:12px; color:var(--acc); cursor:pointer; }
+  .pkexpand.ph{ visibility:hidden; }
+  .pkcheck{ flex:none; width:22px; height:22px; display:grid; place-items:center; font-family:var(--pixfont2); font-size:15px; color:#0c2620;
+    background:var(--dusk-0); border:2px solid var(--ink); border-radius:6px; box-shadow:inset 0 2px 4px rgba(0,0,0,.5); }
+  .pkcheck.on{ background:var(--acc); box-shadow:0 0 8px rgba(95,224,200,.5); } .pkcheck.part{ background:#3fb8a4; }
+  .pkbd{ flex:1; min-width:0; }
+  .pkname{ display:block; font-family:var(--pixfont2); font-size:16px; color:var(--cardtx); line-height:1.15; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .pksub{ display:block; font-family:var(--pixfont2); font-size:13px; color:var(--cardtx); opacity:.6; }
+  .pkmeta{ flex:none; display:flex; align-items:center; gap:7px; }
+  .pkdue{ font-family:var(--pixfont2); font-size:14px; color:var(--acc); }
+  .pkdue.soon{ color:#ffcf6e; }
+  .pkpri{ flex:none; width:8px; height:8px; transform:rotate(45deg); border-radius:1px; }
+  .pkpri.hi{ background:#ff6a6a; box-shadow:0 0 5px rgba(255,106,106,.7); } .pkpri.mid{ background:#ffcf6e; }
+  .pkfoot{ position:sticky; bottom:0; z-index:7; margin:12px -14px 0; padding:12px 14px; background:linear-gradient(0deg,var(--dusk-1) 62%,transparent); }
+  .pkfoot .sq-bigbtn{ width:100%; }
+  .pkfoot.empty #pkAdd{ opacity:.55; filter:saturate(.4); pointer-events:none; }
+  .pkskip{ margin-top:9px; }
+  .pkempty{ text-align:center; font-family:var(--pixfont2); font-size:16px; color:var(--tx); opacity:.55; padding:24px 10px; }
+  @media (prefers-reduced-motion: reduce){
+    .pv-row,.pktask,.bmini,.diffchip,.pkfilter,.autotoday,.addbtn,.bd-txt{ transition-duration:50ms !important; }
+    .pv-fill{ transition-duration:.2s !important; }
+  }
+
   /* ---- reduced motion: loops freeze (a still firefly is still pretty), one-shots <=120ms ---- */
   @media (prefers-reduced-motion: reduce){
     .mglow,.mgang.walking img,.mlbl .mgo{ animation:none !important; }
@@ -817,6 +962,7 @@
           <button class="wmglobe" id="wmGlobe" title="all worlds" aria-label="worlds hub"><span class="pi" data-pi="globe">🌍</span></button>
           <div class="wsw" id="wsw" hidden></div>
         </div>
+        <button class="autotoday" id="autoTodayBtn" title="build a quest from today's tasks">⚡ auto today <span class="ats">— quest up what’s due</span></button>
         <div class="wmap" id="wmArea"></div>
       </section>
 
@@ -859,6 +1005,29 @@
       <section class="screen" id="screen-worlds" data-screen="worlds">
         <div class="sq-questhd"><span class="qt">✦ worlds</span><span class="qm">tap to travel · ✎ to edit</span></div>
         <div class="hubgrid" id="hubGrid"></div>
+      </section>
+
+      <!-- stage 2d: quest PLAY (user quests only — the exam campaign keeps its own trail above) -->
+      <section class="screen" id="screen-quest" data-screen="quest"><div id="qvWrap"></div></section>
+
+      <!-- stage 2d: quest BUILDER (always bound to a stored quest + its world; autosaves on every edit) -->
+      <section class="screen" id="screen-build" data-screen="build">
+        <div class="sq-questhd"><button class="sq-reset sq-back" id="bdBack" title="back to quest">←</button><span class="qt">✎ edit quest</span><span class="qm" id="bdWorld"></span></div>
+        <div class="qname-row"><label>quest</label><input class="bd-txt" id="qname" placeholder="name your quest…" maxlength="80" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+        <div id="bdChapters"></div>
+        <button class="addbtn" id="bdImport">↯ import from ticktick</button>
+        <button class="addbtn" id="bdAddChapter">＋ add chapter</button>
+        <div class="bigrow"><button class="sq-mbtn" id="bdClear">clear</button><button class="sq-mbtn danger" id="bdGiveup">give up quest</button></div>
+        <div class="savenote" id="bdSaveNote"></div>
+      </section>
+
+      <!-- stage 2d: TickTick PICK (baked TT_LISTS snapshot; D3 swaps in the live worker fetch) -->
+      <section class="screen" id="screen-pick" data-screen="pick">
+        <div class="sq-questhd"><button class="sq-reset sq-back" id="pkBack" title="back">←</button><span class="qt" id="pkTitle">pick your tasks</span><span class="qm">✓ ticktick</span></div>
+        <input class="bd-txt pksearch" id="pkSearch" placeholder="search your tasks…" maxlength="60" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <div class="pktools"><div class="pktoggle"><button class="pkseg on" data-org="list">by list</button><button class="pkseg" data-org="date">by date</button></div><button class="pkfilter" id="pkWeek">⏳ due this week</button><button class="pkfilter" id="pkOverdue" style="display:none">⏰ include overdue</button></div>
+        <div id="pkList"></div>
+        <div class="pkfoot empty" id="pkFoot"><button class="sq-bigbtn" id="pkAdd">select tasks to add</button><button class="sq-bigbtn ghost pkskip" id="pkSkip">start blank instead</button></div>
       </section>
           <section class="screen" id="screen-pomo" data-screen="pomo">
         <div class="pomo-hd"><span class="pomo-ttl">✦ the den</span><span class="pomo-tally"><b id="pomoRoomN">0</b> here · <b id="pomoTotalN">0</b> logged</span></div>
@@ -923,6 +1092,19 @@
       <label>name</label>
       <input id="qnName" type="text" maxlength="80" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="quest name…">
       <div class="sq-modrow"><button class="sq-mbtn" id="qnCancel">cancel</button><button class="sq-mbtn primary" id="qnSave">plant it</button></div>
+    </div></div>
+    <div id="stepDetail" class="sq-modal"><div class="sq-card">
+      <h3>▸ step details</h3>
+      <div class="dtask" id="dTask"></div>
+      <div class="dmeta" id="dMeta"></div>
+      <div class="dnotes" id="dNotes"></div>
+      <div class="sq-modrow" id="dStartRow"><button class="sq-mbtn primary" id="dStart">▶ start it</button></div>
+      <div class="sq-modrow"><button class="sq-mbtn" id="dClose">close</button><button class="sq-mbtn" id="dEdit">✎ edit</button></div>
+    </div></div>
+    <div id="sqConfirm" class="sq-modal"><div class="sq-card">
+      <h3 id="scTitle">are you sure?</h3>
+      <p class="sq-syncnote" id="scMsg"></p>
+      <div class="sq-modrow"><button class="sq-mbtn" id="scNo">cancel</button><button class="sq-mbtn danger" id="scYes">confirm</button></div>
     </div></div>
     <div id="timerAsk" class="sq-modal"><div class="sq-card">
       <h3>🍅 tomato's on it</h3>
@@ -1287,7 +1469,7 @@ try{
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v3.5';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v3.6';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -1483,7 +1665,7 @@ try{
   let _wmSpr=null;
   function wmSprites(){ if(!_wmSpr) _wmSpr={ hill:hillURL(48,22), flags:{done:flagURL('done'),prog:flagURL('prog'),gaveup:flagURL('gaveup')}, sl:drawSlime(), tm:drawTomato() }; return _wmSpr; }
   // ---- screen router: one place toggles screens + keeps the nav lamp truthful ----
-  const NAV_ROOT={map:'wmap'};                                          // the exam questline lives UNDER the map tab
+  const NAV_ROOT={map:'wmap',quest:'wmap',build:'wmap',pick:'wmap'};    // the exam questline + quest play/build/pick live UNDER the map tab
   function sqShow(scr){
     document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.dataset.screen===scr));
     const root=NAV_ROOT[scr]||scr;
@@ -1493,6 +1675,9 @@ try{
     if(scr==='wmap') renderWorldMap();
     if(scr==='worlds') renderHub();
     if(scr==='fire') renderCamp();                                      // stage 2b: the campfire re-reads picks on every visit
+    if(scr==='quest') renderQuestView();                                // stage 2d: play / builder / pick re-read their bound quest
+    if(scr==='build') renderBuilder();
+    if(scr==='pick') renderPick();
   }
   // ---- world map ----
   const WM_HW=150, WM_HH=68;
@@ -1566,14 +1751,18 @@ try{
     if(wmGlow){ wmGlow.style.left=p.cx+'px'; wmGlow.style.top=p.cy+'px'; }
     cwSfx('blip'); cwBuzz(6);
   }
-  // opening the World-1 campaign plot lands on the EXISTING exam-3 questline screen, untouched
+  // opening the World-1 campaign plot lands on the EXISTING exam-3 questline screen, untouched —
+  // the campaign quest is a READ-ONLY adapter and never opens in the play screen or the builder.
   function openQuest(id){ const q=WORLD.quests[id]; if(!q)return;
     if(q.kind==='campaign'){ sqShow('map'); cwSfx('blip'); cwBuzz(8); return; }
-    cwBanner('✦ quest play arrives next update ✦');
+    bindQuest(q); sqShow('quest'); cwSfx('blip'); cwBuzz(8);            // stage 2d: user quests open in PLAY (⚙ inside for edit)
   }
   function switchWorld(id){ WORLD.activeWorldId=id; persistWorld(); markChanged(); wmSel=null; sqShow('wmap'); cwSfx('blip'); cwBuzz(6); }
-  // ---- new quest (name-first plant; the full builder is a later stage) ----
-  function openNewQuest(){ const m=document.getElementById('questNew'); if(!m)return; const inp=document.getElementById('qnName'); if(inp)inp.value='';
+  // ---- new quest: stage 2d routes ＋ into the pick-first create flow (choose TickTick
+  // tasks, or "start blank instead" → the builder). the name-only D2a modal below stays
+  // wired as a dormant fallback (openNewQuestNamed) — no handler removed.
+  function openNewQuest(){ openPick('new'); }
+  function openNewQuestNamed(){ const m=document.getElementById('questNew'); if(!m)return; const inp=document.getElementById('qnName'); if(inp)inp.value='';
     m.classList.add('on'); cwSfx('blip'); setTimeout(()=>{ try{ inp.focus(); }catch(e){} },80); }
   function createQuest(){ const inp=document.getElementById('qnName'); const name=((inp&&inp.value)||'').trim();
     if(!name){ if(inp)inp.focus(); return; }
@@ -1657,6 +1846,7 @@ try{
   // ---- static wiring for the new chrome (banner, back, modals) ----
   (function wireWorldUI(){
     const gb=document.getElementById('wmGlobe'); if(gb)gb.onclick=()=>{ sqShow('worlds'); cwSfx('blip'); cwBuzz(6); };
+    const at=document.getElementById('autoTodayBtn'); if(at)at.onclick=()=>openAutoToday();   // ⚡ stage 2d (hoisted from the creation block below)
     const wb=document.getElementById('wswBtn'); if(wb)wb.onclick=(e)=>{ e.stopPropagation(); const d=document.getElementById('wsw'); if(d)d.hidden=!d.hidden; cwSfx('blip'); };
     document.addEventListener('click',(e)=>{ const d=document.getElementById('wsw'); if(d&&!d.hidden&&!e.target.closest('#wmHead')) d.hidden=true; });
     const bk=document.getElementById('cwBack'); if(bk)bk.onclick=()=>{ sqShow('wmap'); cwSfx('blip'); cwBuzz(8); };
@@ -2435,6 +2625,7 @@ try{
         h+='<div class="cf-empty">no unstarted steps anywhere — plant a quest on the map and the fire will hold your next moves ✦</div>';
       }
       h+=weekStripHTML();
+      h+='<button class="cf-link" id="cfAuto">⚡ quest up today’s tasks</button>';   // stage 2d: auto today from the fire too
       h+='<button class="sq-bigbtn ghost cf-night" id="cfNight">🫖 call it a night</button>';
     }
     wrap.innerHTML=h;
@@ -2450,6 +2641,7 @@ try{
     });
     wrap.querySelectorAll('.cf-prog').forEach(el=>el.onclick=()=>{ if(el.dataset.camp){ sqShow('map'); cwSfx('blip'); } else openQuest(el.dataset.qid); });
     const sh=wrap.querySelector('#cfShuf'); if(sh)sh.onclick=campShuffle;
+    const au=wrap.querySelector('#cfAuto'); if(au)au.onclick=()=>openAutoToday();
     const nt=wrap.querySelector('#cfNight'); if(nt)nt.onclick=callItANight;
     const st=wrap.querySelector('#cfStoke'); if(st)st.onclick=()=>{ c.tea=false; persistAQ(); cwSfx('blip'); renderCamp(); };
   }
@@ -2463,7 +2655,7 @@ try{
     if(ref.camp){ sqShow('map'); seatTomatoes();                          // open the exam trail with the tomato seated by the part
       const node=document.querySelector('#cwList [data-id="'+ref.raw+'"]');
       if(node)try{ node.scrollIntoView({block:'center',behavior:REDUCED()?'auto':'smooth'}); }catch(e){} }
-    else refreshCampIfOn();                                               // user-quest steps light their campfire card (play screen arrives later)
+    else { _qvJump=true; openQuest(ref.q.id); }                           // stage 2d: open the quest play with the row lit + tomato seated
     if(fresh) askTimer(ref);                                              // then, separately: "want a timer? 🍅"
   }
   // the seated tomato = the visible "in progress" marker on the exam trail
@@ -2619,6 +2811,443 @@ try{
     const kv=document.getElementById('kettleCv');
     if(kv)kv.onclick=()=>{ if(!FOCUS)return; const m=Math.floor((Date.now()-FOCUS.phaseStart)/60000);  // tap the kettle for the honest numbers
       cwBanner(FOCUS.phase==='focus'?(m+'m into this pot of '+FOCUS.cfg.focus+' · '+FOCUS.pots+'🍅 so far'):('break · '+FOCUS.pots+'🍅 so far')); };
+  })();
+
+  // ==================================================================
+  // STAGE 2d — QUEST CREATION: builder · TickTick pick · quest play ·
+  // auto today (logic ported from quest-next.html into the live worlds
+  // store). the exam campaign quest stays a READ-ONLY adapter: openQuest
+  // routes it to its own trail and it never reaches play/build.
+  // ==================================================================
+
+  // ---- the bound quest: play/edit always operate on the STORED object itself ----
+  // (the prototype kept a floating deep copy that syncQuestToWorld() wrote back; the
+  // live game binds the store directly — campfire/den/ember-sweep mutate stored steps,
+  // so binding in place means an open play/edit screen can never drift out of sync.)
+  let BQ=null, _qvJump=false;
+  function bindQuest(q){ BQ=q; if(!BQ.worldId){ const ow=WORLD.worlds.find(w=>(w.questIds||[]).indexOf(q.id)>=0); BQ.worldId=(ow||activeWorld()).id; } }
+  function questWorld(){ return (BQ&&WORLD.worlds.find(w=>w.id===BQ.worldId))||activeWorld(); }
+  function syncQuestToWorld(){ if(!BQ||!BQ.id||!WORLD.quests[BQ.id])return; WORLD.quests[BQ.id]=BQ; persistWorld(); markChanged(); }
+  // autosave: every edit writes back to the quest's OWN world (BQ.worldId — never
+  // activeWorld(), so a quest can't be filed into the wrong world). a brand-new quest is
+  // only filed once it has real content — backing out of an untouched blank builder
+  // leaves no litter on the road.
+  function autosave(){
+    if(!BQ||!BQ.id)return;
+    if(!WORLD.quests[BQ.id]){
+      const has=(BQ.name||'').trim()||(BQ.chapters||[]).some(c=>(c.name||'').trim()||(c.steps||[]).some(s=>(s.text||'').trim()));
+      if(!has)return;
+      BQ.createdAt=BQ.createdAt||Date.now();
+      BQ.worldId=BQ.worldId||WORLD.activeWorldId;
+      const w=WORLD.worlds.find(x=>x.id===BQ.worldId)||activeWorld();
+      w.questIds=w.questIds||[]; if(w.questIds.indexOf(BQ.id)<0)w.questIds.push(BQ.id);
+      WORLD.quests[BQ.id]=BQ;
+      wmSel=BQ.id; try{ localStorage.setItem('aq_sel',BQ.id); }catch(e){}
+    }
+    syncQuestToWorld();
+  }
+  let _asT=null,_asT2=null;
+  function onEdit(){
+    autosave();
+    clearTimeout(_asT);
+    _asT=setTimeout(()=>{ const n=document.getElementById('bdSaveNote'); if(!n||!BQ||!WORLD.quests[BQ.id])return; n.textContent='✓ autosaved'; clearTimeout(_asT2); _asT2=setTimeout(()=>{ n.textContent=''; },1400); },600);
+  }
+  function noteFlash(msg){ const n=document.getElementById('bdSaveNote'); if(!n)return; n.textContent=msg; clearTimeout(_asT2); _asT2=setTimeout(()=>{ n.textContent=''; },2600); }
+
+  // ---- completing a step behaves IDENTICALLY in play and in the builder:
+  // global xp (awardXP handles HUD + level-up flourish), the day lights, juice fires ----
+  function stepToggle(s,ev,rerender){
+    s.done=!s.done;
+    if(s.done){ s.doing=false; clearPromiseIf(s.id); if(FOCUS&&FOCUS.sid===s.id)endFocus(true); }
+    autosave();
+    awardXP(s.done?stepXP(s):-stepXP(s));
+    if(s.done){
+      lightDay();
+      let cx,cy; if(ev&&ev.clientX){ cx=ev.clientX; cy=ev.clientY; } else { cx=innerWidth/2; cy=innerHeight/2; }
+      cwBurst(cx,cy,false); cwXpFloat(cx,cy-8,stepXP(s)); cwCheer(); cwBuzz(16);
+      cwSfx('check'); setTimeout(()=>cwSfx('xp'),70);
+      if(BQ&&questState(BQ)==='done'){ cwBanner('✦ quest complete — plant the flag ✦',true); cwBigCelebrate(); }
+    } else { cwBuzz(8); cwSfx('blip'); }
+    if(rerender)rerender();
+    refreshCampIfOn();
+  }
+
+  // ---- BUILDER (chapters + steps · diff chip + yellow +xp · optional date · notes ·
+  //      drag-reorder · give-up/resume · autosave via syncQuestToWorld) ----
+  const bdChaptersEl=document.getElementById('bdChapters');
+  function playSVG(done){ return '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" style="filter:drop-shadow(0 0 4px '+(done?'rgba(255,222,120,.95)':'rgba(190,160,255,.9)')+')"><path d="'+(done?CW_STAR:CW_PLAY)+'" fill="'+(done?'#ffe27a':'#d7c8ff')+'"/></svg>'; }
+  function autoGrow(t){ t.style.height='auto'; t.style.height=(t.scrollHeight+2)+'px'; }
+  function renderBuilder(){
+    if(!BQ||!bdChaptersEl)return;
+    const bw=questWorld();
+    const wl=document.getElementById('bdWorld'); if(wl)wl.textContent=(bw.emoji||'✦')+' '+(bw.name||'my world');
+    const qn=document.getElementById('qname'); if(qn)qn.value=BQ.name||'';
+    bdChaptersEl.innerHTML='';
+    BQ.chapters.forEach((c,ci)=>{
+      const ch=document.createElement('div'); ch.className='chapter'; ch.dataset.ci=ci;
+      const hd=document.createElement('div'); hd.className='chapter-hd';
+      hd.innerHTML='<div class="grip" data-drag="chapter">⠿</div><input class="bd-txt" placeholder="chapter name…" maxlength="50" autocapitalize="off" autocorrect="off" spellcheck="false"><div class="bmini del" title="delete chapter">✕</div>';
+      hd.querySelector('input').value=c.name||'';
+      hd.querySelector('input').addEventListener('input',e=>{ c.name=e.target.value; onEdit(); });
+      hd.querySelector('.grip').addEventListener('pointerdown',e=>beginDrag(e,'chapter',ch,ci));
+      hd.querySelector('.bmini').onclick=()=>{ if(BQ.chapters.length>1)BQ.chapters.splice(ci,1); renderBuilder(); onEdit(); cwSfx('blip'); };
+      ch.appendChild(hd);
+      const stepsEl=document.createElement('div'); stepsEl.className='bd-steps'; stepsEl.dataset.ci=ci;
+      c.steps.forEach((s,si)=>stepsEl.appendChild(renderBdStep(c,ci,s,si)));
+      ch.appendChild(stepsEl);
+      const add=document.createElement('button'); add.className='addbtn instep'; add.textContent='＋ add step';
+      add.onclick=()=>{ c.steps.push(blankStep()); renderBuilder(); onEdit(); cwSfx('blip'); };
+      ch.appendChild(add);
+      bdChaptersEl.appendChild(ch);
+    });
+    bdChaptersEl.querySelectorAll('textarea.notes').forEach(autoGrow);
+    const gb=document.getElementById('bdGiveup'); if(gb){ const gv=BQ.state==='gaveup'; gb.textContent=gv?'↩ resume quest':'give up quest'; gb.classList.toggle('danger',!gv); }
+  }
+  function renderBdStep(c,ci,s,si){
+    const el=document.createElement('div'); el.className='bd-step'; el.dataset.ci=ci; el.dataset.si=si;
+    el.innerHTML=
+      '<div class="grip" data-drag="step">⠿</div>'+
+      '<div class="play" title="toggle done">'+playSVG(!!s.done)+'</div>'+
+      '<div class="mid">'+
+        '<input class="bd-txt tk" placeholder="step / task…" maxlength="200" autocapitalize="off" autocorrect="off" spellcheck="false">'+
+        '<div class="row2"><div class="diffchip '+(s.diff||'med')+'" title="difficulty">'+(s.diff||'med')+'</div><span class="sxp">+'+stepXP(s)+'</span>'+
+          '<input class="bd-txt date" placeholder="date (opt)" maxlength="10">'+'</div>'+
+        '<textarea class="bd-txt notes" placeholder="notes (optional)…" maxlength="1000" rows="1"></textarea>'+
+      '</div>'+
+      '<div class="bmini del" title="remove step">✕</div>';
+    el.querySelector('.tk').value=s.text||''; el.querySelector('.date').value=s.date||''; el.querySelector('.notes').value=s.notes||'';
+    el.querySelector('.tk').addEventListener('input',e=>{ s.text=e.target.value; onEdit(); });
+    el.querySelector('.date').addEventListener('input',e=>{ s.date=e.target.value; onEdit(); });
+    const ta=el.querySelector('.notes'); ta.addEventListener('input',e=>{ s.notes=e.target.value; autoGrow(ta); onEdit(); });
+    el.querySelector('.play').onclick=(e)=>stepToggle(s,e,renderBuilder);   // completing here = completing in play (one behavior)
+    el.querySelector('.diffchip').onclick=()=>{ s.diff=DIFFS[(DIFFS.indexOf(s.diff||'med')+1)%3]; renderBuilder(); onEdit(); cwSfx('blip'); };
+    el.querySelector('.grip').addEventListener('pointerdown',e=>beginDrag(e,'step',el,{ci:ci,si:si}));
+    el.querySelector('.bmini.del').onclick=()=>{ if(c.steps.length>1)c.steps.splice(si,1); else c.steps.splice(si,1,blankStep()); renderBuilder(); onEdit(); cwSfx('blip'); };
+    return el;
+  }
+  // drag to reorder: steps within/across chapters, and whole chapters
+  let bdDrag=null;
+  function beginDrag(e,kind,el,ref){
+    if(!BQ)return; e.preventDefault();
+    const r=el.getBoundingClientRect();
+    const ph=document.createElement('div'); ph.className='bd-ph'; ph.style.height=r.height+'px';
+    el.parentNode.replaceChild(ph,el);
+    document.body.appendChild(el); el.classList.add('dragging');
+    el.style.position='fixed'; el.style.width=r.width+'px'; el.style.left=r.left+'px'; el.style.top=r.top+'px'; el.style.pointerEvents='none'; el.style.zIndex=999; el.style.margin=0;
+    bdDrag={kind,el,ph,ref,offX:e.clientX-r.left,offY:e.clientY-r.top};
+    window.addEventListener('pointermove',bdDragMove); window.addEventListener('pointerup',bdDragEnd,{once:true});
+  }
+  function bdDragMove(e){
+    if(!bdDrag)return;
+    bdDrag.el.style.left=(e.clientX-bdDrag.offX)+'px'; bdDrag.el.style.top=(e.clientY-bdDrag.offY)+'px';
+    const under=document.elementFromPoint(e.clientX,e.clientY); if(!under)return;
+    if(bdDrag.kind==='step'){
+      const overSteps=under.closest('.bd-steps'); if(!overSteps)return;
+      const overStep=under.closest('.bd-step');
+      if(overStep&&overStep!==bdDrag.ph){ const rr=overStep.getBoundingClientRect(); overSteps.insertBefore(bdDrag.ph,(e.clientY<rr.top+rr.height/2)?overStep:overStep.nextSibling); }
+      else if(!overStep&&!overSteps.contains(bdDrag.ph)){ overSteps.appendChild(bdDrag.ph); }
+    } else {
+      const overChap=under.closest('.chapter'); if(!overChap||overChap===bdDrag.ph)return;
+      const rr=overChap.getBoundingClientRect(); bdChaptersEl.insertBefore(bdDrag.ph,(e.clientY<rr.top+rr.height/2)?overChap:overChap.nextSibling);
+    }
+  }
+  function bdDragEnd(){
+    window.removeEventListener('pointermove',bdDragMove); if(!bdDrag)return;
+    if(bdDrag.kind==='step'){
+      const ci=bdDrag.ref.ci, si=bdDrag.ref.si, step=BQ.chapters[ci].steps[si];
+      const tEl=bdDrag.ph.parentNode;
+      if(tEl&&tEl.dataset&&tEl.dataset.ci!=null){ const tCi=+tEl.dataset.ci;
+        let idx=0; for(const ch of tEl.children){ if(ch===bdDrag.ph)break; if(ch.classList.contains('bd-step'))idx++; }
+        BQ.chapters[ci].steps.splice(si,1); BQ.chapters[tCi].steps.splice(idx,0,step); }
+    } else {
+      const from=+bdDrag.el.dataset.ci, chap=BQ.chapters[from];
+      let idx=0; for(const ch of bdChaptersEl.children){ if(ch===bdDrag.ph)break; if(ch.classList.contains('chapter'))idx++; }
+      BQ.chapters.splice(from,1); BQ.chapters.splice(idx,0,chap);
+    }
+    bdDrag.el.remove(); bdDrag.ph.remove(); bdDrag=null; renderBuilder(); onEdit();
+  }
+  // shared two-button confirm (give up / clear) — reuses the modal chrome
+  let _scCb=null;
+  function askConfirm(title,msg,cb){ const m=document.getElementById('sqConfirm'); if(!m){ if(cb)cb(); return; }
+    document.getElementById('scTitle').textContent=title; document.getElementById('scMsg').innerHTML=msg; _scCb=cb; m.classList.add('on'); cwSfx('blip'); }
+  (function wireBuilder(){
+    const qn=document.getElementById('qname'); if(qn)qn.addEventListener('input',e=>{ if(!BQ)return; BQ.name=e.target.value; onEdit(); });
+    const ac=document.getElementById('bdAddChapter'); if(ac)ac.onclick=()=>{ if(!BQ)return; BQ.chapters.push(blankChapter()); renderBuilder(); onEdit(); cwSfx('blip'); };
+    const im=document.getElementById('bdImport'); if(im)im.onclick=()=>{ if(!BQ)return; openPick('add'); };
+    const cl=document.getElementById('bdClear'); if(cl)cl.onclick=()=>{ if(!BQ)return;
+      askConfirm('clear this quest?','this wipes all chapters + steps of this quest and starts it fresh.',()=>{ BQ.name=''; BQ.chapters=[blankChapter()]; BQ.state='active'; renderBuilder(); onEdit(); cwSfx('reset'); cwBuzz(12); }); };
+    const gu=document.getElementById('bdGiveup');
+    if(gu)gu.onclick=()=>{ if(!BQ)return;
+      if(BQ.state==='gaveup'){ BQ.state='active'; autosave(); renderBuilder(); noteFlash('↩ resumed — back in progress'); cwSfx('check'); cwBuzz(10); return; }
+      askConfirm('give up quest?','you keep every bit of xp already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).',()=>{ BQ.state='gaveup'; autosave(); renderBuilder(); noteFlash('🏳️ given up — resumable later'); cwSfx('reset'); cwBuzz(12); }); };
+    const bk=document.getElementById('bdBack'); if(bk)bk.onclick=()=>{ sqShow(BQ&&WORLD.quests[BQ.id]?'quest':'wmap'); cwSfx('blip'); cwBuzz(8); };   // ← one level up: builder → its quest (autosaved all along)
+    const m=document.getElementById('sqConfirm');
+    if(m){
+      const no=document.getElementById('scNo'); if(no)no.onclick=()=>{ m.classList.remove('on'); cwSfx('blip'); };
+      const ys=document.getElementById('scYes'); if(ys)ys.onclick=()=>{ m.classList.remove('on'); if(_scCb)_scCb(); };
+      m.addEventListener('click',e=>{ if(e.target===m)m.classList.remove('on'); });
+    }
+  })();
+
+  // ---- QUEST PLAY (the prototype's preview): tap = complete · hold / right-click = details & ▶ start ----
+  function paceLine(steps){                                              // gentle pace math — never red, never "overdue"
+    let left=0,latest=null;
+    steps.forEach(s=>{ if(!(s.text||'').trim()||s.done)return; left++; const d=parseDue(s.date); if(d&&(!latest||d>latest))latest=d; });
+    if(!left||!latest)return '';
+    const p=sqToday().split('-'), t=new Date(+p[0],+p[1]-1,+p[2]);
+    const days=Math.round((latest-t)/86400000); if(!days||days<1)return '';   // due today/past: the quiet date tags say enough
+    const per=Math.ceil(left/days);
+    return left+' step'+(left===1?'':'s')+' · '+days+' day'+(days===1?'':'s')+' → ~'+per+'/day'+(per<=2?' keeps it cozy':'');
+  }
+  function renderQuestView(){
+    const wrap=document.getElementById('qvWrap'); if(!wrap)return;
+    if(!BQ){ wrap.innerHTML='<div class="pv-empty">no quest open — pick one on the map ✦</div>'; return; }
+    const t=questTotals(BQ);
+    const anySteps=BQ.chapters.some(c=>(c.steps||[]).some(s=>(s.text||'').trim()));
+    let h='<div class="sq-questhd"><button class="sq-reset sq-back" id="qvBack" title="back to world map">←</button>'+
+      '<span class="qt">'+esc(BQ.name||'untitled quest')+'</span>'+
+      '<span class="qm">'+t.xpEarned+' / '+t.xpTotal+' xp · '+t.stepsDone+'/'+t.steps+'</span>'+
+      '<button class="sq-reset" id="qvEdit" title="edit quest">⚙</button></div>';
+    if(BQ.state==='gaveup') h+='<div class="qv-gaveup">🏳️ given up — you keep what you earned · resume from ⚙ edit</div>';
+    const pl=(BQ.state==='gaveup')?'':paceLine(questSteps(BQ));
+    if(pl) h+='<div class="qv-pace">🕯 '+pl+'</div>';
+    if(!anySteps){ h+='<div class="pv-empty">no steps yet — tap ⚙ to add chapters + steps, or ↯ import from ticktick ✦</div>'; }
+    else BQ.chapters.forEach((c,ci)=>{
+      let cx=0,cd=0,ce=0,ct=0; (c.steps||[]).forEach(s=>{ ct++; cx+=stepXP(s); if(s.done){cd++; ce+=stepXP(s);} });
+      const cds=(c.steps||[]).filter(s=>!s.done&&(s.text||'').trim()).map(s=>parseDue(s.date)).filter(Boolean);
+      const lat=cds.length?new Date(Math.max.apply(null,cds)):null;
+      const chby=lat?(' · <span class="chby">by '+CF_MON[lat.getMonth()].toLowerCase()+' '+lat.getDate()+'</span>'):'';
+      h+='<div class="pv-ban'+(ci>0?' mt':'')+'"><span class="lbl">'+esc(c.name||('chapter '+(ci+1)))+'</span><span class="cnt"><b>'+cd+'</b>/'+ct+' done'+chby+'</span></div>';
+      h+='<div class="pv-track"><div class="pv-fill" style="width:'+(cx?Math.round(ce/cx*100):0)+'%"></div></div><div class="pv-rows">';
+      (c.steps||[]).forEach((s,si)=>{
+        const doing=!!s.doing&&!s.done;
+        const meta=[doing?'<span class="prog">🍅 in progress</span>':'', s.date?('<span class="date">'+esc(s.date)+'</span>'):'', esc(s.notes||'')].filter(Boolean).join(' · ');
+        h+='<div class="pv-row'+(s.done?' done':(doing?' doing':''))+'" data-ci="'+ci+'" data-si="'+si+'"><span class="ic">'+(doing?'<span class="qv-seat"></span>':playSVG(!!s.done))+'</span>'+
+           '<span class="bd"><span class="task">'+esc(s.text||'(untitled step)')+'</span>'+(meta?'<span class="meta">'+meta+'</span>':'')+'</span>'+
+           '<span class="xp">+'+stepXP(s)+'</span></div>';
+      });
+      h+='</div>';
+    });
+    if(anySteps){
+      h+='<div class="pv-foot">on finish: <i>'+BQ.chapters.length+' + 3</i> <span class="ic ic-star"></span> · <b>'+t.xpTotal+'</b> xp as you go</div>';
+      h+='<div class="pv-hint">tap a step to complete it · hold / right-click → details & ▶ start it</div>';
+    }
+    wrap.innerHTML=h;
+    const bk=document.getElementById('qvBack'); if(bk)bk.onclick=()=>{ sqShow('wmap'); cwSfx('blip'); cwBuzz(8); };
+    const ed=document.getElementById('qvEdit'); if(ed)ed.onclick=()=>{ sqShow('build'); cwSfx('blip'); };
+    wrap.querySelectorAll('.pv-row').forEach(row=>{
+      const ci=+row.dataset.ci, si=+row.dataset.si; if(isNaN(ci))return;
+      const s=BQ.chapters[ci].steps[si];
+      let held=false,timer=null;
+      row.addEventListener('contextmenu',e=>{ e.preventDefault(); clearTimeout(timer); openStepDetail(s); });
+      row.addEventListener('pointerdown',()=>{ held=false; timer=setTimeout(()=>{ held=true; openStepDetail(s); },450); });
+      row.addEventListener('pointermove',()=>clearTimeout(timer));
+      row.addEventListener('pointercancel',()=>clearTimeout(timer));
+      row.addEventListener('pointerup',e=>{ clearTimeout(timer); if(held)return; stepToggle(s,e,renderQuestView); });
+    });
+    // arriving from a campfire card: scroll the freshly-lit row into view
+    if(_qvJump){ _qvJump=false; const dr=wrap.querySelector('.pv-row.doing'); if(dr)setTimeout(()=>{ try{ dr.scrollIntoView({block:'center',behavior:REDUCED()?'auto':'smooth'}); }catch(e){} },60); }
+  }
+  // step detail modal (hold / right-click) — start ≠ complete, start ≠ timer (locked)
+  let _dStep=null;
+  function openStepDetail(s){
+    _dStep=s; cwSfx('blip');
+    const dt=document.getElementById('dTask'); if(!dt)return;
+    dt.textContent=s.text||'(untitled step)';
+    document.getElementById('dMeta').innerHTML=[(s.doing&&!s.done)?'<span class="xp">🍅 in progress</span>':'', s.date?'<span class="date">'+esc(s.date)+'</span>':'', '<span class="xp">+'+stepXP(s)+' xp</span>', esc(s.diff||'med')].filter(Boolean).join(' · ');
+    const dn=document.getElementById('dNotes'); dn.textContent=s.notes||'no notes'; dn.classList.toggle('empty',!s.notes);
+    document.getElementById('dStartRow').style.display=s.done?'none':'flex';
+    document.getElementById('dStart').textContent=(s.doing&&!s.done)?'🍅 good job — send it home':'▶ start it';
+    document.getElementById('stepDetail').classList.add('on');
+  }
+  (function wireStepDetail(){
+    const m=document.getElementById('stepDetail'); if(!m)return;
+    document.getElementById('dStart').onclick=()=>{ const s=_dStep; if(!s)return; m.classList.remove('on');
+      if(s.doing&&!s.done){ s.doing=false; autosave(); if(FOCUS&&FOCUS.sid===s.id)endFocus(true); renderQuestView(); refreshCampIfOn(); cwBanner('good job 🍅 — the tomato heads home'); return; }
+      startStepById(s.id); };
+    document.getElementById('dClose').onclick=()=>{ m.classList.remove('on'); cwSfx('blip'); };
+    document.getElementById('dEdit').onclick=()=>{ m.classList.remove('on'); sqShow('build'); cwSfx('blip'); };
+    m.addEventListener('click',e=>{ if(e.target===m)m.classList.remove('on'); });
+  })();
+
+  // ---- TickTick snapshot (BAKED, ported from the prototype) ----------------------------
+  // D3 NOTE: this constant is the stand-in data source ONLY. at D3 the pick screen swaps
+  // it for the live worker fetch (worker → TickTick lists/tasks), same shape:
+  // [{id,name,tasks:[{id,title,note,due:'YYYY-MM-DD'|null,pri,subs:[…]}]}].
+  const TT_LISTS=[
+   { id:'micro', name:'BMSC 3404 · Microbiology', tasks:[
+     { id:'m-ex3', title:'Unit 3 EXAM (Modules 5 & 6)', note:'48-hr window Jul 4–6. 55 Q, closed book, Examplify.', due:'2026-07-07', pri:5, subs:[
+       { id:'m-ex3a', title:'Self-quiz + weak spots', note:'Active recall over Modules 5 & 6; list weak spots to hit Sunday.', due:'2026-07-04', pri:0 },
+       { id:'m-ex3b', title:'Light review + buffer', note:'Light pass over weak spots; do not cram. Take the exam early.', due:'2026-07-05', pri:0 } ]},
+     { id:'m-cheese', title:'M5 Cheesemaking — write-up', note:'Cheese results + colony data + post-lab questions.', due:'2026-07-06', pri:3, subs:[
+       { id:'m-cheese1', title:'Colony reading #1', note:'~day 3 — read the cheese plate (count, size, color) + photo.', due:'2026-07-02', pri:1 },
+       { id:'m-cheese2', title:'Colony reading #2 (final)', note:'~day 5 — final reading before the write-up.', due:'2026-07-04', pri:1 } ]},
+     { id:'m-fomite', title:'M6 Fomite lab — write-up', note:'Transfer observations + colony data + post-lab questions.', due:'2026-07-13', pri:3, subs:[
+       { id:'m-fomite1', title:'Colony reading #1', note:'~day 3 after plating — read all surface plates + photo.', due:'2026-07-09', pri:1 },
+       { id:'m-fomite2', title:'Colony reading #2 (final)', note:'~day 5 — second/final reading before the write-up.', due:'2026-07-11', pri:1 } ]},
+     { id:'m-disc3', title:'Unit 3 Discussion — Part 2', note:'2 peer replies + a follow-up on your own post. Spread across days.', due:'2026-07-06', pri:3, subs:[
+       { id:'m-disc3a', title:'Peer reply #1', note:'Add a unique point, not just agreement. Bring the Module 6 symbiosis lens.', due:'2026-07-01', pri:0 },
+       { id:'m-disc3b', title:'Peer reply #2', note:'Different day than reply #1. Reply to comments on your own post too.', due:'2026-07-03', pri:0 },
+       { id:'m-disc3c', title:'Follow-up on your own post', note:'Update your post with a Module 6 insight, even if no one commented.', due:'2026-07-05', pri:0 } ]},
+     { id:'m-m6lec', title:'M6 — lectures & review', note:'Module 6 lecture reviews feeding the Unit 3 exam. Check each off as you watch.', due:null, pri:0, subs:[
+       { id:'m-m6l1', title:'L1 review — symbiosis types', note:'P1 7:18 (~7 min). ≈ 6.1 symbiosis types.', due:null, pri:0 },
+       { id:'m-m6l2', title:'L2 review — microbe–microbe', note:'P1 9:07 / P2 5:05 (~14 min). ≈ 6.2.', due:null, pri:0 },
+       { id:'m-m6l3', title:'L3 review — microbe–plant', note:'P1 11:41 / P2 11:46 (~23 min). ≈ 6.3.', due:null, pri:0 },
+       { id:'m-m6l4', title:'L4 review — microbe–animal + microbiome', note:'~36 min. ≈ 6.4 + 6.5.', due:null, pri:0 } ]},
+     { id:'m-wino', title:'Winogradsky Column — FINAL write-up (100 pts)', note:'Term-long lab finale. Compile all weekly observations into the full report.', due:'2026-07-18', pri:5, subs:[] },
+     { id:'m-ex4', title:'Unit 4 EXAM (Modules 7 & 8)', note:'Closes Jul 17 (last day of course). Take it early — heavy final day.', due:'2026-07-18', pri:5, subs:[] } ]},
+   { id:'career', name:'BMSC 4125 · Career Readiness', tasks:[
+     { id:'c-3a', title:'Assignment 3A — Preparing for an Interview', note:'Submit your interview-question responses doc (Job or Admissions set) on Canvas.', due:'2026-07-06', pri:5, subs:[
+       { id:'c-3a1', title:'Draft Q6–10', note:'Draft the remaining 5 answers (interests + soft skills, ≤2 min each).', due:'2026-06-29', pri:0 },
+       { id:'c-3a2', title:'Review & submit', note:'Tighten each answer to ≤2 min, fix typos, submit on Canvas.', due:'2026-06-30', pri:0 } ]},
+     { id:'c-3b', title:'Assignment 3B — Mock Interview', note:'Submit a 10-question mock interview in Big Interview. Dress pro, clean background.', due:'2026-07-06', pri:5, subs:[
+       { id:'c-3b1', title:'Big Interview setup + practice', note:'Enter your code, test camera/mic, do a practice take or two out loud.', due:'2026-07-01', pri:0 },
+       { id:'c-3b2', title:'Record all 10 & submit', note:'Answer all 10 (≤4 min, 2 takes each), review, then submit final answers.', due:'2026-07-02', pri:0 } ]},
+     { id:'c-disc3', title:'Discussion 3 — Tell Me About Yourself (2nd post)', note:'Reply to at least two classmates with a specific, actionable suggestion.', due:'2026-07-02', pri:3, subs:[
+       { id:'c-disc3a', title:'Reply to classmate 1', note:'Concise, specific suggestion — or a question about one of their 3 components.', due:'2026-07-01', pri:0 },
+       { id:'c-disc3b', title:'Reply to classmate 2', note:'Ideally a different day/person than reply 1.', due:'2026-07-01', pri:0 } ]},
+     { id:'c-4a', title:'Assignment 4A — Requesting a Letter of Recommendation', note:'Module 4 · 10 pts. Due Jul 17.', due:'2026-07-18', pri:5, subs:[] } ]},
+   { id:'mcat', name:'MCAT Prep', tasks:[
+     { id:'mc-fl2', title:'Blueprint Full Length 2', note:'Full-length practice test in your Blueprint portal. Recommended by Jul 11.', due:'2026-07-11', pri:0, subs:[] },
+     { id:'mc-fl3', title:'Blueprint Full Length 3', note:'Full-length practice test in your Blueprint portal. Recommended by Aug 1.', due:'2026-08-01', pri:0, subs:[] },
+     { id:'mc-diag', title:'Diagnostic + first 2 Full-Length Practice Tests', note:'Pace practice tests across the summer semester.', due:'2026-08-08', pri:0, subs:[] } ]},
+  ];
+  // TickTick ISO due-date helpers (calendar today — the baked snapshot is dated; D3's live fetch keeps the same shape)
+  function ttToday(){ return dayStr(new Date()); }
+  function dueLabel(iso){ if(!iso)return ''; const p=iso.split('-'); return CF_MON[(+p[1])-1]+' '+(+p[2]); }
+  function dueSoon(iso){ if(!iso)return false; const now=new Date(), due=new Date(iso+'T23:59:59'); const days=(due-now)/86400000; return days>=-1&&days<=7; }
+  function dueToday(iso){ return !!iso&&iso===ttToday(); }
+  function dueOver(iso){ return !!iso&&iso<ttToday(); }   // ISO strings compare chronologically
+
+  // ---- PICK-YOUR-TASKS screen (search · by-list/by-date · due-this-week · expandable subtasks · multi-select) ----
+  let pkSel=new Set(), pkExpand=new Set(), pkOrg='list', pkWeekOn=false, pkMode='new', pkQuery='', pkOverdueOn=false;
+  function pkFind(id){ for(const L of TT_LISTS){ for(const p of L.tasks){ if(p.id===id)return{isSub:false,task:p}; for(const s of (p.subs||[])){ if(s.id===id)return{isSub:true,task:s,parent:p}; } } } return null; }
+  function pkTaskVisible(p){
+    if(pkQuery){ const m=(p.title||'').toLowerCase().includes(pkQuery)||(p.subs||[]).some(s=>(s.title||'').toLowerCase().includes(pkQuery)); if(!m)return false; }
+    // auto-today review: with no search, show only today's dues (+overdue when toggled) and anything still selected;
+    // typing a search opens the whole catalog so extra tasks can be pulled into the day.
+    if(pkMode==='auto'&&!pkQuery){
+      const hit=t=>dueToday(t.due)||(pkOverdueOn&&dueOver(t.due));
+      if(!( hit(p)||(p.subs||[]).some(hit)||pkSel.has(p.id)||(p.subs||[]).some(s=>pkSel.has(s.id)) )) return false;
+    }
+    if(pkWeekOn){ if(!(dueSoon(p.due)||(p.subs||[]).some(s=>dueSoon(s.due)))) return false; }
+    return true;
+  }
+  function pkToggleParent(p){ if(pkSel.has(p.id)){ pkSel.delete(p.id); (p.subs||[]).forEach(s=>pkSel.delete(s.id)); } else { pkSel.add(p.id); (p.subs||[]).forEach(s=>pkSel.add(s.id)); } renderPick(); }
+  function pkToggleSub(s){ if(pkSel.has(s.id))pkSel.delete(s.id); else pkSel.add(s.id); renderPick(); }
+  function pkCell(p,isSub){
+    const sel=pkSel.has(p.id);
+    const hasSubs=!isSub&&(p.subs||[]).length>0;
+    const selSubs=hasSubs?p.subs.filter(s=>pkSel.has(s.id)).length:0;
+    const part=!sel&&selSubs>0;
+    const glyph=sel?'✓':(part?'–':'');
+    const exp=pkExpand.has(p.id)||(pkQuery&&hasSubs&&p.subs.some(s=>(s.title||'').toLowerCase().includes(pkQuery)));
+    const dsoon=dueSoon(p.due);
+    const pri=p.pri>=5?'hi':(p.pri>=3?'mid':'');
+    let r='<div class="pktask'+(isSub?' sub':'')+(sel?' sel':'')+'" data-id="'+p.id+'">';
+    r+= (!isSub&&hasSubs)?'<span class="pkexpand" data-exp="'+p.id+'">'+(exp?'▾':'▸')+'</span>':'<span class="pkexpand ph">▸</span>';
+    r+='<span class="pkcheck'+(sel?' on':(part?' part':''))+'">'+glyph+'</span>';
+    r+='<span class="pkbd"><span class="pkname">'+esc(p.title)+'</span>';
+    if(hasSubs) r+='<span class="pksub">'+p.subs.length+' subtask'+(p.subs.length===1?'':'s')+(pkOrg==='date'&&p._list?' · '+esc(p._list):'')+'</span>';
+    else if(pkOrg==='date'&&!isSub&&p._list) r+='<span class="pksub">'+esc(p._list)+'</span>';
+    r+='</span><span class="pkmeta">';
+    if(p.due) r+='<span class="pkdue'+(dsoon?' soon':'')+'">'+dueLabel(p.due)+'</span>';
+    if(pri) r+='<span class="pkpri '+pri+'"></span>';
+    r+='</span></div>';
+    return { html:r, exp };
+  }
+  function renderPick(){
+    const sk=document.getElementById('pkSkip'); if(sk)sk.style.display=(pkMode==='new')?'':'none';
+    const wk=document.getElementById('pkWeek'); if(wk)wk.style.display=(pkMode==='auto')?'none':'';
+    const ov=document.getElementById('pkOverdue'); if(ov)ov.style.display=(pkMode==='auto')?'':'none';
+    const listEl=document.getElementById('pkList'); if(!listEl)return; let html='', any=false, first=true;
+    const emit=(p,isSub)=>{ const c=pkCell(p,isSub); html+=c.html; if(!isSub&&c.exp)(p.subs||[]).forEach(s=>{ html+=pkCell(s,true).html; }); };
+    if(pkOrg==='list'){
+      TT_LISTS.forEach(L=>{ const vis=L.tasks.filter(pkTaskVisible); if(!vis.length)return; any=true;
+        html+='<div class="pkgh'+(first?' first':'')+'">'+esc(L.name)+'</div>'; first=false;
+        vis.forEach(p=>emit(p,false)); });
+    } else {
+      const flat=[]; TT_LISTS.forEach(L=>L.tasks.forEach(p=>{ if(pkTaskVisible(p)){ p._list=L.name; flat.push(p); } }));
+      flat.sort((a,b)=>{ if(!a.due&&!b.due)return 0; if(!a.due)return 1; if(!b.due)return -1; return a.due<b.due?-1:(a.due>b.due?1:0); });
+      if(flat.length){ any=true; flat.forEach(p=>emit(p,false)); }
+    }
+    listEl.innerHTML= any ? html : '<div class="pkempty">'+((pkMode==='auto'&&!pkQuery)?'nothing due today ✦ — enjoy the calm':'no tasks match ✦')+'</div>';
+    const n=pkSel.size;
+    const foot=document.getElementById('pkFoot'); if(foot)foot.classList.toggle('empty',n===0);
+    const addBtn=document.getElementById('pkAdd'); if(addBtn)addBtn.textContent=(pkMode==='auto')
+      ? (n ? ('looks good — make today’s quest · '+n+' ▸') : '✦ nothing to add yet')
+      : (n ? ('add '+n+' to quest ▸') : 'select tasks to add');
+    listEl.querySelectorAll('.pkexpand[data-exp]').forEach(x=>x.onclick=(e)=>{ e.stopPropagation(); const id=x.dataset.exp; if(pkExpand.has(id))pkExpand.delete(id); else pkExpand.add(id); renderPick(); });
+    listEl.querySelectorAll('.pktask').forEach(row=>row.onclick=(e)=>{ if(e.target.closest('.pkexpand[data-exp]'))return; const f=pkFind(row.dataset.id); if(!f)return; f.isSub?pkToggleSub(f.task):pkToggleParent(f.task); cwSfx('blip'); });
+  }
+  function openPick(mode){ pkMode=mode; pkSel.clear(); pkExpand.clear(); pkQuery=''; pkWeekOn=false; pkOrg='list'; pkOverdueOn=false;
+    const si=document.getElementById('pkSearch'); if(si)si.value='';
+    const wk=document.getElementById('pkWeek'); if(wk)wk.classList.remove('on');
+    const ov=document.getElementById('pkOverdue'); if(ov)ov.classList.remove('on');
+    const tt=document.getElementById('pkTitle'); if(tt)tt.textContent=(mode==='auto')?'⚡ auto today':'pick your tasks';
+    document.querySelectorAll('.pkseg').forEach(b=>b.classList.toggle('on',b.dataset.org==='list'));
+    sqShow('pick'); cwSfx('blip');
+  }
+  // ---- ⚡ AUTO TODAY: one tap gathers today's dues, pre-picked, into the pick screen as a
+  // "does this look good?" review — remove/tweak, then finalize. no editor round-trip. ----
+  function openAutoToday(){
+    openPick('auto');
+    TT_LISTS.forEach(L=>L.tasks.forEach(p=>{
+      if(dueToday(p.due)) pkSel.add(p.id);
+      (p.subs||[]).forEach(s=>{ if(dueToday(s.due)){ pkSel.add(s.id); pkExpand.add(p.id); } });   // a sub due today rides in without dragging its whole parent
+    }));
+    renderPick();
+  }
+  // the "include overdue" toggle (default off) folds tasks due before today in/out of the day's pick
+  function autoSyncOverdue(on){
+    TT_LISTS.forEach(L=>L.tasks.forEach(p=>{
+      if(dueOver(p.due)){ on?pkSel.add(p.id):pkSel.delete(p.id); }
+      (p.subs||[]).forEach(s=>{ if(dueOver(s.due)){ on?pkSel.add(s.id):pkSel.delete(s.id); if(on)pkExpand.add(p.id); } });
+    }));
+  }
+  // steps carry their TickTick id (tt) — the seed of the one-identity model: at fold time (D3),
+  // tasks are REFERENCED by that id across quests and rewards mint ONCE per task id (mint-once
+  // crediting; see docs/audits/user_steer_decisions.md "Auto Today"). the baked snapshot still copies.
+  function pkStepFrom(t){ return { id:nid('s'), tt:t.id, text:t.title, diff:(t.pri>=5?'hard':t.pri>=3?'med':'easy'), date:dueLabel(t.due), notes:t.note||'', done:false }; }
+  function pkAddToQuest(){
+    if(pkMode==='auto'){
+      // day-quest assembly: one chapter per TickTick list keeps the day glanceable.
+      const chapters=[];
+      TT_LISTS.forEach(L=>{ const steps=[];
+        L.tasks.forEach(p=>{ if(pkSel.has(p.id))steps.push(pkStepFrom(p)); (p.subs||[]).forEach(s=>{ if(pkSel.has(s.id))steps.push(pkStepFrom(s)); }); });
+        if(steps.length) chapters.push({ id:nid('c'), name:L.name, steps }); });
+      if(!chapters.length) return;
+      const q={ id:nid('q'), name:'Today · '+dueLabel(ttToday()), chapters, createdAt:null, state:'active', worldId:WORLD.activeWorldId };
+      bindQuest(q); autosave(); pkSel.clear(); cwSfx('check'); cwBuzz(10); cwBanner('✦ today’s quest is planted ✦');
+      sqShow('quest');   // straight to play — the review WAS the editing
+      return;
+    }
+    const chapters=[], loose=[];
+    TT_LISTS.forEach(L=>L.tasks.forEach(p=>{
+      const selSubs=(p.subs||[]).filter(s=>pkSel.has(s.id));
+      if(pkSel.has(p.id)&&selSubs.length) chapters.push({ id:nid('c'), name:p.title, steps:selSubs.map(pkStepFrom) });   // parent → chapter, its subtasks → steps
+      else if(pkSel.has(p.id)) loose.push(pkStepFrom(p));
+      else selSubs.forEach(s=>loose.push(pkStepFrom(s)));
+    }));
+    if(loose.length) chapters.push({ id:nid('c'), name:(pkMode==='add'?'more tasks':'tasks'), steps:loose });
+    if(!chapters.length) return;
+    if(pkMode==='add'&&BQ){
+      const c0=BQ.chapters[0], blankFirst=BQ.chapters.length===1&&c0&&!(c0.name||'').trim()&&c0.steps.length===1&&!(c0.steps[0].text||'').trim();
+      if(blankFirst) BQ.chapters=chapters; else BQ.chapters.push(...chapters);
+      autosave(); pkSel.clear(); cwSfx('check'); cwBuzz(10); sqShow('build');
+    } else {
+      const q={ id:nid('q'), name:'', chapters, createdAt:null, state:'active', worldId:WORLD.activeWorldId };
+      bindQuest(q); autosave(); pkSel.clear(); cwSfx('check'); cwBuzz(10); sqShow('build');
+    }
+  }
+  (function wirePick(){
+    const si=document.getElementById('pkSearch'); if(si)si.addEventListener('input',e=>{ pkQuery=e.target.value.trim().toLowerCase(); renderPick(); });
+    document.querySelectorAll('.pkseg').forEach(b=>b.onclick=()=>{ pkOrg=b.dataset.org; document.querySelectorAll('.pkseg').forEach(x=>x.classList.toggle('on',x===b)); renderPick(); cwSfx('blip'); });
+    const wk=document.getElementById('pkWeek'); if(wk)wk.onclick=()=>{ pkWeekOn=!pkWeekOn; wk.classList.toggle('on',pkWeekOn); renderPick(); cwSfx('blip'); };
+    const ov=document.getElementById('pkOverdue'); if(ov)ov.onclick=()=>{ pkOverdueOn=!pkOverdueOn; ov.classList.toggle('on',pkOverdueOn); autoSyncOverdue(pkOverdueOn); renderPick(); cwSfx('blip'); };
+    const bk=document.getElementById('pkBack'); if(bk)bk.onclick=()=>{ sqShow(pkMode==='add'?'build':'wmap'); cwSfx('blip'); cwBuzz(8); };
+    const sp=document.getElementById('pkSkip'); if(sp)sp.onclick=()=>{ const q=blankQuest(); q.worldId=WORLD.activeWorldId; bindQuest(q); sqShow('build'); cwSfx('blip'); };
+    const ad=document.getElementById('pkAdd'); if(ad)ad.onclick=pkAddToQuest;
   })();
 
   function rebuild(){
