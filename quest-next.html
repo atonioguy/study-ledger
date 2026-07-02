@@ -198,6 +198,12 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
     repeating-linear-gradient(45deg,#2a2248 0 6px,#241d40 6px 12px); }
 .madd .al{ margin-top:8px; font-family:var(--pixfont); font-size:10px; color:#b7a6ef; }
 .mempty{ text-align:center; font-family:var(--pixfont2); font-size:16px; color:var(--tx); opacity:.55; padding:26px 16px 0; }
+/* one-tap day quest — sits right under the world banner */
+.autotoday{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin:2px 0 10px; padding:10px; cursor:pointer;
+  font-family:var(--pixfont); font-size:10px; letter-spacing:.5px; text-transform:lowercase; color:#ffd98a; text-shadow:0 0 8px rgba(255,200,110,.35);
+  background:linear-gradient(180deg,#2c2450,#211b40); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 9px rgba(255,200,110,.18); }
+.autotoday:active{ border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
+.autotoday .ats{ font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.6; text-transform:none; letter-spacing:0; }
 
 /* ---------- WORLDS HUB ---------- */
 .hubttl{ font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1.5px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.45); margin:2px 2px 12px; }
@@ -313,7 +319,7 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
     <div class="view" id="viewPick">
       <div class="pkhd"><button class="pkback" id="pkBack" title="back">←</button><span class="pktt">pick your tasks</span><span class="pksync">✓ ticktick</span></div>
       <input class="txt pksearch" id="pkSearch" placeholder="search your tasks…" maxlength="60">
-      <div class="pktools"><div class="pktoggle"><button class="pkseg on" data-org="list">by list</button><button class="pkseg" data-org="date">by date</button></div><button class="pkfilter" id="pkWeek">⏳ due this week</button></div>
+      <div class="pktools"><div class="pktoggle"><button class="pkseg on" data-org="list">by list</button><button class="pkseg" data-org="date">by date</button></div><button class="pkfilter" id="pkWeek">⏳ due this week</button><button class="pkfilter" id="pkOverdue" style="display:none">⏰ include overdue</button></div>
       <div id="pkList"></div>
       <div class="pkfoot empty" id="pkFoot"><button class="bigbtn" id="pkAdd">select tasks to add</button><button class="bigbtn ghost pkskip" id="pkSkip">start blank instead</button></div>
     </div>
@@ -389,6 +395,9 @@ let uid=0; const nid=(p)=>p+'_'+(Date.now().toString(36))+'_'+(uid++);
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function dueLabel(iso){ if(!iso)return ''; const p=iso.split('-'); return MON[(+p[1])-1]+' '+(+p[2]); }
 function dueSoon(iso){ if(!iso)return false; const now=new Date(); const due=new Date(iso+'T23:59:59'); const days=(due-now)/86400000; return days>=-1 && days<=7; }
+function todayISO(){ return dayStr(new Date()); }
+function dueToday(iso){ return !!iso && iso===todayISO(); }
+function dueOver(iso){ return !!iso && iso<todayISO(); }   // ISO strings compare chronologically
 const TT_LISTS=[
  { id:'micro', name:'BMSC 3404 · Microbiology', tasks:[
    { id:'m-ex3', title:'Unit 3 EXAM (Modules 5 & 6)', note:'48-hr window Jul 4–6. 55 Q, closed book, Examplify.', due:'2026-07-07', pri:5, subs:[
@@ -725,12 +734,14 @@ function renderMap(){
   let head='<div class="wmhd"><button class="wswbtn" id="wswBtn" title="switch world" aria-haspopup="true"><span class="wn">'+esc(w.emoji||'✦')+' '+esc(w.name||'my quests')+'</span><span class="dn">▾</span></button>'+
     '<span class="cnt">'+quests.length+' quest'+(quests.length===1?'':'s')+'</span><button class="wmglobe" title="worlds hub" aria-label="worlds hub">🌍</button>'+
     '<div class="wsw" id="wsw" hidden>'+rows+'</div></div>';
+  head+='<button class="autotoday" id="autoTodayBtn" title="build a quest from today\'s tasks">⚡ auto today <span class="ats">— quest up what\'s due</span></button>';
   if(!quests.length) head+='<div class="mempty">no quests yet — tap ＋ to build your first one ✦</div>';
   wrap.innerHTML=head;
   const wsw=wrap.querySelector('#wsw');
   wrap.querySelector('#wswBtn').onclick=()=>{ wsw.hidden=!wsw.hidden; };
   wsw.querySelectorAll('.wswrow').forEach(r=>r.onclick=()=>{ if(r.dataset.all){ show('hub'); return; } if(r.dataset.wid===WORLD.activeWorldId){ wsw.hidden=true; return; } switchWorld(r.dataset.wid); });
   const globe=wrap.querySelector('.wmglobe'); if(globe) globe.onclick=()=>show('hub');
+  const at=wrap.querySelector('#autoTodayBtn'); if(at) at.onclick=openAutoToday;
   const map=document.createElement('div'); map.className='map';
   const pts=quests.map((q,i)=>({x:(i%2===0?300:132), y:120+i*172}));
   const addX=(quests.length%2===0?300:132), addY=120+quests.length*172; map.style.height=(addY+110)+'px';
@@ -773,10 +784,16 @@ function openQuest(id){ const q=WORLD.quests[id]; if(!q)return; quest=JSON.parse
 function newQuest(){ openPick('new'); }
 
 // ---- pick-your-tasks screen ----
-let pkSel=new Set(), pkExpand=new Set(), pkOrg='list', pkWeekOn=false, pkMode='new', pkQuery='';
+let pkSel=new Set(), pkExpand=new Set(), pkOrg='list', pkWeekOn=false, pkMode='new', pkQuery='', pkOverdueOn=false;
 function pkFind(id){ for(const L of TT_LISTS){ for(const p of L.tasks){ if(p.id===id)return{isSub:false,task:p}; for(const s of (p.subs||[])){ if(s.id===id)return{isSub:true,task:s,parent:p}; } } } return null; }
 function pkTaskVisible(p){
   if(pkQuery){ const m=(p.title||'').toLowerCase().includes(pkQuery) || (p.subs||[]).some(s=>(s.title||'').toLowerCase().includes(pkQuery)); if(!m)return false; }
+  // auto-today review: with no search, show only today's dues (+overdue when toggled) and anything still selected;
+  // typing a search opens the whole catalog so extra tasks can be pulled into the day.
+  if(pkMode==='auto' && !pkQuery){
+    const hit=t=>dueToday(t.due)||(pkOverdueOn&&dueOver(t.due));
+    if(!( hit(p) || (p.subs||[]).some(hit) || pkSel.has(p.id) || (p.subs||[]).some(s=>pkSel.has(s.id)) )) return false;
+  }
   if(pkWeekOn){ if(!(dueSoon(p.due) || (p.subs||[]).some(s=>dueSoon(s.due)))) return false; }
   return true;
 }
@@ -805,6 +822,8 @@ function pkCell(p,isSub){
 }
 function renderPick(){
   document.getElementById('pkSkip').style.display=(pkMode==='new')?'':'none';
+  document.getElementById('pkWeek').style.display=(pkMode==='auto')?'none':'';
+  document.getElementById('pkOverdue').style.display=(pkMode==='auto')?'':'none';
   const listEl=document.getElementById('pkList'); let html='', any=false, first=true;
   const emit=(p,isSub)=>{ const c=pkCell(p,isSub); html+=c.html; if(!isSub && c.exp) (p.subs||[]).forEach(s=>{ html+=pkCell(s,true).html; }); };
   if(pkOrg==='list'){
@@ -816,21 +835,67 @@ function renderPick(){
     flat.sort((a,b)=>{ if(!a.due&&!b.due)return 0; if(!a.due)return 1; if(!b.due)return -1; return a.due<b.due?-1:(a.due>b.due?1:0); });
     if(flat.length){ any=true; flat.forEach(p=>emit(p,false)); }
   }
-  listEl.innerHTML = any ? html : '<div class="pkempty">no tasks match ✦</div>';
+  listEl.innerHTML = any ? html : '<div class="pkempty">'+((pkMode==='auto'&&!pkQuery)?'nothing due today ✦ — enjoy the calm':'no tasks match ✦')+'</div>';
   const n=pkSel.size;
   document.getElementById('pkFoot').classList.toggle('empty', n===0);
-  document.getElementById('pkAdd').textContent = n ? ('add '+n+' to quest ▸') : 'select tasks to add';
+  document.getElementById('pkAdd').textContent = (pkMode==='auto')
+    ? (n ? ('looks good — make today\'s quest · '+n+' ▸') : '✦ nothing to add yet')
+    : (n ? ('add '+n+' to quest ▸') : 'select tasks to add');
   listEl.querySelectorAll('.pkexpand[data-exp]').forEach(x=>x.onclick=(e)=>{ e.stopPropagation(); const id=x.dataset.exp; if(pkExpand.has(id))pkExpand.delete(id); else pkExpand.add(id); renderPick(); });
   listEl.querySelectorAll('.pktask').forEach(row=>row.onclick=(e)=>{ if(e.target.closest('.pkexpand[data-exp]'))return; const f=pkFind(row.dataset.id); if(!f)return; f.isSub?pkToggleSub(f.task):pkToggleParent(f.task); });
 }
-function openPick(mode){ pkMode=mode; pkSel.clear(); pkExpand.clear(); pkQuery=''; pkWeekOn=false; pkOrg='list';
+function openPick(mode){ pkMode=mode; pkSel.clear(); pkExpand.clear(); pkQuery=''; pkWeekOn=false; pkOrg='list'; pkOverdueOn=false;
   const si=document.getElementById('pkSearch'); if(si)si.value='';
   document.getElementById('pkWeek').classList.remove('on');
+  document.getElementById('pkOverdue').classList.remove('on');
+  document.querySelector('#viewPick .pktt').textContent=(mode==='auto')?'⚡ auto today':'pick your tasks';
   document.querySelectorAll('.pkseg').forEach(b=>b.classList.toggle('on',b.dataset.org==='list'));
   show('pick');
+  if(mode==='auto'){ const sub=document.getElementById('topSub'); if(sub) sub.textContent='auto today'; }
 }
-function pkStepFrom(t){ return { id:nid('s'), text:t.title, diff:(t.pri>=5?'hard':t.pri>=3?'med':'easy'), date:dueLabel(t.due), notes:t.note||'', done:false }; }
+// ---- ⚡ auto today: one tap gathers today's dues, pre-picked, into the pick screen
+// as a "does this look good?" review — remove/tweak, then finalize. no editor round-trip. ----
+function openAutoToday(){
+  openPick('auto');
+  TT_LISTS.forEach(L=>L.tasks.forEach(p=>{
+    if(dueToday(p.due)) pkSel.add(p.id);
+    // a sub due today rides in on its own — without dragging the whole parent along
+    (p.subs||[]).forEach(s=>{ if(dueToday(s.due)){ pkSel.add(s.id); pkExpand.add(p.id); } });
+  }));
+  renderPick();
+}
+// the "include overdue" toggle (default off) folds tasks due before today in/out of the day's pick
+function autoSyncOverdue(on){
+  TT_LISTS.forEach(L=>L.tasks.forEach(p=>{
+    if(dueOver(p.due)){ on?pkSel.add(p.id):pkSel.delete(p.id); }
+    (p.subs||[]).forEach(s=>{ if(dueOver(s.due)){ on?pkSel.add(s.id):pkSel.delete(s.id); if(on)pkExpand.add(p.id); } });
+  }));
+}
+// steps carry their TickTick id (tt) — the seed of the one-identity model: at fold time,
+// tasks are REFERENCED by that id across quests and rewards mint ONCE per task id
+// (see docs/audits/user_steer_decisions.md "Auto Today quest"). the prototype still copies.
+function pkStepFrom(t){ return { id:nid('s'), tt:t.id, text:t.title, diff:(t.pri>=5?'hard':t.pri>=3?'med':'easy'), date:dueLabel(t.due), notes:t.note||'', done:false }; }
 function pkAddToQuest(){
+  if(pkMode==='auto'){
+    // day-quest assembly: one chapter per TickTick list keeps the day glanceable.
+    // NOTE (fold-time, not built here): cross-quest crediting — check off anywhere → done
+    // everywhere, rewards minted once per TickTick task id — is the LATER economy layer.
+    const chapters=[];
+    TT_LISTS.forEach(L=>{
+      const steps=[];
+      L.tasks.forEach(p=>{
+        if(pkSel.has(p.id)) steps.push(pkStepFrom(p));
+        (p.subs||[]).forEach(s=>{ if(pkSel.has(s.id)) steps.push(pkStepFrom(s)); });
+      });
+      if(steps.length) chapters.push({ id:nid('c'), name:L.name, steps });
+    });
+    if(!chapters.length) return;
+    quest={ id:nid('q'), name:'Today · '+dueLabel(todayISO()), chapters, createdAt:null, state:'active', worldId:WORLD.activeWorldId };
+    autosave(); pkSel.clear(); sfx('save');
+    selectedId=quest.id; try{ localStorage.setItem('aq_sel',quest.id); }catch(e){}
+    show('preview');   // straight to play — the review WAS the editing
+    return;
+  }
   const chapters=[], loose=[];
   TT_LISTS.forEach(L=>L.tasks.forEach(p=>{
     const selSubs=(p.subs||[]).filter(s=>pkSel.has(s.id));
@@ -851,6 +916,7 @@ function pkAddToQuest(){
 document.getElementById('pkSearch').addEventListener('input', e=>{ pkQuery=e.target.value.trim().toLowerCase(); renderPick(); });
 document.querySelectorAll('.pkseg').forEach(b=>b.onclick=()=>{ pkOrg=b.dataset.org; document.querySelectorAll('.pkseg').forEach(x=>x.classList.toggle('on',x===b)); renderPick(); });
 document.getElementById('pkWeek').onclick=()=>{ pkWeekOn=!pkWeekOn; document.getElementById('pkWeek').classList.toggle('on',pkWeekOn); renderPick(); };
+document.getElementById('pkOverdue').onclick=()=>{ pkOverdueOn=!pkOverdueOn; document.getElementById('pkOverdue').classList.toggle('on',pkOverdueOn); autoSyncOverdue(pkOverdueOn); renderPick(); };
 document.getElementById('pkBack').onclick=()=>show(pkMode==='add'?'build':'map');
 document.getElementById('pkSkip').onclick=()=>{ quest=blankQuest(); quest.worldId=WORLD.activeWorldId; show('build'); };
 document.getElementById('pkAdd').onclick=pkAddToQuest;
@@ -1003,7 +1069,7 @@ document.addEventListener('click',(e)=>{ const p=document.getElementById('wsw');
 // default click blip for everything EXCEPT completing a task (which keeps the satisfying sound)
 document.addEventListener('click', (e)=>{
   const t=e.target; if(t.closest('.play') || t.closest('.pv-row')) return;
-  if(t.closest('#nav button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .mbox, .grip, .hubcard, .hubrow, .emochip, .palchip, .wmglobe, .wswbtn, .wswrow, .pkseg, .pkfilter, .pkback, .pktask, .pkexpand, .stcard')) sfx('sel');
+  if(t.closest('#nav button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .mbox, .grip, .hubcard, .hubrow, .emochip, .palchip, .wmglobe, .wswbtn, .wswrow, .autotoday, .pkseg, .pkfilter, .pkback, .pktask, .pkexpand, .stcard')) sfx('sel');
 }, true);
 
 // keep sticky quest/world banners parked just below the app bar (measured, so it survives safe-area insets)
