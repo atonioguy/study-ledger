@@ -31,6 +31,7 @@
   }
   *{ box-sizing:border-box; }
   html,body{ margin:0; height:100%; background:#161029; color:var(--tx); font-family:var(--pixfont); overflow:hidden; -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent; }
+  @supports (height:100dvh){ html,body{ height:100dvh; } }  /* body tracks the dynamic viewport exactly like #app (100dvh) — nav stays flush, nothing clips when browser chrome collapses */
 
   .cw-win{ --hi:#6a58a0; --lo:#241d3c; --frame:#3b3060; --bar:#5b4a96; --barhi:#8068c4; --bartx:#f5eeff; --outline:#140f24; --body:#130e26; --spot:#241c44; --tx:#e3dbff; --card:#372d5e; --cardtx:#f1ecff; --inset:#0f0a22;
     max-height:none; background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline),0 16px 44px rgba(0,0,0,.5); image-rendering:pixelated; font-family:var(--pixfont); color:var(--tx); }
@@ -1011,7 +1012,7 @@ try{
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v3.1';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v3.2';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -1049,7 +1050,89 @@ try{
   function adjustBalance(dc,ds){ const e=readEcon(); e.c=(e.c||0)-dc; e.s=(e.s||0)-ds; lsSet('aq_econ',JSON.stringify(e)); }
   let shownCoins=coinBal(), shownStars=starBal();
   function countChip(el,from,to){ if(!el)return; if(from===to){ el.textContent=to; return; } const t0=performance.now(),dur=550; (function step(t){ const k=Math.min(1,(t-t0)/dur); el.textContent=Math.round(from+(to-from)*k); if(k<1)requestAnimationFrame(step); })(performance.now()); }
-  function refreshEcon(){ const c=coinBal(), s=starBal(); countChip(document.getElementById('sqCoins'),shownCoins,c); countChip(document.getElementById('sqStars'),shownStars,s); shownCoins=c; shownStars=s; refreshBuddies(); updateSlotInfo(); }
+  function refreshEcon(){ syncEconLedger(); const c=coinBal(), s=starBal(); countChip(document.getElementById('sqCoins'),shownCoins,c); countChip(document.getElementById('sqStars'),shownStars,s); shownCoins=c; shownStars=s; refreshBuddies(); updateSlotInfo(); }
+
+  // ===== worlds / quests data foundation (stage 1: model + save + migration only — no UI reads this yet) =====
+  // ported from the quest-next.html prototype. the exam campaign joins world 1 as a thin
+  // kind:'campaign' adapter quest whose progress is DERIVED from the untouched campDone map
+  // (campDone stays the single source of truth for exam-3 progress + rendering).
+  const XP_DIFF={easy:5,med:10,hard:20}, DIFFS=['easy','med','hard'];
+  let _nuid=0; function nid(p){ return p+'_'+Date.now().toString(36)+'_'+(_nuid++); }
+  function dayStr(d){ const x=d||new Date(); return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'); }
+  const CAMP_QID='q_exam3';
+  function blankStep(){ return {id:nid('s'),text:'',diff:'med',date:'',notes:'',done:false}; }
+  function blankChapter(){ return {id:nid('c'),name:'',steps:[blankStep()]}; }
+  function blankQuest(){ return {id:nid('q'),name:'',chapters:[blankChapter()],createdAt:null,state:'active'}; }
+  function stepXP(s){ return XP_DIFF[s.diff]||0; }
+  function questSteps(q){ return ((q&&q.chapters)||[]).reduce((a,c)=>a.concat(c.steps||[]),[]); }
+  function questState(q){
+    if(!q) return 'new';
+    if(q.kind==='campaign'){ const st=campStats(); return st.done>=CAMP_ITEMS.length?'done':(st.done>0?'prog':'new'); }
+    if(q.state==='gaveup') return 'gaveup';
+    const st=questSteps(q); if(st.length&&st.every(s=>s.done))return 'done'; if(st.some(s=>s.done))return 'prog'; return 'new';
+  }
+  function questTotals(q){
+    if(q&&q.kind==='campaign'){ const st=campStats(); return {xpEarned:st.xp,xpTotal:XP_TOTAL,stepsDone:st.done,steps:CAMP_ITEMS.length}; }
+    let xe=0,xt=0,d=0,n=0; questSteps(q).forEach(s=>{ const x=stepXP(s); xt+=x; n++; if(s.done){ xe+=x; d++; } });
+    return {xpEarned:xe,xpTotal:xt,stepsDone:d,steps:n};
+  }
+  function questStars(q){
+    if(q&&q.kind==='campaign'){ // mirrors the live economy formula EXACTLY (1★/lesson + 3★/module) — no invented bonus
+      const total=CAMP_MODS.reduce((s,m)=>s+m.lessons.length,0)+CAMP_MODS.length*3;
+      return {earned:lessonsCleared()+modulesCleared()*3,total};
+    }
+    const ch=((q&&q.chapters)||[]).filter(c=>(c.steps||[]).length);
+    const earned=ch.filter(c=>c.steps.every(s=>s.done)).length+(questState(q)==='done'?3:0);
+    return {earned,total:ch.length+3};
+  }
+  // ---- aq_worlds store ----
+  let WORLD=null;
+  function defaultWorlds(){ return {v:3,worlds:[{id:nid('w'),name:'my quests',emoji:'✦',color:'twilight',questIds:[],created:dayStr()}],activeWorldId:null,quests:{}}; }
+  function loadWorld(){ const w=lsGet('aq_worlds'); WORLD=(w&&Array.isArray(w.worlds)&&w.worlds.length&&w.quests&&typeof w.quests==='object')?w:defaultWorlds(); if(!WORLD.activeWorldId)WORLD.activeWorldId=WORLD.worlds[0].id; return WORLD; }
+  function persistWorld(){ if(WORLD) lsSet('aq_worlds',JSON.stringify(WORLD)); }
+  function activeWorld(){ if(!WORLD)loadWorld(); return WORLD.worlds.find(w=>w.id===WORLD.activeWorldId)||WORLD.worlds[0]; }
+  function worldQuests(w){ if(!WORLD)loadWorld(); return ((w||activeWorld()).questIds||[]).map(id=>WORLD.quests[id]).filter(Boolean); }
+  // ---- aq_progress store (lifetime xp pool — open-ended, never resets) ----
+  let AQ={xp:0,streak:0,lastDay:null};
+  function loadAQ(){ const a=lsGet('aq_progress'); AQ=(a&&typeof a==='object'&&typeof a.xp==='number')?a:{xp:0,streak:0,lastDay:null}; return AQ; }
+  function persistAQ(){ lsSet('aq_progress',JSON.stringify(AQ)); }
+  function campXpDone(){ return CAMP_ITEMS.reduce((s,i)=>s+(campDone[i.id]?i.xp:0),0); }
+  // ---- banked earned-ledger mirror (aq_econ gains ce/se next to the existing c/s spends) ----
+  // balances still come from the DERIVED coinsEarned()/starsEarned() minus spent — unchanged this
+  // stage — so the visible wallet is bit-identical; the ledger just stays in lockstep at every
+  // persistence point (refreshEcon runs after every state mutation) for the later economy rewire.
+  const MIGR_KEY='aq_worlds_migr';
+  function syncEconLedger(){ if(!localStorage.getItem(MIGR_KEY))return; const e=readEcon(), ce=coinsEarned(), se=starsEarned(); if(e.ce!==ce||e.se!==se){ e.ce=ce; e.se=se; lsSet('aq_econ',JSON.stringify(e)); } }
+  // ---- one-time, idempotent, guarded migration: exam save → worlds + progress + econ ledger ----
+  // runs once after pullCloud() and before rebuild(); ADDITIVE only — no existing key is removed,
+  // renamed or restructured, and campDone keeps being read/written exactly as today.
+  function migrateToWorlds(){
+    try{
+      if(localStorage.getItem(MIGR_KEY)) return false;                     // already migrated → do nothing
+      // 1) backup FIRST — full pre-migration snapshot behind aq_backup_prev
+      try{ localStorage.setItem('aq_backup_prev', JSON.stringify({ t:stamp(), migr:'pre-v3',
+        campDone:lsGet('aq_campaign'), econ:lsGet('aq_econ'), buddies:lsGet('aq_buddies'), cos:lsGet('aq_cos'),
+        pomo:lsGet('aq_pomo'), worlds:lsGet('aq_worlds'), progress:lsGet('aq_progress') })); }catch(e){}
+      // 2) world 1 wraps the exam campaign via the kind:'campaign' adapter (campDone NOT copied)
+      const w=lsGet('aq_worlds');
+      WORLD=(w&&Array.isArray(w.worlds)&&w.quests&&typeof w.quests==='object')?w:defaultWorlds();
+      WORLD.v=3;
+      if(!WORLD.worlds.length) WORLD.worlds.push(defaultWorlds().worlds[0]);
+      if(!WORLD.quests[CAMP_QID]) WORLD.quests[CAMP_QID]={id:CAMP_QID,kind:'campaign',name:'exam 3 quest',createdAt:Date.now(),state:'active'};
+      const w1=WORLD.worlds[0]; if(!Array.isArray(w1.questIds))w1.questIds=[];
+      if(w1.questIds.indexOf(CAMP_QID)<0) w1.questIds.unshift(CAMP_QID);
+      if(!WORLD.activeWorldId) WORLD.activeWorldId=w1.id;
+      persistWorld();
+      // 3) lifetime xp pool = sum of completed campaign items' xp (never seeds downward)
+      loadAQ(); AQ.xp=Math.max(AQ.xp||0,campXpDone()); if(typeof AQ.streak!=='number')AQ.streak=0; if(AQ.lastDay===undefined)AQ.lastDay=null; persistAQ();
+      // 4) banked ledger seeded from TODAY'S derived earners; c/s (spent) untouched →
+      //    coinBal()/starBal() = max(0, earned − spent) is bit-identical before and after
+      const e=readEcon(); e.ce=coinsEarned(); e.se=starsEarned(); e.c=e.c||0; e.s=e.s||0; lsSet('aq_econ',JSON.stringify(e));
+      if(!lsSet(MIGR_KEY,'3')) return false;                               // flag only after everything landed
+      markChanged();                                                       // publish the v3 blob
+      return true;
+    }catch(e){ return false; }
+  }
 
   // ---- avatar token on the current (first unfinished) lesson ----
   function placeAvatar(){
@@ -1545,7 +1628,7 @@ try{
   let _quotaWarned=false;
   function cwNotice(msg){ try{ let n=document.getElementById('cwNotice'); if(!n){ n=document.createElement('div'); n.id='cwNotice'; n.style.cssText='position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:99;max-width:86%;padding:9px 13px;font-family:var(--pixfont2,monospace);font-size:14px;color:#fff;background:#3a2740;border:2px solid #ff8a5a;box-shadow:0 4px 14px rgba(0,0,0,.5);text-align:center'; document.body.appendChild(n); } n.textContent=msg; n.style.opacity='1'; clearTimeout(n._t); n._t=setTimeout(()=>{ n.style.transition='opacity .5s'; n.style.opacity='0'; },4200); }catch(e){} }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); return true; }catch(e){ if(!_quotaWarned){ _quotaWarned=true; cwNotice('⚠ storage full — progress may not be saving'); } return false; } }
-  function snapshot(){ return { v:2, t:stamp(), campDone:campDone, econ:readEcon(), buddies:lsGet('aq_buddies'), cos:lsGet('aq_cos'), pomo:lsGet('aq_pomo') }; }
+  function snapshot(){ return { v:3, t:stamp(), campDone:campDone, econ:readEcon(), buddies:lsGet('aq_buddies'), cos:lsGet('aq_cos'), pomo:lsGet('aq_pomo'), worlds:lsGet('aq_worlds'), progress:lsGet('aq_progress') }; }   // v3 ADDS worlds+progress; campDone stays (pullCloud's validity gate checks it)
   function setSyncErr(msg){ const g=document.getElementById('sqGear'); if(!g)return; g.title=msg||''; let d=g.querySelector('.syncdot'); if(msg){ if(!d){ d=document.createElement('span'); d.className='syncdot'; d.style.cssText='position:absolute;top:-3px;right:-3px;width:9px;height:9px;border-radius:50%;background:#ff5a5a;box-shadow:0 0 6px #ff5a5a;pointer-events:none'; g.style.position='relative'; g.appendChild(d); } } else if(d){ d.remove(); } }
   let pushTimer=0;
   function doPush(keepalive){ if(!syncOn())return; let body; try{ body=JSON.stringify(snapshot()); }catch(e){ return; }
@@ -1557,12 +1640,18 @@ try{
     const r=await fetch(API.url+'/save?slot=sidequest',{headers:{'x-aq-key':API.key}});
     if(!r.ok){ setSyncErr('sync failed ('+r.status+')'); return false; } const d=await r.json();
     if(d && d.campDone && typeof d.campDone==='object' && (d.t||0)>stamp()){
-      try{ localStorage.setItem('aq_backup_prev', JSON.stringify({ t:stamp(), campDone:lsGet('aq_campaign'), econ:lsGet('aq_econ'), buddies:lsGet('aq_buddies'), cos:lsGet('aq_cos'), pomo:lsGet('aq_pomo') })); }catch(e){}
+      try{ localStorage.setItem('aq_backup_prev', JSON.stringify({ t:stamp(), campDone:lsGet('aq_campaign'), econ:lsGet('aq_econ'), buddies:lsGet('aq_buddies'), cos:lsGet('aq_cos'), pomo:lsGet('aq_pomo'), worlds:lsGet('aq_worlds'), progress:lsGet('aq_progress') })); }catch(e){}
       campDone=d.campDone; saveCampaign();
       if(d.econ)lsSet('aq_econ',JSON.stringify(d.econ));
       if(d.buddies)lsSet('aq_buddies',JSON.stringify(d.buddies));
       if(d.cos)lsSet('aq_cos',JSON.stringify(d.cos));
       if(d.pomo)lsSet('aq_pomo',JSON.stringify(d.pomo));
+      if(d.worlds){ lsSet('aq_worlds',JSON.stringify(d.worlds)); loadWorld(); }         // v3 fields adopt when present…
+      if(d.progress){ lsSet('aq_progress',JSON.stringify(d.progress)); loadAQ(); }
+      else if(localStorage.getItem(MIGR_KEY)){                                          // …a v2 blob (older device) never erases them;
+        const a=lsGet('aq_progress'), floor=campXpDone();                               // lifetime xp only ever floors UP to the adopted campaign
+        if(a&&(a.xp||0)<floor){ a.xp=floor; lsSet('aq_progress',JSON.stringify(a)); loadAQ(); }
+      }
       lsSet('aq_save_t',String(d.t||0)); setSyncErr(''); return true;
     }
     setSyncErr(''); return false;
@@ -1657,7 +1746,7 @@ try{
       const r=await fetch(API.url+'/save?slot=sidequest',{headers:{'x-aq-key':API.key}});
       if(r.status===401){ st.textContent='✕ wrong key'; return; }
       if(!r.ok){ st.textContent='✕ worker error ('+r.status+') — KV bound?'; return; }
-      const adopted=await pullCloud(); loadBud(); loadCos(); applyCos(); loadPomo(); rebuild(); renderDex(); renderActiveBuddy(); renderShopOutfits(); pomoTally(); if(!adopted) pushCloud();
+      const adopted=await pullCloud(); migrateToWorlds(); loadWorld(); loadAQ(); loadBud(); loadCos(); applyCos(); loadPomo(); rebuild(); renderDex(); renderActiveBuddy(); renderShopOutfits(); pomoTally(); if(!adopted) pushCloud();
       st.textContent='✓ connected — synced'; cwSfx('levelup'); cwBuzz(16);
       setTimeout(closeSync,800);
     }catch(e){ st.textContent='✕ cannot reach worker'; }
@@ -1670,6 +1759,8 @@ try{
   if(new URLSearchParams(location.search).has('embed')){ document.documentElement.classList.add('embed'); document.body.classList.add('embed'); }
   const vEl=document.getElementById('sqVer'); if(vEl) vEl.textContent='side quest '+SQ_VER;
   const adopted=await pullCloud();
+  migrateToWorlds();                 // one-time exam-save → worlds fold (idempotent, guarded, backed up)
+  loadWorld(); loadAQ();             // hydrate the new stores (nothing renders from them this stage)
   loadCos(); applyCos();
   initBuddies();
   initShop();
