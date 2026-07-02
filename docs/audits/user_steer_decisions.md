@@ -84,6 +84,17 @@ Evaluate every improvement on THREE fronts: **look · performance · practicalit
 - **Overdue/abandon handling — SOFTENED from owner's give-up idea:** an unfinished task just stays open; completing it later still credits its origin quest. NO auto "given up" on a whole world (clashes with never-shame). Give-up stays manual; auto-give-up could be an opt-in setting only.
 - Belongs in ROADMAP as a new track (T11), targeted for Phase B (proto-now) alongside the pick screen.
 
+## Clarification
+- Earlier "origin WORLD given up" → owner meant "origin QUEST." Softened handling applies at the quest level; no auto-give-up, give-up stays manual.
+
+## Cross-quest task indicator (owner — small, no agent)
+- A step that exists in >1 quest shows a small **link badge (e.g. "⇄ 2")**; tap → see the other quests it's in and navigate there. Pure transparency on the one-identity-by-TickTick-id model (checking off credits all; rewards still mint once). Prototype-now, cheap.
+
+## Habits → Daily Quests (owner — Fable creative-liberty pass)
+- Turn TickTick **habits** into gamified **daily quests/dailies**. Bidirectional check-in sync (check in Side Quest ↔ TickTick habit reflects; check in TickTick → rewards show when you open dailies). API supports habit check-ins via the worker.
+- MUST NOT feel like extra workload / another task pile. Should feel like a warm, satisfying daily RITUAL that's motivating to keep — ties naturally to the Hearth/streak + campfire. Anti-overload is the key constraint.
+- Fable given creative liberty; report: redesign_habits_dailies.md.
+
 ## Standing rule reinforced
 - Every feature must REDUCE friction. If a mechanic requires manual bookkeeping/logging to earn rewards, redesign it to be automatic or drop it.
 - Evaluation lens for ALL work: look · performance · practicality.
