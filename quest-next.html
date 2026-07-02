@@ -44,10 +44,12 @@ html,body{margin:0;min-height:100%;background:#161029;font-family:var(--pixfont)
 .hud-streak{ flex:none; font-family:var(--pixfont); font-size:12px; color:#ffcf6e; text-shadow:0 0 8px rgba(255,150,60,.5); white-space:nowrap; }
 #top .t{ font-family:var(--pixfont); font-size:13px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.4); }
 #top .sub{ font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.6; }
-#tabs{ margin-left:auto; display:flex; gap:6px; }
-#tabs button{ font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; text-transform:lowercase; padding:6px 10px; cursor:pointer;
-  background:var(--card); color:var(--cardtx); border:2px solid; border-color:var(--chi) var(--clo) var(--clo) var(--chi); }
-#tabs button.on{ background:var(--bar); color:var(--bartx); }
+/* persistent bottom nav (borrowed from the live game's #nav — lateral moves only; ← handles vertical) */
+#nav{ position:sticky; bottom:0; z-index:18; flex:none; display:flex; background:linear-gradient(180deg,#2a2350,#1c1636); border-top:2px solid var(--outline); box-shadow:0 -3px 0 rgba(0,0,0,.25); padding-bottom:env(safe-area-inset-bottom); }
+#nav button{ flex:1; background:none; border:none; cursor:pointer; padding:8px 4px 9px; display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--tx); opacity:.55; font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; text-transform:lowercase; }
+#nav button .ni{ font-size:18px; line-height:1; }
+#nav button.on{ opacity:1; color:var(--gold); text-shadow:0 0 8px rgba(255,210,110,.5); }
+#nav button.on .ni{ filter:drop-shadow(0 0 7px rgba(255,210,110,.6)); }
 .wrap{ flex:1; padding:14px; }
 .view{ display:none; } .view.on{ display:block; }
 
@@ -100,9 +102,10 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .savenote{ font-family:var(--pixfont2); font-size:15px; color:var(--comp); text-align:center; margin-top:10px; min-height:18px; }
 
 /* ---------- PREVIEW ---------- */
-.qhd{ position:sticky; top:var(--toph,52px); z-index:8; display:flex; align-items:baseline; gap:8px; margin:0 -14px 12px; padding:10px 16px; background:linear-gradient(180deg,var(--base2),var(--base)); border-bottom:2px solid var(--outline); box-shadow:0 4px 9px rgba(0,0,0,.4); }
-.qhd .qt{ font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.45); }
-.qhd .qm{ font-family:var(--pixfont2); font-size:15px; color:var(--tx); opacity:.65; margin-left:auto; }
+.qhd{ position:sticky; top:var(--toph,52px); z-index:8; display:flex; align-items:center; gap:8px; margin:0 -14px 12px; padding:8px 14px; background:linear-gradient(180deg,var(--base2),var(--base)); border-bottom:2px solid var(--outline); box-shadow:0 4px 9px rgba(0,0,0,.4); }
+.qhd .qt{ flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:var(--pixfont); font-size:14px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; text-shadow:0 0 9px rgba(255,200,110,.45); }
+.qhd .qm{ flex:none; font-family:var(--pixfont2); font-size:15px; color:var(--tx); opacity:.65; margin-left:auto; }
+.pkback.wide{ width:auto; padding:0 9px; font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; text-transform:lowercase; white-space:nowrap; }
 .pv-ban{ position:relative; display:flex; align-items:center; gap:9px; margin:2px 0 8px; padding:8px 12px; background:linear-gradient(90deg,var(--ban),transparent); border-left:4px solid var(--gold); }
 .pv-ban.mt{ margin-top:16px; } .pv-ban .lbl{ font-family:var(--pixfont); font-size:12px; color:#ffd98a; letter-spacing:1.5px; text-transform:uppercase; text-shadow:0 0 8px rgba(255,200,110,.4); }
 .pv-ban .cnt{ margin-left:auto; font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.7; } .pv-ban .cnt b{ color:#ffcf6e; }
@@ -142,6 +145,24 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .wmhd .wmglobe{ flex:none; margin-left:4px; width:30px; height:30px; padding:0; font-size:16px; line-height:1; cursor:pointer; background:linear-gradient(180deg,#2c2450,#211b40); border:2px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 7px rgba(255,200,110,.25); transition:transform .1s, box-shadow .15s; image-rendering:pixelated; }
 .wmhd .wmglobe:hover{ transform:translateY(-1px) scale(1.08); box-shadow:0 0 12px rgba(255,200,110,.55); }
 .wmhd .wmglobe:active{ transform:translateY(1px) scale(.94); }
+/* quick world switcher — pixel dropdown off the world banner */
+.wswbtn{ display:flex; align-items:center; gap:7px; background:none; border:none; padding:2px 4px 2px 0; cursor:pointer; min-width:0;
+  font-family:var(--pixfont); font-size:12px; color:#ffd98a; letter-spacing:1.5px; text-transform:uppercase; text-shadow:0 0 8px rgba(255,200,110,.4); }
+.wswbtn .wn{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.wswbtn .dn{ flex:none; font-size:9px; opacity:.7; }
+.wsw{ position:absolute; left:8px; top:calc(100% + 5px); z-index:22; min-width:236px; max-width:calc(100% - 16px); padding:5px;
+  background:var(--frame); border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi); box-shadow:0 0 0 2px var(--outline), 0 14px 34px rgba(0,0,0,.55); }
+.wsw[hidden]{ display:none; }
+.wswrow{ display:flex; align-items:center; gap:8px; padding:8px 9px; cursor:pointer; }
+.wswrow:hover{ background:rgba(255,255,255,.06); }
+.wswrow.here{ background:var(--inset); box-shadow:inset 3px 0 0 var(--gold); }
+.wswrow .we{ flex:none; font-size:15px; line-height:1; }
+.wswrow .wname{ flex:1; min-width:0; font-family:var(--pixfont2); font-size:16px; color:var(--cardtx); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.wswrow .wbar{ flex:none; width:52px; height:8px; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); overflow:hidden; }
+.wswrow .wfill{ display:block; height:100%; background:repeating-linear-gradient(45deg,var(--compL) 0 5px,var(--compD) 5px 10px); }
+.wswrow .wq{ flex:none; font-family:var(--pixfont2); font-size:13px; color:var(--tx); opacity:.6; }
+.wswrow.all{ border-top:2px solid var(--outline); margin-top:3px; padding-top:9px; }
+.wswrow.all .wname{ font-family:var(--pixfont); font-size:10px; color:#b7a6ef; text-transform:lowercase; }
 .map{ position:relative; width:100%; }
 .mbox{ position:absolute; transform:translateX(-50%); z-index:1; box-sizing:border-box; cursor:pointer; image-rendering:pixelated;
   background:linear-gradient(180deg, color-mix(in srgb, var(--frame) 80%, transparent), color-mix(in srgb, var(--base) 90%, transparent));
@@ -228,7 +249,7 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .pkdue.soon{ color:#ffcf6e; }
 .pkpri{ flex:none; width:8px; height:8px; transform:rotate(45deg); }
 .pkpri.hi{ background:#ff6a6a; box-shadow:0 0 5px rgba(255,106,106,.7); } .pkpri.mid{ background:#ffcf6e; }
-.pkfoot{ position:sticky; bottom:0; margin:12px -14px 0; padding:12px 14px calc(12px + env(safe-area-inset-bottom)); background:linear-gradient(0deg,var(--base) 60%,transparent); }
+.pkfoot{ position:sticky; bottom:var(--navh,0px); margin:12px -14px 0; padding:12px 14px; background:linear-gradient(0deg,var(--base) 60%,transparent); }
 .pkfoot .bigbtn{ width:100%; }
 .pkfoot.empty .bigbtn{ opacity:.5; pointer-events:none; }
 .pkskip{ width:100%; margin-top:8px; }
@@ -268,8 +289,7 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 <body><div id="app">
   <header id="top">
     <div class="topbar">
-      <span class="t">✦ side quest</span><span class="sub">builder</span>
-      <div id="tabs"><button id="tabMap" class="on">map</button><button id="tabBuild">build</button><button id="tabPreview">preview</button></div>
+      <span class="t">✦ side quest</span><span class="sub" id="topSub">world map</span>
     </div>
     <div class="hud" id="hud">
       <div class="hud-lvl"><span class="hud-rank" id="hudRank">fresh start</span><span class="hud-lv" id="hudLv">lv 1</span></div>
@@ -280,12 +300,12 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
   <div class="wrap">
     <div class="view on" id="viewMap"></div>
     <div class="view" id="viewBuild">
+      <div class="pkhd"><button class="pkback" id="bdBack" title="back to quest">←</button><span class="pktt">edit quest</span><span class="pksync" id="bdWorld"></span></div>
       <div class="qname-row"><label>quest</label><input class="txt" id="qname" placeholder="name your quest…" maxlength="80"></div>
       <div id="chapters"></div>
       <button class="addbtn chap" id="importBtn">↯ import from ticktick</button>
       <button class="addbtn chap" id="addChapter">＋ add chapter</button>
-      <div class="bigrow"><button class="bigbtn ghost" id="clearBtn">clear</button><button class="bigbtn" id="saveBtn">save quest</button></div>
-      <div class="bigrow"><button class="bigbtn danger" id="giveupBtn">give up quest</button></div>
+      <div class="bigrow"><button class="bigbtn ghost" id="clearBtn">clear</button><button class="bigbtn danger" id="giveupBtn">give up quest</button></div>
       <div class="savenote" id="saveNote"></div>
     </div>
     <div class="view" id="viewPreview"></div>
@@ -299,6 +319,11 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
     </div>
     <div class="view" id="viewStats"></div>
   </div>
+  <nav id="nav">
+    <button id="navMap" class="on"><span class="ni">🗺️</span>map</button>
+    <button id="navWorlds"><span class="ni">🌍</span>worlds</button>
+    <button id="navStats"><span class="ni">📊</span>stats</button>
+  </nav>
 
   <div class="modal" id="worldEdit"><div class="mcard">
     <h3 id="weTitle">new world</h3>
@@ -405,8 +430,9 @@ const TT_LISTS=[
 
 function blankStep(){ return {id:nid('s'), text:'', diff:'med', date:'', notes:'', done:false}; }
 function blankChapter(){ return {id:nid('c'), name:'', steps:[blankStep()]}; }
-function blankQuest(){ return {id:nid('q'), name:'', chapters:[blankChapter()], createdAt:null, state:'active'}; }
-let quest = load() || blankQuest();
+function blankQuest(){ return {id:nid('q'), name:'', chapters:[blankChapter()], createdAt:null, state:'active', worldId:null}; }
+// the quest currently open in play/edit — always BOUND to a stored quest + its world (no floating global draft)
+let quest = null;
 
 // ---- world state ----
 function loadWorld(){ try{ const w=JSON.parse(localStorage.getItem('aq_worlds')); if(w&&w.worlds)return w; }catch(e){} return { worlds:[{id:nid('w'),name:'My Quests',emoji:'✦',color:'twilight',questIds:[]}], activeWorldId:null, quests:{} }; }
@@ -414,6 +440,27 @@ let WORLD=loadWorld(); if(!WORLD.activeWorldId)WORLD.activeWorldId=WORLD.worlds[
 function persistWorld(){ try{ localStorage.setItem('aq_worlds', JSON.stringify(WORLD)); }catch(e){} }
 function activeWorld(){ return WORLD.worlds.find(w=>w.id===WORLD.activeWorldId)||WORLD.worlds[0]; }
 function worldQuests(){ const w=activeWorld(); return (w.questIds||[]).map(id=>WORLD.quests[id]).filter(Boolean); }
+// ---- one-time migration: stored quests learn their worldId; any leftover floating builder
+// draft (the old model) is filed into its world instead of silently dying, then retired ----
+(function migrateModel(){
+  let dirty=false;
+  WORLD.worlds.forEach(w=>(w.questIds||[]).forEach(id=>{ const q=WORLD.quests[id]; if(q&&!q.worldId){ q.worldId=w.id; dirty=true; } }));
+  try{
+    const d=JSON.parse(localStorage.getItem('aq_builder_draft'));
+    if(d && d.id && d.chapters){
+      const has=(d.name||'').trim() || d.chapters.some(c=>(c.name||'').trim()||(c.steps||[]).some(s=>(s.text||'').trim()));
+      if(has){
+        const home=WORLD.worlds.find(w=>(w.questIds||[]).includes(d.id));
+        d.worldId = d.worldId || (home?home.id:WORLD.activeWorldId);
+        if(!home){ const w=WORLD.worlds.find(x=>x.id===d.worldId)||activeWorld(); w.questIds=w.questIds||[]; if(!w.questIds.includes(d.id)) w.questIds.push(d.id); }
+        d.createdAt=d.createdAt||'now';
+        WORLD.quests[d.id]=d; dirty=true;
+      }
+    }
+  }catch(e){}
+  try{ localStorage.removeItem('aq_builder_draft'); }catch(e){}
+  if(dirty) persistWorld();
+})();
 
 const stepXP=(s)=>XP[s.diff]||0;
 function questState(q){ const t=questTotals(q); if(q.state==='gaveup')return 'gaveup'; if(t.steps>0 && t.stepsDone===t.steps)return 'done'; if(t.stepsDone>0)return 'prog'; return 'new'; }
@@ -421,9 +468,7 @@ function questStars(q){ let total=q.chapters.length+3, earned=0; q.chapters.forE
 function questTotals(q){ let xp=0,exp=0,done=0,tot=0; q.chapters.forEach(c=>c.steps.forEach(s=>{ tot++; xp+=stepXP(s); if(s.done){done++; exp+=stepXP(s);} })); return {xpEarned:exp,xpTotal:xp,stepsDone:done,steps:tot}; }
 function esc(x){ return String(x==null?'':x).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
 
-// ---- persistence ----
-function persist(){ try{ localStorage.setItem('aq_builder_draft', JSON.stringify(quest)); }catch(e){} }
-function load(){ try{ const d=JSON.parse(localStorage.getItem('aq_builder_draft')); return (d&&d.chapters)?d:null; }catch(e){ return null; } }
+// ---- persistence: the builder AUTOSAVES straight into the quest's own world (see autosave() below) ----
 
 // ---- global leveling + daily streak (one lifetime XP pool, open-ended) ----
 const RANKS=[[1,'fresh start'],[3,'warming up'],[5,'in the zone'],[8,'locked in'],[12,'on a roll'],[16,'unstoppable'],[20,'legend'],[26,'ascended']];
@@ -446,21 +491,33 @@ function renderHUD(levelUp){
   document.getElementById('hudStreak').textContent='🔥 '+(AQ.streak||0);
   if(levelUp){ const h=document.getElementById('hud'); h.classList.remove('levelup'); void h.offsetWidth; h.classList.add('levelup'); }
 }
-function saveQuest(){
-  quest.createdAt = quest.createdAt || 'now';
-  WORLD.quests[quest.id] = JSON.parse(JSON.stringify(quest));
-  const w = activeWorld(); w.questIds = w.questIds || [];
-  if(!w.questIds.includes(quest.id)) w.questIds.push(quest.id);
-  persistWorld();
-}
 // persist play-progress (checked-off steps) back to the stored quest so it survives leaving + re-opening
 function syncQuestToWorld(){ if(quest && quest.id && WORLD.quests[quest.id]){ WORLD.quests[quest.id] = JSON.parse(JSON.stringify(quest)); persistWorld(); } }
+// autosave: every edit writes back to the quest's OWN world (quest.worldId — never activeWorld(),
+// so a quest can't be filed into the wrong world). A brand-new quest is only filed once it has
+// real content, so backing out of an untouched blank builder leaves no litter on the road.
+function autosave(){
+  if(!quest || !quest.id) return;
+  if(!WORLD.quests[quest.id]){
+    const hasContent=(quest.name||'').trim() || quest.chapters.some(c=>(c.name||'').trim()||c.steps.some(s=>(s.text||'').trim()));
+    if(!hasContent) return;
+    quest.createdAt = quest.createdAt || 'now';
+    quest.worldId = quest.worldId || WORLD.activeWorldId;
+    const w = WORLD.worlds.find(x=>x.id===quest.worldId) || activeWorld();
+    w.questIds = w.questIds || [];
+    if(!w.questIds.includes(quest.id)) w.questIds.push(quest.id);
+    WORLD.quests[quest.id] = {}; // register; syncQuestToWorld fills it in
+  }
+  syncQuestToWorld();
+}
 
 // ---- builder render ----
 const chaptersEl=document.getElementById('chapters');
 function playSVG(done){ return '<svg viewBox="0 0 24 24" width="24" height="24" style="filter:drop-shadow(0 0 4px '+(done?'rgba(255,222,120,.95)':'rgba(190,160,255,.9)')+')"><path d="'+(done?CW_STAR:CW_PLAY)+'" fill="'+(done?'#ffe27a':'#d7c8ff')+'"/></svg>'; }
 function autoGrow(t){ t.style.height='auto'; t.style.height=(t.scrollHeight+2)+'px'; }
 function renderBuilder(){
+  const bw=WORLD.worlds.find(x=>x.id===quest.worldId)||activeWorld();
+  document.getElementById('bdWorld').textContent=(bw.emoji||'✦')+' '+(bw.name||'my world');
   document.getElementById('qname').value = quest.name;
   chaptersEl.innerHTML='';
   quest.chapters.forEach((c,ci)=>{
@@ -500,13 +557,20 @@ function renderStep(c,ci,s,si){
   el.querySelector('.tk').addEventListener('input',e=>{ s.text=e.target.value; onEdit(); });
   el.querySelector('.date').addEventListener('input',e=>{ s.date=e.target.value; onEdit(); });
   const ta=el.querySelector('.notes'); ta.addEventListener('input',e=>{ s.notes=e.target.value; autoGrow(ta); onEdit(); });
-  el.querySelector('.play').onclick=()=>{ s.done=!s.done; if(s.done)sfx('done'); renderBuilder(); onEdit(); };
+  // completing a step behaves IDENTICALLY here and in play: award XP + write back via syncQuestToWorld (through onEdit→autosave)
+  el.querySelector('.play').onclick=()=>{ s.done=!s.done; if(s.done)sfx('done'); awardXP(s.done?stepXP(s):-stepXP(s)); renderBuilder(); onEdit(); };
   el.querySelector('.diffchip').onclick=()=>{ s.diff=DIFFS[(DIFFS.indexOf(s.diff)+1)%3]; renderBuilder(); onEdit(); };
   el.querySelector('.grip').addEventListener('pointerdown',e=>beginDrag(e,'step',el,{ci,si}));
   el.querySelector('.del').onclick=()=>{ if(c.steps.length>1) c.steps.splice(si,1); else c.steps.splice(si,1,blankStep()); renderBuilder(); onEdit(); };
   return el;
 }
-function onEdit(){ persist(); if(document.getElementById('viewPreview').classList.contains('on')) renderPreview(); }
+let _asT=null,_asT2=null;
+function onEdit(){
+  autosave();
+  clearTimeout(_asT);
+  _asT=setTimeout(()=>{ const n=document.getElementById('saveNote'); if(!n||!WORLD.quests[(quest||{}).id])return; n.textContent='✓ autosaved'; clearTimeout(_asT2); _asT2=setTimeout(()=>{ n.textContent=''; },1400); },600);
+  if(document.getElementById('viewPreview').classList.contains('on')) renderPreview();
+}
 
 // ---- drag to reorder (steps within/across chapters, and chapters) ----
 let drag=null;
@@ -555,10 +619,11 @@ const pv=document.getElementById('viewPreview');
 function renderPreview(){
   const t=questTotals(quest);
   const anySteps = quest.chapters.some(c=>c.steps.some(s=>s.text.trim()));
-  let h='<div class="qhd"><span class="qt">'+esc(quest.name||'untitled quest')+'</span>'+
-        '<span class="qm">'+t.xpEarned+' / '+t.xpTotal+' xp · '+t.stepsDone+'/'+t.steps+' done</span></div>';
+  let h='<div class="qhd"><button class="pkback" id="pvBack" title="back to map">←</button><span class="qt">'+esc(quest.name||'untitled quest')+'</span>'+
+        '<span class="qm">'+t.xpEarned+' / '+t.xpTotal+' xp · '+t.stepsDone+'/'+t.steps+' done</span>'+
+        '<button class="pkback wide" id="pvEdit" title="edit quest">⚙ edit</button></div>';
   if(quest.state==='gaveup') h+='<div class="savenote" style="margin:0 0 10px">🏳️ given up — you keep what you earned, no bonus</div>';
-  if(!anySteps){ h+='<div class="pv-empty">add a chapter + some steps to see your quest take shape ✦</div>'; pv.innerHTML=h; return; }
+  if(!anySteps){ h+='<div class="pv-empty">add a chapter + some steps to see your quest take shape ✦</div>'; pv.innerHTML=h; wirePvHead(); return; }
   quest.chapters.forEach((c,ci)=>{
     let cx=0,cd=0,ce=0,ct=0; c.steps.forEach(s=>{ ct++; cx+=stepXP(s); if(s.done){cd++; ce+=stepXP(s);} });
     h+='<div class="pv-ban'+(ci>0?' mt':'')+'"><span class="lbl">'+esc(c.name||('chapter '+(ci+1)))+'</span><span class="cnt"><b>'+cd+'</b>/'+ct+' done</span></div>';
@@ -574,6 +639,7 @@ function renderPreview(){
   h+='<div class="pv-foot">on finish: <i>'+quest.chapters.length+' + 3</i> ⭐ · earning <b>'+t.xpTotal+'</b> coins + xp as you go</div>';
   h+='<div class="pv-hint">tap a step to complete it · right-click / hold for details</div>';
   pv.innerHTML=h;
+  wirePvHead();
   pv.querySelectorAll('.pv-row').forEach(row=>{
     const ci=+row.dataset.ci, si=+row.dataset.si, s=quest.chapters[ci].steps[si];
     let held=false, timer=null;
@@ -581,8 +647,12 @@ function renderPreview(){
     row.addEventListener('contextmenu',e=>{ e.preventDefault(); clearTimeout(timer); openDetail(s,ci); });
     row.addEventListener('pointerdown',()=>{ held=false; timer=setTimeout(openIt,450); });
     row.addEventListener('pointermove',()=>{ clearTimeout(timer); });
-    row.addEventListener('pointerup',()=>{ clearTimeout(timer); if(!held){ s.done=!s.done; if(s.done)sfx('done'); awardXP(s.done?stepXP(s):-stepXP(s)); if(document.getElementById('viewBuild').classList.contains('on'))renderBuilder(); persist(); syncQuestToWorld(); renderPreview(); } });
+    row.addEventListener('pointerup',()=>{ clearTimeout(timer); if(!held){ s.done=!s.done; if(s.done)sfx('done'); awardXP(s.done?stepXP(s):-stepXP(s)); autosave(); renderPreview(); } });
   });
+}
+function wirePvHead(){
+  const b=document.getElementById('pvBack'); if(b) b.onclick=()=>show('map');
+  const e=document.getElementById('pvEdit'); if(e) e.onclick=()=>show('build');
 }
 
 // ---- detail modal ----
@@ -648,11 +718,19 @@ function renderMap(){
   const wrap=document.getElementById('viewMap'); const quests=worldQuests(); const w=activeWorld();
   const HW=150,HH=68; hillPos={}; gangEl=glowEl=null;
   selectedId = (selectedId && quests.find(q=>q.id===selectedId)) ? selectedId : defaultSel(quests);
-  let head='<div class="wmhd"><span class="wn">'+esc(w.emoji||'✦')+' '+esc(w.name||'my quests')+'</span><span class="cnt">'+quests.length+' quest'+(quests.length===1?'':'s')+'</span><button class="wmglobe" title="worlds hub" aria-label="worlds hub">🌍</button></div>';
+  // world banner = quick world switcher (▾ dropdown); the 🌍 globe still goes to the full hub
+  let rows=''; WORLD.worlds.filter(x=>!x.archived).forEach(x=>{ const a=worldAgg(x);
+    rows+='<div class="wswrow'+(x.id===w.id?' here':'')+'" data-wid="'+x.id+'"><span class="we">'+esc(x.emoji||'✦')+'</span><span class="wname">'+esc(x.name||'my world')+'</span><span class="wbar"><span class="wfill" style="width:'+a.pct+'%"></span></span><span class="wq">'+a.n+'</span></div>'; });
+  rows+='<div class="wswrow all" data-all="1"><span class="we">🌍</span><span class="wname">all worlds</span><span class="wq">→</span></div>';
+  let head='<div class="wmhd"><button class="wswbtn" id="wswBtn" title="switch world" aria-haspopup="true"><span class="wn">'+esc(w.emoji||'✦')+' '+esc(w.name||'my quests')+'</span><span class="dn">▾</span></button>'+
+    '<span class="cnt">'+quests.length+' quest'+(quests.length===1?'':'s')+'</span><button class="wmglobe" title="worlds hub" aria-label="worlds hub">🌍</button>'+
+    '<div class="wsw" id="wsw" hidden>'+rows+'</div></div>';
   if(!quests.length) head+='<div class="mempty">no quests yet — tap ＋ to build your first one ✦</div>';
   wrap.innerHTML=head;
-  const wmhd=wrap.querySelector('.wmhd'); if(wmhd){ wmhd.style.cursor='pointer'; wmhd.title='worlds hub'; wmhd.onclick=()=>show('hub'); }
-  const globe=wrap.querySelector('.wmglobe'); if(globe) globe.onclick=(e)=>{ e.stopPropagation(); show('hub'); };
+  const wsw=wrap.querySelector('#wsw');
+  wrap.querySelector('#wswBtn').onclick=()=>{ wsw.hidden=!wsw.hidden; };
+  wsw.querySelectorAll('.wswrow').forEach(r=>r.onclick=()=>{ if(r.dataset.all){ show('hub'); return; } if(r.dataset.wid===WORLD.activeWorldId){ wsw.hidden=true; return; } switchWorld(r.dataset.wid); });
+  const globe=wrap.querySelector('.wmglobe'); if(globe) globe.onclick=()=>show('hub');
   const map=document.createElement('div'); map.className='map';
   const pts=quests.map((q,i)=>({x:(i%2===0?300:132), y:120+i*172}));
   const addX=(quests.length%2===0?300:132), addY=120+quests.length*172; map.style.height=(addY+110)+'px';
@@ -688,7 +766,10 @@ function selectQuest(id){ if(id===selectedId)return; selectedId=id; try{localSto
   if(gangEl){ gangEl.style.left=p.cx+'px'; gangEl.style.top=(p.baseY-2)+'px'; gangEl.classList.add('walking'); setTimeout(()=>{ gangEl && gangEl.classList.remove('walking'); },660); }
   if(glowEl){ glowEl.style.left=p.cx+'px'; glowEl.style.top=p.cy+'px'; }
 }
-function openQuest(id){ const q=WORLD.quests[id]; if(!q)return; quest=JSON.parse(JSON.stringify(q)); persist(); show('preview'); }
+// opening a quest goes to PLAY; builder work is never at risk (it autosaved on every edit)
+function openQuest(id){ const q=WORLD.quests[id]; if(!q)return; quest=JSON.parse(JSON.stringify(q));
+  if(!quest.worldId){ const ow=WORLD.worlds.find(w=>(w.questIds||[]).includes(id)); quest.worldId=(ow||activeWorld()).id; }
+  show('preview'); }
 function newQuest(){ openPick('new'); }
 
 // ---- pick-your-tasks screen ----
@@ -763,15 +844,15 @@ function pkAddToQuest(){
     const c0=quest.chapters[0], blankFirst = quest.chapters.length===1 && c0 && !c0.name && c0.steps.length===1 && !c0.steps[0].text;
     if(blankFirst) quest.chapters=chapters; else quest.chapters.push(...chapters);
   } else {
-    quest={ id:nid('q'), name:'', chapters, createdAt:null, state:'active' };
+    quest={ id:nid('q'), name:'', chapters, createdAt:null, state:'active', worldId:WORLD.activeWorldId };
   }
-  persist(); pkSel.clear(); show('build');
+  autosave(); pkSel.clear(); show('build');
 }
 document.getElementById('pkSearch').addEventListener('input', e=>{ pkQuery=e.target.value.trim().toLowerCase(); renderPick(); });
 document.querySelectorAll('.pkseg').forEach(b=>b.onclick=()=>{ pkOrg=b.dataset.org; document.querySelectorAll('.pkseg').forEach(x=>x.classList.toggle('on',x===b)); renderPick(); });
 document.getElementById('pkWeek').onclick=()=>{ pkWeekOn=!pkWeekOn; document.getElementById('pkWeek').classList.toggle('on',pkWeekOn); renderPick(); };
 document.getElementById('pkBack').onclick=()=>show(pkMode==='add'?'build':'map');
-document.getElementById('pkSkip').onclick=()=>{ quest=blankQuest(); persist(); show('build'); };
+document.getElementById('pkSkip').onclick=()=>{ quest=blankQuest(); quest.worldId=WORLD.activeWorldId; show('build'); };
 document.getElementById('pkAdd').onclick=pkAddToQuest;
 
 // ---- worlds hub ----
@@ -892,26 +973,44 @@ document.getElementById('worldEdit').addEventListener('click',e=>{ if(e.target.i
 document.getElementById('qname').addEventListener('input',e=>{ quest.name=e.target.value; onEdit(); });
 document.getElementById('addChapter').onclick=()=>{ quest.chapters.push(blankChapter()); renderBuilder(); onEdit(); };
 document.getElementById('importBtn').onclick=()=>openPick('add');
-document.getElementById('clearBtn').onclick=()=>askConfirm('clear this quest?','this wipes the current draft and starts fresh.',()=>{ quest=blankQuest(); renderBuilder(); persist(); document.getElementById('saveNote').textContent=''; });
-document.getElementById('saveBtn').onclick=()=>{ saveQuest(); document.getElementById('saveNote').textContent='✓ saved to your world'; setTimeout(()=>{document.getElementById('saveNote').textContent='';},2600); };
+document.getElementById('clearBtn').onclick=()=>askConfirm('clear this quest?','this wipes all chapters + steps of this quest and starts it fresh.',()=>{ quest.name=''; quest.chapters=[blankChapter()]; quest.state='active'; renderBuilder(); onEdit(); document.getElementById('saveNote').textContent=''; });
 function noteFlash(msg){ const n=document.getElementById('saveNote'); n.textContent=msg; setTimeout(()=>{ n.textContent=''; },2600); }
 document.getElementById('giveupBtn').onclick=()=>{
-  if(quest.state==='gaveup'){ quest.state='active'; persist(); syncQuestToWorld(); renderBuilder(); noteFlash('↩ resumed — back in progress'); return; }
-  askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; persist(); syncQuestToWorld(); renderBuilder(); noteFlash('🏳️ given up — resumable later'); });
+  if(quest.state==='gaveup'){ quest.state='active'; autosave(); renderBuilder(); noteFlash('↩ resumed — back in progress'); return; }
+  askConfirm('give up quest?', 'you’ll keep every coin + star you’ve already earned, but forfeit the <b>+3</b> completion bonus. the quest gets a faded flag (resumable later).', ()=>{ quest.state='gaveup'; autosave(); renderBuilder(); noteFlash('🏳️ given up — resumable later'); });
 };
+document.getElementById('bdBack').onclick=()=>show('preview'); // ← = one level up: builder → its quest (autosaved all along)
 const V={map:document.getElementById('viewMap'), build:document.getElementById('viewBuild'), preview:document.getElementById('viewPreview'), hub:document.getElementById('viewHub'), pick:document.getElementById('viewPick'), stats:document.getElementById('viewStats')};
-const T={map:document.getElementById('tabMap'), build:document.getElementById('tabBuild'), preview:document.getElementById('tabPreview')};
-function show(name){ applyWorldTheme(activeWorld()); for(const k in V) V[k].classList.toggle('on', k===name); for(const k in T) T[k].classList.toggle('on', k===name); if(name==='map')renderMap(); else if(name==='build')renderBuilder(); else if(name==='preview')renderPreview(); else if(name==='hub')renderHub(); else if(name==='pick')renderPick(); else if(name==='stats')renderStats(); }
-T.map.onclick=()=>show('map'); T.build.onclick=()=>show('build'); T.preview.onclick=()=>show('preview');
+// bottom nav = lateral roots (final lineup is a later decision); quest/build/pick sit under map
+const NAVROOT={map:'navMap',preview:'navMap',build:'navMap',pick:'navMap',hub:'navWorlds',stats:'navStats'};
+const SUBS={map:'world map',preview:'quest',build:'edit quest',hub:'worlds',pick:'pick tasks',stats:'stats'};
+function show(name){
+  if((name==='build'||name==='preview') && !quest) name='map';   // play/edit only exist bound to a quest
+  const themeW=((name==='build'||name==='preview')&&quest) ? (WORLD.worlds.find(w=>w.id===quest.worldId)||activeWorld()) : activeWorld();
+  applyWorldTheme(themeW);
+  for(const k in V) V[k].classList.toggle('on', k===name);
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on', b.id===NAVROOT[name]));
+  const sub=document.getElementById('topSub'); if(sub) sub.textContent=SUBS[name]||'';
+  if(name==='map')renderMap(); else if(name==='build')renderBuilder(); else if(name==='preview')renderPreview(); else if(name==='hub')renderHub(); else if(name==='pick')renderPick(); else if(name==='stats')renderStats();
+}
+document.getElementById('navMap').onclick=()=>show('map');
+document.getElementById('navWorlds').onclick=()=>show('hub');
+document.getElementById('navStats').onclick=()=>{ stDrillId=null; show('stats'); };
+
+// close the world-switcher dropdown on any tap outside the banner
+document.addEventListener('click',(e)=>{ const p=document.getElementById('wsw'); if(p && !p.hidden && !e.target.closest('.wmhd')) p.hidden=true; });
 
 // default click blip for everything EXCEPT completing a task (which keeps the satisfying sound)
 document.addEventListener('click', (e)=>{
   const t=e.target; if(t.closest('.play') || t.closest('.pv-row')) return;
-  if(t.closest('#tabs button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .mbox, .grip, .hubcard, .hubrow, .emochip, .palchip, .wmglobe, .pkseg, .pkfilter, .pkback, .pktask, .pkexpand, .stcard')) sfx('sel');
+  if(t.closest('#nav button, .bigbtn, .mini, .diffchip, .addbtn, .madd, .mhill, .mbox, .grip, .hubcard, .hubrow, .emochip, .palchip, .wmglobe, .wswbtn, .wswrow, .pkseg, .pkfilter, .pkback, .pktask, .pkexpand, .stcard')) sfx('sel');
 }, true);
 
 // keep sticky quest/world banners parked just below the app bar (measured, so it survives safe-area insets)
-function setTopH(){ const t=document.getElementById('top'); if(t) document.getElementById('app').style.setProperty('--toph', t.offsetHeight+'px'); }
+// + measure the bottom nav so sticky footers (pick) sit above it
+function setTopH(){ const app=document.getElementById('app'), t=document.getElementById('top'), n=document.getElementById('nav');
+  if(t) app.style.setProperty('--toph', t.offsetHeight+'px');
+  if(n) app.style.setProperty('--navh', n.offsetHeight+'px'); }
 setTopH(); window.addEventListener('resize', setTopH);
 renderHUD();
 show('map');
