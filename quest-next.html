@@ -317,6 +317,23 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .cf-link{ display:block; width:100%; margin-top:10px; background:none; border:none; cursor:pointer; font-family:var(--pixfont2); font-size:15px; color:var(--comp); opacity:.85; text-align:center; }
 .cf-empty{ font-family:var(--pixfont2); font-size:16px; color:var(--tx); opacity:.55; text-align:center; padding:18px 10px; line-height:1.4; }
 
+/* ---------- THE CLOCK (effectiveness_vision #2) — calm pace context. gold/accent ONLY: never red, never "overdue" ---------- */
+.pace{ font-family:var(--pixfont2); font-size:14px; color:#ffe9b0; opacity:.8; text-align:center; margin:-2px 2px 10px; }
+.chby{ color:var(--comp); opacity:.9; text-transform:none; letter-spacing:0; }
+.cf-due{ display:flex; gap:2px; align-items:center; justify-content:center; min-height:5px; margin-top:1px; }
+.cf-due i{ width:3px; height:3px; background:#ffcf6e; box-shadow:0 0 3px rgba(255,207,110,.55); }
+.cf-due b{ font-family:var(--pixfont2); font-size:9px; color:#ffcf6e; font-weight:normal; line-height:1; }
+
+/* ---------- TOMORROW'S PROMISE (effectiveness_vision #4) — the dumpling holds it out ---------- */
+.cf-card.promise{ border-color:var(--gold); box-shadow:0 0 12px rgba(255,207,110,.4); }
+.cf-card .vow{ display:block; font-family:var(--pixfont); font-size:7px; letter-spacing:.5px; color:#ffd98a; margin-bottom:3px; text-transform:lowercase; }
+.prm-row{ display:flex; align-items:center; gap:9px; padding:9px 10px; margin-bottom:7px; cursor:pointer; background:var(--card); border:2px solid; border-color:var(--chi) var(--clo) var(--clo) var(--chi); }
+.prm-row:active{ border-color:var(--gold); }
+.prm-row img{ flex:none; image-rendering:pixelated; }
+.prm-row .task{ flex:1; min-width:0; font-family:var(--pixfont2); font-size:16px; color:var(--ctext); line-height:1.15; overflow:hidden; }
+.prm-row .task .from{ display:block; font-size:12px; opacity:.6; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.prm-row .due{ flex:none; font-family:var(--pixfont2); font-size:13px; color:var(--comp); }
+
 /* ---------- start-a-step (doing state — the tomato sits by it) ---------- */
 .pv-row.doing{ border-color:var(--gold); box-shadow:0 0 10px rgba(255,207,110,.35); }
 .pv-row.doing .task{ color:#ffe9b0; }
@@ -449,6 +466,13 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
     <p class="msg" id="cfMsg"></p>
     <div class="mrow"><button class="bigbtn ghost" id="cfNo">cancel</button><button class="bigbtn danger" id="cfYes">confirm</button></div>
   </div></div>
+
+  <div class="modal" id="promiseM"><div class="mcard">
+    <h3>✦ what's first tomorrow?</h3>
+    <p class="msg">pick one and the dumpling will keep it warm for the morning — or just rest.</p>
+    <div id="prList"></div>
+    <div class="mrow"><button class="bigbtn ghost" id="prSkip">skip — just rest 🫖</button></div>
+  </div></div>
 </div>
 <script>
 // ===== Side Quest — builder prototype =====
@@ -577,8 +601,8 @@ function esc(x){ return String(x==null?'':x).replace(/[&<>"]/g,m=>({'&':'&amp;',
 
 // ---- global leveling + daily streak (one lifetime XP pool, open-ended) ----
 const RANKS=[[1,'fresh start'],[3,'warming up'],[5,'in the zone'],[8,'locked in'],[12,'on a roll'],[16,'unstoppable'],[20,'legend'],[26,'ascended']];
-// camp = today's campfire picks/shuffles/tea flag · timer = last-used kettle config (both additive; core model unchanged)
-function loadAQ(){ try{ const a=JSON.parse(localStorage.getItem('aq_progress')); if(a&&typeof a.xp==='number')return {xp:a.xp, streak:a.streak||0, lastDay:a.lastDay||null, camp:a.camp||null, timer:a.timer||null}; }catch(e){} return {xp:0, streak:0, lastDay:null, camp:null, timer:null}; }
+// camp = today's campfire picks/shuffles/tea flag · timer = last-used kettle config · promise = tomorrow's promise {day,sid} (all additive; core model unchanged)
+function loadAQ(){ try{ const a=JSON.parse(localStorage.getItem('aq_progress')); if(a&&typeof a.xp==='number')return {xp:a.xp, streak:a.streak||0, lastDay:a.lastDay||null, camp:a.camp||null, timer:a.timer||null, promise:a.promise||null}; }catch(e){} return {xp:0, streak:0, lastDay:null, camp:null, timer:null, promise:null}; }
 let AQ=loadAQ();
 function persistAQ(){ try{ localStorage.setItem('aq_progress', JSON.stringify(AQ)); }catch(e){} }
 function xpForLevel(L){ return 50 + 25*(L-1); }                 // cost to go L -> L+1
@@ -666,7 +690,7 @@ function renderStep(c,ci,s,si){
   el.querySelector('.date').addEventListener('input',e=>{ s.date=e.target.value; onEdit(); });
   const ta=el.querySelector('.notes'); ta.addEventListener('input',e=>{ s.notes=e.target.value; autoGrow(ta); onEdit(); });
   // completing a step behaves IDENTICALLY here and in play: award XP + write back via syncQuestToWorld (through onEdit→autosave)
-  el.querySelector('.play').onclick=()=>{ s.done=!s.done; if(s.done){ s.doing=false; sfx('done'); } awardXP(s.done?stepXP(s):-stepXP(s)); renderBuilder(); onEdit(); };
+  el.querySelector('.play').onclick=()=>{ s.done=!s.done; if(s.done){ s.doing=false; sfx('done'); clearPromiseIf(s.id); } awardXP(s.done?stepXP(s):-stepXP(s)); renderBuilder(); onEdit(); };
   el.querySelector('.diffchip').onclick=()=>{ s.diff=DIFFS[(DIFFS.indexOf(s.diff)+1)%3]; renderBuilder(); onEdit(); };
   el.querySelector('.grip').addEventListener('pointerdown',e=>beginDrag(e,'step',el,{ci,si}));
   el.querySelector('.del').onclick=()=>{ if(c.steps.length>1) c.steps.splice(si,1); else c.steps.splice(si,1,blankStep()); renderBuilder(); onEdit(); };
@@ -731,10 +755,17 @@ function renderPreview(){
         '<span class="qm">'+t.xpEarned+' / '+t.xpTotal+' xp · '+t.stepsDone+'/'+t.steps+' done</span>'+
         '<button class="pkback wide" id="pvEdit" title="edit quest">⚙ edit</button></div>';
   if(quest.state==='gaveup') h+='<div class="savenote" style="margin:0 0 10px">🏳️ given up — you keep what you earned, no bonus</div>';
+  // the clock: gentle pace line from remaining steps + latest due date (undated quests show nothing)
+  const _pl=(quest.state==='gaveup')?'':paceLine([].concat.apply([],quest.chapters.map(c=>c.steps)));
+  if(_pl) h+='<div class="pace">🕯 '+_pl+'</div>';
   if(!anySteps){ h+='<div class="pv-empty">add a chapter + some steps to see your quest take shape ✦</div>'; pv.innerHTML=h; wirePvHead(); return; }
   quest.chapters.forEach((c,ci)=>{
     let cx=0,cd=0,ce=0,ct=0; c.steps.forEach(s=>{ ct++; cx+=stepXP(s); if(s.done){cd++; ce+=stepXP(s);} });
-    h+='<div class="pv-ban'+(ci>0?' mt':'')+'"><span class="lbl">'+esc(c.name||('chapter '+(ci+1)))+'</span><span class="cnt"><b>'+cd+'</b>/'+ct+' done</span></div>';
+    // soonest/latest-due context, softly (accent color, no red): "· by jul 6" on chapters with dated remaining steps
+    const _cds=c.steps.filter(s=>!s.done&&(s.text||'').trim()).map(s=>parseDue(s.date)).filter(Boolean);
+    const _lat=_cds.length?new Date(Math.max.apply(null,_cds)):null;
+    const chby=_lat?(' · <span class="chby">by '+MON[_lat.getMonth()].toLowerCase()+' '+_lat.getDate()+'</span>'):'';
+    h+='<div class="pv-ban'+(ci>0?' mt':'')+'"><span class="lbl">'+esc(c.name||('chapter '+(ci+1)))+'</span><span class="cnt"><b>'+cd+'</b>/'+ct+' done'+chby+'</span></div>';
     h+='<div class="pv-track"><div class="pv-fill" style="width:'+(cx?Math.round(ce/cx*100):0)+'%"></div></div><div class="pv-rows">';
     c.steps.forEach((s,si)=>{
       const doing=!!s.doing && !s.done;   // started via ▶ — the tomato sits by it
@@ -756,7 +787,7 @@ function renderPreview(){
     row.addEventListener('contextmenu',e=>{ e.preventDefault(); clearTimeout(timer); openDetail(s,ci); });
     row.addEventListener('pointerdown',()=>{ held=false; timer=setTimeout(openIt,450); });
     row.addEventListener('pointermove',()=>{ clearTimeout(timer); });
-    row.addEventListener('pointerup',()=>{ clearTimeout(timer); if(!held){ s.done=!s.done; if(s.done){ s.doing=false; sfx('done'); } awardXP(s.done?stepXP(s):-stepXP(s)); autosave(); renderPreview(); } });
+    row.addEventListener('pointerup',()=>{ clearTimeout(timer); if(!held){ s.done=!s.done; if(s.done){ s.doing=false; sfx('done'); clearPromiseIf(s.id); } awardXP(s.done?stepXP(s):-stepXP(s)); autosave(); renderPreview(); } });
   });
   // arriving from a campfire card: scroll the freshly-lit row into view
   if(_cfJump){ _cfJump=false; const dr=pv.querySelector('.pv-row.doing'); if(dr) setTimeout(()=>dr.scrollIntoView({block:'center',behavior:'smooth'}),60); }
@@ -783,7 +814,7 @@ function openDetail(s,ci){
 document.getElementById('dStart').onclick=()=>{
   const s=detailStep; if(!s)return; detail.classList.remove('on');
   if(s.doing && !s.done){ stopStep(s); return; }
-  s.doing=true; s.startedAt=s.startedAt||Date.now(); autosave(); sfx('add'); renderPreview();
+  s.doing=true; s.startedAt=s.startedAt||Date.now(); clearPromiseIf(s.id); autosave(); sfx('add'); renderPreview();
   askTimer({q:quest, s});
 };
 document.getElementById('dClose').onclick=()=>detail.classList.remove('on');
@@ -1093,6 +1124,20 @@ function parseDue(str){ if(!str)return null; const s=String(str).trim();
     const now=new Date(); let d=new Date(now.getFullYear(),mi,+m[2]); if(d-now<-180*86400000) d=new Date(now.getFullYear()+1,mi,+m[2]); return d; }
   return null;
 }
+// ---- THE CLOCK (effectiveness_vision #2) — real dates → calm pace arithmetic. never red,
+// never "overdue!": past-due just quietly stops counting; the number itself is the only nudge. ----
+// the study day rolls at 5am (user_steer_decisions) — 1am still counts as tonight
+function studyToday(){ return dayStr(new Date(Date.now()-5*3600000)); }
+function daysUntil(due){ if(!due)return null; const p=studyToday().split('-'); const t=new Date(+p[0],+p[1]-1,+p[2]); return Math.round((due-t)/86400000); }
+// gentle pace line for a set of steps: "9 steps · 5 days → ~2/day". undated → '' (show nothing).
+function paceLine(steps){
+  let left=0, latest=null;
+  steps.forEach(s=>{ if(!(s.text||'').trim()||s.done)return; left++; const d=parseDue(s.date); if(d&&(!latest||d>latest)) latest=d; });
+  if(!left||!latest) return '';
+  const days=daysUntil(latest); if(days==null||days<1) return '';   // due today/past: the quiet date tags say enough — never an alarm
+  const per=Math.ceil(left/days);
+  return left+' step'+(left===1?'':'s')+' · '+days+' day'+(days===1?'':'s')+' → ~'+per+'/day'+(per<=2?' keeps it cozy':'');
+}
 // candidates = each active quest's next few UNSTARTED steps, nudged by due-soon (earliest due floats up; no red, ever)
 function campCandidates(){
   const out=[];
@@ -1127,19 +1172,36 @@ function campShuffle(){
   c.ids.forEach(id=>{ if(c.seen.indexOf(id)<0)c.seen.push(id); });
   c.ids=[]; c.shuffles++; persistAQ(); campEnsure(); sfx('sel'); renderCamp();
 }
+// the clock on the week strip: due-count per day, today + ahead only. anything already past
+// folds quietly into today (it just doesn't disappear) — never a red "overdue" anywhere.
+function dueDotMap(){
+  const map={}, t0=todayISO();
+  WORLD.worlds.filter(w=>!w.archived).forEach(w=>(w.questIds||[]).forEach(id=>{ const q=WORLD.quests[id]; if(!q||!q.chapters||q.state==='gaveup')return;
+    q.chapters.forEach(c=>(c.steps||[]).forEach(s=>{ if(s.done||!(s.text||'').trim())return; const d=parseDue(s.date); if(!d)return;
+      const ds=dayStr(d), key=ds<t0?t0:ds; map[key]=(map[key]||0)+1; })); }));
+  return map;
+}
 function weekStripHTML(){
   const lit=new Set();                                           // derive the lit run from streak+lastDay (calm; history never shown as holes)
   if(AQ.lastDay&&AQ.streak>0){ const p=AQ.lastDay.split('-'); const d=new Date(+p[0],+p[1]-1,+p[2]);
     for(let i=0;i<AQ.streak&&i<8;i++){ lit.add(dayStr(d)); d.setDate(d.getDate()-1); } }
+  const dues=dueDotMap();
   const DL=['su','mo','tu','we','th','fr','sa']; const now=new Date(); let h='<div class="cf-week">';
-  for(let i=6;i>=0;i--){ const d=new Date(now); d.setDate(d.getDate()-i); const ds=dayStr(d), today=(i===0);
+  for(let i=-3;i<=3;i++){ const d=new Date(now); d.setDate(d.getDate()+i); const ds=dayStr(d), today=(i===0);
     const cls=lit.has(ds)?' lit':(today?' ember':'');
-    h+='<div class="cf-dayp"><span class="cf-pip'+cls+(today?' today':'')+'"></span>'+DL[d.getDay()]+'</div>'; }
+    const n=(i>=0&&dues[ds])||0;                                 // a gentle gold dot per due step on the days ahead — the wall becomes "mon:2 tue:1"
+    let dots='<span class="cf-due">'; for(let k=0;k<Math.min(n,3);k++)dots+='<i></i>'; if(n>3)dots+='<b>+</b>'; dots+='</span>';
+    h+='<div class="cf-dayp"><span class="cf-pip'+cls+(today?' today':'')+'"></span>'+DL[d.getDay()]+dots+'</div>'; }
   return h+'</div>';
 }
 function renderCamp(){
   const wrap=document.getElementById('viewCamp'); const c=campEnsure();
   const lit=AQ.lastDay===todayISO(), tier=streakTier(AQ.streak||0);
+  // tomorrow's promise: a stale one clears silently (a broken promise is NEVER mentioned);
+  // today's pins itself to the front of the picks — the dumpling holds it out first.
+  if(AQ.promise && AQ.promise.day<studyToday()){ AQ.promise=null; persistAQ(); }
+  const vow=promiseFor(studyToday());
+  if(vow){ c.ids=[vow.s.id].concat(c.ids.filter(x=>x!==vow.s.id)).slice(0,3); persistAQ(); }
   const picks=c.ids.map(id=>findStepRef(id)).filter(Boolean);
   const allResolved=picks.length>0&&picks.every(r=>r.s.done||r.s.doing);
   const tea=c.tea||allResolved;
@@ -1158,16 +1220,17 @@ function renderCamp(){
     if(c.tea) h+='<button class="cf-link" id="cfStoke">stoke it back up ✦</button>';
     else if(shufLeft>0) h+='<button class="addbtn" id="cfShuf">🔀 one more log on the fire?</button>';
   } else {
-    h+='<div class="cf-say">'+(lit
+    h+='<div class="cf-say">'+(vow?'the dumpling kept your first move warm ✦':(lit
       ? (picks.length?picks.length+' small thing'+(picks.length===1?'':'s')+' by the fire — no rush':'the fire’s happy · nothing waiting ✦')
-      : 'the fire’s banked — anything small lights it ✦')+'</div></div>';
+      : 'the fire’s banked — anything small lights it ✦'))+'</div></div>';
     if(dRefs.length){ h+=dRefs.map(r=>'<div class="cf-prog" data-qid="'+r.q.id+'">🍅 <span class="pn">'+esc(r.s.text||'(untitled step)')+'</span><span style="opacity:.6">'+esc(r.q.name||'quest')+' →</span></div>').join(''); }
     if(picks.length){
       h+='<div class="cf-cards">'+picks.map(r=>{
         const st=r.s.done?'done':(r.s.doing?'doing':'');
+        const isVow=!!vow&&r.s.id===vow.s.id&&!st;               // the promised step — held out, highlighted, first
         const due=r.s.date?(' · <span class="due">'+esc(r.s.date)+'</span>'):'';
-        return '<div class="cf-card'+(st?' '+st:'')+'" data-sid="'+r.s.id+'"><span class="go">'+(r.s.done?'✔':(r.s.doing?'🍅':'▶'))+'</span>'+
-          '<span class="bd"><span class="task">'+esc(r.s.text||'(untitled step)')+'</span>'+
+        return '<div class="cf-card'+(st?' '+st:'')+(isVow?' promise':'')+'" data-sid="'+r.s.id+'"><span class="go">'+(r.s.done?'✔':(r.s.doing?'🍅':(isVow?('<img src="'+SL+'" style="width:22px" alt="">'):'▶')))+'</span>'+
+          '<span class="bd">'+(isVow?'<span class="vow">✦ you said you’d start with this</span>':'')+'<span class="task">'+esc(r.s.text||'(untitled step)')+'</span>'+
           '<span class="from">'+esc(r.w.emoji||'✦')+' '+esc(r.q.name||'untitled quest')+due+'</span></span>'+
           '<span class="xp">+'+stepXP(r.s)+'</span></div>';
       }).join('')+'</div>';
@@ -1187,15 +1250,40 @@ function renderCamp(){
   });
   wrap.querySelectorAll('.cf-prog').forEach(el=>el.onclick=()=>{ _cfJump=true; openQuest(el.dataset.qid); });
   const sh=wrap.querySelector('#cfShuf'); if(sh)sh.onclick=campShuffle;
-  const nt=wrap.querySelector('#cfNight'); if(nt)nt.onclick=()=>{ c.tea=true; persistAQ(); renderCamp(); }; // pure ceremony — never closes the streak day
+  const nt=wrap.querySelector('#cfNight'); if(nt)nt.onclick=callItANight; // tea ceremony + tomorrow's promise — never closes the streak day
   const st=wrap.querySelector('#cfStoke'); if(st)st.onclick=()=>{ c.tea=false; persistAQ(); renderCamp(); };
 }
+
+// ---- TOMORROW'S PROMISE (effectiveness_vision #4 — implementation intentions, cozied) ----
+// tonight-you picks ONE next-unstarted step (or skips); stored additively as AQ.promise={day,sid}.
+// next study-day (5am boundary) the campfire holds it out first. no pick = no nag, ever.
+function promiseFor(day){ const p=AQ.promise; if(!p||p.day!==day)return null;
+  const ref=findStepRef(p.sid); if(!ref||ref.s.done||ref.s.doing)return null; return ref; }
+function clearPromiseIf(sid){ if(AQ.promise&&AQ.promise.sid===sid){ AQ.promise=null; persistAQ(); } } // acted on → the promise is kept, retire it quietly
+function nextStudyDay(){ const p=studyToday().split('-'); const d=new Date(+p[0],+p[1]-1,+p[2]); d.setDate(d.getDate()+1); return dayStr(d); }
+function _prTuck(){ document.getElementById('promiseM').classList.remove('on'); const c=campEnsure(); c.tea=true; persistAQ(); renderCamp(); }
+function callItANight(){
+  const cands=campCandidates().slice(0,4);                      // a few next-unstarted steps to choose from
+  if(!cands.length){ _prTuck(); return; }                       // nothing to promise — straight to tea
+  document.getElementById('prList').innerHTML=cands.map(r=>{
+    const due=r.s.date?('<span class="due">'+esc(r.s.date)+'</span>'):'';
+    return '<div class="prm-row" data-sid="'+r.s.id+'"><img src="'+SL+'" style="width:22px" alt="">'+
+      '<span class="task">'+esc(r.s.text||'(untitled step)')+'<span class="from">'+esc(r.w.emoji||'✦')+' '+esc(r.q.name||'untitled quest')+'</span></span>'+due+'</div>';
+  }).join('');
+  document.getElementById('prList').querySelectorAll('.prm-row').forEach(el=>el.onclick=()=>{
+    AQ.promise={day:nextStudyDay(), sid:el.dataset.sid}; persistAQ();
+    sfx('add'); toast('✦ the dumpling holds it for the morning'); _prTuck();
+  });
+  document.getElementById('promiseM').classList.add('on');
+}
+document.getElementById('prSkip').onclick=_prTuck;
+document.getElementById('promiseM').addEventListener('click',e=>{ if(e.target.id==='promiseM') _prTuck(); }); // backdrop = skip; skipping is always fine
 
 // ---- press ▶ / start-a-step (start ≠ complete, start ≠ timer) ----
 function startStepById(sid){
   const ref=findStepRef(sid); if(!ref||ref.s.done)return;
   const fresh=!ref.s.doing;
-  if(fresh){ ref.s.doing=true; ref.s.startedAt=ref.s.startedAt||Date.now(); persistWorld(); sfx('add'); }
+  if(fresh){ ref.s.doing=true; ref.s.startedAt=ref.s.startedAt||Date.now(); clearPromiseIf(sid); persistWorld(); sfx('add'); }
   _cfJump=true; openQuest(ref.q.id);          // open the quest with the row lit + tomato seated
   if(fresh) askTimer(ref);                    // then, separately: "want a timer? 🍅"
 }
