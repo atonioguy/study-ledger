@@ -10,11 +10,22 @@
   --pixfont:'Silkscreen','Courier New',monospace; --pixfont2:'VT323','Courier New',monospace;
   --base:#191234; --base2:#322766; --dot:#2b2258; --env:#8068c4; --ban:rgba(128,104,196,.42);
   --comp:#5fe0c8; --compL:#6ff0d8; --compD:#3fb8a4; --chi:#7d6bc0; --clo:#281f48; --ctext:#f3eeff; --donetx:#0c3830; --pathdot:#4a3d78;
+  /* per-world glow hue (the color light "leaks" as) + shared bloom recipes — one luminous system */
+  --glow:#8f7bff; --skyglow:rgba(143,123,255,.20); --comp-hi:#b7f6ea;
+  --bloom-gold:0 0 14px rgba(255,200,110,.75);
+  --bloom-accent:0 0 14px color-mix(in srgb,var(--comp) 60%,transparent);
+  --glow-soft:0 0 10px color-mix(in srgb,var(--glow) 45%,transparent);
 }
 *{box-sizing:border-box;}
 html,body{margin:0;min-height:100%;background:#161029;font-family:var(--pixfont);color:var(--tx);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;}
 #app{ position:relative; width:100%; max-width:460px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column;
-  background:radial-gradient(var(--dot) 1px,transparent 1.5px) 0 0/4px 4px, radial-gradient(circle at 50% 0%, var(--base2), var(--base));
+  /* layered ambient bg: corner vignette · dot grid fading toward the bottom · pixel dot grid · top-center sky glow in the world's glow hue · dusky base */
+  background:
+    radial-gradient(ellipse at 50% 42%, transparent 55%, rgba(8,5,20,.35) 100%),
+    linear-gradient(180deg, transparent 55%, var(--base) 96%),
+    radial-gradient(var(--dot) 1px,transparent 1.5px) 0 0/4px 4px,
+    radial-gradient(120% 55% at 50% -6%, var(--skyglow), transparent 62%),
+    radial-gradient(circle at 50% 0%, var(--base2), var(--base));
   image-rendering:pixelated; }
 #top{ flex:none; display:flex; flex-direction:column; gap:9px; padding:calc(11px + env(safe-area-inset-top)) 14px 10px; background:linear-gradient(180deg,#332a59,#241d3c); border-bottom:2px solid var(--outline); box-shadow:0 3px 0 rgba(0,0,0,.3); position:sticky; top:0; z-index:9; }
 .topbar{ display:flex; align-items:center; gap:9px; }
@@ -136,7 +147,7 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
   background:linear-gradient(180deg, color-mix(in srgb, var(--frame) 80%, transparent), color-mix(in srgb, var(--base) 90%, transparent));
   border:3px solid; border-color:var(--hi) var(--lo) var(--lo) var(--hi);
   box-shadow:0 6px 0 rgba(0,0,0,.32), 0 0 0 2px var(--outline), inset 0 2px 0 rgba(255,255,255,.05); transition:box-shadow .2s, border-color .2s; }
-.mbox.sel{ border-color:var(--comp); box-shadow:0 6px 0 rgba(0,0,0,.32), 0 0 15px color-mix(in srgb, var(--comp) 70%, transparent), 0 0 0 2px var(--outline); }
+.mbox.sel{ border-color:var(--comp); box-shadow:0 6px 0 rgba(0,0,0,.32), var(--bloom-accent), 0 0 0 2px var(--outline); }
 .mdot{ position:absolute; width:6px; height:6px; transform:translate(-50%,-50%) rotate(45deg); background:var(--pathdot,#4a3d78); image-rendering:pixelated; }
 .mglow{ position:absolute; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none; transition:left .55s ease-in-out, top .55s ease-in-out; background:radial-gradient(circle, color-mix(in srgb, var(--comp) 34%, transparent) 0%, rgba(255,217,107,.15) 42%, transparent 70%); animation:mamb 2.4s ease-in-out infinite; }
 @keyframes mamb{ 0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.94)} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)} }
@@ -185,7 +196,7 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .welbl{ display:block; font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; text-transform:uppercase; color:var(--tx); opacity:.6; margin:12px 0 5px; }
 .pickrow{ display:flex; flex-wrap:wrap; gap:7px; }
 .emochip{ width:38px; height:38px; display:grid; place-items:center; font-size:19px; cursor:pointer; background:var(--inset); border:2px solid; border-color:var(--lo) var(--hi) var(--hi) var(--lo); }
-.emochip.on{ border-color:var(--gold); box-shadow:0 0 8px rgba(255,217,107,.5); }
+.emochip.on{ border-color:var(--gold); box-shadow:var(--bloom-gold); }
 .palchip{ width:44px; height:30px; cursor:pointer; border:2px solid #241d40; box-shadow:0 0 0 2px var(--outline); }
 .palchip.on{ outline:2px solid #fff; outline-offset:1px; }
 /* pick-your-tasks screen */
@@ -203,7 +214,7 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .pkgh{ font-family:var(--pixfont); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#ffd98a; margin:14px 0 8px; padding:6px 10px; background:linear-gradient(90deg,var(--ban),transparent); border-left:4px solid var(--gold); text-shadow:0 0 8px rgba(255,200,110,.35); }
 .pkgh.first{ margin-top:0; }
 .pktask{ display:flex; align-items:center; gap:9px; padding:10px 11px; margin-bottom:7px; cursor:pointer; background:var(--card); border:2px solid; border-color:var(--chi) var(--clo) var(--clo) var(--chi); transition:border-color .12s, box-shadow .12s; }
-.pktask.sel{ border-color:var(--comp); box-shadow:0 0 9px color-mix(in srgb,var(--comp) 45%, transparent); }
+.pktask.sel{ border-color:var(--comp); box-shadow:var(--bloom-accent); }
 .pktask.sub{ margin-left:26px; background:var(--frame); }
 .pkexpand{ flex:none; width:18px; text-align:center; font-size:12px; color:var(--comp); cursor:pointer; }
 .pkexpand.ph{ visibility:hidden; }
@@ -242,6 +253,17 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 .stqrow .qi{ flex:none; font-size:15px; } .stqrow .qn{ flex:1; min-width:0; font-family:var(--pixfont2); font-size:16px; color:var(--cardtx); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .stqrow .qx{ flex:none; font-family:var(--pixfont2); font-size:14px; color:#ffcf6e; } .stqrow .qs{ flex:none; font-family:var(--pixfont2); font-size:14px; color:#ffe08a; }
 .stempty{ text-align:center; font-family:var(--pixfont2); font-size:16px; color:var(--tx); opacity:.6; padding:22px 14px; line-height:1.45; }
+
+/* ---------- reduced-motion foundation ----------
+   kill loops (hudShine sheen, mamb halo pulse, mbob walk-bob, hudpop),
+   keep one-shot state transitions (bar fills, selection) but shorten them,
+   and freeze glows at a tasteful static frame instead of removing them. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.15s!important; }
+  .hud-fill::after{ content:none; }                 /* looping sheen sweep off; bar keeps its steady glow */
+  .mglow{ animation:none!important; opacity:.7; }   /* selection halo frozen mid-breath — still a soft glow */
+  .mgang.walking img{ animation:none!important; }   /* gang teleport-walks; no bob */
+}
 </style></head>
 <body><div id="app">
   <header id="top">
@@ -304,26 +326,32 @@ textarea.notes{ resize:none; overflow:hidden; min-height:34px; line-height:1.25;
 <script>
 // ===== Side Quest — builder prototype =====
 const XP={easy:5,med:10,hard:20}, DIFFS=['easy','med','hard'];
+// art_direction.md idea #1 — dusky base + one unique singing accent + a per-world `glow`
+// hue (the color light "leaks" as: sky-glow, blooms). fixes the old mint/twilight
+// dup-teal collision and snow's blue-instead-of-peach accent (PLAN wants peach).
 const PALETTES={
-  twilight:{label:'twilight', acc:'#5fe0c8', c1:'#3a3062', c2:'#2a2148', bd:'#7d68c0'},
-  sunset:  {label:'sunset',   acc:'#ff9e5a', c1:'#4d2f3b', c2:'#3a2330', bd:'#c8703e'},
-  mint:    {label:'mint',     acc:'#5fe0c8', c1:'#26473f', c2:'#1b342d', bd:'#4a9f8c'},
-  snow:    {label:'snowy',    acc:'#7fbfff', c1:'#33436e', c2:'#243050', bd:'#6a82c0'},
-  sakura:  {label:'sakura',   acc:'#ffb3d1', c1:'#45304a', c2:'#34203a', bd:'#b877a0'},
+  twilight:{label:'twilight', acc:'#66ecd4', glow:'#8f7bff', c1:'#3d3168', c2:'#241c46', bd:'#8a72d8'}, // teal accent (kept), violet glow
+  sunset:  {label:'sunset',   acc:'#57d9e0', glow:'#ff9e5a', c1:'#523142', c2:'#3a2130', bd:'#d67a44'}, // cyan accent vs ember glow
+  mint:    {label:'mint',     acc:'#ff9e86', glow:'#8fe6b4', c1:'#27503f', c2:'#183028', bd:'#54ad94'}, // coral accent, leaf-green glow
+  snow:    {label:'snowy',    acc:'#ffcaa0', glow:'#add0ff', c1:'#38507e', c2:'#243050', bd:'#7a94d0'}, // peach accent, icy glow
+  sakura:  {label:'sakura',   acc:'#9fe9c4', glow:'#ffc2e0', c1:'#4a3352', c2:'#33203c', bd:'#c885b0'}, // mint accent, blossom-pink glow
 };
 const PAL_KEYS=Object.keys(PALETTES);
 // ---- palette theming: retint the map/quest views to the active world ----
 function _hex2rgb(h){ h=(h||'').replace('#',''); if(h.length===3)h=h.split('').map(c=>c+c).join(''); return [parseInt(h.slice(0,2),16)||0,parseInt(h.slice(2,4),16)||0,parseInt(h.slice(4,6),16)||0]; }
 function shade(hex,pct){ const [r,g,b]=_hex2rgb(hex); const t=pct<0?0:255,p=Math.abs(pct)/100,mix=v=>Math.round(v+(t-v)*p); return 'rgb('+mix(r)+','+mix(g)+','+mix(b)+')'; }
+function mixhex(a,b,p){ const A=_hex2rgb(a),B=_hex2rgb(b),m=i=>Math.round(A[i]+(B[i]-A[i])*p); return 'rgb('+m(0)+','+m(1)+','+m(2)+')'; } // darken toward the palette's own hue (stays saturated, never muddy-grey)
 function rgba(hex,a){ const [r,g,b]=_hex2rgb(hex); return 'rgba('+r+','+g+','+b+','+a+')'; }
 function applyWorldTheme(w){
   const P=PALETTES[(w&&w.color)]||PALETTES.twilight;
   const app=document.getElementById('app'); if(!app)return;
   const set=(k,v)=>app.style.setProperty(k,v);
-  // teal / completion role -> this world's accent
-  set('--comp',P.acc); set('--compL',shade(P.acc,20)); set('--compD',shade(P.acc,-30)); set('--donetx',shade(P.acc,-70));
+  // teal / completion role -> this world's accent (dark shades rotate toward the world's deep base, not black)
+  set('--comp',P.acc); set('--compL',shade(P.acc,20)); set('--compD',mixhex(P.acc,P.c2,.42)); set('--donetx',mixhex(P.acc,P.c2,.82)); set('--comp-hi',shade(P.acc,45));
+  // per-world glow hue -> signature bloom + ambient sky-glow
+  set('--glow',P.glow); set('--skyglow',rgba(P.glow,.20)); set('--glow-soft','0 0 10px '+rgba(P.glow,.45));
   // dusky-blue base role -> this world's base shades
-  set('--base2',P.c1); set('--base',shade(P.c2,-14)); set('--dot',shade(P.c1,-16)); set('--pathdot',shade(P.bd,-4));
+  set('--base2',P.c1); set('--base',shade(P.c2,-14)); set('--dot',mixhex(P.c1,P.c2,.55)); set('--pathdot',shade(P.bd,-4));
   set('--frame',P.c1); set('--card',shade(P.c1,12)); set('--bar',shade(P.c1,14)); set('--barhi',P.bd);
   set('--hi',P.bd); set('--lo',shade(P.c2,-22)); set('--env',P.bd); set('--chi',P.bd); set('--clo',shade(P.c2,-8));
   set('--ban',rgba(P.bd,.42));
@@ -833,7 +861,7 @@ function openWorldEdit(wid){
   weEmoji = w ? (w.emoji||'✦') : '✦'; weColor = w ? (w.color||'twilight') : 'twilight';
   const er=document.getElementById('weEmoji'); er.innerHTML=EMOJIS.map(e=>'<div class="emochip'+(e===weEmoji?' on':'')+'" data-e="'+e+'">'+e+'</div>').join('');
   er.querySelectorAll('.emochip').forEach(c=>c.onclick=()=>{ weEmoji=c.dataset.e; er.querySelectorAll('.emochip').forEach(x=>x.classList.toggle('on',x===c)); });
-  const pr=document.getElementById('wePal'); pr.innerHTML=PAL_KEYS.map(k=>{ const P=PALETTES[k]; return '<div class="palchip'+(k===weColor?' on':'')+'" data-k="'+k+'" title="'+P.label+'" style="background:linear-gradient(135deg,'+P.c1+' 55%,'+P.acc+' 55%);border-color:'+P.bd+'"></div>'; }).join('');
+  const pr=document.getElementById('wePal'); pr.innerHTML=PAL_KEYS.map(k=>{ const P=PALETTES[k]; return '<div class="palchip'+(k===weColor?' on':'')+'" data-k="'+k+'" title="'+P.label+'" style="background:linear-gradient(135deg,'+P.c1+' 45%,'+P.acc+' 45% 75%,'+P.glow+' 75%);border-color:'+P.bd+'"></div>'; }).join('');
   pr.querySelectorAll('.palchip').forEach(c=>c.onclick=()=>{ weColor=c.dataset.k; pr.querySelectorAll('.palchip').forEach(x=>x.classList.toggle('on',x===c)); });
   document.getElementById('weManageRow').style.display = wid ? 'flex' : 'none';
   document.getElementById('worldEdit').classList.add('on');
