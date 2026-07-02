@@ -19,6 +19,7 @@ A fleet of Fable-model agents audited the project to plan the prototype → live
 | `reward_animations.md` | Reward choreography: a 6-tier escalation ladder (step<chapter<quest<level<hatch) — flag-plant ceremony, coin/star-fly, level-up gold spill, hatch walk-home |
 | `redesign_cosmetics_progression.md` | Unified customization (mascot outfits ⨯ room decor) + finetuned leveling reward ladder (level-locked cosmetics, no feature unlocks, charms cut) |
 | `quest_management_flows.md` | Move/reorder/delete/give-up/archive interaction design + undo-safety model |
+| `redesign_habits_dailies.md` | "The Fire Ring" — TickTick habits as hearthstones around the campfire (bidirectional sync, mint-once, +3 XP, anti-overload by shape) |
 | `aesthetic_direction_notes.md` | Owner's reference-image direction (cozy + vibrant twilight/pastel) |
 | `user_steer_decisions.md` | Owner steering: rejected/approved ideas, TickTick pomo integration, standing anti-friction rule |
 
