@@ -96,6 +96,15 @@ Evaluate every improvement on THREE fronts: **look · performance · practicalit
 - Fable given creative liberty; report: redesign_habits_dailies.md → design = **"The Fire Ring"** (habits = hearthstones around the campfire; tap to light; +3 XP only; mint-once bidirectional sync; anti-overload by shape; a full ring "hums", never an achievement).
 - **Sign-off (owner):** (1) Habits use the **CALENDAR day** boundary (match TickTick exactly), NOT the 5am study-day — so Side Quest & TickTick always agree on habit dates. (Note: the Hearth study-streak still uses 5am; only habits use calendar day.) (2) **Streak stays study-pure** — habits NEVER light the Hearth (no Anki opt-in).
 
+## Start-task vs start-timer (owner refinement to The Den / Press-▶)
+- **Separate the two actions.** Hold/right-click a quest step → **"start it"** → tomato walks over and sits beside it = the visible "in progress" indicator (owner especially wants this). THEN prompt **"want a timer?"**
+  - **Yes** → choose timer (customizable; default **25/5 + long break**) → Pomo tab becomes a **full-screen cozy focus mode** (tomato "at work", kettle). Also starts a native TickTick focus session (bidirectional).
+  - **No** → no focus-mode takeover, tomato still sits by the task; owner STILL receives pomo rewards from TickTick focus records the same way.
+- **Send tomato back:** hold tomato → "good job 🍅" → walks back to campfire.
+- **Return to Den** (after TickTick pomos OR ending an in-app session) → tomato hauls crystals home, tomatoes rain in, room shifts to tea time.
+- **Reconciliation:** app can't push-detect a TickTick pomo — reconcile on app open / foreground / Den open, PLUS a manual **"check for pomos 🍅" button in the Den**.
+- Principle reaffirmed: the in-app timer IS a TickTick focus session (never competes); a TickTick-run pomo still pays out in-app.
+
 ## Standing rule reinforced
 - Every feature must REDUCE friction. If a mechanic requires manual bookkeeping/logging to earn rewards, redesign it to be automatic or drop it.
 - Evaluation lens for ALL work: look · performance · practicality.
