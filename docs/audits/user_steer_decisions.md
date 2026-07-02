@@ -105,6 +105,17 @@ Evaluate every improvement on THREE fronts: **look · performance · practicalit
 - **Reconciliation:** app can't push-detect a TickTick pomo — reconcile on app open / foreground / Den open, PLUS a manual **"check for pomos 🍅" button in the Den**.
 - Principle reaffirmed: the in-app timer IS a TickTick focus session (never competes); a TickTick-run pomo still pays out in-app.
 
+## Visual identity: GROUND-UP OVERHAUL (owner — big direction)
+- The planned art track was ENHANCEMENT within the current look; owner wants a **ground-up visual/UI/HUD/identity overhaul** toward the reference images' "alive, official, high-quality, cozy" bar. Current look is "fine but too simple." Full creative liberty; NO obligation to keep prior design choices.
+- Chosen ambition = **HYBRID**: full UI/HUD/identity redesign via CSS/canvas (frames, buttons, shapes, type, color, motion, ambiance) **+ a few REAL pixel-art assets for hero surfaces** (Den room, campfire scene, map backdrop, maybe mascot portraits) where hand-drawn richness matters.
+- Reconciles with "preserve exam-3 look" = that meant don't DOWNGRADE to the rough prototype; this is a deliberate UPGRADE above the current live look. Don't regress; intentionally elevate.
+- **Asset-sourcing reality:** hero pixel-art assets = external PNGs the OWNER sources (commission an artist / AI-generate) — I can't hand-draw scene-level pixel art in this env. I design the spec + integrate; owner provides the art. CSS/canvas redesign I/Fable can fully build. The overhaul pass will produce a concrete asset "shopping list."
+- Sequencing: get the visual-identity DESIGN approved before more visual building (functional work — nav, Auto Today — proceeds in parallel and re-skins on top; only palette hexes may be revisited, trivial).
+
+## Cast is sacred (owner — hard constraint)
+- The **mascots (dumpling/slime + tomato/pomo)** and the **collectible buddies** are the HEART of the game and are NEVER replaced. No redesign/overhaul may swap them out.
+- They may be ELEVATED (glossier/alive rendering, personality, presence, roles — tomato = focus-timer's face, dumpling = warmth/promise-holder, buddies = found-family) but their identities stay.
+
 ## Standing rule reinforced
 - Every feature must REDUCE friction. If a mechanic requires manual bookkeeping/logging to earn rewards, redesign it to be automatic or drop it.
 - Evaluation lens for ALL work: look · performance · practicality.
