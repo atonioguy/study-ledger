@@ -17,6 +17,8 @@ A fleet of Fable-model agents audited the project to plan the prototype → live
 | `redesign_shop_economy.md` | Deep redesign: the Twilight Market + Payday Wheel (inverted gamble, decor sinks, banked ledger, balance math) |
 | `redesign_streak.md` | Deep redesign: "The Hearth" — the streak as the campfire fire (shame-free forgiveness, 5am rollover, flame tiers, milestones) |
 | `reward_animations.md` | Reward choreography: a 6-tier escalation ladder (step<chapter<quest<level<hatch) — flag-plant ceremony, coin/star-fly, level-up gold spill, hatch walk-home |
+| `redesign_cosmetics_progression.md` | Unified customization (mascot outfits ⨯ room decor) + finetuned leveling reward ladder (level-locked cosmetics, no feature unlocks, charms cut) |
+| `quest_management_flows.md` | Move/reorder/delete/give-up/archive interaction design + undo-safety model |
 | `aesthetic_direction_notes.md` | Owner's reference-image direction (cozy + vibrant twilight/pastel) |
 | `user_steer_decisions.md` | Owner steering: rejected/approved ideas, TickTick pomo integration, standing anti-friction rule |
 
