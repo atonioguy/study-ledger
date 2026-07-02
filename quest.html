@@ -684,6 +684,96 @@
   .sq-mbtn.danger{ --btn-hi:#a34d58; --btn-md:#7e3542; --btn-lo:#4a1c26; color:#ffe3e3; background:linear-gradient(180deg,var(--btn-hi) 0 45%,var(--btn-md) 45%); }
   .sq-back{ margin-left:0; }
 
+  /* ==================================================================
+     STAGE 2b — THE CAMPFIRE + DEN FOCUS (ported from quest-next, skinned
+     LANTERNLIGHT: clay cards, ink outlines, frame sprites, the two blooms.
+     the fire IS the streak (redesign_streak R1) · start ≠ timer (locked) */
+  /* ---- the hearth scene: campfire-clearing art under a code-drawn flame ---- */
+  .cf-scene{ position:relative; margin:0 0 4px; padding:16px 10px 10px; min-height:168px; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; overflow:hidden; border-radius:12px;
+    border:2px solid var(--ink); box-shadow:0 4px 0 rgba(10,6,24,.9),0 4px 0 2px var(--ink),inset 0 2px 0 rgba(255,244,214,.06);
+    background:radial-gradient(120% 90% at 50% 0%, #2c2350, var(--dusk-1)); }
+  .cf-bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center bottom; image-rendering:pixelated; z-index:0; pointer-events:none; opacity:.94;
+    -webkit-mask-image:linear-gradient(180deg,#000 58%,rgba(0,0,0,.45) 84%,rgba(0,0,0,.2)); mask-image:linear-gradient(180deg,#000 58%,rgba(0,0,0,.45) 84%,rgba(0,0,0,.2)); }
+  .cf-glow{ position:absolute; left:50%; top:52%; transform:translate(-50%,-50%); width:220px; height:132px; border-radius:50%; pointer-events:none; z-index:1;
+    background:radial-gradient(circle, rgba(255,180,90,.30) 0%, rgba(255,150,60,.12) 45%, transparent 70%); animation:mamb 2.6s ease-in-out infinite; }
+  .cf-fire{ position:relative; z-index:2; display:flex; align-items:flex-end; justify-content:center; gap:12px; min-height:64px; }
+  .cf-fire img{ image-rendering:pixelated; display:block; filter:drop-shadow(0 2px 2px rgba(0,0,0,.4)); }
+  .cf-sign{ font-family:var(--pixfont); font-size:8px; color:#ffd98a; opacity:.9; align-self:flex-end; padding-bottom:4px; white-space:nowrap; text-shadow:1px 1px 0 var(--ink); }
+  .cf-day-line{ position:relative; z-index:2; font-family:var(--pixfont); font-size:9px; letter-spacing:.5px; color:var(--hearth-1); text-shadow:1px 1px 0 var(--ink),0 0 8px rgba(255,150,60,.4); margin-top:7px; text-transform:lowercase; }
+  .cf-say{ position:relative; z-index:2; font-family:var(--pixfont2); font-size:16px; color:var(--tx); text-align:center; margin:8px 4px 0; line-height:1.35; text-shadow:1px 1px 0 rgba(20,15,36,.85); }
+  /* ---- next-step cards: clay anatomy, one-tap ▶ ---- */
+  .cf-cards{ display:flex; flex-direction:column; gap:10px; margin-top:12px; position:relative; z-index:1; }
+  .cf-card{ display:flex; align-items:center; gap:10px; padding:11px 12px; cursor:pointer; border-radius:9px; --btn-lo:#251c50;
+    background:linear-gradient(180deg,#443878 0 45%,#332a59 45%); border:2px solid var(--ink);
+    box-shadow:0 4px 0 var(--btn-lo),0 4px 0 2px var(--ink),inset 0 2px 0 rgba(255,244,214,.14); transition:transform 70ms linear, box-shadow 90ms; }
+  .cf-card:active{ transform:translateY(2px); box-shadow:0 1px 0 var(--btn-lo),0 1px 0 2px var(--ink); }
+  .cf-card .go{ flex:none; width:32px; height:32px; display:grid; place-items:center; font-size:13px; color:var(--hearth-1); background:var(--dusk-0); border:2px solid var(--ink); border-radius:8px; box-shadow:inset 0 2px 4px rgba(0,0,0,.5); }
+  .cf-card .go img{ image-rendering:pixelated; display:block; }
+  .cf-card .bd{ flex:1; min-width:0; }
+  .cf-card .task{ display:block; font-family:var(--pixfont2); font-size:17px; color:var(--cardtx); line-height:1.15; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cf-card .from{ display:block; font-family:var(--pixfont2); font-size:13px; color:var(--cardtx); opacity:.65; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cf-card .from .due{ color:var(--acc); }
+  .cf-card .xp{ flex:none; font-family:var(--pixfont2); font-size:15px; color:#ffcf6e; }
+  .cf-card.doing,.cf-card.promise{ border-color:var(--hearth-2); box-shadow:0 4px 0 var(--btn-lo),0 4px 0 2px var(--ink),var(--bloom-gold),inset 0 2px 0 rgba(255,244,214,.14); }
+  .cf-card.done{ opacity:.78; --btn-lo:#0a4034; background:linear-gradient(180deg,#33c2a1 0 45%,#1e8f76 45%); }
+  .cf-card.done .task{ text-decoration:line-through; }
+  .cf-card .vow{ display:block; font-family:var(--pixfont); font-size:7px; letter-spacing:.5px; color:#ffd98a; margin-bottom:3px; text-transform:lowercase; }
+  .cf-prog{ display:flex; align-items:center; gap:9px; margin-top:10px; padding:8px 11px; cursor:pointer; font-family:var(--pixfont2); font-size:15px; color:#ffe9b0; position:relative; z-index:1;
+    background:linear-gradient(90deg,rgba(255,180,90,.16),transparent); border-left:4px solid var(--hearth-1); border-radius:0 8px 8px 0; }
+  .cf-prog .pn{ flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cf-shuf{ display:block; width:100%; margin-top:12px; }
+  .cf-hint{ font-family:var(--pixfont2); font-size:14px; color:var(--tx); opacity:.6; text-align:center; margin-top:12px; }
+  .cf-empty{ font-family:var(--pixfont2); font-size:16px; color:var(--tx); opacity:.6; text-align:center; padding:18px 10px; line-height:1.4; }
+  /* ---- week strip: lit pips (streak run) + gentle due dots ahead ---- */
+  .cf-week{ display:flex; justify-content:center; gap:11px; margin:16px 0 4px; position:relative; z-index:1; }
+  .cf-dayp{ display:flex; flex-direction:column; align-items:center; gap:4px; font-family:var(--pixfont); font-size:7px; color:var(--tx); opacity:.65; text-transform:lowercase; }
+  .cf-pip{ width:11px; height:11px; border:2px solid var(--ink); border-radius:3px; background:var(--dusk-0); box-shadow:inset 0 1px 2px rgba(0,0,0,.5); }
+  .cf-pip.lit{ background:var(--hearth-1); border-color:var(--ink); box-shadow:0 0 6px rgba(255,200,110,.7); }
+  .cf-pip.ember{ background:#7a4a2e; }
+  .cf-pip.today{ outline:2px solid rgba(255,217,107,.4); outline-offset:1px; }
+  .cf-due{ display:flex; gap:2px; align-items:center; justify-content:center; min-height:5px; margin-top:1px; }
+  .cf-due i{ width:3px; height:3px; border-radius:1px; background:var(--hearth-1); box-shadow:0 0 3px rgba(255,207,110,.55); }
+  .cf-due b{ font-family:var(--pixfont2); font-size:9px; color:var(--hearth-1); font-weight:normal; line-height:1; }
+  /* ---- tea / call it a night ---- */
+  .cf-night{ display:block; width:100%; margin-top:14px; }
+  .cf-tea{ text-align:center; padding:8px 10px 2px; position:relative; z-index:1; }
+  .cf-tea .big{ font-size:34px; line-height:1; margin:6px 0 8px; }
+  .cf-teaimg{ display:block; width:100%; max-width:250px; margin:2px auto 10px; image-rendering:pixelated; border-radius:9px; border:2px solid var(--ink); box-shadow:0 3px 0 rgba(10,6,24,.8); }
+  .cf-link{ display:block; width:100%; margin-top:10px; background:none; border:none; cursor:pointer; font-family:var(--pixfont2); font-size:15px; color:var(--acc); opacity:.9; text-align:center; }
+  /* ---- tomorrow's promise rows (storybook paper — the dumpling holds them) ---- */
+  .prm-row{ display:flex; align-items:center; gap:9px; padding:9px 10px; margin-bottom:8px; cursor:pointer; border-radius:7px;
+    background:var(--paper); border:2px solid var(--paper-ink); box-shadow:0 2px 0 var(--ink); }
+  .prm-row:active{ transform:translateY(1px); box-shadow:0 1px 0 var(--ink); }
+  .prm-row img{ flex:none; image-rendering:pixelated; }
+  .prm-row .task{ flex:1; min-width:0; font-family:var(--pixfont2); font-size:16px; color:var(--paper-ink); line-height:1.15; overflow:hidden; }
+  .prm-row .task .from{ display:block; font-size:12px; opacity:.65; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .prm-row .due{ flex:none; font-family:var(--pixfont2); font-size:13px; color:#8a5a24; }
+  /* ---- kettle config rows ---- */
+  .sq-card .tset-row{ display:flex; align-items:center; gap:8px; margin:8px 0; }
+  .sq-card .tset-row label{ flex:1; display:inline; margin:0; font-family:var(--pixfont2); font-size:15px; color:var(--cardtx); opacity:.85; text-transform:none; letter-spacing:0; }
+  .sq-card .tset-row input{ width:76px; text-align:center; }
+  /* ---- den focus panel (tomato at work · the kettle fill IS the timer face) ---- */
+  .den-focus{ display:flex; align-items:center; gap:11px; margin:0 0 10px; padding:10px 12px; position:relative; z-index:1;
+    background:var(--dusk-3); background-clip:padding-box; border:8px solid var(--dusk-3); border-image:var(--f-panel) 8 fill / 8px; image-rendering:pixelated; }
+  .den-focus[hidden]{ display:none; }
+  .df-tom{ flex:none; width:34px; height:30px; background:var(--tomato) center/contain no-repeat; image-rendering:pixelated; transform-origin:50% 100%; animation:cwSquish 2.3s ease-in-out infinite; }
+  #kettleCv{ flex:none; width:52px; height:52px; image-rendering:pixelated; cursor:pointer; }
+  .df-mid{ flex:1; min-width:0; }
+  .df-step{ display:block; font-family:var(--pixfont2); font-size:16px; color:var(--cardtx); line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .df-phase{ display:block; font-family:var(--pixfont); font-size:8px; letter-spacing:.5px; color:var(--hearth-1); margin-top:5px; text-transform:lowercase; min-height:10px; }
+  .df-end{ flex:none; }
+  /* ---- HUD focus chip (the kettle's remote) + started-step seat on the exam trail ---- */
+  .hud-focus{ flex:none; font-family:var(--pixfont2); font-size:13px; color:var(--acc); cursor:pointer; white-space:nowrap; text-shadow:0 0 8px rgba(95,224,200,.4); }
+  .hud-focus[hidden]{ display:none; }
+  .cw-node.doing,.cw-quest.doing{ border-color:var(--hearth-2); box-shadow:0 4px 0 var(--btn-lo),0 4px 0 2px var(--ink),var(--bloom-gold),inset 0 2px 0 rgba(255,244,214,.18); }
+  .sq-seat{ position:absolute; top:-15px; right:-6px; width:26px; height:23px; background:var(--tomato) center/contain no-repeat; image-rendering:pixelated; pointer-events:none; z-index:5;
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,.4)); transform-origin:50% 100%; animation:cwSquish 2.3s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce){
+    .cf-glow{ animation:none !important; opacity:.7; }
+    .sq-seat,.df-tom{ animation:none !important; }
+    .cf-card,.prm-row{ transition-duration:50ms !important; }
+  }
+
   /* ---- reduced motion: loops freeze (a still firefly is still pretty), one-shots <=120ms ---- */
   @media (prefers-reduced-motion: reduce){
     .mglow,.mgang.walking img,.mlbl .mgo{ animation:none !important; }
@@ -705,7 +795,7 @@
     <header id="hud">
       <span class="hud-buds"><span class="cw-slime" id="cwSlime"><i class="m-hat" id="slimeHat"></i></span><span class="cw-tom" id="cwTom"><i class="m-hat" id="tomHat"></i></span><span class="cw-bud" id="cwBud"></span></span>
       <div class="hud-mid">
-        <div class="hud-lvrow"><span class="cw-lv" id="cwLv">lv 1</span><span class="cw-rank" id="cwRank">fresh start</span><span class="cw-streak"><i class="pi" data-pi="flame">🔥</i><b id="cwStreak">0/21</b></span></div>
+        <div class="hud-lvrow"><span class="cw-lv" id="cwLv">lv 1</span><span class="cw-rank" id="cwRank">fresh start</span><span class="cw-streak"><i class="pi" data-pi="flame">🔥</i><b id="cwStreak">0/21</b></span><span class="hud-focus" id="hudFocus" hidden></span></div>
         <div class="hud-xptrack"><div class="cw-xpfill" id="cwXpFill"></div></div>
         <div class="hud-xpnum" id="cwXpTotal">0 / 250 xp</div>
       </div>
@@ -716,7 +806,11 @@
     </header>
 
     <div id="screens">
-      <section class="screen on" id="screen-wmap" data-screen="wmap">
+      <section class="screen on" id="screen-fire" data-screen="fire">
+        <div id="cfWrap"></div>
+      </section>
+
+      <section class="screen" id="screen-wmap" data-screen="wmap">
         <div class="wmhd" id="wmHead">
           <button class="wswbtn" id="wswBtn" title="switch world" aria-haspopup="true"><span class="wn" id="wswName">✦ my quests</span><span class="dn">▾</span></button>
           <span class="cnt" id="wmCnt"></span>
@@ -768,13 +862,20 @@
       </section>
           <section class="screen" id="screen-pomo" data-screen="pomo">
         <div class="pomo-hd"><span class="pomo-ttl">✦ the den</span><span class="pomo-tally"><b id="pomoRoomN">0</b> here · <b id="pomoTotalN">0</b> logged</span></div>
+        <div class="den-focus" id="denFocus" hidden>
+          <span class="df-tom"></span>
+          <canvas id="kettleCv" width="26" height="26" title="how's the pot?"></canvas>
+          <div class="df-mid"><span class="df-step" id="dfStep"></span><span class="df-phase" id="dfPhase"></span></div>
+          <button class="sq-mbtn primary df-end" id="dfEnd">finish ✦</button>
+        </div>
         <div class="pomo-room" id="pomoArea"></div>
         <div class="pomo-actions"><button id="pomoDrop" class="sq-bigbtn">＋ log a pomo</button><button id="pomoSell" class="sq-bigbtn ghost off" disabled>sell all · <b id="pomoSellN">0</b><span class="ic ic-coin"></span></button></div>
       </section>
     </div>
 
     <nav id="nav">
-      <button class="on" data-go="wmap"><span class="ni pi" data-pi="map">🗺️</span>map</button>
+      <button class="on" data-go="fire"><span class="ni pi" data-pi="flame">🔥</span>fire</button>
+      <button data-go="wmap"><span class="ni pi" data-pi="map">🗺️</span>map</button>
       <button data-go="worlds"><span class="ni pi" data-pi="globe">🌍</span>worlds</button>
       <button data-go="pomo"><span class="ni pi" data-pi="tomato">🍅</span>den</button>
       <button data-go="buddies"><span class="ni pi" data-pi="egg">🥚</span>buddies</button>
@@ -822,6 +923,25 @@
       <label>name</label>
       <input id="qnName" type="text" maxlength="80" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="quest name…">
       <div class="sq-modrow"><button class="sq-mbtn" id="qnCancel">cancel</button><button class="sq-mbtn primary" id="qnSave">plant it</button></div>
+    </div></div>
+    <div id="timerAsk" class="sq-modal"><div class="sq-card">
+      <h3>🍅 tomato's on it</h3>
+      <p class="sq-syncnote">it hops over and settles in beside the step. want a timer?</p>
+      <div class="sq-modrow"><button id="taNo" class="sq-mbtn">no — just company</button><button id="taYes" class="sq-mbtn primary">yes 🍅 brew one</button></div>
+    </div></div>
+    <div id="timerSet" class="sq-modal"><div class="sq-card">
+      <h3>🫖 set the kettle</h3>
+      <div class="tset-row"><label>focus (min)</label><input id="tsFocus" type="number" min="5" max="120" value="25"></div>
+      <div class="tset-row"><label>break (min)</label><input id="tsBrk" type="number" min="1" max="60" value="5"></div>
+      <div class="tset-row"><label>long break (min)</label><input id="tsLong" type="number" min="5" max="90" value="15"></div>
+      <div class="tset-row"><label>long break every</label><input id="tsEvery" type="number" min="2" max="8" value="4"></div>
+      <div class="sq-modrow"><button id="tsCancel" class="sq-mbtn">not now</button><button id="tsGo" class="sq-mbtn primary">start brewing ▶</button></div>
+    </div></div>
+    <div id="promiseM" class="sq-modal"><div class="sq-card">
+      <h3>✦ what's first tomorrow?</h3>
+      <p class="sq-syncnote">pick one and the dumpling will keep it warm for the morning — or just rest.</p>
+      <div id="prList"></div>
+      <div class="sq-modrow"><button id="prSkip" class="sq-mbtn">skip — just rest 🫖</button></div>
     </div></div>
     <div id="cwFx"></div>
     <div class="cw-banner" id="cwBanner"></div>
@@ -1127,6 +1247,9 @@ try{
   ambience(document.getElementById('screen-buddies'),[
     {x:10,y:12,dx:14,dy:-16,t:11,d:0},{x:82,y:8,dx:-12,dy:12,t:9,d:1.4},{x:30,y:34,dx:16,dy:-14,t:12,d:.8},
     {x:68,y:56,dx:-14,dy:-18,t:10,d:2.2},{x:48,y:20,dx:10,dy:-20,t:13,d:3}]);
+  ambience(document.getElementById('screen-fire'),[            // hearth sparks: mostly warm, drifting up (<=8, transform/opacity only)
+    {x:38,y:16,dx:10,dy:-22,t:8,d:0,w:1},{x:60,y:14,dx:-8,dy:-26,t:9,d:1.2,w:1},{x:48,y:22,dx:6,dy:-18,t:7.5,d:2.2,w:1},
+    {x:14,y:40,dx:18,dy:-16,t:11,d:.7},{x:84,y:36,dx:-14,dy:-18,t:10,d:1.8},{x:26,y:64,dx:14,dy:-20,t:12,d:2.6}]);
   ambience(document.querySelector('.pomo-room'),[
     {x:14,y:78,dx:10,dy:-26,t:8,d:0,w:1},{x:76,y:84,dx:-8,dy:-30,t:10,d:1.6,w:1},
     {x:44,y:24,dx:14,dy:-10,t:12,d:.9},{x:88,y:16,dx:-12,dy:10,t:11,d:2.4}]);
@@ -1162,7 +1285,7 @@ try{
 
 // ===== Side Quest shell: economy, HUD, nav, questline, cloud sync, gacha =====
 (async function(){
-  const SQ_VER='v3.3';                                  // bump on every push so a new build is verifiable
+  const SQ_VER='v3.4';                                  // bump on every push so a new build is verifiable
   const rs=document.documentElement.style;
   rs.setProperty('--slime','url("'+drawSlime()+'")');
   rs.setProperty('--tomato','url("'+drawTomato()+'")');
@@ -1345,9 +1468,10 @@ try{
     const root=NAV_ROOT[scr]||scr;
     document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x.dataset.go===root));
     if(scr==='pomo') pomoStart(); else pomoStop();
-    if(scr==='map') scheduleTrail();                                    // exam-3 trail needs visible offsets
+    if(scr==='map'){ scheduleTrail(); seatTomatoes(); }                 // exam-3 trail needs visible offsets (+ seated tomatoes on started parts)
     if(scr==='wmap') renderWorldMap();
     if(scr==='worlds') renderHub();
+    if(scr==='fire') renderCamp();                                      // stage 2b: the campfire re-reads picks on every visit
   }
   // ---- world map ----
   const WM_HW=150, WM_HH=68;
@@ -2078,6 +2202,403 @@ try{
     refreshEcon(); placeAvatar(); scheduleTrail(); markChanged();
   };
 
+  // ================================================================
+  // STAGE 2b — THE CAMPFIRE + PRESS-▶ + DEN FOCUS (ported from the
+  // quest-next prototype, LANTERNLIGHT skin). Quests stand alone; the
+  // campfire is an optional on-ramp reading ACROSS all worlds/quests —
+  // the exam campaign's next parts qualify via the kind:'campaign'
+  // adapter (synthetic 'camp:<id>' step refs derived from campDone).
+  // LOCKED rules honored: start-task ≠ start-timer; a day is lit by
+  // >=1 step OR >=1 credited pomo OR the 2-min showed-up ember;
+  // tomatoes mint 1 per COMPLETED pomo; cozy, never shame, never red.
+  // ================================================================
+  const CAMP_PRE='camp:', CF_SHUF_CAP=3;
+  const CF_SL=drawSlime(), CF_TM=drawTomato();
+  const CF_MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  // the study day rolls at 5am (user_steer_decisions) — 1am still counts as tonight
+  function sqToday(){ return dayStr(new Date(Date.now()-5*3600000)); }
+  function nextStudyDay(){ const p=sqToday().split('-'); const d=new Date(+p[0],+p[1]-1,+p[2]); d.setDate(d.getDate()+1); return dayStr(d); }
+  // a lit day feeds the fire — never closes it, never shames a gap (streak restarts at 1, quietly)
+  function lightDay(){ const t=sqToday(); if(AQ.lastDay===t)return;
+    const p=t.split('-'); const y=new Date(+p[0],+p[1]-1,+p[2]); y.setDate(y.getDate()-1);
+    AQ.streak=(AQ.lastDay===dayStr(y))?(AQ.streak||0)+1:1; AQ.lastDay=t; persistAQ(); markChanged(); }
+
+  // ---- the Hearth flame (redesign_streak R1/R4 — the campfire fire IS the streak) ----
+  function streakTier(n){ return n<=0?0 : n<3?1 : n<7?2 : n<14?3 : n<30?4 : n<100?5 : 6; }
+  function flameURL(tier,frame){
+    const W=22,H=30,c=pxc(W,H),x=c.getContext('2d'); x.imageSmoothingEnabled=false;
+    x.fillStyle='#6b4a32'; x.fillRect(3,H-4,16,3);            // logs
+    x.fillStyle='#4e3423'; x.fillRect(6,H-6,10,3);
+    if(tier<=0){                                              // banked embers — glowing, tended, waiting (never a shaming zero)
+      x.fillStyle='#a84f2a'; x.fillRect(8,H-8,3,2); x.fillRect(13,H-9,2,2);
+      x.fillStyle='#ffcf6e'; x.fillRect(frame?10:14,H-9,1,1);
+      return c.toDataURL();
+    }
+    const hts=[0,9,13,17,20,22,24][Math.min(tier,6)], base=H-6, cx=11;
+    x.fillStyle=(tier>=5)?'#ffb46b':'#ff8d4a';
+    for(let i=0;i<hts;i++){ const t=i/hts, w1=Math.max(1,Math.round((1-t)*5)+((i%3===(frame?0:1))?1:0)); x.fillRect(cx-w1, base-1-i, w1*2, 1); }
+    x.fillStyle='#ffd96b';
+    const ch=Math.round(hts*0.62);
+    for(let i=0;i<ch;i++){ const t=i/ch, w2=Math.max(1,Math.round((1-t)*3)); x.fillRect(cx-w2, base-1-i, w2*2, 1); }
+    x.fillStyle=(tier>=6)?'#dff6ff':'#fff3c4';
+    x.fillRect(cx-1, base-Math.round(ch*0.75)-2, 2, 3);
+    if(tier>=4 && frame){ x.fillStyle='#ffcf6e'; x.fillRect(cx+5, base-hts-2, 1, 1); }
+    return c.toDataURL();
+  }
+  const FLAMES={}; for(let _t=0;_t<=6;_t++) FLAMES[_t]=[flameURL(_t,0),flameURL(_t,1)];
+  function flameImg(tier,px){ return '<img class="flamespr" data-tier="'+tier+'" src="'+FLAMES[tier][0]+'" style="width:'+px+'px" alt="">'; }
+  let _flameFrame=0;      // one shared 600ms flicker, only while the fire screen shows, frozen under reduced motion
+  setInterval(()=>{ if(REDUCED())return; const f=document.getElementById('screen-fire'); if(!f||!f.classList.contains('on'))return;
+    _flameFrame^=1; f.querySelectorAll('img.flamespr').forEach(im=>{ const t=+im.dataset.tier||0; im.src=FLAMES[t][_flameFrame]; }); },600);
+
+  // ---- campaign step index: exam parts + review quests become campfire-visible steps ----
+  let _campIdx=null;
+  function campIndex(){ if(_campIdx)return _campIdx; _campIdx={order:[],map:{}};
+    CAMP_MODS.forEach(m=>m.lessons.forEach(les=>les.parts.forEach((p,pi)=>{
+      const it={id:p.id,text:m.label+' · '+les.l+' · part '+(pi+1)+' — '+p.t,xp:p.xp,date:les.date,day:les.day};
+      _campIdx.map[p.id]=it; _campIdx.order.push(it); })));
+    CAMP_REVIEW.forEach(r=>{ const it={id:r.id,text:r.task,xp:r.xp,date:r.date,day:r.day}; _campIdx.map[r.id]=it; _campIdx.order.push(it); });
+    return _campIdx; }
+  function campDue(md){ if(!md)return null; const m=String(md).match(/^(\d{1,2})\/(\d{1,2})$/); if(!m)return null;
+    const now=new Date(); let d=new Date(now.getFullYear(),+m[1]-1,+m[2]); if(d-now<-180*86400000)d=new Date(now.getFullYear()+1,+m[1]-1,+m[2]); return d; }
+  // user-quest dates are freeform ("Jul 4", ISO, M/D) — best-effort parse for the due-soon nudge only
+  function parseDue(str){ if(!str)return null; const s=String(str).trim();
+    let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/); if(m) return new Date(+m[1],+m[2]-1,+m[3]);
+    m=s.match(/^([A-Za-z]{3,})\.?\s+(\d{1,2})$/); if(m){ const mi=CF_MON.findIndex(x=>x.toLowerCase()===m[1].toLowerCase().slice(0,3)); if(mi<0)return null;
+      const now=new Date(); let d=new Date(now.getFullYear(),mi,+m[2]); if(d-now<-180*86400000) d=new Date(now.getFullYear()+1,mi,+m[2]); return d; }
+    return campDue(s); }
+
+  // ---- step lookup across ALL worlds (campaign refs are synthetic; campDone stays the truth) ----
+  function campWorld(){ return WORLD.worlds.find(x=>!x.archived&&(x.questIds||[]).indexOf(CAMP_QID)>=0)||WORLD.worlds[0]; }
+  function findStepRef(sid){
+    if(!sid||!WORLD)return null;
+    if(String(sid).indexOf(CAMP_PRE)===0){ const raw=sid.slice(CAMP_PRE.length), it=campIndex().map[raw], q=WORLD.quests[CAMP_QID];
+      if(!it||!q)return null;
+      return {w:campWorld(),q,camp:true,raw,s:{id:sid,text:it.text,date:it.day+' '+it.date},xp:it.xp}; }
+    for(const w of WORLD.worlds){ if(w.archived)continue;
+      for(const id of (w.questIds||[])){ const q=WORLD.quests[id]; if(!q||!q.chapters)continue;
+        for(const c of q.chapters){ for(const s of (c.steps||[])){ if(s.id===sid) return {w,q,s,xp:stepXP(s)}; } } } }
+    return null;
+  }
+  function refDone(r){ return r.camp ? !!campDone[r.raw] : !!r.s.done; }
+  function refDoing(r){ if(refDone(r))return false; return r.camp ? !!(AQ.doing&&AQ.doing[r.s.id]) : !!r.s.doing; }
+  // started marks: user steps carry s.doing/startedAt (prototype shape, ready for the builder);
+  // campaign parts (no step objects) park theirs in AQ.doing = { 'camp:<id>': {t,ember} }
+  function markDoing(r){ if(r.camp){ AQ.doing=AQ.doing||{}; if(!AQ.doing[r.s.id])AQ.doing[r.s.id]={t:Date.now()}; persistAQ(); }
+    else { r.s.doing=true; r.s.startedAt=r.s.startedAt||Date.now(); persistWorld(); } markChanged(); }
+  function clearDoingId(sid){ if(AQ.doing&&AQ.doing[sid]){ delete AQ.doing[sid]; persistAQ(); }
+    if(String(sid).indexOf(CAMP_PRE)!==0){ const r=findStepRef(sid); if(r&&!r.camp&&r.s.doing){ r.s.doing=false; persistWorld(); } } }
+  function doingRefs(){ const out=[];
+    if(AQ.doing) Object.keys(AQ.doing).forEach(sid=>{ const r=findStepRef(sid);
+      if(r&&!refDone(r)) out.push(r); else { delete AQ.doing[sid]; persistAQ(); } });   // completed/vanished marks retire quietly
+    WORLD.worlds.filter(w=>!w.archived).forEach(w=>(w.questIds||[]).forEach(id=>{ const q=WORLD.quests[id]; if(!q||!q.chapters)return;
+      q.chapters.forEach(c=>(c.steps||[]).forEach(s=>{ if(s.doing&&!s.done) out.push({w,q,s,xp:stepXP(s)}); })); }));
+    return out; }
+
+  // ---- candidates = each active quest's next few UNSTARTED steps, earliest due floats up (no red, ever) ----
+  function campCandidates(){ const out=[];
+    WORLD.worlds.filter(w=>!w.archived).forEach(w=>(w.questIds||[]).forEach(id=>{
+      const q=WORLD.quests[id]; if(!q)return;
+      if(q.kind==='campaign'){ let taken=0;
+        for(const it of campIndex().order){ if(campDone[it.id])continue; const sid=CAMP_PRE+it.id;
+          if(AQ.doing&&AQ.doing[sid])continue;
+          const ref=findStepRef(sid); if(ref){ out.push({ref,due:campDue(it.date)}); taken++; } if(taken>=3)break; }
+        return; }
+      if(!q.chapters||q.state==='gaveup')return;
+      let taken=0;
+      for(const c of q.chapters){ for(const s of (c.steps||[])){
+        if(s.done||s.doing||!(s.text||'').trim())continue;
+        out.push({ref:{w,q,s,xp:stepXP(s)},due:parseDue(s.date)}); taken++; if(taken>=3)break;
+      } if(taken>=3)break; }
+    }));
+    out.sort((a,b)=>((a.due?+a.due:Infinity)-(b.due?+b.due:Infinity)));
+    return out; }
+
+  // ---- today's picks: cached per day in AQ.camp; shuffle is BOUNDED (agency, not a task-slot-machine) ----
+  function campEnsure(){ const day=sqToday();
+    if(!AQ.camp||AQ.camp.day!==day) AQ.camp={day,ids:[],shuffles:0,tea:false,seen:[]};
+    const c=AQ.camp; c.seen=c.seen||[];
+    c.ids=(c.ids||[]).filter(id=>findStepRef(id));                       // drop picks whose steps vanished
+    if(c.ids.length<3){ const fill=(skipSeen)=>{ const have=new Set(c.ids.concat(skipSeen?c.seen:[]));
+        for(const cand of campCandidates()){ if(c.ids.length>=3)break; const id=cand.ref.s.id; if(have.has(id))continue; c.ids.push(id); have.add(id); } };
+      fill(true); if(c.ids.length<3) fill(false); }
+    persistAQ(); return c; }
+  function campShuffle(){ const c=campEnsure(); if(c.shuffles>=CF_SHUF_CAP)return;
+    c.ids.forEach(id=>{ if(c.seen.indexOf(id)<0)c.seen.push(id); });
+    c.ids=[]; c.shuffles++; persistAQ(); markChanged(); campEnsure(); cwSfx('blip'); cwBuzz(6); renderCamp(); }
+
+  // ---- the clock on the week strip: due dots today + ahead; past folds quietly into today ----
+  function dueDotMap(){ const map={}, t0=sqToday();
+    campIndex().order.forEach(it=>{ if(campDone[it.id])return; const d=campDue(it.date); if(!d)return;
+      const ds=dayStr(d), key=ds<t0?t0:ds; map[key]=(map[key]||0)+1; });
+    WORLD.worlds.filter(w=>!w.archived).forEach(w=>(w.questIds||[]).forEach(id=>{ const q=WORLD.quests[id]; if(!q||!q.chapters||q.state==='gaveup'||q.kind==='campaign')return;
+      q.chapters.forEach(c=>(c.steps||[]).forEach(s=>{ if(s.done||!(s.text||'').trim())return; const d=parseDue(s.date); if(!d)return;
+        const ds=dayStr(d), key=ds<t0?t0:ds; map[key]=(map[key]||0)+1; })); }));
+    return map; }
+  function weekStripHTML(){
+    const lit=new Set();                                                 // lit run derived from streak+lastDay (history never shown as holes)
+    if(AQ.lastDay&&(AQ.streak||0)>0){ const p=AQ.lastDay.split('-'); const d=new Date(+p[0],+p[1]-1,+p[2]);
+      for(let i=0;i<AQ.streak&&i<8;i++){ lit.add(dayStr(d)); d.setDate(d.getDate()-1); } }
+    const dues=dueDotMap();
+    const DL=['su','mo','tu','we','th','fr','sa']; const now=new Date(); let h='<div class="cf-week">';
+    for(let i=-3;i<=3;i++){ const d=new Date(now); d.setDate(d.getDate()+i); const ds=dayStr(d), today=(i===0);
+      const cls=lit.has(ds)?' lit':(today?' ember':'');
+      const n=(i>=0&&dues[ds])||0;
+      let dots='<span class="cf-due">'; for(let k=0;k<Math.min(n,3);k++)dots+='<i></i>'; if(n>3)dots+='<b>+</b>'; dots+='</span>';
+      h+='<div class="cf-dayp"><span class="cf-pip'+cls+(today?' today':'')+'"></span>'+DL[d.getDay()]+dots+'</div>'; }
+    return h+'</div>'; }
+
+  // ---- TOMORROW'S PROMISE (effectiveness_vision #4) — stored additively as AQ.promise={day,sid} ----
+  function promiseFor(day){ const p=AQ.promise; if(!p||p.day!==day)return null;
+    const ref=findStepRef(p.sid); if(!ref||refDone(ref)||refDoing(ref))return null; return ref; }
+  function clearPromiseIf(sid){ if(AQ.promise&&AQ.promise.sid===sid){ AQ.promise=null; persistAQ(); markChanged(); } } // acted on → kept, retired quietly
+  function _prTuck(){ const m=document.getElementById('promiseM'); if(m)m.classList.remove('on');
+    const c=campEnsure(); c.tea=true; persistAQ(); markChanged(); renderCamp(); }
+  function callItANight(){                                               // tea ceremony — never closes the streak day
+    const cands=campCandidates().slice(0,4);
+    if(!cands.length){ _prTuck(); return; }
+    const list=document.getElementById('prList'); if(!list){ _prTuck(); return; }
+    list.innerHTML=cands.map(cd=>{ const r=cd.ref; const due=r.s.date?('<span class="due">'+esc(r.s.date)+'</span>'):'';
+      return '<div class="prm-row" data-sid="'+r.s.id+'"><img src="'+CF_SL+'" style="width:22px" alt="">'+
+        '<span class="task">'+esc(r.s.text||'(untitled step)')+'<span class="from">'+esc(r.w.emoji||'✦')+' '+esc(r.q.name||'untitled quest')+'</span></span>'+due+'</div>'; }).join('');
+    list.querySelectorAll('.prm-row').forEach(el=>el.onclick=()=>{
+      AQ.promise={day:nextStudyDay(),sid:el.dataset.sid}; persistAQ(); markChanged();
+      cwSfx('check'); cwBuzz(8); cwBanner('✦ the dumpling holds it for the morning'); _prTuck(); });
+    document.getElementById('promiseM').classList.add('on'); cwSfx('blip'); }
+
+  // ---- THE CAMPFIRE render (gang at the Hearth · <=3 next-unstarted cards · bounded shuffle · week strip) ----
+  function cfBudImg(){ try{ const ab=BUD.active&&BUDDIES.find(b=>b.id===BUD.active);
+    if(ab) return '<img src="'+drawBuddy(ab.color,ab.top)+'" style="width:28px" alt="">'; }catch(e){} return ''; }
+  function renderCamp(){
+    const wrap=document.getElementById('cfWrap'); if(!wrap)return;
+    const c=campEnsure();
+    const lit=AQ.lastDay===sqToday(), tier=streakTier(AQ.streak||0);
+    if(AQ.promise && AQ.promise.day<sqToday()){ AQ.promise=null; persistAQ(); }   // a stale promise clears silently — never mentioned
+    const vow=promiseFor(sqToday());
+    if(vow){ c.ids=[vow.s.id].concat(c.ids.filter(x=>x!==vow.s.id)).slice(0,3); persistAQ(); }
+    const picks=c.ids.map(id=>findStepRef(id)).filter(Boolean);
+    const allResolved=picks.length>0&&picks.every(r=>refDone(r)||refDoing(r));
+    const tea=c.tea||allResolved;
+    const dRefs=doingRefs(); const away=!!FOCUS||dRefs.length>0;         // tomato's off at work beside a step
+    const shufLeft=CF_SHUF_CAP-(c.shuffles||0);
+    // scene — the fire IS the streak flame; tea banks it down for the night
+    let h='<div class="cf-scene" id="cfScene"><div class="cf-glow"></div><div class="cf-fire">'+
+      '<img src="'+CF_SL+'" style="width:42px" alt="">'+flameImg(tea?0:(lit?Math.max(tier,1):0),46)+
+      (away?'<span class="cf-sign">🍅 at work ✦</span>':'<img src="'+CF_TM+'" style="width:32px" alt="">')+cfBudImg()+'</div>';
+    if(lit&&(AQ.streak||0)>0) h+='<div class="cf-day-line">day '+AQ.streak+' — the fire’s fed</div>';
+    if(tea){
+      h+='<div class="cf-say">'+(c.tea?'the fire’s tucked in — rest well':'every card found its spark — the hustle is over, tea now')+' 🫖</div></div>';
+      h+='<div class="cf-tea" id="cfTea"><div class="big">🫖</div></div>';
+      h+=weekStripHTML();
+      if(c.tea) h+='<button class="cf-link" id="cfStoke">stoke it back up ✦</button>';
+      else if(shufLeft>0) h+='<button class="sq-mbtn cf-shuf" id="cfShuf">🔀 one more log on the fire?</button>';
+    } else {
+      h+='<div class="cf-say">'+(vow?'the dumpling kept your first move warm ✦':(lit
+        ? (picks.length?picks.length+' small thing'+(picks.length===1?'':'s')+' by the fire — no rush':'the fire’s happy · nothing waiting ✦')
+        : 'the fire’s banked — anything small lights it ✦'))+'</div></div>';
+      if(dRefs.length){ h+=dRefs.map(r=>'<div class="cf-prog" data-qid="'+r.q.id+'" data-camp="'+(r.camp?1:'')+'">🍅 <span class="pn">'+esc(r.s.text||'(untitled step)')+'</span><span style="opacity:.6">'+esc(r.q.name||'quest')+' →</span></div>').join(''); }
+      if(picks.length){
+        h+='<div class="cf-cards">'+picks.map(r=>{
+          const st=refDone(r)?'done':(refDoing(r)?'doing':'');
+          const isVow=!!vow&&r.s.id===vow.s.id&&!st;
+          const due=r.s.date?(' · <span class="due">'+esc(r.s.date)+'</span>'):'';
+          return '<div class="cf-card'+(st?' '+st:'')+(isVow?' promise':'')+'" data-sid="'+r.s.id+'"><span class="go">'+(refDone(r)?'✔':(refDoing(r)?'🍅':(isVow?('<img src="'+CF_SL+'" style="width:22px" alt="">'):'▶')))+'</span>'+
+            '<span class="bd">'+(isVow?'<span class="vow">✦ you said you’d start with this</span>':'')+'<span class="task">'+esc(r.s.text||'(untitled step)')+'</span>'+
+            '<span class="from">'+esc(r.w.emoji||'✦')+' '+esc(r.q.name||'untitled quest')+due+'</span></span>'+
+            '<span class="xp">+'+(r.xp||0)+'</span></div>';
+        }).join('')+'</div>';
+        h+= shufLeft>0 ? '<button class="sq-mbtn cf-shuf" id="cfShuf">🔀 show me 3 others'+(shufLeft<CF_SHUF_CAP?' ('+shufLeft+' left)':'')+'</button>'
+                       : '<div class="cf-hint">that’s tonight’s spread ✦ fresh picks tomorrow</div>';
+      } else {
+        h+='<div class="cf-empty">no unstarted steps anywhere — plant a quest on the map and the fire will hold your next moves ✦</div>';
+      }
+      h+=weekStripHTML();
+      h+='<button class="sq-bigbtn ghost cf-night" id="cfNight">🫖 call it a night</button>';
+    }
+    wrap.innerHTML=h;
+    // hero art: campfire-clearing under the code-drawn flame; tea-party in the tea beat (404 → code look stays)
+    const scene=wrap.querySelector('#cfScene');
+    if(scene&&window.sqHeroImg){ const bg=window.sqHeroImg('campfire','cf-bg'); if(bg)scene.insertBefore(bg,scene.firstChild); }
+    const teaEl=wrap.querySelector('#cfTea');
+    if(teaEl&&window.sqHeroImg){ const ti=window.sqHeroImg('tea','cf-teaimg'); if(ti)teaEl.insertBefore(ti,teaEl.firstChild); }
+    wrap.querySelectorAll('.cf-card').forEach(el=>el.onclick=()=>{
+      const r=findStepRef(el.dataset.sid); if(!r)return;
+      if(refDone(r)||refDoing(r)){ if(r.camp){ sqShow('map'); cwSfx('blip'); } else openQuest(r.q.id); return; }   // resolved cards just revisit
+      startStepById(r.s.id);                                                                                       // one-tap "start"
+    });
+    wrap.querySelectorAll('.cf-prog').forEach(el=>el.onclick=()=>{ if(el.dataset.camp){ sqShow('map'); cwSfx('blip'); } else openQuest(el.dataset.qid); });
+    const sh=wrap.querySelector('#cfShuf'); if(sh)sh.onclick=campShuffle;
+    const nt=wrap.querySelector('#cfNight'); if(nt)nt.onclick=callItANight;
+    const st=wrap.querySelector('#cfStoke'); if(st)st.onclick=()=>{ c.tea=false; persistAQ(); cwSfx('blip'); renderCamp(); };
+  }
+  function refreshCampIfOn(){ const f=document.getElementById('screen-fire'); if(f&&f.classList.contains('on')) renderCamp(); }
+
+  // ---- press ▶ / start-a-step (start ≠ complete, start ≠ timer — locked) ----
+  function startStepById(sid){
+    const ref=findStepRef(sid); if(!ref||refDone(ref))return;
+    const fresh=!refDoing(ref);
+    if(fresh){ markDoing(ref); clearPromiseIf(sid); cwSfx('check'); cwBuzz(10); }
+    if(ref.camp){ sqShow('map'); seatTomatoes();                          // open the exam trail with the tomato seated by the part
+      const node=document.querySelector('#cwList [data-id="'+ref.raw+'"]');
+      if(node)try{ node.scrollIntoView({block:'center',behavior:REDUCED()?'auto':'smooth'}); }catch(e){} }
+    else refreshCampIfOn();                                               // user-quest steps light their campfire card (play screen arrives later)
+    if(fresh) askTimer(ref);                                              // then, separately: "want a timer? 🍅"
+  }
+  // the seated tomato = the visible "in progress" marker on the exam trail
+  function seatTomatoes(){
+    const list=document.getElementById('cwList'); if(!list)return;
+    list.querySelectorAll('.sq-seat').forEach(e=>e.remove());
+    list.querySelectorAll('.cw-node.doing,.cw-quest.doing').forEach(e=>e.classList.remove('doing'));
+    if(!AQ.doing)return;
+    Object.keys(AQ.doing).forEach(sid=>{ if(String(sid).indexOf(CAMP_PRE)!==0)return;
+      const raw=sid.slice(CAMP_PRE.length); if(campDone[raw])return;
+      const node=list.querySelector('[data-id="'+raw+'"]'); if(!node)return;
+      node.classList.add('doing'); const t=document.createElement('span'); t.className='sq-seat'; node.appendChild(t); });
+  }
+  // starting counts toward showing up: at 2 real minutes the ember pops (+2 xp to the lifetime pool, once per step, lights the day)
+  function emberSweep(){
+    if(!WORLD)return;                                                    // boot hasn't hydrated the stores yet
+    const now=Date.now(); let hits=0;
+    if(AQ.doing) Object.keys(AQ.doing).forEach(sid=>{ const d=AQ.doing[sid];
+      if(d&&!d.ember&&d.t&&(now-d.t)>=120000){ d.ember=true; hits++; } });
+    WORLD.worlds.forEach(w=>(w.questIds||[]).forEach(id=>{ const q=WORLD.quests[id]; if(!q||!q.chapters)return;
+      q.chapters.forEach(ch=>(ch.steps||[]).forEach(s=>{ if(s.doing&&!s.done&&s.startedAt&&!s.ember&&(now-s.startedAt)>=120000){ s.ember=true; hits++; } })); }));
+    if(!hits)return;
+    AQ.xp=(AQ.xp||0)+2*hits; persistAQ(); persistWorld(); lightDay();
+    cwSfx('check',7); cwBanner('✦ showed up — the ember lights the day (+2 xp)');
+    refreshCampIfOn();
+  }
+  setInterval(emberSweep,15000);
+
+  // ---- "want a timer? 🍅" (yes → kettle config → Den focus; no → tomato still sits by the task) ----
+  let _pendingRef=null;
+  function timerPrefs(){ const t=AQ.timer||{}; return {focus:t.focus||25,brk:t.brk||5,long:t.long||15,every:t.every||4}; }
+  function askTimer(ref){ if(FOCUS){ cwBanner('the kettle’s already on 🍅'); return; }
+    _pendingRef=ref; const m=document.getElementById('timerAsk'); if(m)m.classList.add('on'); }
+
+  // ================= DEN FOCUS ENGINE — LOCAL 25/5 STUB =================
+  // This local interval is a stand-in ONLY. At D3, startFocus() creates a native
+  // TickTick focus session (worker → create_focus, taskId = the step's tt id,
+  // titled with the step text), and pots + bonus XP are reconciled idempotently
+  // from TickTick focus records (by record id) — this engine then becomes a
+  // read-only mirror of TickTick's timer. ONE timer, TickTick's (locked).
+  let FOCUS=null,_focusIv=null;
+  function startFocus(ref,cfg){
+    AQ.timer=cfg; persistAQ(); markChanged();
+    FOCUS={sid:ref.s.id,camp:!!ref.camp,text:ref.s.text||'(untitled step)',cfg,phase:'focus',phaseStart:Date.now(),pots:0,potMinPaid:0};
+    if(_focusIv)clearInterval(_focusIv); _focusIv=setInterval(tickFocus,1000);
+    sqShow('pomo'); renderDenFocus(); renderFocusChip(); cwSfx('check'); cwBuzz(10);
+  }
+  function tickFocus(){
+    if(!FOCUS)return;
+    const el=(Date.now()-FOCUS.phaseStart)/60000;
+    if(FOCUS.phase==='focus'){
+      const m=Math.min(Math.floor(el),FOCUS.cfg.focus);                   // bonus XP per focused minute — XP-ONLY, never coins (inflation firewall)
+      if(m>FOCUS.potMinPaid){ AQ.xp=(AQ.xp||0)+(m-FOCUS.potMinPaid); FOCUS.potMinPaid=m; persistAQ(); }
+      if(el>=FOCUS.cfg.focus) potDone();
+    } else {
+      const len=(FOCUS.phase==='long')?FOCUS.cfg.long:FOCUS.cfg.brk;
+      if(el>=len){ FOCUS.phase='focus'; FOCUS.phaseStart=Date.now(); FOCUS.potMinPaid=0; cwSfx('blip'); cwBanner('back to the pot — pot '+(FOCUS.pots+1)+' 🍅'); }
+    }
+    renderDenFocus(); renderFocusChip();
+  }
+  function potDone(){                                                     // one finished pomo = one chunky tomato; a credited pomo lights the day
+    FOCUS.pots++; FOCUS.potMinPaid=0;
+    mintPomo(); lightDay();
+    const long=(FOCUS.pots%FOCUS.cfg.every===0);
+    FOCUS.phase=long?'long':'break'; FOCUS.phaseStart=Date.now();
+    cwSfx('yay',0,.5); cwBuzz([16,30]); cwBanner('🍅 pot '+FOCUS.pots+' done — '+(long?'long break 🌙':'little break 🫖'));
+  }
+  function endFocus(silent){
+    if(!FOCUS)return;
+    if(_focusIv){clearInterval(_focusIv);_focusIv=null;}
+    const pots=FOCUS.pots; FOCUS=null;
+    renderDenFocus(); renderFocusChip();
+    if(!silent){ cwSfx('fanfare',0,.4); cwBuzz(12); cwBanner(pots?('the hustle is over — tea now 🫖 · '+pots+'🍅'):'kettle’s off — the tomato stays by the step 🍅'); }
+    refreshCampIfOn();
+  }
+  function mintPomo(){                                                    // tomato mint: full drop ceremony when the den is open, quiet ledger tick otherwise
+    const scr=document.getElementById('screen-pomo');
+    if(scr&&scr.classList.contains('on')&&POMO_AREA){ dropPomo(); }
+    else { pomoState.room++; pomoState.total++; savePomo(); pomoTally(); markChanged(); cwSfx('check'); }
+  }
+  function renderDenFocus(){
+    const p=document.getElementById('denFocus'); if(!p)return;
+    if(!FOCUS){ p.hidden=true; return; }
+    p.hidden=false;
+    const st=document.getElementById('dfStep'); if(st)st.textContent=FOCUS.text;
+    const el=(Date.now()-FOCUS.phaseStart)/60000; let fill,txt;
+    if(FOCUS.phase==='focus'){ fill=Math.min(1,el/FOCUS.cfg.focus); txt='pot '+(FOCUS.pots+1)+' · brewing · '+FOCUS.pots+'🍅 this sitting'; }
+    else { const len=(FOCUS.phase==='long')?FOCUS.cfg.long:FOCUS.cfg.brk; fill=Math.max(0,1-el/len);
+      txt=((FOCUS.phase==='long')?'long break 🌙':'tea break 🫖')+' · '+FOCUS.pots+'🍅 this sitting'; }
+    const ph=document.getElementById('dfPhase'); if(ph)ph.textContent=txt;
+    drawKettle(fill,FOCUS.phase);
+  }
+  function drawKettle(fill,phase){                                        // the kettle's fill level IS the timer face — no shouting countdown digits
+    const cv=document.getElementById('kettleCv'); if(!cv)return; const x=cv.getContext('2d');
+    x.imageSmoothingEnabled=false; x.clearRect(0,0,26,26);
+    x.fillStyle='#3a2c20'; x.fillRect(4,23,18,2);                         // stove
+    x.fillStyle='#e07a3a'; x.fillRect(9,22,2,1); x.fillRect(14,22,2,1);   // coals
+    x.fillStyle='#4e5a66'; x.fillRect(6,10,14,12);                        // body
+    x.fillStyle='#39434d'; x.fillRect(6,20,14,2);
+    const fh=Math.round(9*Math.min(1,Math.max(0,fill)));
+    x.fillStyle=(phase==='focus')?'#6fd9c4':'#ffcf6e';                    // the water line
+    if(fh>0)x.fillRect(7,20-fh,12,fh);
+    x.fillStyle='#39434d'; x.fillRect(8,8,10,2);                          // lid
+    x.fillStyle='#ffd96b'; x.fillRect(12,6,2,2);                          // knob
+    x.fillStyle='#4e5a66'; x.fillRect(20,12,4,2); x.fillRect(23,9,2,4);   // spout
+    x.fillRect(2,11,4,2); x.fillRect(2,12,2,6); x.fillRect(2,17,4,2);     // handle
+    if(phase!=='focus'||fill>0.92){ x.fillStyle='rgba(240,240,255,.85)'; x.fillRect(23,4,1,3); x.fillRect(24,2,1,2); }  // steam
+  }
+  function renderFocusChip(){
+    const el=document.getElementById('hudFocus'); if(!el)return;
+    if(!FOCUS){ el.hidden=true; return; }
+    el.hidden=false;
+    const m=Math.floor((Date.now()-FOCUS.phaseStart)/60000);
+    el.textContent=(FOCUS.phase==='focus')?('🍅 '+m+'m'):'🫖 break';
+  }
+
+  // completing a campaign part retires its doing-mark + promise and lights the day (>=1 step)
+  const _toggleFire=cwToggle;
+  cwToggle=function(row,ev){
+    const wasDone=!!campDone[row.dataset.id];
+    _toggleFire(row,ev);
+    const nowDone=!!campDone[row.dataset.id];
+    if(nowDone&&!wasDone){ const sid=CAMP_PRE+row.dataset.id; clearDoingId(sid); clearPromiseIf(sid); lightDay(); }
+    seatTomatoes(); refreshCampIfOn();
+  };
+
+  // ---- static wiring: timer-ask / kettle config / promise modal / focus chip / den panel ----
+  (function wireCampfire(){
+    const noTimer=()=>{ const m=document.getElementById('timerAsk'); if(m)m.classList.remove('on'); cwBanner('no timer — the tomato keeps you company 🍅'); };
+    const ta=document.getElementById('timerAsk');
+    if(ta){
+      const no=document.getElementById('taNo'); if(no)no.onclick=noTimer;
+      const yes=document.getElementById('taYes');
+      if(yes)yes.onclick=()=>{ ta.classList.remove('on'); const p=timerPrefs();
+        [['tsFocus',p.focus],['tsBrk',p.brk],['tsLong',p.long],['tsEvery',p.every]].forEach(pr=>{ const el=document.getElementById(pr[0]); if(el)el.value=pr[1]; });
+        const s=document.getElementById('timerSet'); if(s)s.classList.add('on'); cwSfx('blip'); };
+      ta.addEventListener('click',e=>{ if(e.target===ta)noTimer(); });                     // backdrop = "no" — skipping is always fine
+    }
+    const ts=document.getElementById('timerSet');
+    if(ts){
+      const cc=document.getElementById('tsCancel'); if(cc)cc.onclick=()=>{ ts.classList.remove('on'); cwBanner('no timer — tomato stays put 🍅'); };
+      const go=document.getElementById('tsGo');
+      if(go)go.onclick=()=>{ const num=(id,lo,hi,d)=>{ const v=parseInt((document.getElementById(id)||{}).value,10); return isNaN(v)?d:Math.min(hi,Math.max(lo,v)); };
+        const cfg={focus:num('tsFocus',5,120,25),brk:num('tsBrk',1,60,5),long:num('tsLong',5,90,15),every:num('tsEvery',2,8,4)};
+        ts.classList.remove('on'); if(_pendingRef)startFocus(_pendingRef,cfg); };
+      ts.addEventListener('click',e=>{ if(e.target===ts)ts.classList.remove('on'); });
+    }
+    const pm=document.getElementById('promiseM');
+    if(pm){ const sk=document.getElementById('prSkip'); if(sk)sk.onclick=_prTuck;
+      pm.addEventListener('click',e=>{ if(e.target===pm)_prTuck(); }); }                   // backdrop = skip; skipping is always fine
+    const hf=document.getElementById('hudFocus'); if(hf)hf.onclick=()=>{ if(FOCUS){ sqShow('pomo'); cwSfx('blip'); } };
+    const de=document.getElementById('dfEnd'); if(de)de.onclick=()=>endFocus(false);
+    const kv=document.getElementById('kettleCv');
+    if(kv)kv.onclick=()=>{ if(!FOCUS)return; const m=Math.floor((Date.now()-FOCUS.phaseStart)/60000);  // tap the kettle for the honest numbers
+      cwBanner(FOCUS.phase==='focus'?(m+'m into this pot of '+FOCUS.cfg.focus+' · '+FOCUS.pots+'🍅 so far'):('break · '+FOCUS.pots+'🍅 so far')); };
+  })();
+
   function rebuild(){
     buildCampaign();
     const rsb=document.getElementById('cwReset'); if(rsb){ const orig=rsb.onclick; rsb.onclick=(e)=>{ if(orig)orig(e); refreshEcon(); placeAvatar(); scheduleTrail(); markChanged(); }; }
@@ -2114,7 +2635,7 @@ try{
       const r=await fetch(API.url+'/save?slot=sidequest',{headers:{'x-aq-key':API.key}});
       if(r.status===401){ st.textContent='✕ wrong key'; return; }
       if(!r.ok){ st.textContent='✕ worker error ('+r.status+') — KV bound?'; return; }
-      const adopted=await pullCloud(); migrateToWorlds(); loadWorld(); loadAQ(); loadBud(); loadCos(); applyCos(); loadPomo(); rebuild(); renderWorldMap(); renderHub(); renderDex(); renderActiveBuddy(); renderShopOutfits(); pomoTally(); if(!adopted) pushCloud();
+      const adopted=await pullCloud(); migrateToWorlds(); loadWorld(); loadAQ(); loadBud(); loadCos(); applyCos(); loadPomo(); rebuild(); renderWorldMap(); renderHub(); renderDex(); renderActiveBuddy(); renderShopOutfits(); pomoTally(); seatTomatoes(); refreshCampIfOn(); if(!adopted) pushCloud();
       st.textContent='✓ connected — synced'; cwSfx('levelup'); cwBuzz(16);
       setTimeout(closeSync,800);
     }catch(e){ st.textContent='✕ cannot reach worker'; }
@@ -2135,7 +2656,9 @@ try{
   initPomo();
   initMascotSheet();
   rebuild();
-  renderWorldMap();                  // stage 2a: the world map is the front door (exam-3 questline one tap in)
+  renderWorldMap();                  // stage 2a: the world map is one tab over (exam-3 questline one tap in)
+  seatTomatoes();                    // stage 2b: started-but-unfinished parts keep their seated tomato across reloads
+  sqShow('fire');                    // stage 2b: the campfire is home — the fire greets you first
   addEventListener('resize',scheduleTrail);
   addEventListener('resize',()=>{ const s=document.getElementById('screen-wmap'); if(s&&s.classList.contains('on')) renderWorldMap(); });
   if(syncOn() && !adopted) pushCloud();
