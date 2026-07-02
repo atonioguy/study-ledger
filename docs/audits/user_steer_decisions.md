@@ -116,6 +116,13 @@ Evaluate every improvement on THREE fronts: **look · performance · practicalit
 - The **mascots (dumpling/slime + tomato/pomo)** and the **collectible buddies** are the HEART of the game and are NEVER replaced. No redesign/overhaul may swap them out.
 - They may be ELEVATED (glossier/alive rendering, personality, presence, roles — tomato = focus-timer's face, dumpling = warmth/promise-holder, buddies = found-family) but their identities stay.
 
+## Post-fold navigation & intuitiveness pass (owner — QUEUED for after D2, on the LIVE game)
+A dedicated Fable navigation/UX agent must review the LIVE game AFTER the fold (features integrated + skinned) and make everything feel intuitive. Focus especially on **Campfire, Tomorrow's Promise, Pomo/Den**.
+- **Cut clutter:** there is too much text / hints / indicators — it CONFUSES more than helps. Favor intuitive, self-evident UI over explanatory labels. Reduce noise.
+- **Navigation-state continuity (concrete bug):** choosing a Campfire card → lands on a step in a quest → tapping back to the map should return to the map **with that quest SELECTED** (map centered/selected on it), not a neutral map. Back should preserve context everywhere.
+- **APPROVED feature:** a "recent quests opened" sidebar / quick-switcher to move between quests easily.
+- Bar: the whole app must feel very intuitive — clear pipelines, obvious redirection, no dead-ends or confusion.
+
 ## Standing rule reinforced
 - Every feature must REDUCE friction. If a mechanic requires manual bookkeeping/logging to earn rewards, redesign it to be automatic or drop it.
 - Evaluation lens for ALL work: look · performance · practicality.
