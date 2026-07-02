@@ -93,7 +93,8 @@ Evaluate every improvement on THREE fronts: **look · performance · practicalit
 ## Habits → Daily Quests (owner — Fable creative-liberty pass)
 - Turn TickTick **habits** into gamified **daily quests/dailies**. Bidirectional check-in sync (check in Side Quest ↔ TickTick habit reflects; check in TickTick → rewards show when you open dailies). API supports habit check-ins via the worker.
 - MUST NOT feel like extra workload / another task pile. Should feel like a warm, satisfying daily RITUAL that's motivating to keep — ties naturally to the Hearth/streak + campfire. Anti-overload is the key constraint.
-- Fable given creative liberty; report: redesign_habits_dailies.md.
+- Fable given creative liberty; report: redesign_habits_dailies.md → design = **"The Fire Ring"** (habits = hearthstones around the campfire; tap to light; +3 XP only; mint-once bidirectional sync; anti-overload by shape; a full ring "hums", never an achievement).
+- **Sign-off (owner):** (1) Habits use the **CALENDAR day** boundary (match TickTick exactly), NOT the 5am study-day — so Side Quest & TickTick always agree on habit dates. (Note: the Hearth study-streak still uses 5am; only habits use calendar day.) (2) **Streak stays study-pure** — habits NEVER light the Hearth (no Anki opt-in).
 
 ## Standing rule reinforced
 - Every feature must REDUCE friction. If a mechanic requires manual bookkeeping/logging to earn rewards, redesign it to be automatic or drop it.
